@@ -561,11 +561,90 @@
             "Tracheostomy     Tube                       Tracheostomy Mask"
         ];
 
+        // Anesthesia subcategories
+        const anesthesiaSubcategories = [
+            "Anesthesia Breathing circuit (Smooth Bore )",
+            "Anesthesia Breathing circuit (corrugated)",
+            "Ventelation Breathing Circuit",
+            "Catheter Mount",
+            "Breathing Bag ( Antistatic ) Reusable",
+            "MdI meter Dose",
+            "Bacterial & Viral Filters",
+            "Bacterial /Viral Filter With Heat & Moisture exchange Type",
+            "Bacterial /Viral Filter With Heat & Moisture exchange Type (Artificial Nose )",
+            "Tracheostomy HME Filter",
+            "E.T.T preformed (South Facing-oral) Cuffed",
+            "E.T.T preformed (north Facing Nasal) Cuffed",
+            "E.T.T preformed (South Facing-oral) UNCuffed",
+            "E.T.T preformed (north Facing Nasal) UNCuffed",
+            "Endotracheal Tubes Oral/Nasal-Cuffed",
+            "Endotracheal Tubes Reinforced Oral/Nasal-Cuffed",
+            "Endotracheal Tubes Oral/Nasal-UnCffed",
+            "Endotracheal Tubes Reinforced Oral/Nasal-UnCffed"
+        ];
+
+        // Oxygen Therapy subcategories
+        const oxygenTherapySubcategories = [
+            "Oxygen Nasal Cannula",
+            "Aerosol Mask Without Tube",
+            "Nebulizer Mask With tube",
+            "Oxygen Catheter",
+            "Oxygen Mask With tube",
+            "Nebulizer kit with (T-mouth pc , 15cm corrugated tube )",
+            "Aerosol Mask with Tube",
+            "Non-Rebreathing Mask",
+            "Partially Non Rebreathing Mask",
+            "Venturi Mask /Mask Vent Adult",
+            "Accessories",
+            "Oxygen Catheter"
+        ];
+
+        // Neonatal subcategories
+        const neonatalSubcategories = [
+            "Polyurethane Catheter",
+            "Positioning Aid / Snuggle Ups",
+            "NCAP-Hat(cap)",
+            "Eye Protector",
+            "Little Suckers/Neosuchers-neonate Gentle Plastic",
+            "Nasal Prong , Maximum Patient flow 6 1/min",
+            "NCPAP Mask",
+            "Hat For Neonate",
+            "Infant bonnet , head cover to keep the premature and newborn Warm, Soft,latex free",
+            "SIPAP Inflow flow circuit"
+        ];
+
         // Update subcategory dropdown based on category selection
         productCategorySelect.addEventListener('change', function() {
             if (this.value === "Airway") {
                 productSubcategorySelect.innerHTML = '<option value="">-- Optional --</option>';
                 airwaySubcategories.forEach(sub => {
+                    const opt = document.createElement('option');
+                    opt.value = sub;
+                    opt.textContent = sub;
+                    productSubcategorySelect.appendChild(opt);
+                });
+                productSubcategorySelect.disabled = false;
+            } else if (this.value === "Anesthesia") {
+                productSubcategorySelect.innerHTML = '<option value="">-- Optional --</option>';
+                anesthesiaSubcategories.forEach(sub => {
+                    const opt = document.createElement('option');
+                    opt.value = sub;
+                    opt.textContent = sub;
+                    productSubcategorySelect.appendChild(opt);
+                });
+                productSubcategorySelect.disabled = false;
+            } else if (this.value === "Oxygen Therapy") {
+                productSubcategorySelect.innerHTML = '<option value="">-- Optional --</option>';
+                oxygenTherapySubcategories.forEach(sub => {
+                    const opt = document.createElement('option');
+                    opt.value = sub;
+                    opt.textContent = sub;
+                    productSubcategorySelect.appendChild(opt);
+                });
+                productSubcategorySelect.disabled = false;
+            } else if (this.value === "Neonatal") {
+                productSubcategorySelect.innerHTML = '<option value="">-- Optional --</option>';
+                neonatalSubcategories.forEach(sub => {
                     const opt = document.createElement('option');
                     opt.value = sub;
                     opt.textContent = sub;
