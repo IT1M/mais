@@ -498,7 +498,7 @@
                 <nav>
                     <ul>
                         <li><a href="#">Home</a></li>
-                        <li><a href="#">Products</a></li>
+                        <li><a href="Competitor-analysis.html">Competitor analysis </a></li>
                         <li><a href="#">Reports</a></li>
                         <li><a href="#">Contact</a></li>
                     </ul>
@@ -644,7 +644,7 @@
             <div class="support-modal-desc">اكتب مشكلتك أو استفسارك حول منصة MAIS وسيتم الرد عليك بواسطة الذكاء الاصطناعي.</div>
             <textarea id="support-input" placeholder="صف مشكلتك أو سؤالك هنا..."></textarea>
             <button class="support-send-btn" id="support-send-btn" disabled>إرسال</button>
-            <div class="support-loading" id="support-loading" style="display:none;">جاري معالجة الطلب...</div>
+            <div class="support-loading" id="support-loading" style="display:none;">Thinking and writing now</div>
             <div class="support-response" id="support-response"></div>
         </div>
     </div>
@@ -1331,7 +1331,7 @@ Your analysis should be evidence-based, strategic, and actionable. Highlight spe
             supportLoading.style.display = 'block';
             supportResponse.textContent = '';
             try {
-                const reply = await supportGroqAPI(userMsg);
+                const reply = await supportGeminiAPI(userMsg);
                 supportResponse.textContent = reply;
             } catch (e) {
                 supportResponse.textContent = 'حدث خطأ أثناء التواصل مع الدعم. حاول مرة أخرى.';
@@ -1340,38 +1340,38 @@ Your analysis should be evidence-based, strategic, and actionable. Highlight spe
             supportSendBtn.disabled = false;
         });
 
-        // Support API call
-        async function supportGroqAPI(userMsg) {
-            const GROQ_API_KEY = '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';
-            const GROQ_API_ENDPOINT = 'https://api.groq.com/openai/v1/chat/completions';
-            const MODEL_NAME = 'deepseek-r1-distill-llama-70b';
+        // Gemini API call for support
+        const apiKey = 'AIzaSyCMrm1LjmlJObZsVCQEuy_wTkh9ZEEc8aQ'; // ضع هنا مفتاح API الفعلي
+
+        async function geminiRequest(prompt) {
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+            const body = {
+                contents: [
+                    { role: "user", parts: [{ text: prompt }] }
+                ]
+            };
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(body)
+            });
+            if (!response.ok) throw new Error('API error');
+            const data = await response.json();
+            // Gemini response structure
+            return data.candidates?.[0]?.content?.parts?.[0]?.text?.trim() || "لم يتم الحصول على رد من الدعم.";
+        }
+
+        async function supportGeminiAPI(userMsg) {
             const supportPrompt = `أنت مساعد دعم فني ذكي لمنصة MAIS. 
 ساعد المستخدمين في حل مشاكلهم التقنية أو استفساراتهم حول استخدام المنصة أو منتجاتها أو تقاريرها.
 - أجب بشكل واضح ومباشر وبأسلوب ودود.
 - إذا كان السؤال خارج نطاق MAIS، اعتذر بلطف ووجه المستخدم للاتصال بالدعم البشري إذا لزم الأمر.
 - لا تقدم نصائح طبية أو مالية.
 - إذا كان السؤال عن بيانات أو تقارير، وضح كيفية رفع البيانات أو الاستفادة من التحليلات.
-- أجب باللغة العربية الفصحى.`;
+- أجب باللغة العربية الفصحى.
 
-            const response = await fetch(GROQ_API_ENDPOINT, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${GROQ_API_KEY}`
-                },
-                body: JSON.stringify({
-                    model: MODEL_NAME,
-                    messages: [
-                        { role: "system", content: supportPrompt },
-                        { role: "user", content: userMsg }
-                    ],
-                    temperature: 0.3,
-                    max_tokens: 700
-                })
-            });
-            if (!response.ok) throw new Error('API error');
-            const data = await response.json();
-            return data.choices[0].message.content.trim();
+سؤال المستخدم: ${userMsg}`;
+            return await geminiRequest(supportPrompt);
         }
     </script>
 </body>
