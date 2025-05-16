@@ -636,6 +636,22 @@
             "Syringe luer tip (sterile)"
         ];
 
+        // Hemodialysis subcategories
+        const hemodialysisSubcategories = [
+            "Blood Lines for (Fresenius Machines) – Sterile",
+            "Blood Lines for (Other Machines) – Sterile",
+            "Arterial Venous Catheter for Haemodialysis – Sterile",
+            "Hemodialyzer Filters – Sterile",
+            "Cartridge for hemodialysis – Non Sterile",
+            "Fistula Needle – Sterile",
+            "Fistula Needle Set (Pair) – Sterile",
+            "“Y” Connector for Single Needle Dialysis – Sterile",
+            "Trans Urethral Resection Catheter – Sterile",
+            "Dialysis Catheter (short term): Single Lumen Catheter",
+            "Blood Lines for (Gambro Machines) – Sterile",
+            "Blood Lines for (B. Braun Machines) – Sterile"
+        ];
+
         // Update subcategory dropdown based on category selection
         productCategorySelect.addEventListener('change', function() {
             if (this.value === "Airway") {
@@ -686,6 +702,46 @@
             } else if (this.value === "Syringes") {
                 productSubcategorySelect.innerHTML = '<option value="">-- Optional --</option>';
                 syringesSubcategories.forEach(sub => {
+                    const opt = document.createElement('option');
+                    opt.value = sub;
+                    opt.textContent = sub;
+                    productSubcategorySelect.appendChild(opt);
+                });
+                productSubcategorySelect.disabled = false;
+            } else if (this.value === "Kits & Sets") {
+                productSubcategorySelect.innerHTML = '<option value="">-- Optional --</option>';
+                const kitsAndSetsSubcategories = [
+                    "CVC Single Lumen with J trip guide wire – Sterile",
+                    "CVC Double Lumen with J trip guide wire – Sterile",
+                    "CVC Triple Lumen with J trip guide wire – Sterile",
+                    "CVC Four Lumen with J trip guide wire – Sterile",
+                    "CVC Five Lumen with J trip guide wire – Sterile",
+                    "HDC Single Lumen Catheter Set (Straight/ Femoral with J trip guide wire)",
+                    "HDC Double Lumen Catheter Set (Straight/ Femoral with J trip guide wire)",
+                    "HDC Single Lumen Catheter Set (curved with J trip guide wire)",
+                    "HDC Double Lumen Catheter Set (curved/Jugular with J trip guide wire)",
+                    "HDC Triple Lumen Catheter Set (straight/Femoral with J trip guide wire)",
+                    "HDC Triple Lumen Catheter Set (curved/Jugular with J trip guide wire)",
+                    "Peritoneal Dialysis Catheter Set – PDC",
+                    "Permthane Double Lumen Catheter Set",
+                    "Lumbar Puncture Set – Sterilized",
+                    "Combined Spinal – Epidural Set – Sterilized",
+                    "Epidural Set – Sterilized",
+                    "Biopsy Set – Sterilized",
+                    "Tracheostomy Care Kit",
+                    "Patient Care Kit",
+                    "Suction Catheter Kit"
+                ];
+                kitsAndSetsSubcategories.forEach(sub => {
+                    const opt = document.createElement('option');
+                    opt.value = sub;
+                    opt.textContent = sub;
+                    productSubcategorySelect.appendChild(opt);
+                });
+                productSubcategorySelect.disabled = false;
+            } else if (this.value === "Hemodialysis") {
+                productSubcategorySelect.innerHTML = '<option value="">-- Optional --</option>';
+                hemodialysisSubcategories.forEach(sub => {
                     const opt = document.createElement('option');
                     opt.value = sub;
                     opt.textContent = sub;
