@@ -270,94 +270,13 @@
             overflow-y: auto;
         }
 
-        .loading {
-            display: none;
-            text-align: center;
-            margin: 40px 0;
+        /* Make the "Product Performance" card larger and rectangular */
+        #performance-card {
+            grid-column: span 2;
+            min-height: 400px;
         }
 
-        .spinner {
-            border: 4px solid rgba(0, 0, 0, 0.1);
-            border-radius: 50%;
-            border-top: 4px solid var(--secondary-color);
-            width: 40px;
-            height: 40px;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 15px;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 15px;
-        }
-
-        th, td {
-            padding: 12px 15px;
-            text-align: left;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        th {
-            background-color: #f2f2f2;
-            font-weight: 600;
-        }
-
-        tr:hover {
-            background-color: #f9f9f9;
-        }
-
-        .status-success {
-            color: #2ecc71;
-            font-weight: 500;
-        }
-
-        .status-danger {
-            color: #e74c3c;
-            font-weight: 500;
-        }
-
-        .text-highlight {
-            background-color: #ffeaa7;
-            padding: 2px 5px;
-            border-radius: 3px;
-        }
-
-        footer {
-            background-color: var(--primary-color);
-            color: white;
-            padding: 25px 0;
-            margin-top: 60px;
-        }
-
-        .footer-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .footer-logo {
-            font-size: 20px;
-            font-weight: bold;
-        }
-
-        .footer-links a {
-            color: white;
-            margin-left: 15px;
-            text-decoration: none;
-            transition: var(--transition);
-        }
-
-        .footer-links a:hover {
-            color: var(--secondary-color);
-        }
-
-        /* Responsive design */
+        /* Responsive design improvements */
         @media (max-width: 768px) {
             .header-content {
                 flex-direction: column;
@@ -371,6 +290,10 @@
 
             .results-grid {
                 grid-template-columns: 1fr;
+            }
+
+            #performance-card {
+                grid-column: span 1;
             }
 
             .footer-content {
@@ -399,6 +322,19 @@
                 border-left: 3px solid var(--secondary-color);
                 border-bottom: 1px solid var(--border-color);
             }
+
+            .result-card {
+                padding: 10px;
+            }
+
+            .card-header {
+                font-size: 16px;
+                padding: 10px;
+            }
+
+            .card-body {
+                padding: 15px;
+            }
         }
     </style>
 </head>
@@ -423,7 +359,7 @@
 
     <div class="container">
         <main class="main-content">
-            <h1 class="section-title">Medical Product Analysis Platform</h1>
+            <h1 class="section-title">Sales Data Analysis Platform</h1>
             
             <section class="input-section">
                 <div class="product-selection">
@@ -498,7 +434,7 @@
                         </div>
                     </div>
                     
-                    <div class="result-card">
+                    <div id="performance-card" class="result-card">
                         <div class="card-header">Product Performance</div>
                         <div class="card-body" id="performance-content">
                             <!-- Performance table will be loaded here -->
@@ -938,18 +874,16 @@
                 // Get selected product information
                 const category = productCategorySelect.options[productCategorySelect.selectedIndex].text;
                 const subcategory = ""; // always empty for now
-                
+
                 // Get input data (text or file)
                 let inputData = '';
                 if (activeTab === 'text-tab') {
                     inputData = analysisText.value.trim();
                 } else {
-                    // For demonstration purposes, just use file name
-                    // In a real application, you'd read and process the file
                     inputData = `Data from file: ${fileName.textContent}`;
                 }
-                
-                // Perform analysis with Groq API
+
+                // Perform sales analysis with Groq API
                 const results = await analyzeWithGroq(category, subcategory, inputData);
                 
                 // Display results
@@ -963,34 +897,34 @@
                 resultsSection.scrollIntoView({ behavior: 'smooth' });
                 
             } catch (error) {
-                console.error('Analysis error:', error);
-                alert('An error occurred during analysis. Please try again.');
+                console.error('Sales analysis error:', error);
+                alert('An error occurred during sales analysis. Please try again.');
                 loadingDiv.style.display = 'none';
             }
         });
         
-        // Function to analyze data using Groq API
+        // Function to analyze sales data using Groq API
         async function analyzeWithGroq(category, subcategory, inputData) {
             const GROQ_API_KEY = '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';
             const GROQ_API_ENDPOINT = 'https://api.groq.com/openai/v1/chat/completions';
             const MODEL_NAME = 'deepseek-r1-distill-llama-70b';
             
             // Create a detailed system prompt
-            const systemPrompt = `You are an advanced AI specialized in medical product analysis for MAIS Medical Products Company. 
-Your primary focus is on ${category}, specifically ${subcategory}.
+            const systemPrompt = `You are an advanced AI specialized in sales data analysis for MAIS. 
+Your primary focus is on identifying patterns, trends, profitable areas, and areas of loss in sales data.
 
 When analyzing data, follow these precise steps:
-1. First, thoroughly understand the context of the medical data provided.
-2. Identify key metrics, trends, and patterns related to product performance.
-3. Compare against industry benchmarks and historical data for this product category.
-4. Assess market positioning, competitive advantages, and potential weaknesses.
-5. Evaluate clinical outcomes and patient satisfaction where applicable.
-6. Consider regulatory compliance aspects and potential risks.
+1. Understand the context of the sales data provided.
+2. Identify key metrics, trends, and patterns related to sales performance.
+3. Highlight profitable areas and areas of loss with specific causes.
+4. Compare against industry benchmarks and historical sales data.
+5. Provide actionable recommendations to improve sales performance.
+6. Offer strategic insights for optimizing sales strategies.
 
 Provide your analysis in three distinct sections:
-1. COMPREHENSIVE ANALYSIS: A detailed assessment of the product's performance, market positioning, clinical efficacy, and overall business impact. Include relevant metrics and their interpretation.
-2. PERFORMANCE TABLE: A structured assessment of winning vs. losing aspects of the product, specific causes for each, and actionable recommendations. Format this as a clear HTML table.
-3. STRATEGIC INSIGHTS: Provide unexpected, high-value observations that might not be immediately obvious but could significantly impact business decisions.
+1. COMPREHENSIVE ANALYSIS: A detailed assessment of sales performance, trends, and overall business impact. Include relevant metrics and their interpretation.
+2. PERFORMANCE TABLE: A structured assessment of profitable vs. loss-making areas, specific causes for each, and actionable recommendations. Format this as a clear HTML table.
+3. STRATEGIC INSIGHTS: Provide unexpected, high-value observations that could significantly impact sales strategies.
 
 Your analysis should be evidence-based, strategic, and actionable. Highlight specific numbers and metrics where possible. Focus on providing concrete, specific insights rather than general observations.`;
 
