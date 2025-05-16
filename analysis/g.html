@@ -613,6 +613,20 @@
             "SIPAP Inflow flow circuit"
         ];
 
+        // I.V. Therapy subcategories
+        const ivTherapySubcategories = [
+            "Blood Transfusion Set with “y” injection site- sterile",
+            "blood Administrator set -Burette Type -Sterile",
+            "Blood filter for removal of blood clots-sterile",
+            "I.V Infusion set With “Y” injection site / Administration set",
+            "I.V Infusion set With flow control",
+            "Burette I.V Infusion set With “Y” Injection site",
+            "Infusion Accessories",
+            "Transfer Set",
+            "Venting Needle",
+            "I.V. adhesive Fixer"
+        ];
+
         // Update subcategory dropdown based on category selection
         productCategorySelect.addEventListener('change', function() {
             if (this.value === "Airway") {
@@ -645,6 +659,15 @@
             } else if (this.value === "Neonatal") {
                 productSubcategorySelect.innerHTML = '<option value="">-- Optional --</option>';
                 neonatalSubcategories.forEach(sub => {
+                    const opt = document.createElement('option');
+                    opt.value = sub;
+                    opt.textContent = sub;
+                    productSubcategorySelect.appendChild(opt);
+                });
+                productSubcategorySelect.disabled = false;
+            } else if (this.value === "I.V. Therapy") {
+                productSubcategorySelect.innerHTML = '<option value="">-- Optional --</option>';
+                ivTherapySubcategories.forEach(sub => {
                     const opt = document.createElement('option');
                     opt.value = sub;
                     opt.textContent = sub;
