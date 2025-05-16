@@ -6,28 +6,35 @@
     <title>MAIS Medical Products Analysis</title>
     <style>
         :root {
-            --primary-color: #0056b3;
-            --secondary-color: #4CAF50;
-            --background-color: #f9f9f9;
+            --primary-color: #0056b3; /* Deep Blue */
+            --secondary-color: #4CAF50; /* Green */
+            --accent-color: #ff9800; /* Orange for accents if needed */
+            --background-color: #f8f9fa; /* Lighter gray */
             --card-color: #ffffff;
-            --text-color: #333333;
-            --border-color: #e0e0e0;
-            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            --hover-shadow: 0 10px 15px rgba(0, 0, 0, 0.15);
-            --transition: all 0.3s ease;
+            --text-color: #343a40; /* Darker gray for text */
+            --border-color: #dee2e6; /* Lighter border */
+            --shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+            --hover-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease-in-out;
+            --border-radius: 8px;
         }
 
-        * {
+        *, *::before, *::after {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        html {
+            scroll-behavior: smooth;
         }
 
         body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: var(--background-color);
             color: var(--text-color);
             line-height: 1.6;
+            font-size: 16px;
         }
 
         .container {
@@ -36,11 +43,15 @@
             padding: 20px;
         }
 
+        /* Header */
         header {
             background-color: var(--primary-color);
             color: white;
-            padding: 20px 0;
-            box-shadow: var(--shadow);
+            padding: 15px 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
         }
 
         .header-content {
@@ -49,14 +60,26 @@
             align-items: center;
         }
 
-        .logo {
-            font-size: 28px;
-            font-weight: bold;
-            letter-spacing: 1px;
+        .logo a {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            color: white;
         }
 
         .logo img {
             height: 48px;
+            margin-right: 10px;
+            transition: transform 0.3s ease;
+        }
+        .logo a:hover img {
+            transform: scale(1.05);
+        }
+
+        .logo-text {
+            font-size: 26px;
+            font-weight: bold;
+            letter-spacing: 0.5px;
         }
 
         nav ul {
@@ -65,60 +88,98 @@
         }
 
         nav ul li {
-            margin-left: 20px;
+            margin-left: 25px;
         }
 
         nav ul li a {
             color: white;
             text-decoration: none;
             font-weight: 500;
-            transition: var(--transition);
+            padding: 8px 0;
+            position: relative;
+            transition: color 0.3s ease;
+        }
+
+        nav ul li a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: var(--secondary-color);
+            transition: width 0.3s ease;
         }
 
         nav ul li a:hover {
-            color: var(--secondary-color);
+            color: #e0e0e0; /* Slightly lighter on hover */
+        }
+        nav ul li a:hover::after,
+        nav ul li a.active::after { /* For active page link */
+            width: 100%;
         }
 
+
+        /* Message Area */
+        .message-area {
+            padding: 15px;
+            margin: 20px auto;
+            border-radius: var(--border-radius);
+            text-align: center;
+            font-weight: 500;
+            max-width: 1160px; /* Aligns with container minus padding */
+        }
+        .message-area.success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .message-area.error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+
+        /* Main Content */
         .main-content {
-            margin: 40px 0;
+            margin: 30px 0;
         }
 
         .section-title {
-            font-size: 24px;
-            margin-bottom: 20px;
+            font-size: 28px;
+            margin-bottom: 25px;
             color: var(--primary-color);
-            border-bottom: 2px solid var(--secondary-color);
-            padding-bottom: 10px;
-            position: relative;
+            border-bottom: 3px solid var(--secondary-color);
+            padding-bottom: 12px;
+            font-weight: 600;
         }
 
         .input-section {
             background-color: var(--card-color);
-            padding: 25px;
-            border-radius: 8px;
+            padding: 30px;
+            border-radius: var(--border-radius);
             box-shadow: var(--shadow);
             margin-bottom: 30px;
         }
 
-        .product-selection {
-            margin-bottom: 25px;
-        }
-
         .select-group {
-            margin-bottom: 15px;
+            margin-bottom: 20px;
         }
 
         label {
             display: block;
             margin-bottom: 8px;
             font-weight: 500;
+            color: #555;
         }
 
         select, textarea {
             width: 100%;
-            padding: 12px;
+            padding: 12px 15px;
             border: 1px solid var(--border-color);
-            border-radius: 4px;
+            border-radius: 4px; /* Smaller radius for form elements */
             background-color: #fff;
             font-size: 16px;
             transition: var(--transition);
@@ -127,21 +188,21 @@
         select:focus, textarea:focus {
             outline: none;
             border-color: var(--primary-color);
-            box-shadow: 0 0 0 2px rgba(0, 86, 179, 0.2);
+            box-shadow: 0 0 0 3px rgba(0, 86, 179, 0.15);
         }
 
         .input-tabs {
-            margin-top: 20px;
+            margin-top: 25px;
         }
 
         .tab-buttons {
             display: flex;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
             border-bottom: 1px solid var(--border-color);
         }
 
         .tab-button {
-            padding: 10px 20px;
+            padding: 12px 25px;
             background: none;
             border: none;
             border-bottom: 3px solid transparent;
@@ -155,10 +216,16 @@
         .tab-button.active {
             border-bottom-color: var(--secondary-color);
             color: var(--primary-color);
+            font-weight: 600;
+        }
+        .tab-button:not(.active):hover {
+            color: var(--primary-color);
+            background-color: rgba(0, 86, 179, 0.05);
         }
 
         .tab-content {
             display: none;
+            padding-top: 10px;
         }
 
         .tab-content.active {
@@ -167,20 +234,22 @@
 
         .file-upload {
             border: 2px dashed var(--border-color);
-            padding: 30px;
+            padding: 35px;
             text-align: center;
             border-radius: 6px;
             margin-bottom: 20px;
             transition: var(--transition);
+            background-color: #fdfdfd;
         }
 
         .file-upload:hover {
             border-color: var(--primary-color);
+            background-color: rgba(0, 86, 179, 0.02);
         }
 
         .file-upload p {
             margin-bottom: 15px;
-            color: #666;
+            color: #6c757d;
         }
 
         .file-input {
@@ -189,65 +258,114 @@
 
         .upload-btn {
             display: inline-block;
-            padding: 10px 25px;
+            padding: 12px 30px;
             background-color: var(--primary-color);
             color: white;
             border-radius: 4px;
             cursor: pointer;
             transition: var(--transition);
+            font-weight: 500;
         }
 
         .upload-btn:hover {
-            background-color: #004494;
+            background-color: #00458f; /* Darker shade */
+        }
+
+        #file-name-display {
+            margin-top: 15px;
+            font-size: 14px;
+            color: #555;
+            font-style: italic;
         }
 
         .text-input textarea {
-            min-height: 200px;
+            min-height: 180px;
             resize: vertical;
         }
 
         .submit-btn {
             display: block;
             width: 100%;
-            padding: 14px;
+            padding: 15px;
             background-color: var(--secondary-color);
             color: white;
             border: none;
             border-radius: 4px;
             font-size: 18px;
-            font-weight: 500;
+            font-weight: 600;
             cursor: pointer;
             transition: var(--transition);
-            margin-top: 20px;
+            margin-top: 25px;
         }
 
-        .submit-btn:hover {
-            background-color: #3e8e41;
+        .submit-btn:hover:not(:disabled) {
+            background-color: #409143; /* Darker green */
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
         }
 
         .submit-btn:disabled {
-            background-color: #cccccc;
+            background-color: #ced4da;
             cursor: not-allowed;
+            color: #6c757d;
         }
 
+        /* Loading Animation */
+        .loading {
+            display: none; /* Hidden by default */
+            text-align: center;
+            padding: 40px 20px;
+            margin: 30px 0;
+        }
+
+        .loading p {
+            color: var(--primary-color);
+            margin-top: 20px;
+            font-size: 18px;
+            font-weight: 500;
+        }
+
+        .spinner {
+            width: 60px;
+            height: 60px;
+            margin: 0 auto;
+            border: 7px solid #e9ecef; /* Light grey for track */
+            border-top: 7px solid var(--primary-color); /* Spinner color */
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+
+        /* Results Section */
         .results-section {
-            display: none;
+            display: none; /* Hidden by default */
             margin-top: 40px;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .results-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 25px;
-            margin-top: 20px;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 30px;
+            margin-top: 25px;
         }
 
         .result-card {
             background-color: var(--card-color);
-            border-radius: 8px;
+            border-radius: var(--border-radius);
             box-shadow: var(--shadow);
             transition: var(--transition);
-            overflow: hidden;
+            overflow: hidden; /* Ensures content respects border radius */
         }
 
         .result-card:hover {
@@ -258,202 +376,204 @@
         .card-header {
             background-color: var(--primary-color);
             color: white;
-            padding: 15px 20px;
-            font-weight: 500;
-            font-size: 18px;
+            padding: 18px 25px;
+            font-weight: 600;
+            font-size: 19px;
         }
 
         .card-body {
-            padding: 20px;
-            min-height: 300px;
-            max-height: 500px;
+            padding: 25px;
+            min-height: 250px; /* Adjusted min-height */
+            max-height: 450px; /* Adjusted max-height */
             overflow-y: auto;
+            font-size: 15px;
         }
-
-        /* Make the "Product Performance" card larger and rectangular */
-        #performance-card {
-            grid-column: span 2;
-            min-height: 400px;
-        }
-
-        /* Responsive design improvements */
-        @media (max-width: 768px) {
-            .header-content {
-                flex-direction: column;
-                text-align: center;
-            }
-
-            nav ul {
-                margin-top: 15px;
-                justify-content: center;
-            }
-
-            .results-grid {
-                grid-template-columns: 1fr;
-            }
-
-            #performance-card {
-                grid-column: span 1;
-            }
-
-            .footer-content {
-                flex-direction: column;
-                text-align: center;
-            }
-
-            .footer-links {
-                margin-top: 15px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .tab-buttons {
-                flex-direction: column;
-                border-bottom: none;
-            }
-
-            .tab-button {
-                border-bottom: 1px solid var(--border-color);
-                text-align: left;
-                padding: 12px 10px;
-            }
-
-            .tab-button.active {
-                border-left: 3px solid var(--secondary-color);
-                border-bottom: 1px solid var(--border-color);
-            }
-
-            .result-card {
-                padding: 10px;
-            }
-
-            .card-header {
-                font-size: 16px;
-                padding: 10px;
-            }
-
-            .card-body {
-                padding: 15px;
-            }
-        }
-
-        /* Loading Animation Styles */
-        .loading {
-            display: none;
-            text-align: center;
-            padding: 30px;
-            margin: 20px 0;
-        }
-
-        .loading p {
+         .card-body h3 {
+            font-size: 1.1em;
             color: var(--primary-color);
+            margin-top: 1em;
+            margin-bottom: 0.5em;
+        }
+        .card-body p {
+            margin-bottom: 1em;
+            line-height: 1.7;
+        }
+        .card-body ul, .card-body ol {
+            margin-left: 20px;
+            margin-bottom: 1em;
+        }
+        .card-body li {
+            margin-bottom: 0.5em;
+        }
+        .card-body strong { color: var(--primary-color); }
+        .card-body em { color: var(--secondary-color); font-style: normal; }
+        .text-highlight {
+            background-color: #fff3cd; /* Light yellow highlight */
+            padding: 0.1em 0.3em;
+            border-radius: 3px;
+        }
+
+        /* Table styling for performance card */
+        #performance-content table {
+            width: 100%;
+            border-collapse: collapse;
             margin-top: 15px;
-            font-size: 18px;
+        }
+        #performance-content th, #performance-content td {
+            border: 1px solid var(--border-color);
+            padding: 10px 12px;
+            text-align: left;
+            font-size: 14px;
+        }
+        #performance-content th {
+            background-color: #f8f9fa; /* Light background for headers */
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+        #performance-content tr:nth-child(even) {
+            background-color: #fdfdfd;
+        }
+        #performance-content .status-success { color: var(--secondary-color); font-weight: bold; }
+        #performance-content .status-danger { color: #dc3545; font-weight: bold; } /* Red for danger/loss */
+        #performance-content .status-neutral { color: #6c757d; } /* Grey for neutral */
+
+
+        #performance-card {
+            grid-column: 1 / -1; /* Span full width on larger screens */
+            min-height: 350px;
         }
 
-        .spinner {
-            width: 70px;
-            height: 70px;
-            margin: 0 auto;
-            border: 8px solid #f3f3f3;
-            border-top: 8px solid var(--primary-color);
-            border-radius: 50%;
-            animation: spin 1s linear infinite, pulse 1.5s ease-in-out infinite;
-            box-shadow: 0 0 15px rgba(0, 86, 179, 0.2);
+
+        /* Footer */
+        footer {
+            background-color: #343a40; /* Dark footer */
+            color: #adb5bd; /* Light text for dark background */
+            padding: 30px 0;
+            margin-top: 50px;
+            text-align: center;
         }
 
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+        .footer-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
         }
 
-        @keyframes pulse {
-            0% { transform: scale(1) rotate(0deg); }
-            50% { transform: scale(1.1) rotate(180deg); }
-            100% { transform: scale(1) rotate(360deg); }
+        .footer-logo {
+            font-size: 20px;
+            font-weight: bold;
+            color: #f8f9fa;
         }
 
-        /* 3D Support Button Styles */
+        .footer-links a {
+            color: #adb5bd;
+            text-decoration: none;
+            margin: 0 12px;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: #ffffff;
+        }
+
+
+        /* 3D Support Button */
         .support-btn-3d {
             position: fixed;
-            bottom: 32px;
-            right: 32px;
+            bottom: 30px;
+            right: 30px;
             z-index: 9999;
-            width: 64px;
-            height: 64px;
-            background: linear-gradient(145deg, #0056b3 60%, #4CAF50 100%);
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(145deg, var(--primary-color) 50%, var(--secondary-color) 100%);
             border-radius: 50%;
-            box-shadow: 0 8px 24px rgba(0,86,179,0.25), 0 2px 8px rgba(0,0,0,0.10);
+            box-shadow: 0 6px 18px rgba(0,86,179,0.2), 0 2px 6px rgba(0,0,0,0.08);
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.2s;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
             border: none;
             outline: none;
         }
         .support-btn-3d:hover {
-            transform: translateY(-6px) scale(1.07);
-            box-shadow: 0 16px 32px rgba(0,86,179,0.30), 0 4px 16px rgba(0,0,0,0.12);
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 12px 24px rgba(0,86,179,0.25), 0 3px 12px rgba(0,0,0,0.1);
         }
         .support-btn-3d svg {
-            width: 36px;
-            height: 36px;
-            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.18));
+            width: 32px;
+            height: 32px;
+            filter: drop-shadow(0 1px 2px rgba(0,0,0,0.15));
         }
 
-        /* Support Modal Styles */
+        /* Support Modal */
         .support-modal-bg {
-            display: none;
+            display: none; /* Hidden by default */
             position: fixed;
             z-index: 10000;
-            left: 0; top: 0; width: 100vw; height: 100vh;
-            background: rgba(0,0,0,0.25);
+            left: 0; top: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.4); /* Darker overlay */
+            display: flex; /* Use flex for centering, but manage display via JS */
             align-items: center;
             justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0s linear 0.3s;
         }
+        .support-modal-bg.visible {
+            opacity: 1;
+            visibility: visible;
+            transition: opacity 0.3s ease;
+        }
+
         .support-modal {
-            background: #fff;
-            border-radius: 16px;
-            box-shadow: 0 8px 32px rgba(0,86,179,0.18);
-            max-width: 400px;
-            width: 95vw;
-            padding: 28px 24px 18px 24px;
+            background: var(--card-color);
+            border-radius: var(--border-radius);
+            box-shadow: 0 10px 40px rgba(0,86,179,0.15);
+            max-width: 420px;
+            width: 90vw;
+            padding: 30px 25px 20px 25px;
             position: relative;
-            animation: supportModalIn 0.25s;
+            transform: scale(0.95) translateY(20px);
+            transition: transform 0.3s ease;
         }
-        @keyframes supportModalIn {
-            from { transform: scale(0.92) translateY(40px); opacity: 0; }
-            to { transform: scale(1) translateY(0); opacity: 1; }
+        .support-modal-bg.visible .support-modal {
+            transform: scale(1) translateY(0);
         }
+
         .support-modal-close {
             position: absolute;
-            top: 14px; right: 18px;
+            top: 15px; right: 20px;
             background: none;
             border: none;
-            font-size: 22px;
-            color: #888;
+            font-size: 26px;
+            color: #adb5bd;
             cursor: pointer;
+            transition: color 0.2s ease;
+        }
+        .support-modal-close:hover {
+            color: var(--text-color);
         }
         .support-modal-title {
-            font-size: 20px;
-            font-weight: bold;
+            font-size: 22px;
+            font-weight: 600; /* Bolder */
             color: var(--primary-color);
             margin-bottom: 12px;
         }
         .support-modal-desc {
             font-size: 15px;
-            color: #444;
-            margin-bottom: 18px;
+            color: #555;
+            margin-bottom: 20px;
         }
         .support-modal textarea {
             width: 100%;
-            min-height: 80px;
+            min-height: 100px;
             border: 1px solid var(--border-color);
-            border-radius: 6px;
-            padding: 10px;
+            border-radius: 4px;
+            padding: 12px;
             font-size: 15px;
-            margin-bottom: 12px;
+            margin-bottom: 15px;
             resize: vertical;
         }
         .support-modal .support-send-btn {
@@ -461,30 +581,87 @@
             color: #fff;
             border: none;
             border-radius: 4px;
-            padding: 10px 22px;
+            padding: 12px 25px;
             font-size: 16px;
             font-weight: 500;
             cursor: pointer;
-            transition: background 0.2s;
+            transition: background-color 0.2s ease;
+            width: 100%;
+        }
+        .support-modal .support-send-btn:hover:not(:disabled) {
+            background-color: #00458f;
         }
         .support-modal .support-send-btn:disabled {
-            background: #b0b0b0;
+            background: #ced4da;
             cursor: not-allowed;
         }
-        .support-modal .support-response {
-            margin-top: 16px;
-            background: #f6faff;
-            border-radius: 6px;
-            padding: 12px;
-            font-size: 15px;
-            color: #222;
-            min-height: 32px;
-            white-space: pre-line;
-        }
         .support-modal .support-loading {
-            margin-top: 10px;
+            margin-top: 12px;
             color: var(--primary-color);
             font-size: 15px;
+            text-align: center;
+        }
+        .support-modal .support-response {
+            margin-top: 18px;
+            background: #f8f9fa;
+            border-radius: 6px;
+            padding: 15px;
+            font-size: 15px;
+            color: var(--text-color);
+            min-height: 40px;
+            white-space: pre-line; /* Respect newlines from AI */
+            border: 1px solid var(--border-color);
+        }
+
+        /* Responsive Adjustments */
+        @media (max-width: 992px) {
+            #performance-card {
+                grid-column: span 1; /* Stack on smaller screens */
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+            }
+            .logo { margin-bottom: 10px; }
+            nav ul {
+                margin-top: 15px;
+                justify-content: center;
+                flex-wrap: wrap; /* Allow nav items to wrap */
+            }
+            nav ul li { margin: 5px 10px; }
+
+            .results-grid {
+                grid-template-columns: 1fr; /* Single column for cards */
+            }
+            .footer-content {
+                flex-direction: column;
+                text-align: center;
+            }
+            .footer-links { margin-top: 15px; }
+            .footer-links a { margin: 0 8px; }
+        }
+
+        @media (max-width: 480px) {
+            .section-title { font-size: 24px; }
+            .input-section, .card-body, .card-header { padding: 20px; }
+            .tab-buttons {
+                flex-direction: column;
+                border-bottom: none;
+            }
+            .tab-button {
+                border-bottom: 1px solid var(--border-color);
+                text-align: left;
+                width: 100%;
+            }
+            .tab-button.active {
+                border-left: 4px solid var(--secondary-color);
+                border-bottom-color: var(--border-color); /* Keep bottom border */
+            }
+            .support-modal { padding: 20px 15px 15px 15px; }
+            .support-modal-title { font-size: 20px; }
         }
     </style>
 </head>
@@ -493,12 +670,15 @@
         <div class="container">
             <div class="header-content">
                 <div class="logo">
-                    <img src="../logo.png" alt="MAIS Logo" style="height:48px;">
+                    <a href="#" title="MAIS Home">
+                        <img src="../logo.png" alt="MAIS Company Logo">
+                        <span class="logo-text">MAIS Analytics</span>
+                    </a>
                 </div>
                 <nav>
                     <ul>
-                        <li><a href="#">Home</a></li>
-                        <li><a href="Competitor-analysis.html">Competitor analysis </a></li>
+                        <li><a href="#" class="active">Home</a></li>
+                        <li><a href="Competitor-analysis.html">Competitor Analysis</a></li>
                         <li><a href="#">Reports</a></li>
                         <li><a href="#">Contact</a></li>
                     </ul>
@@ -508,16 +688,19 @@
     </header>
 
     <div class="container">
+        <div id="message-area" class="message-area" style="display:none;" role="alert"></div>
+
         <main class="main-content">
             <h1 class="section-title">Sales Data Analysis Platform</h1>
             
-            <section class="input-section">
+            <section class="input-section" aria-labelledby="input-section-title">
+                <h2 id="input-section-title" class="visually-hidden">Data Input</h2>
                 <div class="product-selection">
                     <div class="select-group">
                         <label for="product-category">Select Product Category:</label>
                         <select id="product-category">
                             <option value="">-- Select Category --</option>
-                            <option value="any">any</option>
+                            <option value="any">Any Category</option>
                             <option value="Airway">Airway</option>
                             <option value="Anesthesia">Anesthesia</option>
                             <option value="Oxygen Therapy">Oxygen Therapy</option>
@@ -535,32 +718,32 @@
                         </select>
                     </div>
                     <div class="select-group">
-                        <label for="product-subcategory">Select Specific Product:</label>
+                        <label for="product-subcategory">Select Specific Product (Optional):</label>
                         <select id="product-subcategory" disabled>
-                            <option value="">-- Optional --</option>
+                            <option value="">-- Select Category First --</option>
                         </select>
                     </div>
                 </div>
                 
                 <div class="input-tabs">
-                    <div class="tab-buttons">
-                        <button class="tab-button active" data-tab="file-tab">Upload File</button>
-                        <button class="tab-button" data-tab="text-tab">Enter Text</button>
+                    <div class="tab-buttons" role="tablist">
+                        <button class="tab-button active" id="file-tab-btn" data-tab="file-tab" role="tab" aria-controls="file-tab" aria-selected="true">Upload File</button>
+                        <button class="tab-button" id="text-tab-btn" data-tab="text-tab" role="tab" aria-controls="text-tab" aria-selected="false">Enter Text</button>
                     </div>
                     
-                    <div id="file-tab" class="tab-content active">
+                    <div id="file-tab" class="tab-content active" role="tabpanel" aria-labelledby="file-tab-btn">
                         <div class="file-upload">
-                            <p>Drag and drop a file or click the button below</p>
-                            <input type="file" id="file-input" class="file-input" accept=".pdf,.doc,.docx,.xls,.xlsx,.csv,.txt">
+                            <p>Drag and drop a file here or click the button below.</p>
+                            <input type="file" id="file-input" class="file-input" accept=".pdf,.doc,.docx,.xls,.xlsx,.csv,.txt,.md" aria-label="File input for sales data">
                             <label for="file-input" class="upload-btn">Choose File</label>
-                            <p id="file-name" style="margin-top: 10px; font-size: 14px;"></p>
+                            <p id="file-name-display" style="margin-top: 10px; font-size: 14px;"></p>
                         </div>
                     </div>
                     
-                    <div id="text-tab" class="tab-content">
+                    <div id="text-tab" class="tab-content" role="tabpanel" aria-labelledby="text-tab-btn">
                         <div class="text-input">
                             <label for="analysis-text">Enter text for analysis:</label>
-                            <textarea id="analysis-text" placeholder="Paste your text here for analysis..."></textarea>
+                            <textarea id="analysis-text" placeholder="Paste your sales data or relevant text here for analysis..."></textarea>
                         </div>
                     </div>
                     
@@ -568,33 +751,35 @@
                 </div>
             </section>
             
-            <div id="loading" class="loading">
-                <div class="spinner"></div>
-                <p>جاري تحليل البيانات... يرجى الانتظار</p>
+            <div id="loading" class="loading" aria-live="polite" aria-atomic="true">
+                <div class="spinner" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+                <p>Analyzing data... Please wait.</p>
             </div>
             
-            <section id="results-section" class="results-section">
+            <section id="results-section" class="results-section" aria-live="polite" aria-atomic="true">
                 <h2 class="section-title">Analysis Results</h2>
                 
                 <div class="results-grid">
                     <div class="result-card">
                         <div class="card-header">Comprehensive Analysis</div>
                         <div class="card-body" id="analysis-content">
-                            <!-- Analysis content will be loaded here -->
+                            <p><em>Analysis content will appear here.</em></p>
                         </div>
                     </div>
                     
                     <div id="performance-card" class="result-card">
-                        <div class="card-header">Product Performance</div>
+                        <div class="card-header">Product Performance Highlights</div>
                         <div class="card-body" id="performance-content">
-                            <!-- Performance table will be loaded here -->
+                             <p><em>Performance table and key metrics will appear here.</em></p>
                         </div>
                     </div>
                     
                     <div class="result-card">
-                        <div class="card-header">AI Insights</div>
+                        <div class="card-header">Strategic AI Insights</div>
                         <div class="card-body" id="insights-content">
-                            <!-- AI insights will be loaded here -->
+                            <p><em>Actionable AI-driven insights will appear here.</em></p>
                         </div>
                     </div>
                 </div>
@@ -605,20 +790,19 @@
     <footer>
         <div class="container">
             <div class="footer-content">
-                <div class="footer-logo">MAIS Analytics by YAZEED</div>
+                <div class="footer-logo">MAIS Analytics © <span id="current-year"></span></div>
                 <div class="footer-links">
                     <a href="#">Privacy Policy</a>
                     <a href="#">Terms of Service</a>
-                    <a href="#">Support</a>
+                    <a href="#support-btn" id="footer-support-link">Support</a>
                 </div>
             </div>
         </div>
     </footer>
 
     <!-- 3D Support Button -->
-    <button class="support-btn-3d" id="support-btn" title="دعم فني">
-        <!-- 3D headset icon SVG -->
-        <svg viewBox="0 0 64 64" fill="none">
+    <button class="support-btn-3d" id="support-btn" title="Technical Support" aria-label="Open Technical Support Chat">
+        <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
             <defs>
                 <radialGradient id="g1" cx="50%" cy="50%" r="70%">
                     <stop offset="0%" stop-color="#4CAF50"/>
@@ -637,24 +821,27 @@
     </button>
 
     <!-- Support Modal -->
-    <div class="support-modal-bg" id="support-modal-bg">
+    <div class="support-modal-bg" id="support-modal-bg" role="dialog" aria-modal="true" aria-labelledby="support-modal-title">
         <div class="support-modal">
-            <button class="support-modal-close" id="support-modal-close" title="إغلاق">&times;</button>
-            <div class="support-modal-title">الدعم الفني - MAIS</div>
-            <div class="support-modal-desc">اكتب مشكلتك أو استفسارك حول منصة MAIS وسيتم الرد عليك بواسطة الذكاء الاصطناعي.</div>
-            <textarea id="support-input" placeholder="صف مشكلتك أو سؤالك هنا..."></textarea>
-            <button class="support-send-btn" id="support-send-btn" disabled>إرسال</button>
-            <div class="support-loading" id="support-loading" style="display:none;">Thinking and writing now</div>
-            <div class="support-response" id="support-response"></div>
+            <button class="support-modal-close" id="support-modal-close" title="Close" aria-label="Close support modal">×</button>
+            <div class="support-modal-title" id="support-modal-title">MAIS Technical Support</div>
+            <div class="support-modal-desc">Describe your issue or question about the MAIS platform, and our AI assistant will help you.</div>
+            <textarea id="support-input" placeholder="Type your problem or question here..." aria-label="Support question input"></textarea>
+            <button class="support-send-btn" id="support-send-btn" disabled>Send</button>
+            <div class="support-loading" id="support-loading" style="display:none;" aria-live="polite">Processing your request...</div>
+            <div class="support-response" id="support-response" aria-live="polite"></div>
         </div>
     </div>
 
+    <!-- Visually Hidden Class for Accessibility -->
+    <style>.visually-hidden { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0, 0, 0, 0); border: 0; }</style>
+
     <script>
-        // DOM elements
+        // DOM Elements
         const productCategorySelect = document.getElementById('product-category');
         const productSubcategorySelect = document.getElementById('product-subcategory');
         const fileInput = document.getElementById('file-input');
-        const fileName = document.getElementById('file-name');
+        const fileNameDisplay = document.getElementById('file-name-display');
         const analysisText = document.getElementById('analysis-text');
         const analyzeBtn = document.getElementById('analyze-btn');
         const tabButtons = document.querySelectorAll('.tab-button');
@@ -664,455 +851,212 @@
         const analysisContent = document.getElementById('analysis-content');
         const performanceContent = document.getElementById('performance-content');
         const insightsContent = document.getElementById('insights-content');
+        const messageArea = document.getElementById('message-area');
         
-        // Current active tab
-        let activeTab = 'file-tab';
+        let activeTab = 'file-tab'; // Default active tab
 
-        // Airway subcategories
-        const airwaySubcategories = [
-            "Pharyngeal Airway",
-            "Naso-Pharyngeal Airway-PVC",
-            "Naso-Pharyngeal Airway-Silicon",
-            "laryngeal Airway Mask -PVC",
-            "laryngeal Airway Mask (Reinforced Reusable -silicon)",
-            "laryngeal Airway Mask set (Reinforced Reusable -silicon)",
-            "All-Silicone Tracheostomy Tube : Un-Cuffed",
-            "All-Silicone Tracheostomy Tube : Cuffed",
-            "Tracheostomy     Tube                       Tracheostomy Mask"
-        ];
+        // Product Subcategories Data
+        const productSubcategories = {
+            "Airway": ["Pharyngeal Airway", "Naso-Pharyngeal Airway-PVC", "Naso-Pharyngeal Airway-Silicon", "laryngeal Airway Mask -PVC", "laryngeal Airway Mask (Reinforced Reusable -silicon)", "laryngeal Airway Mask set (Reinforced Reusable -silicon)", "All-Silicone Tracheostomy Tube : Un-Cuffed", "All-Silicone Tracheostomy Tube : Cuffed", "Tracheostomy Tube", "Tracheostomy Mask"],
+            "Anesthesia": ["Anesthesia Breathing circuit (Smooth Bore )", "Anesthesia Breathing circuit (corrugated)", "Ventelation Breathing Circuit", "Catheter Mount", "Breathing Bag (Antistatic) Reusable", "MDI Meter Dose Inhaler Adapter", "Bacterial & Viral Filters", "Bacterial/Viral Filter With HME", "Bacterial/Viral Filter With HME (Artificial Nose)", "Tracheostomy HME Filter", "E.T.T Preformed (South Facing-oral) Cuffed", "E.T.T Preformed (North Facing Nasal) Cuffed", "E.T.T Preformed (South Facing-oral) Uncuffed", "E.T.T Preformed (North Facing Nasal) Uncuffed", "Endotracheal Tubes Oral/Nasal-Cuffed", "Endotracheal Tubes Reinforced Oral/Nasal-Cuffed", "Endotracheal Tubes Oral/Nasal-Uncuffed", "Endotracheal Tubes Reinforced Oral/Nasal-Uncuffed"],
+            "Oxygen Therapy": ["Oxygen Nasal Cannula", "Aerosol Mask Without Tube", "Nebulizer Mask With tube", "Oxygen Catheter", "Oxygen Mask With tube", "Nebulizer kit with (T-mouth pc, 15cm corrugated tube)", "Non-Rebreathing Mask", "Partially Non Rebreathing Mask", "Venturi Mask / Mask Vent Adult", "Oxygen Therapy Accessories"],
+            "Neonatal": ["Polyurethane Catheter", "Positioning Aid / Snuggle Ups", "NCAP-Hat(cap)", "Eye Protector", "Little Suckers/Neosuckers-neonate Gentle Plastic", "Nasal Prong, Max flow 6 l/min", "NCPAP Mask", "Hat For Neonate", "Infant bonnet", "SIPAP Inflow flow circuit"],
+            "I.V. Therapy": ["Blood Transfusion Set with Y-injection site", "Blood Administrator set - Burette Type", "Blood filter for clot removal", "I.V Infusion set With Y-injection site", "I.V Infusion set With flow control", "Burette I.V Infusion set With Y-Injection site", "Infusion Accessories", "Transfer Set", "Venting Needle", "I.V. adhesive Fixer"],
+            "Syringes": ["Dual Syringe Injector", "Special Syringes", "Syringe Insulin (sterile)", "Syringe Luer Lock/side Nozzle (Sterile)", "Syringe luer tip (sterile)"],
+            "Kits & Sets": ["CVC Single/Double/Triple/Four/Five Lumen Sets", "HDC Single/Double/Triple Lumen Catheter Sets (Straight/Curved)", "Peritoneal Dialysis Catheter Set (PDC)", "Permthane Double Lumen Catheter Set", "Lumbar Puncture Set", "Combined Spinal-Epidural Set", "Epidural Set", "Biopsy Set", "Tracheostomy Care Kit", "Patient Care Kit", "Suction Catheter Kit"],
+            "Hemodialysis": ["Blood Lines (Fresenius/Gambro/B.Braun/Other Machines)", "Arterial Venous Catheter for Hemodialysis", "Hemodialyzer Filters", "Cartridge for hemodialysis (Non-Sterile)", "Fistula Needle (Sterile/Set)", "Y-Connector for Single Needle Dialysis", "Trans Urethral Resection Catheter", "Dialysis Catheter (short term)"],
+            "Tubes & Catheters": ["Feeding Tube (with Guide Wire/Silicon/X-Ray Line)", "Enteral Feeding Bag with Set", "Feeding Tube Gastrostomy (Silicone)", "Ryles Tubes with X-Ray Line", "Rectal Tube", "Drainage Tubes", "Extension/Connection Tubes", "Suction Connection Tubes", "Nasojejunal Feeding Tube/Suction Silicon Tube", "I.V. Amber Tubing", "Suction Catheter (Finger Control/Funnel)", "CO2 Gas Tubing for Insufflator", "Laparoscopic Accessories", "Adapters", "Thoracic Catheter (Right Angle/Straight, with/without Trocar)"],
+            "Pulse Oximeter": ["Sensor Oxygen Forehead Masimo SET", "SPO2 Probe Adhesive Masimo SET", "Saturation Probe Neonates Nellcor", "Skin Temperature Probe Giraffe Incubator", "Saturation Probe Finger Tip", "Temperature Probe"],
+            "General Surgery": ["PVC Wound Drainage Set (Silicon Multi Channel Tube)", "Open Surgery Abdominal Drain", "Hi-Vacuum Wound Drainage Set Spring Type", "Silicon Hubless Wound Drainage", "Wound Drainage Set (Pre-evacuated/Bellow Pump)", "Under Water Drainage System (Thoracic/Pleural/One/Two Bottle)"],
+            "Urology": ["Tiemann Catheter", "Nelaton Catheter (Male/Female)", "Double Lumen Catheter (Radio-Opaque, Graduated)", "Set Replacement Polyurethane Pigtail", "2-Way Foley Catheter (100% Silicone/Latex Silicone Coated)", "Ureteral Stent (Distal End Opened/Closed - PUR)"],
+            "Obstetrics & Gynecology": ["Vaginal Dilator Set", "Water Based Gel"],
+            "Miscellaneous": ["IV Cannula (With/Without Port)", "Safety Intravenous (I.V) Cannula", "Scalp Vein Set", "IV Butterfly Needle", "Vacuum Blood Collection Tube", "Multi Sample Needle", "Multi Sample Holder & Adapter", "Arterial Catheter"]
+        };
+        
+        // Helper function to show messages
+        function showMessage(message, type = 'info') { // type can be 'info', 'success', 'error'
+            messageArea.textContent = message;
+            messageArea.className = 'message-area'; // Reset classes
+            if (type === 'success') {
+                messageArea.classList.add('success');
+            } else if (type === 'error') {
+                messageArea.classList.add('error');
+            }
+            messageArea.style.display = 'block';
+            // Optionally hide after some time for info/success
+            if (type !== 'error') {
+                setTimeout(() => {
+                    if (messageArea.textContent === message) { // Only hide if it's still the same message
+                         messageArea.style.display = 'none';
+                    }
+                }, 5000);
+            }
+        }
+        function hideMessage() {
+            messageArea.style.display = 'none';
+        }
 
-        // Anesthesia subcategories
-        const anesthesiaSubcategories = [
-            "Anesthesia Breathing circuit (Smooth Bore )",
-            "Anesthesia Breathing circuit (corrugated)",
-            "Ventelation Breathing Circuit",
-            "Catheter Mount",
-            "Breathing Bag ( Antistatic ) Reusable",
-            "MdI meter Dose",
-            "Bacterial & Viral Filters",
-            "Bacterial /Viral Filter With Heat & Moisture exchange Type",
-            "Bacterial /Viral Filter With Heat & Moisture exchange Type (Artificial Nose )",
-            "Tracheostomy HME Filter",
-            "E.T.T preformed (South Facing-oral) Cuffed",
-            "E.T.T preformed (north Facing Nasal) Cuffed",
-            "E.T.T preformed (South Facing-oral) UNCuffed",
-            "E.T.T preformed (north Facing Nasal) UNCuffed",
-            "Endotracheal Tubes Oral/Nasal-Cuffed",
-            "Endotracheal Tubes Reinforced Oral/Nasal-Cuffed",
-            "Endotracheal Tubes Oral/Nasal-UnCffed",
-            "Endotracheal Tubes Reinforced Oral/Nasal-UnCffed"
-        ];
-
-        // Oxygen Therapy subcategories
-        const oxygenTherapySubcategories = [
-            "Oxygen Nasal Cannula",
-            "Aerosol Mask Without Tube",
-            "Nebulizer Mask With tube",
-            "Oxygen Catheter",
-            "Oxygen Mask With tube",
-            "Nebulizer kit with (T-mouth pc , 15cm corrugated tube )",
-            "Aerosol Mask with Tube",
-            "Non-Rebreathing Mask",
-            "Partially Non Rebreathing Mask",
-            "Venturi Mask /Mask Vent Adult",
-            "Accessories",
-            "Oxygen Catheter"
-        ];
-
-        // Neonatal subcategories
-        const neonatalSubcategories = [
-            "Polyurethane Catheter",
-            "Positioning Aid / Snuggle Ups",
-            "NCAP-Hat(cap)",
-            "Eye Protector",
-            "Little Suckers/Neosuchers-neonate Gentle Plastic",
-            "Nasal Prong , Maximum Patient flow 6 1/min",
-            "NCPAP Mask",
-            "Hat For Neonate",
-            "Infant bonnet , head cover to keep the premature and newborn Warm, Soft,latex free",
-            "SIPAP Inflow flow circuit"
-        ];
-
-        // I.V. Therapy subcategories
-        const ivTherapySubcategories = [
-            "Blood Transfusion Set with “y” injection site- sterile",
-            "blood Administrator set -Burette Type -Sterile",
-            "Blood filter for removal of blood clots-sterile",
-            "I.V Infusion set With “Y” injection site / Administration set",
-            "I.V Infusion set With flow control",
-            "Burette I.V Infusion set With “Y” Injection site",
-            "Infusion Accessories",
-            "Transfer Set",
-            "Venting Needle",
-            "I.V. adhesive Fixer"
-        ];
-
-        // Syringes subcategories
-        const syringesSubcategories = [
-            "Dual Syringe Injector",
-            "Special Syringes",
-            "Syringe Insulin (sterile)",
-            "Syringe Luer Lock/side Nozzle (Sterile)",
-            "Syringe luer tip (sterile)"
-        ];
-
-        // Hemodialysis subcategories
-        const hemodialysisSubcategories = [
-            "Blood Lines for (Fresenius Machines) – Sterile",
-            "Blood Lines for (Other Machines) – Sterile",
-            "Arterial Venous Catheter for Haemodialysis – Sterile",
-            "Hemodialyzer Filters – Sterile",
-            "Cartridge for hemodialysis – Non Sterile",
-            "Fistula Needle – Sterile",
-            "Fistula Needle Set (Pair) – Sterile",
-            "“Y” Connector for Single Needle Dialysis – Sterile",
-            "Trans Urethral Resection Catheter – Sterile",
-            "Dialysis Catheter (short term): Single Lumen Catheter",
-            "Blood Lines for (Gambro Machines) – Sterile",
-            "Blood Lines for (B. Braun Machines) – Sterile"
-        ];
-
-        // Pulse Oximeter subcategories
-        const pulseOximeterSubcategories = [
-            "Sensor Oxygen Forehead Masimo SET Technology",
-            "SPO2 Probe with Adhesive Tape Masimo SET Technology",
-            "Pulse Oximeter Sensor Probe Adhesive Tape Masimo SET Technology",
-            "Saturation Probe Neonates Nellcor Technology",
-            "Skin Temperature Probe Giraffe Incubator",
-            "Saturation Probe (For Pulse Oximeter) Finger Tip",
-            "Temperature Probe"
-        ];
-
-        // General Surgery subcategories
-        const generalSurgerySubcategories = [
-            "PVC Wound Drainage Set (Silicon Multi Channel Tube)",
-            "Open Surgery Abdominal Drain (Without trocar) Sterile",
-            "Hi-Vacuum Wound Drainage Set Spring Type",
-            "Silicon Hubless Wound Drainage (Silicon Multi Channel Tube)",
-            "Wound Drainage Set Pre-evacuated – Sterile",
-            "Wound Drainage Set Bellow Pump – Sterile",
-            "Under Water Drainage System 2000/3000 Thoracic",
-            "Under Water Drainage System 700/2000 Pleural",
-            "Under Water Drainage System: Two Bottle",
-            "Under Water Drainage System: One Bottle"
-        ];
-
-        // Urology subcategories
-        const urologySubcategories = [
-            "Tiemann Catheter",
-            "Nelaton Catheter Male",
-            "Nelaton Catheter Female",
-            "Double Lumen Catheter, Radio-Opaque, Graduated Soft Tip",
-            "Set Replacement, Polyurethane Pigtail",
-            "2-Way Foley Catheter 100% Pure Silicone",
-            "2-Way Foley Catheter Natural Latex Silicone Coated",
-            "Ureteral Stent (Indwelling Catheter) Distal End Opened – PUR",
-            "Ureteral Stent (Indwelling Catheter) Distal End Closed – PUR"
-        ];
-
-        // Obstetrics & Gynecology subcategories
-        const obstetricsGynecologySubcategories = [
-            "Vaginal Dilator Set",
-            "Water Based Gel"
-        ];
-
-        // Miscellaneous subcategories
-        const miscellaneousSubcategories = [
-            "IV Cannula With Port – Sterile",
-            "IV Cannula Without Port (Small Wings) – Sterile",
-            "Safety Intravenous (I.V) Cannula",
-            "Scalp Vein",
-            "IV Butterfly",
-            "Vacuum Tube",
-            "Multi Sample Needle",
-            "Multi Sample Holder & Adapter",
-            "Arterial Catheter"
-        ];
-
-        // Update subcategory dropdown based on category selection
+        // Populate subcategories
         productCategorySelect.addEventListener('change', function() {
-            if (this.value === "Airway") {
-                productSubcategorySelect.innerHTML = '<option value="">-- Optional --</option>';
-                airwaySubcategories.forEach(sub => {
+            const selectedCategory = this.value;
+            productSubcategorySelect.innerHTML = '<option value="">-- Optional: Select Specific Product --</option>';
+            
+            if (selectedCategory && productSubcategories[selectedCategory]) {
+                productSubcategories[selectedCategory].forEach(sub => {
                     const opt = document.createElement('option');
                     opt.value = sub;
                     opt.textContent = sub;
                     productSubcategorySelect.appendChild(opt);
                 });
                 productSubcategorySelect.disabled = false;
-            } else if (this.value === "Anesthesia") {
-                productSubcategorySelect.innerHTML = '<option value="">-- Optional --</option>';
-                anesthesiaSubcategories.forEach(sub => {
-                    const opt = document.createElement('option');
-                    opt.value = sub;
-                    opt.textContent = sub;
-                    productSubcategorySelect.appendChild(opt);
-                });
-                productSubcategorySelect.disabled = false;
-            } else if (this.value === "Oxygen Therapy") {
-                productSubcategorySelect.innerHTML = '<option value="">-- Optional --</option>';
-                oxygenTherapySubcategories.forEach(sub => {
-                    const opt = document.createElement('option');
-                    opt.value = sub;
-                    opt.textContent = sub;
-                    productSubcategorySelect.appendChild(opt);
-                });
-                productSubcategorySelect.disabled = false;
-            } else if (this.value === "Neonatal") {
-                productSubcategorySelect.innerHTML = '<option value="">-- Optional --</option>';
-                neonatalSubcategories.forEach(sub => {
-                    const opt = document.createElement('option');
-                    opt.value = sub;
-                    opt.textContent = sub;
-                    productSubcategorySelect.appendChild(opt);
-                });
-                productSubcategorySelect.disabled = false;
-            } else if (this.value === "I.V. Therapy") {
-                productSubcategorySelect.innerHTML = '<option value="">-- Optional --</option>';
-                ivTherapySubcategories.forEach(sub => {
-                    const opt = document.createElement('option');
-                    opt.value = sub;
-                    opt.textContent = sub;
-                    productSubcategorySelect.appendChild(opt);
-                });
-                productSubcategorySelect.disabled = false;
-            } else if (this.value === "Syringes") {
-                productSubcategorySelect.innerHTML = '<option value="">-- Optional --</option>';
-                syringesSubcategories.forEach(sub => {
-                    const opt = document.createElement('option');
-                    opt.value = sub;
-                    opt.textContent = sub;
-                    productSubcategorySelect.appendChild(opt);
-                });
-                productSubcategorySelect.disabled = false;
-            } else if (this.value === "Kits & Sets") {
-                productSubcategorySelect.innerHTML = '<option value="">-- Optional --</option>';
-                const kitsAndSetsSubcategories = [
-                    "CVC Single Lumen with J trip guide wire – Sterile",
-                    "CVC Double Lumen with J trip guide wire – Sterile",
-                    "CVC Triple Lumen with J trip guide wire – Sterile",
-                    "CVC Four Lumen with J trip guide wire – Sterile",
-                    "CVC Five Lumen with J trip guide wire – Sterile",
-                    "HDC Single Lumen Catheter Set (Straight/ Femoral with J trip guide wire)",
-                    "HDC Double Lumen Catheter Set (Straight/ Femoral with J trip guide wire)",
-                    "HDC Single Lumen Catheter Set (curved with J trip guide wire)",
-                    "HDC Double Lumen Catheter Set (curved/Jugular with J trip guide wire)",
-                    "HDC Triple Lumen Catheter Set (straight/Femoral with J trip guide wire)",
-                    "HDC Triple Lumen Catheter Set (curved/Jugular with J trip guide wire)",
-                    "Peritoneal Dialysis Catheter Set – PDC",
-                    "Permthane Double Lumen Catheter Set",
-                    "Lumbar Puncture Set – Sterilized",
-                    "Combined Spinal – Epidural Set – Sterilized",
-                    "Epidural Set – Sterilized",
-                    "Biopsy Set – Sterilized",
-                    "Tracheostomy Care Kit",
-                    "Patient Care Kit",
-                    "Suction Catheter Kit"
-                ];
-                kitsAndSetsSubcategories.forEach(sub => {
-                    const opt = document.createElement('option');
-                    opt.value = sub;
-                    opt.textContent = sub;
-                    productSubcategorySelect.appendChild(opt);
-                });
-                productSubcategorySelect.disabled = false;
-            } else if (this.value === "Hemodialysis") {
-                productSubcategorySelect.innerHTML = '<option value="">-- Optional --</option>';
-                hemodialysisSubcategories.forEach(sub => {
-                    const opt = document.createElement('option');
-                    opt.value = sub;
-                    opt.textContent = sub;
-                    productSubcategorySelect.appendChild(opt);
-                });
-                productSubcategorySelect.disabled = false;
-            } else if (this.value === "Tubes & Catheters") {
-                productSubcategorySelect.innerHTML = '<option value="">-- Optional --</option>';
-                const tubesAndCathetersSubcategories = [
-                    "Feeding Tube with Guide Wire – Silicon",
-                    "Enteral Feeding Bag with Set",
-                    "Feeding Tube with X-Ray Line",
-                    "Feeding Tube Gastrostomy – Silicone",
-                    "Ryles Tubes with X-Ray Line",
-                    "Rectal Tube",
-                    "Drainage Tubes",
-                    "Extension / Connection Tubes",
-                    "Suction Connection Tubes (ID=5.0mm, 7.0mm) – Sterile",
-                    "Nasojejunal Feeding Tube / Suction Silicon Tube",
-                    "I.V. Amber Tubing",
-                    "Suction Catheter with Finger Control Tip",
-                    "Suction Catheter Funnel Type",
-                    "CO₂ Gas Tubing Compatible with Insufflator (150–200 cm)",
-                    "Laparoscopic",
-                    "Adaptor",
-                    "Thoracic Catheter Right Angle with Connector without Trocar",
-                    "Thoracic Catheter Straight with Connector without Trocar",
-                    "Thoracic Catheter Straight with Trocar"
-                ];
-                tubesAndCathetersSubcategories.forEach(sub => {
-                    const opt = document.createElement('option');
-                    opt.value = sub;
-                    opt.textContent = sub;
-                    productSubcategorySelect.appendChild(opt);
-                });
-                productSubcategorySelect.disabled = false;
-            } else if (this.value === "Pulse Oximeter") {
-                productSubcategorySelect.innerHTML = '<option value="">-- Optional --</option>';
-                pulseOximeterSubcategories.forEach(sub => {
-                    const opt = document.createElement('option');
-                    opt.value = sub;
-                    opt.textContent = sub;
-                    productSubcategorySelect.appendChild(opt);
-                });
-                productSubcategorySelect.disabled = false;
-            } else if (this.value === "General Surgery") {
-                productSubcategorySelect.innerHTML = '<option value="">-- Optional --</option>';
-                generalSurgerySubcategories.forEach(sub => {
-                    const opt = document.createElement('option');
-                    opt.value = sub;
-                    opt.textContent = sub;
-                    productSubcategorySelect.appendChild(opt);
-                });
-                productSubcategorySelect.disabled = false;
-            } else if (this.value === "Urology") {
-                productSubcategorySelect.innerHTML = '<option value="">-- Optional --</option>';
-                urologySubcategories.forEach(sub => {
-                    const opt = document.createElement('option');
-                    opt.value = sub;
-                    opt.textContent = sub;
-                    productSubcategorySelect.appendChild(opt);
-                });
-                productSubcategorySelect.disabled = false;
-            } else if (this.value === "Obstetrics & Gynecology") {
-                productSubcategorySelect.innerHTML = '<option value="">-- Optional --</option>';
-                obstetricsGynecologySubcategories.forEach(sub => {
-                    const opt = document.createElement('option');
-                    opt.value = sub;
-                    opt.textContent = sub;
-                    productSubcategorySelect.appendChild(opt);
-                });
-                productSubcategorySelect.disabled = false;
-            } else if (this.value === "Miscellaneous") {
-                productSubcategorySelect.innerHTML = '<option value="">-- Optional --</option>';
-                miscellaneousSubcategories.forEach(sub => {
-                    const opt = document.createElement('option');
-                    opt.value = sub;
-                    opt.textContent = sub;
-                    productSubcategorySelect.appendChild(opt);
-                });
-                productSubcategorySelect.disabled = false;
+            } else {
+                productSubcategorySelect.innerHTML = '<option value="">-- Select Category First --</option>';
+                productSubcategorySelect.disabled = true;
             }
             updateAnalyzeButtonState();
         });
-        
+
         // Handle file selection
         fileInput.addEventListener('change', function() {
             if (this.files.length > 0) {
-                fileName.textContent = this.files[0].name;
+                fileNameDisplay.textContent = `Selected file: ${this.files[0].name}`;
+                 // Basic file type validation (can be expanded)
+                const allowedTypes = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'application/vnd.ms-excel', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'text/csv', 'text/plain', 'text/markdown'];
+                if (!allowedTypes.includes(this.files[0].type) && !this.files[0].name.endsWith('.md')) { // .md might not have a standard MIME type
+                    showMessage(`Unsupported file type: ${this.files[0].type || 'unknown'}. Please upload PDF, DOC, DOCX, XLS, XLSX, CSV, TXT, or MD.`, 'error');
+                    this.value = ''; // Clear the input
+                    fileNameDisplay.textContent = '';
+                }
             } else {
-                fileName.textContent = '';
+                fileNameDisplay.textContent = '';
             }
             updateAnalyzeButtonState();
         });
-        
+
         // Handle text input
         analysisText.addEventListener('input', updateAnalyzeButtonState);
-        
-        // Tab switching functionality
+
+        // Tab switching
         tabButtons.forEach(button => {
             button.addEventListener('click', function() {
                 const tabId = this.getAttribute('data-tab');
                 
-                // Update active tab
-                tabButtons.forEach(btn => btn.classList.remove('active'));
+                tabButtons.forEach(btn => {
+                    btn.classList.remove('active');
+                    btn.setAttribute('aria-selected', 'false');
+                });
                 this.classList.add('active');
+                this.setAttribute('aria-selected', 'true');
                 
-                // Show active tab content
-                tabContents.forEach(content => content.classList.remove('active'));
+                tabContents.forEach(content => {
+                    content.classList.remove('active');
+                });
                 document.getElementById(tabId).classList.add('active');
                 
                 activeTab = tabId;
                 updateAnalyzeButtonState();
             });
         });
-        
-        // Check if all required fields are filled to enable analyze button
+
+        // Update Analyze Button State
         function updateAnalyzeButtonState() {
             const categorySelected = productCategorySelect.value !== '';
-            // subcategory is now always optional
             let dataProvided = false;
             if (activeTab === 'file-tab') {
-                dataProvided = fileInput.files.length > 0;
+                dataProvided = fileInput.files.length > 0 && fileInput.files[0] !== undefined;
             } else {
                 dataProvided = analysisText.value.trim() !== '';
             }
             analyzeBtn.disabled = !(categorySelected && dataProvided);
         }
-        
-        // Analyze button click handler
+
+        // Analyze Button Click Handler
         analyzeBtn.addEventListener('click', async function() {
-            // Show loading spinner
+            hideMessage();
             loadingDiv.style.display = 'block';
             resultsSection.style.display = 'none';
-            
-            try {
-                // Get selected product information
-                const category = productCategorySelect.options[productCategorySelect.selectedIndex].text;
-                const subcategory = ""; // always empty for now
+            this.disabled = true; // Disable button during processing
 
-                // Get input data (text or file)
-                let inputData = '';
+            try {
+                const category = productCategorySelect.options[productCategorySelect.selectedIndex].text;
+                const subcategoryValue = productSubcategorySelect.value;
+                const subcategory = subcategoryValue ? ` - ${subcategoryValue}` : ""; // Add subcategory if selected
+
+                let inputDataContent = '';
+                let sourceDescription = '';
+
                 if (activeTab === 'text-tab') {
-                    inputData = analysisText.value.trim();
+                    inputDataContent = analysisText.value.trim();
+                    sourceDescription = 'text input';
+                    if (!inputDataContent) {
+                        showMessage('Please enter text for analysis.', 'error');
+                        throw new Error('No text input provided.');
+                    }
                 } else {
-                    inputData = `Data from file: ${fileName.textContent}`;
+                    if (fileInput.files.length === 0 || !fileInput.files[0]) {
+                         showMessage('Please select a file for analysis.', 'error');
+                        throw new Error('No file selected.');
+                    }
+                    // For security, actual file content reading for direct API sending
+                    // would typically happen server-side. Here, we simulate with file name.
+                    // If you need to send file content, you'd use FileReader API.
+                    // For now, let's assume the API can handle a description or the backend does the fetching.
+                    inputDataContent = `Sales data from file: ${fileInput.files[0].name}. File type: ${fileInput.files[0].type}. File size: ${fileInput.files[0].size} bytes.`;
+                    sourceDescription = `file: ${fileInput.files[0].name}`;
                 }
 
-                // Perform sales analysis with Groq API
-                const results = await analyzeWithGroq(category, subcategory, inputData);
-                
-                // Display results
+                const results = await analyzeWithGroq(category, subcategory, inputDataContent, sourceDescription);
                 displayResults(results);
                 
-                // Hide loading spinner and show results
                 loadingDiv.style.display = 'none';
                 resultsSection.style.display = 'block';
-                
-                // Scroll to results
                 resultsSection.scrollIntoView({ behavior: 'smooth' });
-                
+                showMessage('Analysis complete!', 'success');
+
             } catch (error) {
                 console.error('Sales analysis error:', error);
-                alert('An error occurred during sales analysis. Please try again.');
+                showMessage(`Analysis Error: ${error.message}. Please check your input or try again.`, 'error');
                 loadingDiv.style.display = 'none';
+            } finally {
+                analyzeBtn.disabled = false; // Re-enable button
+                updateAnalyzeButtonState(); // Ensure it's correctly disabled if inputs are cleared
             }
         });
-        
-        // Function to analyze sales data using Groq API
-        async function analyzeWithGroq(category, subcategory, inputData) {
-            const GROQ_API_KEY = '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';
+
+        // Groq API Analysis
+        async function analyzeWithGroq(category, subcategory, inputData, sourceDescription) {
+            // --- IMPORTANT SECURITY WARNING ---
+            // NEVER hardcode API keys directly in client-side JavaScript like this for production.
+            // This key will be exposed to anyone viewing the page source.
+            // For production, use a backend proxy server to make API calls securely.
+            const GROQ_API_KEY = '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'; // REPLACE WITH YOUR ACTUAL KEY VIA A SECURE METHOD
             const GROQ_API_ENDPOINT = 'https://api.groq.com/openai/v1/chat/completions';
-            const MODEL_NAME = 'deepseek-r1-distill-llama-70b';
-            
-            // Create a detailed system prompt
-            const systemPrompt = `You are an advanced AI specialized in sales data analysis for MAIS. 
-Your primary focus is on identifying patterns, trends, profitable areas, and areas of loss in sales data.
+            const MODEL_NAME = 'llama3-8b-8192'; // Switched to a common Llama3 model for broad capabilities
 
-When analyzing data, follow these precise steps:
-1. Understand the context of the sales data provided.
-2. Identify key metrics, trends, and patterns related to sales performance.
-3. Highlight profitable areas and areas of loss with specific causes.
-4. Compare against industry benchmarks and historical sales data.
-5. Provide actionable recommendations to improve sales performance.
-6. Offer strategic insights for optimizing sales strategies.
+            const systemPrompt = `You are an expert Sales Data Analyst for MAIS, a medical products company.
+Your task is to analyze sales data and provide a structured report.
+The user will provide data related to product category: "${category}${subcategory}" from source: "${sourceDescription}".
 
-Provide your analysis in three distinct sections:
-1. COMPREHENSIVE ANALYSIS: A detailed assessment of sales performance, trends, and overall business impact. Include relevant metrics and their interpretation.
-2. PERFORMANCE TABLE: A structured assessment of profitable vs. loss-making areas, specific causes for each, and actionable recommendations. Format this as a clear HTML table.
-3. STRATEGIC INSIGHTS: Provide unexpected, high-value observations that could significantly impact sales strategies.
+Please structure your response precisely as follows, using these exact headings:
 
-Your analysis should be evidence-based, strategic, and actionable. Highlight specific numbers and metrics where possible. Focus on providing concrete, specific insights rather than general observations.`;
+COMPREHENSIVE ANALYSIS:
+[Provide a detailed assessment of sales performance, trends, patterns, and overall business impact. Identify key metrics and interpret them. Discuss market position, competitive factors if evident, and potential opportunities or threats. Use bullet points for lists of findings.]
 
-            // Prepare the API request
+PERFORMANCE HIGHLIGHTS:
+[Create a summary of profitable vs. loss-making areas/products/trends. For each, try to identify specific causes if discernible from the data. Then, provide specific, actionable recommendations. If possible, present this as a structured list or if complex, describe how a table would look with columns: Aspect, Status (e.g., Profitable/Loss-making/Stagnant), Potential Cause, Recommendation. Example:
+- Product X:
+  - Status: Highly Profitable
+  - Potential Cause: Recent marketing campaign, high demand in specific region.
+  - Recommendation: Scale up marketing, explore similar regions.]
+
+STRATEGIC AI INSIGHTS:
+[Offer 2-3 high-value, potentially non-obvious observations or strategic recommendations derived from the data. These should be forward-looking and aim to significantly impact sales strategies or uncover hidden potential. Focus on actionable advice.]
+
+Be concise, data-driven, and professional. If the provided data is insufficient for a section, state that clearly (e.g., "Insufficient data to determine specific loss-making areas.").
+`;
+
+            const userContent = `Analyze the following sales data: ${inputData}`;
+
             const response = await fetch(GROQ_API_ENDPOINT, {
                 method: 'POST',
                 headers: {
@@ -1123,256 +1067,291 @@ Your analysis should be evidence-based, strategic, and actionable. Highlight spe
                     model: MODEL_NAME,
                     messages: [
                         { role: "system", content: systemPrompt },
-                        { role: "user", content: `Please analyze the following data for ${category} - ${subcategory}: ${inputData}` }
+                        { role: "user", content: userContent }
                     ],
-                    temperature: 0.5,
-                    max_tokens: 2000
+                    temperature: 0.6, // Slightly creative but still factual
+                    max_tokens: 3000 // Increased for potentially detailed analysis
                 })
             });
-            
+
             if (!response.ok) {
-                throw new Error(`API request failed with status: ${response.status}`);
+                const errorData = await response.json().catch(() => ({}));
+                throw new Error(`API request failed: ${response.status} ${response.statusText}. ${errorData.error?.message || ''}`);
             }
-            
+
             const responseData = await response.json();
+            if (!responseData.choices || responseData.choices.length === 0) {
+                throw new Error("API returned an empty response or no choices.");
+            }
             const analysisText = responseData.choices[0].message.content;
+            return parseAnalysisResponse(analysisText);
+        }
+
+        // Parse Groq Response
+        function parseAnalysisResponse(text) {
+            const sections = {
+                analysis: "Comprehensive analysis not found in the response.",
+                performance: "Performance highlights not found in the response.",
+                insights: "Strategic insights not found in the response."
+            };
+
+            const analysisMatch = text.match(/COMPREHENSIVE ANALYSIS:([\s\S]*?)(?=PERFORMANCE HIGHLIGHTS:|STRATEGIC AI INSIGHTS:|$)/i);
+            if (analysisMatch && analysisMatch[1]) sections.analysis = analysisMatch[1].trim();
+
+            const performanceMatch = text.match(/PERFORMANCE HIGHLIGHTS:([\s\S]*?)(?=STRATEGIC AI INSIGHTS:|$)/i);
+            if (performanceMatch && performanceMatch[1]) sections.performance = performanceMatch[1].trim();
             
-            // Parse the response into our three sections
-            // This is a simplified approach - in production, you might want a more robust parsing
-            const sections = parseAnalysisResponse(analysisText);
-            
+            const insightsMatch = text.match(/STRATEGIC AI INSIGHTS:([\s\S]*?)$/i);
+            if (insightsMatch && insightsMatch[1]) sections.insights = insightsMatch[1].trim();
+
             return sections;
         }
-        
-        // Function to parse the Groq response into sections
-        function parseAnalysisResponse(text) {
-            // For demonstration purposes, let's create a basic parser
-            // In production, you would need more robust parsing logic
-            
-            // Example parsing logic - looking for section headers
-            const comprehensiveAnalysisMatch = text.match(/COMPREHENSIVE ANALYSIS:?([\s\S]*?)(?=PERFORMANCE TABLE:|STRATEGIC INSIGHTS:|$)/i);
-            const performanceTableMatch = text.match(/PERFORMANCE TABLE:?([\s\S]*?)(?=STRATEGIC INSIGHTS:|$)/i);
-            const strategicInsightsMatch = text.match(/STRATEGIC INSIGHTS:?([\s\S]*?)$/i);
-            
-            return {
-                analysis: comprehensiveAnalysisMatch ? comprehensiveAnalysisMatch[1].trim() : "Analysis not available",
-                performance: performanceTableMatch ? performanceTableMatch[1].trim() : "Performance data not available",
-                insights: strategicInsightsMatch ? strategicInsightsMatch[1].trim() : "Insights not available"
-            };
-        }
-        
-        // Function to display results
+
+        // Display Results
         function displayResults(results) {
-            // Format and display comprehensive analysis
             analysisContent.innerHTML = formatContent(results.analysis);
-            
-            // Format and display performance table (convert text to HTML table if needed)
             performanceContent.innerHTML = formatPerformanceTable(results.performance);
-            
-            // Format and display insights
             insightsContent.innerHTML = formatContent(results.insights);
         }
         
-        // Helper function to format content with markdown-like syntax
+        // Format Content (basic markdown-like)
         function formatContent(text) {
-            // Basic formatting for demonstration purposes
-            // In production, you might want to use a proper markdown parser
+            if (!text) return "<p><em>No content available for this section.</em></p>";
+            let html = text;
+            // Bold: **text** or __text__
+            html = html.replace(/\*\*(.*?)\*\*|__(.*?)__/g, '<strong>$1$2</strong>');
+            // Italic: *text* or _text_
+            html = html.replace(/\*(.*?)\*|_(.*?)_/g, '<em>$1$2</em>');
+            // Highlight: ==text==
+            html = html.replace(/==(.*?)==/g, '<span class="text-highlight">$1</span>');
+            // Bullet points: * item or - item or + item
+            html = html.replace(/^\s*[\*\-\+]\s+(.*)/gm, '<li>$1</li>');
+            html = html.replace(/<\/li>\s*<li>/g, '</li><li>'); // Consolidate li tags
+            html = html.replace(/<li>.*<\/li>/gs, (match) => `<ul>${match}</ul>`); // Wrap LIs in ULs
+            // Numbered lists: 1. item
+            html = html.replace(/^\s*\d+\.\s+(.*)/gm, '<li>$1</li>');
+            html = html.replace(/<\/li>\s*<li>/g, '</li><li>'); // Consolidate li tags (again for numbered)
+            // This regex needs to be smarter to distinguish between UL and OL or have AI use distinct markers.
+            // For now, if we have LIs not in UL, assume it's a new OL.
+            html = html.replace(/(<li>.*<\/li>)(?!<\/ul>)(?!<\/ol>)/gs, (match) => `<ol>${match}</ol>`);
+
+
+            // Paragraphs (split by double newlines, then single newlines to <br>)
+            const paragraphs = html.split(/\n\s*\n/).map(p => {
+                if (p.startsWith('<ul>') || p.startsWith('<ol>')) return p; // Don't wrap lists in <p>
+                return p.trim() ? `<p>${p.replace(/\n/g, '<br>')}</p>` : '';
+            }).join('');
             
-            // Replace line breaks with paragraph tags
-            let formatted = text.replace(/\n\n/g, '</p><p>').replace(/\n/g, '<br>');
-            
-            // Wrap in paragraph tags if not already
-            if (!formatted.startsWith('<p>')) {
-                formatted = '<p>' + formatted;
-            }
-            if (!formatted.endsWith('</p>')) {
-                formatted = formatted + '</p>';
-            }
-            
-            // Format bold text
-            formatted = formatted.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-            
-            // Format italic text
-            formatted = formatted.replace(/\*(.*?)\*/g, '<em>$1</em>');
-            
-            // Format highlighting
-            formatted = formatted.replace(/==(.*?)==/g, '<span class="text-highlight">$1</span>');
-            
-            return formatted;
+            return paragraphs || "<p><em>Content processed, but result is empty.</em></p>";
         }
-        
-        // Helper function to format performance table
+
+        // Format Performance Table
         function formatPerformanceTable(text) {
-            // Check if text already contains HTML table
-            if (text.includes('<table')) {
-                return text;
+            if (!text) return "<p><em>No performance data available.</em></p>";
+
+            if (text.toLowerCase().includes("insufficient data")) {
+                return `<p><em>${text}</em></p>`;
+            }
+
+            // If AI provides a markdown table:
+            if (text.includes('| --- |')) {
+                let html = text.replace(/\|\s*---*\s*\|/g, '|:---|') // Ensure left align for remark
+                               .replace(/^\|(.+)\|\s*$/gm, '<tr><td>$1</td></tr>')
+                               .replace(/<\/td><td>/g, '</td><td>')
+                               .replace(/<\/td><\/tr>\s*<tr><td>/g, '</td></tr><tr><td>')
+                               .replace(/<td>\s*([^|]+?)\s*<\/td>/g, (match, p1) => `<td>${p1.trim()}</td>`) // Trim content
+                               .replace(/<tr><td>(.+?)<\/td><\/tr>/, '<thead><tr><th>$1</th></tr></thead>') // First row as header
+                               .replace(/<\/th><th>/g, '</th><th>') // Fix multiple th
+                               .replace(/<tr><td>/g, '<tbody><tr><td>'); // Start tbody after head
+                if (html.includes('<tbody>')) html += '</tbody>'; else html = `<table>${html}</table>`;
+                 return html.replace('<table><thead>', '<table class="generated-table"><thead>');
             }
             
-            // Otherwise, create a basic table from the text
-            let tableHtml = `
-            <table>
-                <thead>
-                    <tr>
-                        <th>Aspect</th>
-                        <th>Status</th>
-                        <th>Cause</th>
-                        <th>Recommendation</th>
-                    </tr>
-                </thead>
-                <tbody>`;
+            // Fallback to simpler list-based or paragraph formatting if not a clear table structure
+            // Try to parse "Aspect:", "Status:", "Cause:", "Recommendation:" pattern
+            let htmlOutput = "";
+            const entries = text.split(/\n\s*(?=[A-Za-z\s]+:)/); // Split by lines starting with "Word:"
             
-            // Simple parsing logic - this is basic for demonstration
-            // In production, you would need more robust parsing
-            const lines = text.split('\n').filter(line => line.trim() !== '');
-            
-            let inWinningSection = false;
-            let inLosingSection = false;
-            
-            for (const line of lines) {
-                if (line.toLowerCase().includes('winning') || line.toLowerCase().includes('strengths')) {
-                    inWinningSection = true;
-                    inLosingSection = false;
-                    continue;
-                } else if (line.toLowerCase().includes('losing') || line.toLowerCase().includes('weaknesses')) {
-                    inWinningSection = false;
-                    inLosingSection = true;
-                    continue;
+            if (entries.length > 1 && entries.some(e => e.toLowerCase().includes("status:"))) {
+                 htmlOutput += '<table class="generated-table"><thead><tr><th>Aspect</th><th>Status</th><th>Potential Cause</th><th>Recommendation</th></tr></thead><tbody>';
+                let currentEntry = {};
+                entries.forEach(line => {
+                    const parts = line.match(/^([A-Za-z\s]+):\s*([\s\S]*)/);
+                    if (parts) {
+                        const key = parts[1].trim().toLowerCase();
+                        const value = parts[2].trim();
+                        if (key === "aspect" || key === "product" || key === "item") currentEntry.aspect = value;
+                        else if (key === "status") currentEntry.status = value;
+                        else if (key === "potential cause" || key === "cause") currentEntry.cause = value;
+                        else if (key === "recommendation") currentEntry.recommendation = value;
+
+                        if (currentEntry.aspect && currentEntry.status && currentEntry.cause && currentEntry.recommendation) {
+                            htmlOutput += `<tr>
+                                <td>${currentEntry.aspect}</td>
+                                <td class="${currentEntry.status.toLowerCase().includes('profit') ? 'status-success' : currentEntry.status.toLowerCase().includes('loss') ? 'status-danger' : 'status-neutral'}">${currentEntry.status}</td>
+                                <td>${currentEntry.cause}</td>
+                                <td>${currentEntry.recommendation}</td>
+                            </tr>`;
+                            currentEntry = {}; // Reset for next entry
+                        }
+                    }
+                });
+                htmlOutput += '</tbody></table>';
+                if (!htmlOutput.includes('<tr>')) { // If no table rows were made, fall back
+                    htmlOutput = formatContent(text); // Use general content formatter
                 }
-                
-                // Simple heuristic to extract point, cause, and recommendation
-                // This is simplified for demonstration purposes
-                const parts = line.split(':').map(part => part.trim());
-                let aspect = parts[0] || "General";
-                let details = parts.length > 1 ? parts[1] : line;
-                
-                // Further split details if possible
-                const detailParts = details.split('.').map(part => part.trim()).filter(Boolean);
-                let cause = detailParts[0] || "Not specified";
-                let recommendation = detailParts.length > 1 ? detailParts[1] : "See analysis for details";
-                
-                const status = inWinningSection ? "Winning" : inLosingSection ? "Losing" : "Neutral";
-                const statusClass = inWinningSection ? "status-success" : inLosingSection ? "status-danger" : "";
-                
-                tableHtml += `
-                <tr>
-                    <td>${aspect}</td>
-                    <td class="${statusClass}">${status}</td>
-                    <td>${cause}</td>
-                    <td>${recommendation}</td>
-                </tr>`;
+
+            } else {
+                // If not easily parsable into a table, use the general content formatter
+                htmlOutput = formatContent(text);
             }
-            
-            tableHtml += `
-                </tbody>
-            </table>
-            <p><em>Note: This table is automatically generated from the analysis text.</em></p>`;
-            
-            return tableHtml;
+            return htmlOutput || "<p><em>Performance highlights processed.</em></p>";
         }
-        
-        // File drag and drop functionality
+
+        // File Drag and Drop
         const dropZone = document.querySelector('.file-upload');
-        
-        dropZone.addEventListener('dragover', function(e) {
+        dropZone.addEventListener('dragover', (e) => {
             e.preventDefault();
-            this.style.borderColor = '#0056b3';
-            this.style.backgroundColor = 'rgba(0, 86, 179, 0.05)';
+            dropZone.style.borderColor = 'var(--primary-color)';
+            dropZone.style.backgroundColor = 'rgba(0, 86, 179, 0.03)';
         });
-        
-        dropZone.addEventListener('dragleave', function(e) {
-            e.preventDefault();
-            this.style.borderColor = '';
-            this.style.backgroundColor = '';
+        dropZone.addEventListener('dragleave', () => {
+            dropZone.style.borderColor = 'var(--border-color)';
+            dropZone.style.backgroundColor = '#fdfdfd';
         });
-        
-        dropZone.addEventListener('drop', function(e) {
+        dropZone.addEventListener('drop', (e) => {
             e.preventDefault();
-            this.style.borderColor = '';
-            this.style.backgroundColor = '';
-            
+            dropZone.style.borderColor = 'var(--border-color)';
+            dropZone.style.backgroundColor = '#fdfdfd';
             if (e.dataTransfer.files.length > 0) {
                 fileInput.files = e.dataTransfer.files;
-                fileName.textContent = e.dataTransfer.files[0].name;
-                updateAnalyzeButtonState();
+                // Trigger change event manually for fileInput
+                const event = new Event('change');
+                fileInput.dispatchEvent(event);
             }
         });
 
-        // ====== Support Button & Modal Logic ======
+        // Support Modal Logic
         const supportBtn = document.getElementById('support-btn');
+        const footerSupportLink = document.getElementById('footer-support-link');
         const supportModalBg = document.getElementById('support-modal-bg');
         const supportModalClose = document.getElementById('support-modal-close');
         const supportInput = document.getElementById('support-input');
         const supportSendBtn = document.getElementById('support-send-btn');
         const supportLoading = document.getElementById('support-loading');
         const supportResponse = document.getElementById('support-response');
+        let previousFocusedElement;
 
-        // Open modal
-        supportBtn.addEventListener('click', () => {
-            supportModalBg.style.display = 'flex';
+
+        function openSupportModal() {
+            previousFocusedElement = document.activeElement;
+            supportModalBg.classList.add('visible');
             supportInput.value = '';
             supportResponse.textContent = '';
             supportSendBtn.disabled = true;
             supportLoading.style.display = 'none';
+            supportInput.focus();
+        }
+        function closeSupportModal() {
+            supportModalBg.classList.remove('visible');
+            if(previousFocusedElement) previousFocusedElement.focus();
+        }
+
+        supportBtn.addEventListener('click', openSupportModal);
+        if(footerSupportLink) footerSupportLink.addEventListener('click', (e) => { e.preventDefault(); openSupportModal();});
+
+        supportModalClose.addEventListener('click', closeSupportModal);
+        supportModalBg.addEventListener('click', (e) => { // Close on overlay click
+            if (e.target === supportModalBg) closeSupportModal();
         });
-        // Close modal
-        supportModalClose.addEventListener('click', () => {
-            supportModalBg.style.display = 'none';
+        document.addEventListener('keydown', (e) => { // Close with Escape key
+            if (e.key === 'Escape' && supportModalBg.classList.contains('visible')) {
+                closeSupportModal();
+            }
         });
-        // Enable send button if input not empty
+
+
         supportInput.addEventListener('input', () => {
             supportSendBtn.disabled = supportInput.value.trim() === '';
         });
 
-        // Send support request
         supportSendBtn.addEventListener('click', async () => {
             const userMsg = supportInput.value.trim();
             if (!userMsg) return;
+            
             supportSendBtn.disabled = true;
+            supportInput.disabled = true;
             supportLoading.style.display = 'block';
             supportResponse.textContent = '';
+            
             try {
-                const reply = await supportGeminiAPI(userMsg);
+                const reply = await callSupportAI(userMsg);
                 supportResponse.textContent = reply;
             } catch (e) {
-                supportResponse.textContent = 'حدث خطأ أثناء التواصل مع الدعم. حاول مرة أخرى.';
+                console.error("Support AI Error:", e);
+                supportResponse.textContent = 'Apologies, I encountered an issue trying to connect with support. Please try again shortly.';
+            } finally {
+                supportLoading.style.display = 'none';
+                supportSendBtn.disabled = false; // Re-enable based on input content next
+                supportInput.disabled = false;
+                supportInput.focus();
+                supportInput.dispatchEvent(new Event('input')); // Trigger input event to re-check button state
             }
-            supportLoading.style.display = 'none';
-            supportSendBtn.disabled = false;
         });
 
         // Gemini API call for support
-        const apiKey = 'AIzaSyCMrm1LjmlJObZsVCQEuy_wTkh9ZEEc8aQ'; // ضع هنا مفتاح API الفعلي
+        async function callSupportAI(userMsg) {
+            // --- IMPORTANT SECURITY WARNING ---
+            // As with the Groq key, this API key should NOT be in client-side code for production.
+            // Use a backend proxy.
+            const GEMINI_API_KEY = 'AIzaSyCMrm1LjmlJObZsVCQEuy_wTkh9ZEEc8aQ'; // REPLACE with your actual key via a SECURE METHOD
+            const GEMINI_API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${GEMINI_API_KEY}`;
 
-        async function geminiRequest(prompt) {
-            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
-            const body = {
-                contents: [
-                    { role: "user", parts: [{ text: prompt }] }
-                ]
+            const supportPrompt = `You are a helpful AI assistant for MAIS, a medical products analysis platform.
+Your role is to provide technical support and answer questions about using the platform, its features, understanding analysis results, or general queries related to MAIS products.
+- Answer clearly, concisely, and in a friendly, professional tone.
+- If a question is outside the scope of MAIS platform support (e.g., medical advice, financial advice, non-MAIS topics), politely state that you cannot assist with that specific query and suggest contacting human support if appropriate for complex MAIS issues.
+- If the user asks about data analysis or reports, explain how to use the platform's features or interpret the generated content.
+- Respond in English.
+
+User's question: "${userMsg}"`;
+
+            const requestBody = {
+                contents: [{ role: "user", parts: [{ text: supportPrompt }] }],
+                generationConfig: {
+                    temperature: 0.7,
+                    maxOutputTokens: 500
+                }
             };
-            const response = await fetch(url, {
+
+            const response = await fetch(GEMINI_API_URL, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(body)
+                body: JSON.stringify(requestBody)
             });
-            if (!response.ok) throw new Error('API error');
+
+            if (!response.ok) {
+                const errorData = await response.json().catch(() => ({}));
+                 throw new Error(`Support API error: ${response.status}. ${errorData.error?.message || 'Failed to get a response.'}`);
+            }
+
             const data = await response.json();
-            // Gemini response structure
-            return data.candidates?.[0]?.content?.parts?.[0]?.text?.trim() || "لم يتم الحصول على رد من الدعم.";
+            if (data.candidates && data.candidates[0] && data.candidates[0].content && data.candidates[0].content.parts && data.candidates[0].content.parts[0]) {
+                return data.candidates[0].content.parts[0].text.trim();
+            } else if (data.promptFeedback && data.promptFeedback.blockReason) {
+                return `I'm sorry, I couldn't process that request due to: ${data.promptFeedback.blockReason}. Please try rephrasing.`;
+            }
+            return "I'm sorry, I couldn't generate a response at this time. Please try again.";
         }
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            updateAnalyzeButtonState(); // Initial check for analyze button
+            document.getElementById('current-year').textContent = new Date().getFullYear();
+            // Set default placeholder for subcategory
+            productSubcategorySelect.innerHTML = '<option value="">-- Select Category First --</option>';
+        });
 
-        async function supportGeminiAPI(userMsg) {
-            const supportPrompt = `أنت مساعد دعم فني ذكي لمنصة MAIS. 
-ساعد المستخدمين في حل مشاكلهم التقنية أو استفساراتهم حول استخدام المنصة أو منتجاتها أو تقاريرها.
-- أجب بشكل واضح ومباشر وبأسلوب ودود.
-- إذا كان السؤال خارج نطاق MAIS، اعتذر بلطف ووجه المستخدم للاتصال بالدعم البشري إذا لزم الأمر.
-- لا تقدم نصائح طبية أو مالية.
-- إذا كان السؤال عن بيانات أو تقارير، وضح كيفية رفع البيانات أو الاستفادة من التحليلات.
-- أجب باللغة العربية الفصحى.
-
-سؤال المستخدم: ${userMsg}`;
-            return await geminiRequest(supportPrompt);
-        }
     </script>
 </body>
 </html>
