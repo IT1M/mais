@@ -336,6 +336,42 @@
                 padding: 15px;
             }
         }
+
+        /* Loading Animation Styles */
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 30px;
+            margin: 20px 0;
+        }
+
+        .loading p {
+            color: var(--primary-color);
+            margin-top: 15px;
+            font-size: 18px;
+        }
+
+        .spinner {
+            width: 70px;
+            height: 70px;
+            margin: 0 auto;
+            border: 8px solid #f3f3f3;
+            border-top: 8px solid var(--primary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite, pulse 1.5s ease-in-out infinite;
+            box-shadow: 0 0 15px rgba(0, 86, 179, 0.2);
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1) rotate(0deg); }
+            50% { transform: scale(1.1) rotate(180deg); }
+            100% { transform: scale(1) rotate(360deg); }
+        }
     </style>
 </head>
 <body>
@@ -420,7 +456,7 @@
             
             <div id="loading" class="loading">
                 <div class="spinner"></div>
-                <p>Analyzing your data. This might take a moment...</p>
+                <p>جاري تحليل البيانات... يرجى الانتظار</p>
             </div>
             
             <section id="results-section" class="results-section">
