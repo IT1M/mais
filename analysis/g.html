@@ -627,6 +627,15 @@
             "I.V. adhesive Fixer"
         ];
 
+        // Syringes subcategories
+        const syringesSubcategories = [
+            "Dual Syringe Injector",
+            "Special Syringes",
+            "Syringe Insulin (sterile)",
+            "Syringe Luer Lock/side Nozzle (Sterile)",
+            "Syringe luer tip (sterile)"
+        ];
+
         // Update subcategory dropdown based on category selection
         productCategorySelect.addEventListener('change', function() {
             if (this.value === "Airway") {
@@ -668,6 +677,15 @@
             } else if (this.value === "I.V. Therapy") {
                 productSubcategorySelect.innerHTML = '<option value="">-- Optional --</option>';
                 ivTherapySubcategories.forEach(sub => {
+                    const opt = document.createElement('option');
+                    opt.value = sub;
+                    opt.textContent = sub;
+                    productSubcategorySelect.appendChild(opt);
+                });
+                productSubcategorySelect.disabled = false;
+            } else if (this.value === "Syringes") {
+                productSubcategorySelect.innerHTML = '<option value="">-- Optional --</option>';
+                syringesSubcategories.forEach(sub => {
                     const opt = document.createElement('option');
                     opt.value = sub;
                     opt.textContent = sub;
