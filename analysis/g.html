@@ -428,19 +428,28 @@
                     <div class="select-group">
                         <label for="product-category">Select Product Category:</label>
                         <select id="product-category">
-                            <option value="">-- Select Main Category --</option>
-                            <option value="cardiovascular">Cardiovascular Products</option>
-                            <option value="orthopedic">Orthopedic Devices</option>
-                            <option value="diagnostic">Diagnostic Equipment</option>
-                            <option value="surgical">Surgical Instruments</option>
-                            <option value="monitoring">Patient Monitoring Systems</option>
+                            <option value="">-- Select Category --</option>
+                            <option value="diverse">Diverse</option>
+                            <option value="Airway">Airway</option>
+                            <option value="Anesthesia">Anesthesia</option>
+                            <option value="Oxygen Therapy">Oxygen Therapy</option>
+                            <option value="Neonatal">Neonatal</option>
+                            <option value="I.V. Therapy">I.V. Therapy</option>
+                            <option value="Syringes">Syringes</option>
+                            <option value="Kits & Sets">Kits & Sets</option>
+                            <option value="Hemodialysis">Hemodialysis</option>
+                            <option value="Tubes & Catheters">Tubes & Catheters</option>
+                            <option value="Pulse Oximeter">Pulse Oximeter</option>
+                            <option value="General Surgery">General Surgery</option>
+                            <option value="Urology">Urology</option>
+                            <option value="Obstetrics & Gynecology">Obstetrics & Gynecology</option>
+                            <option value="Miscellaneous">Miscellaneous</option>
                         </select>
                     </div>
-                    
                     <div class="select-group">
                         <label for="product-subcategory">Select Specific Product:</label>
                         <select id="product-subcategory" disabled>
-                            <option value="">-- First Select Category --</option>
+                            <option value="">-- Optional --</option>
                         </select>
                     </div>
                 </div>
@@ -519,30 +528,6 @@
     </footer>
 
     <script>
-        // Product categories and subcategories
-        const productCategories = {
-            cardiovascular: [
-                "Heart Valves", "Stents", "Pacemakers", "Defibrillators", 
-                "Cardiac Monitoring Devices", "Vascular Grafts"
-            ],
-            orthopedic: [
-                "Joint Implants", "Spinal Devices", "Trauma Implants", 
-                "Orthopedic Braces", "Casting Materials", "Orthopedic Surgical Instruments"
-            ],
-            diagnostic: [
-                "MRI Machines", "CT Scanners", "X-Ray Equipment", "Ultrasound Devices", 
-                "Blood Testing Equipment", "Endoscopy Equipment"
-            ],
-            surgical: [
-                "Surgical Robotics", "Laparoscopic Instruments", "Electrosurgical Tools", 
-                "Surgical Lasers", "Surgical Navigation Systems", "Sutures and Stapling Devices"
-            ],
-            monitoring: [
-                "Patient Vital Signs Monitors", "Telemetry Systems", "Pulse Oximeters", 
-                "ECG Monitors", "Sleep Monitoring Systems", "Remote Patient Monitoring Devices"
-            ]
-        };
-
         // DOM elements
         const productCategorySelect = document.getElementById('product-category');
         const productSubcategorySelect = document.getElementById('product-subcategory');
@@ -561,32 +546,10 @@
         // Current active tab
         let activeTab = 'file-tab';
 
-        // Populate subcategories based on main category selection
+        // No need to populate subcategories, keep it always disabled and optional
         productCategorySelect.addEventListener('change', function() {
-            const category = this.value;
-            
-            // Clear and disable subcategory if no category selected
-            if (!category) {
-                productSubcategorySelect.innerHTML = '<option value="">-- First Select Category --</option>';
-                productSubcategorySelect.disabled = true;
-                updateAnalyzeButtonState();
-                return;
-            }
-            
-            // Enable and populate subcategory dropdown
-            productSubcategorySelect.disabled = false;
-            
-            let options = '<option value="">-- Select Specific Product --</option>';
-            productCategories[category].forEach(subcategory => {
-                options += `<option value="${subcategory.toLowerCase().replace(/\s+/g, '-')}">${subcategory}</option>`;
-            });
-            
-            productSubcategorySelect.innerHTML = options;
             updateAnalyzeButtonState();
         });
-        
-        // Handle subcategory selection
-        productSubcategorySelect.addEventListener('change', updateAnalyzeButtonState);
         
         // Handle file selection
         fileInput.addEventListener('change', function() {
@@ -622,16 +585,14 @@
         // Check if all required fields are filled to enable analyze button
         function updateAnalyzeButtonState() {
             const categorySelected = productCategorySelect.value !== '';
-            const subcategorySelected = productSubcategorySelect.value !== '';
-            
+            // subcategory is now always optional
             let dataProvided = false;
             if (activeTab === 'file-tab') {
                 dataProvided = fileInput.files.length > 0;
             } else {
                 dataProvided = analysisText.value.trim() !== '';
             }
-            
-            analyzeBtn.disabled = !(categorySelected && subcategorySelected && dataProvided);
+            analyzeBtn.disabled = !(categorySelected && dataProvided);
         }
         
         // Analyze button click handler
@@ -643,7 +604,7 @@
             try {
                 // Get selected product information
                 const category = productCategorySelect.options[productCategorySelect.selectedIndex].text;
-                const subcategory = productSubcategorySelect.options[productSubcategorySelect.selectedIndex].text;
+                const subcategory = ""; // always empty for now
                 
                 // Get input data (text or file)
                 let inputData = '';
@@ -735,7 +696,7 @@ Your analysis should be evidence-based, strategic, and actionable. Highlight spe
         // Function to parse the Groq response into sections
         function parseAnalysisResponse(text) {
             // For demonstration purposes, let's create a basic parser
-            // In production, you'd need more robust parsing logic
+            // In production, you would need more robust parsing logic
             
             // Example parsing logic - looking for section headers
             const comprehensiveAnalysisMatch = text.match(/COMPREHENSIVE ANALYSIS:?([\s\S]*?)(?=PERFORMANCE TABLE:|STRATEGIC INSIGHTS:|$)/i);
