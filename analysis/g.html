@@ -652,6 +652,17 @@
             "Blood Lines for (B. Braun Machines) – Sterile"
         ];
 
+        // Pulse Oximeter subcategories
+        const pulseOximeterSubcategories = [
+            "Sensor Oxygen Forehead Masimo SET Technology",
+            "SPO2 Probe with Adhesive Tape Masimo SET Technology",
+            "Pulse Oximeter Sensor Probe Adhesive Tape Masimo SET Technology",
+            "Saturation Probe Neonates Nellcor Technology",
+            "Skin Temperature Probe Giraffe Incubator",
+            "Saturation Probe (For Pulse Oximeter) Finger Tip",
+            "Temperature Probe"
+        ];
+
         // Update subcategory dropdown based on category selection
         productCategorySelect.addEventListener('change', function() {
             if (this.value === "Airway") {
@@ -748,9 +759,45 @@
                     productSubcategorySelect.appendChild(opt);
                 });
                 productSubcategorySelect.disabled = false;
-            } else {
+            } else if (this.value === "Tubes & Catheters") {
                 productSubcategorySelect.innerHTML = '<option value="">-- Optional --</option>';
-                productSubcategorySelect.disabled = true;
+                const tubesAndCathetersSubcategories = [
+                    "Feeding Tube with Guide Wire – Silicon",
+                    "Enteral Feeding Bag with Set",
+                    "Feeding Tube with X-Ray Line",
+                    "Feeding Tube Gastrostomy – Silicone",
+                    "Ryles Tubes with X-Ray Line",
+                    "Rectal Tube",
+                    "Drainage Tubes",
+                    "Extension / Connection Tubes",
+                    "Suction Connection Tubes (ID=5.0mm, 7.0mm) – Sterile",
+                    "Nasojejunal Feeding Tube / Suction Silicon Tube",
+                    "I.V. Amber Tubing",
+                    "Suction Catheter with Finger Control Tip",
+                    "Suction Catheter Funnel Type",
+                    "CO₂ Gas Tubing Compatible with Insufflator (150–200 cm)",
+                    "Laparoscopic",
+                    "Adaptor",
+                    "Thoracic Catheter Right Angle with Connector without Trocar",
+                    "Thoracic Catheter Straight with Connector without Trocar",
+                    "Thoracic Catheter Straight with Trocar"
+                ];
+                tubesAndCathetersSubcategories.forEach(sub => {
+                    const opt = document.createElement('option');
+                    opt.value = sub;
+                    opt.textContent = sub;
+                    productSubcategorySelect.appendChild(opt);
+                });
+                productSubcategorySelect.disabled = false;
+            } else if (this.value === "Pulse Oximeter") {
+                productSubcategorySelect.innerHTML = '<option value="">-- Optional --</option>';
+                pulseOximeterSubcategories.forEach(sub => {
+                    const opt = document.createElement('option');
+                    opt.value = sub;
+                    opt.textContent = sub;
+                    productSubcategorySelect.appendChild(opt);
+                });
+                productSubcategorySelect.disabled = false;
             }
             updateAnalyzeButtonState();
         });
