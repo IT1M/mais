@@ -55,8 +55,8 @@
             letter-spacing: 1px;
         }
 
-        .logo span {
-            color: var(--secondary-color);
+        .logo img {
+            height: 48px;
         }
 
         nav ul {
@@ -406,7 +406,9 @@
     <header>
         <div class="container">
             <div class="header-content">
-                <div class="logo">MAIS <span>Analytics</span></div>
+                <div class="logo">
+                    <img src="../logo.png" alt="MAIS Logo" style="height:48px;">
+                </div>
                 <nav>
                     <ul>
                         <li><a href="#">Home</a></li>
@@ -429,7 +431,7 @@
                         <label for="product-category">Select Product Category:</label>
                         <select id="product-category">
                             <option value="">-- Select Category --</option>
-                            <option value="diverse">Diverse</option>
+                            <option value="any">any</option>
                             <option value="Airway">Airway</option>
                             <option value="Anesthesia">Anesthesia</option>
                             <option value="Oxygen Therapy">Oxygen Therapy</option>
@@ -546,8 +548,34 @@
         // Current active tab
         let activeTab = 'file-tab';
 
-        // No need to populate subcategories, keep it always disabled and optional
+        // Airway subcategories
+        const airwaySubcategories = [
+            "Pharyngeal Airway",
+            "Naso-Pharyngeal Airway-PVC",
+            "Naso-Pharyngeal Airway-Silicon",
+            "laryngeal Airway Mask -PVC",
+            "laryngeal Airway Mask (Reinforced Reusable -silicon)",
+            "laryngeal Airway Mask set (Reinforced Reusable -silicon)",
+            "All-Silicone Tracheostomy Tube : Un-Cuffed",
+            "All-Silicone Tracheostomy Tube : Cuffed",
+            "Tracheostomy     Tube                       Tracheostomy Mask"
+        ];
+
+        // Update subcategory dropdown based on category selection
         productCategorySelect.addEventListener('change', function() {
+            if (this.value === "Airway") {
+                productSubcategorySelect.innerHTML = '<option value="">-- Optional --</option>';
+                airwaySubcategories.forEach(sub => {
+                    const opt = document.createElement('option');
+                    opt.value = sub;
+                    opt.textContent = sub;
+                    productSubcategorySelect.appendChild(opt);
+                });
+                productSubcategorySelect.disabled = false;
+            } else {
+                productSubcategorySelect.innerHTML = '<option value="">-- Optional --</option>';
+                productSubcategorySelect.disabled = true;
+            }
             updateAnalyzeButtonState();
         });
         
