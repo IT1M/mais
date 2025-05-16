@@ -1,0 +1,889 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MAIS Medical Products Analysis</title>
+    <style>
+        :root {
+            --primary-color: #0056b3;
+            --secondary-color: #4CAF50;
+            --background-color: #f9f9f9;
+            --card-color: #ffffff;
+            --text-color: #333333;
+            --border-color: #e0e0e0;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --hover-shadow: 0 10px 15px rgba(0, 0, 0, 0.15);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 20px 0;
+            box-shadow: var(--shadow);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        .logo span {
+            color: var(--secondary-color);
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+
+        nav ul li {
+            margin-left: 20px;
+        }
+
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+
+        nav ul li a:hover {
+            color: var(--secondary-color);
+        }
+
+        .main-content {
+            margin: 40px 0;
+        }
+
+        .section-title {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--secondary-color);
+            padding-bottom: 10px;
+            position: relative;
+        }
+
+        .input-section {
+            background-color: var(--card-color);
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+            margin-bottom: 30px;
+        }
+
+        .product-selection {
+            margin-bottom: 25px;
+        }
+
+        .select-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        select, textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            background-color: #fff;
+            font-size: 16px;
+            transition: var(--transition);
+        }
+
+        select:focus, textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px rgba(0, 86, 179, 0.2);
+        }
+
+        .input-tabs {
+            margin-top: 20px;
+        }
+
+        .tab-buttons {
+            display: flex;
+            margin-bottom: 15px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .tab-button {
+            padding: 10px 20px;
+            background: none;
+            border: none;
+            border-bottom: 3px solid transparent;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 500;
+            transition: var(--transition);
+            color: var(--text-color);
+        }
+
+        .tab-button.active {
+            border-bottom-color: var(--secondary-color);
+            color: var(--primary-color);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .file-upload {
+            border: 2px dashed var(--border-color);
+            padding: 30px;
+            text-align: center;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            transition: var(--transition);
+        }
+
+        .file-upload:hover {
+            border-color: var(--primary-color);
+        }
+
+        .file-upload p {
+            margin-bottom: 15px;
+            color: #666;
+        }
+
+        .file-input {
+            display: none;
+        }
+
+        .upload-btn {
+            display: inline-block;
+            padding: 10px 25px;
+            background-color: var(--primary-color);
+            color: white;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .upload-btn:hover {
+            background-color: #004494;
+        }
+
+        .text-input textarea {
+            min-height: 200px;
+            resize: vertical;
+        }
+
+        .submit-btn {
+            display: block;
+            width: 100%;
+            padding: 14px;
+            background-color: var(--secondary-color);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 18px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            margin-top: 20px;
+        }
+
+        .submit-btn:hover {
+            background-color: #3e8e41;
+        }
+
+        .submit-btn:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
+
+        .results-section {
+            display: none;
+            margin-top: 40px;
+        }
+
+        .results-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-top: 20px;
+        }
+
+        .result-card {
+            background-color: var(--card-color);
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            overflow: hidden;
+        }
+
+        .result-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--hover-shadow);
+        }
+
+        .card-header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 15px 20px;
+            font-weight: 500;
+            font-size: 18px;
+        }
+
+        .card-body {
+            padding: 20px;
+            min-height: 300px;
+            max-height: 500px;
+            overflow-y: auto;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            margin: 40px 0;
+        }
+
+        .spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            border-radius: 50%;
+            border-top: 4px solid var(--secondary-color);
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        th {
+            background-color: #f2f2f2;
+            font-weight: 600;
+        }
+
+        tr:hover {
+            background-color: #f9f9f9;
+        }
+
+        .status-success {
+            color: #2ecc71;
+            font-weight: 500;
+        }
+
+        .status-danger {
+            color: #e74c3c;
+            font-weight: 500;
+        }
+
+        .text-highlight {
+            background-color: #ffeaa7;
+            padding: 2px 5px;
+            border-radius: 3px;
+        }
+
+        footer {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 25px 0;
+            margin-top: 60px;
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .footer-logo {
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .footer-links a {
+            color: white;
+            margin-left: 15px;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .footer-links a:hover {
+            color: var(--secondary-color);
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            nav ul {
+                margin-top: 15px;
+                justify-content: center;
+            }
+
+            .results-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-content {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .footer-links {
+                margin-top: 15px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .tab-buttons {
+                flex-direction: column;
+                border-bottom: none;
+            }
+
+            .tab-button {
+                border-bottom: 1px solid var(--border-color);
+                text-align: left;
+                padding: 12px 10px;
+            }
+
+            .tab-button.active {
+                border-left: 3px solid var(--secondary-color);
+                border-bottom: 1px solid var(--border-color);
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">MAIS <span>Analytics</span></div>
+                <nav>
+                    <ul>
+                        <li><a href="#">Home</a></li>
+                        <li><a href="#">Products</a></li>
+                        <li><a href="#">Reports</a></li>
+                        <li><a href="#">Contact</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <main class="main-content">
+            <h1 class="section-title">Medical Product Analysis Platform</h1>
+            
+            <section class="input-section">
+                <div class="product-selection">
+                    <div class="select-group">
+                        <label for="product-category">Select Product Category:</label>
+                        <select id="product-category">
+                            <option value="">-- Select Main Category --</option>
+                            <option value="cardiovascular">Cardiovascular Products</option>
+                            <option value="orthopedic">Orthopedic Devices</option>
+                            <option value="diagnostic">Diagnostic Equipment</option>
+                            <option value="surgical">Surgical Instruments</option>
+                            <option value="monitoring">Patient Monitoring Systems</option>
+                        </select>
+                    </div>
+                    
+                    <div class="select-group">
+                        <label for="product-subcategory">Select Specific Product:</label>
+                        <select id="product-subcategory" disabled>
+                            <option value="">-- First Select Category --</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="input-tabs">
+                    <div class="tab-buttons">
+                        <button class="tab-button active" data-tab="file-tab">Upload File</button>
+                        <button class="tab-button" data-tab="text-tab">Enter Text</button>
+                    </div>
+                    
+                    <div id="file-tab" class="tab-content active">
+                        <div class="file-upload">
+                            <p>Drag and drop a file or click the button below</p>
+                            <input type="file" id="file-input" class="file-input" accept=".pdf,.doc,.docx,.xls,.xlsx,.csv,.txt">
+                            <label for="file-input" class="upload-btn">Choose File</label>
+                            <p id="file-name" style="margin-top: 10px; font-size: 14px;"></p>
+                        </div>
+                    </div>
+                    
+                    <div id="text-tab" class="tab-content">
+                        <div class="text-input">
+                            <label for="analysis-text">Enter text for analysis:</label>
+                            <textarea id="analysis-text" placeholder="Paste your text here for analysis..."></textarea>
+                        </div>
+                    </div>
+                    
+                    <button id="analyze-btn" class="submit-btn" disabled>Analyze Data</button>
+                </div>
+            </section>
+            
+            <div id="loading" class="loading">
+                <div class="spinner"></div>
+                <p>Analyzing your data. This might take a moment...</p>
+            </div>
+            
+            <section id="results-section" class="results-section">
+                <h2 class="section-title">Analysis Results</h2>
+                
+                <div class="results-grid">
+                    <div class="result-card">
+                        <div class="card-header">Comprehensive Analysis</div>
+                        <div class="card-body" id="analysis-content">
+                            <!-- Analysis content will be loaded here -->
+                        </div>
+                    </div>
+                    
+                    <div class="result-card">
+                        <div class="card-header">Product Performance</div>
+                        <div class="card-body" id="performance-content">
+                            <!-- Performance table will be loaded here -->
+                        </div>
+                    </div>
+                    
+                    <div class="result-card">
+                        <div class="card-header">AI Insights</div>
+                        <div class="card-body" id="insights-content">
+                            <!-- AI insights will be loaded here -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+    
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">MAIS Analytics</div>
+                <div class="footer-links">
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Terms of Service</a>
+                    <a href="#">Support</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Product categories and subcategories
+        const productCategories = {
+            cardiovascular: [
+                "Heart Valves", "Stents", "Pacemakers", "Defibrillators", 
+                "Cardiac Monitoring Devices", "Vascular Grafts"
+            ],
+            orthopedic: [
+                "Joint Implants", "Spinal Devices", "Trauma Implants", 
+                "Orthopedic Braces", "Casting Materials", "Orthopedic Surgical Instruments"
+            ],
+            diagnostic: [
+                "MRI Machines", "CT Scanners", "X-Ray Equipment", "Ultrasound Devices", 
+                "Blood Testing Equipment", "Endoscopy Equipment"
+            ],
+            surgical: [
+                "Surgical Robotics", "Laparoscopic Instruments", "Electrosurgical Tools", 
+                "Surgical Lasers", "Surgical Navigation Systems", "Sutures and Stapling Devices"
+            ],
+            monitoring: [
+                "Patient Vital Signs Monitors", "Telemetry Systems", "Pulse Oximeters", 
+                "ECG Monitors", "Sleep Monitoring Systems", "Remote Patient Monitoring Devices"
+            ]
+        };
+
+        // DOM elements
+        const productCategorySelect = document.getElementById('product-category');
+        const productSubcategorySelect = document.getElementById('product-subcategory');
+        const fileInput = document.getElementById('file-input');
+        const fileName = document.getElementById('file-name');
+        const analysisText = document.getElementById('analysis-text');
+        const analyzeBtn = document.getElementById('analyze-btn');
+        const tabButtons = document.querySelectorAll('.tab-button');
+        const tabContents = document.querySelectorAll('.tab-content');
+        const loadingDiv = document.getElementById('loading');
+        const resultsSection = document.getElementById('results-section');
+        const analysisContent = document.getElementById('analysis-content');
+        const performanceContent = document.getElementById('performance-content');
+        const insightsContent = document.getElementById('insights-content');
+        
+        // Current active tab
+        let activeTab = 'file-tab';
+
+        // Populate subcategories based on main category selection
+        productCategorySelect.addEventListener('change', function() {
+            const category = this.value;
+            
+            // Clear and disable subcategory if no category selected
+            if (!category) {
+                productSubcategorySelect.innerHTML = '<option value="">-- First Select Category --</option>';
+                productSubcategorySelect.disabled = true;
+                updateAnalyzeButtonState();
+                return;
+            }
+            
+            // Enable and populate subcategory dropdown
+            productSubcategorySelect.disabled = false;
+            
+            let options = '<option value="">-- Select Specific Product --</option>';
+            productCategories[category].forEach(subcategory => {
+                options += `<option value="${subcategory.toLowerCase().replace(/\s+/g, '-')}">${subcategory}</option>`;
+            });
+            
+            productSubcategorySelect.innerHTML = options;
+            updateAnalyzeButtonState();
+        });
+        
+        // Handle subcategory selection
+        productSubcategorySelect.addEventListener('change', updateAnalyzeButtonState);
+        
+        // Handle file selection
+        fileInput.addEventListener('change', function() {
+            if (this.files.length > 0) {
+                fileName.textContent = this.files[0].name;
+            } else {
+                fileName.textContent = '';
+            }
+            updateAnalyzeButtonState();
+        });
+        
+        // Handle text input
+        analysisText.addEventListener('input', updateAnalyzeButtonState);
+        
+        // Tab switching functionality
+        tabButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const tabId = this.getAttribute('data-tab');
+                
+                // Update active tab
+                tabButtons.forEach(btn => btn.classList.remove('active'));
+                this.classList.add('active');
+                
+                // Show active tab content
+                tabContents.forEach(content => content.classList.remove('active'));
+                document.getElementById(tabId).classList.add('active');
+                
+                activeTab = tabId;
+                updateAnalyzeButtonState();
+            });
+        });
+        
+        // Check if all required fields are filled to enable analyze button
+        function updateAnalyzeButtonState() {
+            const categorySelected = productCategorySelect.value !== '';
+            const subcategorySelected = productSubcategorySelect.value !== '';
+            
+            let dataProvided = false;
+            if (activeTab === 'file-tab') {
+                dataProvided = fileInput.files.length > 0;
+            } else {
+                dataProvided = analysisText.value.trim() !== '';
+            }
+            
+            analyzeBtn.disabled = !(categorySelected && subcategorySelected && dataProvided);
+        }
+        
+        // Analyze button click handler
+        analyzeBtn.addEventListener('click', async function() {
+            // Show loading spinner
+            loadingDiv.style.display = 'block';
+            resultsSection.style.display = 'none';
+            
+            try {
+                // Get selected product information
+                const category = productCategorySelect.options[productCategorySelect.selectedIndex].text;
+                const subcategory = productSubcategorySelect.options[productSubcategorySelect.selectedIndex].text;
+                
+                // Get input data (text or file)
+                let inputData = '';
+                if (activeTab === 'text-tab') {
+                    inputData = analysisText.value.trim();
+                } else {
+                    // For demonstration purposes, just use file name
+                    // In a real application, you'd read and process the file
+                    inputData = `Data from file: ${fileName.textContent}`;
+                }
+                
+                // Perform analysis with Groq API
+                const results = await analyzeWithGroq(category, subcategory, inputData);
+                
+                // Display results
+                displayResults(results);
+                
+                // Hide loading spinner and show results
+                loadingDiv.style.display = 'none';
+                resultsSection.style.display = 'block';
+                
+                // Scroll to results
+                resultsSection.scrollIntoView({ behavior: 'smooth' });
+                
+            } catch (error) {
+                console.error('Analysis error:', error);
+                alert('An error occurred during analysis. Please try again.');
+                loadingDiv.style.display = 'none';
+            }
+        });
+        
+        // Function to analyze data using Groq API
+        async function analyzeWithGroq(category, subcategory, inputData) {
+            const GROQ_API_KEY = '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';
+            const GROQ_API_ENDPOINT = 'https://api.groq.com/openai/v1/chat/completions';
+            const MODEL_NAME = 'deepseek-r1-distill-llama-70b';
+            
+            // Create a detailed system prompt
+            const systemPrompt = `You are an advanced AI specialized in medical product analysis for MAIS Medical Products Company. 
+Your primary focus is on ${category}, specifically ${subcategory}.
+
+When analyzing data, follow these precise steps:
+1. First, thoroughly understand the context of the medical data provided.
+2. Identify key metrics, trends, and patterns related to product performance.
+3. Compare against industry benchmarks and historical data for this product category.
+4. Assess market positioning, competitive advantages, and potential weaknesses.
+5. Evaluate clinical outcomes and patient satisfaction where applicable.
+6. Consider regulatory compliance aspects and potential risks.
+
+Provide your analysis in three distinct sections:
+1. COMPREHENSIVE ANALYSIS: A detailed assessment of the product's performance, market positioning, clinical efficacy, and overall business impact. Include relevant metrics and their interpretation.
+2. PERFORMANCE TABLE: A structured assessment of winning vs. losing aspects of the product, specific causes for each, and actionable recommendations. Format this as a clear HTML table.
+3. STRATEGIC INSIGHTS: Provide unexpected, high-value observations that might not be immediately obvious but could significantly impact business decisions.
+
+Your analysis should be evidence-based, strategic, and actionable. Highlight specific numbers and metrics where possible. Focus on providing concrete, specific insights rather than general observations.`;
+
+            // Prepare the API request
+            const response = await fetch(GROQ_API_ENDPOINT, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${GROQ_API_KEY}`
+                },
+                body: JSON.stringify({
+                    model: MODEL_NAME,
+                    messages: [
+                        { role: "system", content: systemPrompt },
+                        { role: "user", content: `Please analyze the following data for ${category} - ${subcategory}: ${inputData}` }
+                    ],
+                    temperature: 0.5,
+                    max_tokens: 2000
+                })
+            });
+            
+            if (!response.ok) {
+                throw new Error(`API request failed with status: ${response.status}`);
+            }
+            
+            const responseData = await response.json();
+            const analysisText = responseData.choices[0].message.content;
+            
+            // Parse the response into our three sections
+            // This is a simplified approach - in production, you might want a more robust parsing
+            const sections = parseAnalysisResponse(analysisText);
+            
+            return sections;
+        }
+        
+        // Function to parse the Groq response into sections
+        function parseAnalysisResponse(text) {
+            // For demonstration purposes, let's create a basic parser
+            // In production, you'd need more robust parsing logic
+            
+            // Example parsing logic - looking for section headers
+            const comprehensiveAnalysisMatch = text.match(/COMPREHENSIVE ANALYSIS:?([\s\S]*?)(?=PERFORMANCE TABLE:|STRATEGIC INSIGHTS:|$)/i);
+            const performanceTableMatch = text.match(/PERFORMANCE TABLE:?([\s\S]*?)(?=STRATEGIC INSIGHTS:|$)/i);
+            const strategicInsightsMatch = text.match(/STRATEGIC INSIGHTS:?([\s\S]*?)$/i);
+            
+            return {
+                analysis: comprehensiveAnalysisMatch ? comprehensiveAnalysisMatch[1].trim() : "Analysis not available",
+                performance: performanceTableMatch ? performanceTableMatch[1].trim() : "Performance data not available",
+                insights: strategicInsightsMatch ? strategicInsightsMatch[1].trim() : "Insights not available"
+            };
+        }
+        
+        // Function to display results
+        function displayResults(results) {
+            // Format and display comprehensive analysis
+            analysisContent.innerHTML = formatContent(results.analysis);
+            
+            // Format and display performance table (convert text to HTML table if needed)
+            performanceContent.innerHTML = formatPerformanceTable(results.performance);
+            
+            // Format and display insights
+            insightsContent.innerHTML = formatContent(results.insights);
+        }
+        
+        // Helper function to format content with markdown-like syntax
+        function formatContent(text) {
+            // Basic formatting for demonstration purposes
+            // In production, you might want to use a proper markdown parser
+            
+            // Replace line breaks with paragraph tags
+            let formatted = text.replace(/\n\n/g, '</p><p>').replace(/\n/g, '<br>');
+            
+            // Wrap in paragraph tags if not already
+            if (!formatted.startsWith('<p>')) {
+                formatted = '<p>' + formatted;
+            }
+            if (!formatted.endsWith('</p>')) {
+                formatted = formatted + '</p>';
+            }
+            
+            // Format bold text
+            formatted = formatted.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+            
+            // Format italic text
+            formatted = formatted.replace(/\*(.*?)\*/g, '<em>$1</em>');
+            
+            // Format highlighting
+            formatted = formatted.replace(/==(.*?)==/g, '<span class="text-highlight">$1</span>');
+            
+            return formatted;
+        }
+        
+        // Helper function to format performance table
+        function formatPerformanceTable(text) {
+            // Check if text already contains HTML table
+            if (text.includes('<table')) {
+                return text;
+            }
+            
+            // Otherwise, create a basic table from the text
+            let tableHtml = `
+            <table>
+                <thead>
+                    <tr>
+                        <th>Aspect</th>
+                        <th>Status</th>
+                        <th>Cause</th>
+                        <th>Recommendation</th>
+                    </tr>
+                </thead>
+                <tbody>`;
+            
+            // Simple parsing logic - this is basic for demonstration
+            // In production, you would need more robust parsing
+            const lines = text.split('\n').filter(line => line.trim() !== '');
+            
+            let inWinningSection = false;
+            let inLosingSection = false;
+            
+            for (const line of lines) {
+                if (line.toLowerCase().includes('winning') || line.toLowerCase().includes('strengths')) {
+                    inWinningSection = true;
+                    inLosingSection = false;
+                    continue;
+                } else if (line.toLowerCase().includes('losing') || line.toLowerCase().includes('weaknesses')) {
+                    inWinningSection = false;
+                    inLosingSection = true;
+                    continue;
+                }
+                
+                // Simple heuristic to extract point, cause, and recommendation
+                // This is simplified for demonstration purposes
+                const parts = line.split(':').map(part => part.trim());
+                let aspect = parts[0] || "General";
+                let details = parts.length > 1 ? parts[1] : line;
+                
+                // Further split details if possible
+                const detailParts = details.split('.').map(part => part.trim()).filter(Boolean);
+                let cause = detailParts[0] || "Not specified";
+                let recommendation = detailParts.length > 1 ? detailParts[1] : "See analysis for details";
+                
+                const status = inWinningSection ? "Winning" : inLosingSection ? "Losing" : "Neutral";
+                const statusClass = inWinningSection ? "status-success" : inLosingSection ? "status-danger" : "";
+                
+                tableHtml += `
+                <tr>
+                    <td>${aspect}</td>
+                    <td class="${statusClass}">${status}</td>
+                    <td>${cause}</td>
+                    <td>${recommendation}</td>
+                </tr>`;
+            }
+            
+            tableHtml += `
+                </tbody>
+            </table>
+            <p><em>Note: This table is automatically generated from the analysis text.</em></p>`;
+            
+            return tableHtml;
+        }
+        
+        // File drag and drop functionality
+        const dropZone = document.querySelector('.file-upload');
+        
+        dropZone.addEventListener('dragover', function(e) {
+            e.preventDefault();
+            this.style.borderColor = '#0056b3';
+            this.style.backgroundColor = 'rgba(0, 86, 179, 0.05)';
+        });
+        
+        dropZone.addEventListener('dragleave', function(e) {
+            e.preventDefault();
+            this.style.borderColor = '';
+            this.style.backgroundColor = '';
+        });
+        
+        dropZone.addEventListener('drop', function(e) {
+            e.preventDefault();
+            this.style.borderColor = '';
+            this.style.backgroundColor = '';
+            
+            if (e.dataTransfer.files.length > 0) {
+                fileInput.files = e.dataTransfer.files;
+                fileName.textContent = e.dataTransfer.files[0].name;
+                updateAnalyzeButtonState();
+            }
+        });
+    </script>
+</body>
+</html>
