@@ -26,7 +26,88 @@
             min-height: 100vh;
             display: flex;
             flex-direction: column;
+            perspective: 1000px;
+            overflow-x: hidden;
         }
+        
+        /* 3D Animated Background */
+        .background-3d {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+            overflow: hidden;
+        }
+        
+        .floating-cube {
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            opacity: 0.08;
+            transform-style: preserve-3d;
+            animation: float 15s infinite linear;
+        }
+        
+        .floating-cube:nth-child(1) {
+            top: 15%;
+            left: 10%;
+            animation-delay: -2s;
+            animation-duration: 25s;
+        }
+        
+        .floating-cube:nth-child(2) {
+            top: 70%;
+            left: 85%;
+            animation-delay: -7s;
+            animation-duration: 30s;
+        }
+        
+        .floating-cube:nth-child(3) {
+            top: 40%;
+            left: 20%;
+            animation-delay: -12s;
+            animation-duration: 22s;
+        }
+        
+        .floating-cube:nth-child(4) {
+            top: 60%;
+            left: 75%;
+            animation-delay: -5s;
+            animation-duration: 18s;
+        }
+        
+        .floating-cube:nth-child(5) {
+            top: 10%;
+            left: 90%;
+            animation-delay: -9s;
+            animation-duration: 20s;
+        }
+        
+        .cube-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: var(--primary-color);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            backface-visibility: visible;
+        }
+        
+        .face-front { transform: translateZ(50px); }
+        .face-back { transform: rotateY(180deg) translateZ(50px); }
+        .face-right { transform: rotateY(90deg) translateZ(50px); }
+        .face-left { transform: rotateY(-90deg) translateZ(50px); }
+        .face-top { transform: rotateX(90deg) translateZ(50px); }
+        .face-bottom { transform: rotateX(-90deg) translateZ(50px); }
+        
+        @keyframes float {
+            0% { transform: translateY(0) rotateX(0) rotateY(0) rotateZ(0); }
+            50% { transform: translateY(-100px) rotateX(180deg) rotateY(180deg) rotateZ(90deg); }
+            100% { transform: translateY(0) rotateX(360deg) rotateY(360deg) rotateZ(180deg); }
+        }
+        
         header {
             background: linear-gradient(120deg, var(--primary-color) 60%, var(--secondary-color) 100%);
             color: #fff;
@@ -35,38 +116,80 @@
             box-shadow: 0 4px 24px rgba(0,0,0,0.10);
             position: relative;
             z-index: 2;
+            transform-style: preserve-3d;
+            transform: translateZ(20px);
+            transition: transform 0.5s ease-out;
         }
+        
+        header:hover {
+            transform: translateZ(40px) scale(1.02);
+        }
+        
+        .logo-container {
+            position: relative;
+            display: inline-block;
+            perspective: 1000px;
+            transform-style: preserve-3d;
+            margin-bottom: 12px;
+        }
+        
         .logo-img {
             width: 70px;
             height: 70px;
             border-radius: 50%;
             background: #fff;
-            margin-bottom: 12px;
             object-fit: contain;
             box-shadow: 0 4px 16px rgba(0,0,0,0.13), 0 1.5px 4px rgba(0,0,0,0.10);
+            transition: transform 0.6s ease-out;
+            transform-style: preserve-3d;
+            transform: rotateY(0deg) translateZ(0);
         }
+        
+        .logo-container:hover .logo-img {
+            transform: rotateY(360deg) translateZ(20px);
+        }
+        
         h1 {
             font-size: 2.8rem;
             margin: 0 0 10px 0;
             letter-spacing: 1px;
             font-weight: 800;
             text-shadow: 0 2px 8px rgba(0,0,0,0.10);
+            transform-style: preserve-3d;
+            transition: all 0.3s ease;
         }
+        
+        h1:hover {
+            text-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            transform: translateZ(15px);
+        }
+        
         .subtitle {
             font-size: 1.25rem;
             font-weight: 400;
             margin-bottom: 0;
             color: #e0e0e0;
             text-shadow: 0 1px 4px rgba(0,0,0,0.09);
+            transition: all 0.3s ease;
         }
+        
+        .subtitle:hover {
+            transform: translateZ(10px);
+            text-shadow: 0 2px 8px rgba(0,0,0,0.15);
+        }
+        
         main {
             flex: 1;
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
             padding: 40px 10px 30px 10px;
             background: linear-gradient(135deg, #eaf6ff 0%, #f5f7fa 100%);
+            perspective: 1000px;
+            transform-style: preserve-3d;
         }
+        
         .actions-card {
             background: linear-gradient(145deg, #ffffff 70%, #e3f0ff 100%);
             border-radius: var(--border-radius);
@@ -75,11 +198,19 @@
             max-width: 440px;
             width: 100%;
             text-align: center;
-            margin: 0 auto;
             position: relative;
             z-index: 1;
             border: 1.5px solid #e3eaf7;
+            transform-style: preserve-3d;
+            transition: transform 0.4s ease-out, box-shadow 0.4s ease;
+            transform: translateZ(50px) rotateX(0deg);
         }
+        
+        .actions-card:hover {
+            box-shadow: 0 24px 48px rgba(0,0,0,0.2), 0 4px 12px rgba(0,0,0,0.15);
+            transform: translateZ(80px) rotateX(2deg);
+        }
+        
         .actions-card::before {
             content: "";
             position: absolute;
@@ -88,19 +219,29 @@
             box-shadow: 0 16px 48px 8px rgba(0,86,179,0.08);
             z-index: -1;
         }
+        
         .actions-card h2 {
             font-size: 1.6rem;
             margin-bottom: 18px;
             color: var(--primary-color);
             font-weight: 700;
             text-shadow: 0 1px 4px rgba(0,86,179,0.07);
+            transform-style: preserve-3d;
+            transition: transform 0.3s ease;
         }
+        
+        .actions-card h2:hover {
+            transform: translateZ(10px);
+        }
+        
         .action-btns {
             display: flex;
             flex-direction: column;
             gap: 28px;
             margin-top: 22px;
+            transform-style: preserve-3d;
         }
+        
         .action-btn {
             display: flex;
             align-items: center;
@@ -122,38 +263,68 @@
             overflow: hidden;
             perspective: 400px;
             border-bottom: 4px solid #b3d1f7;
+            transform-style: preserve-3d;
+            transform: translateZ(0) scale(1);
         }
-        /* زر صغير */
+        
         .action-btn-small {
             font-size: 1rem;
             padding: 12px 0;
             border-radius: 10px;
             gap: 10px;
+            margin-top: 32px;
+            max-width: 440px;
+            width: 100%;
+            text-align: center;
         }
+        
         .action-btn-small svg {
             width: 24px;
             height: 24px;
         }
+        
         .action-btn:active {
-            transform: translateY(2px) scale(0.98) perspective(400px) rotateX(2deg);
+            transform: translateY(2px) scale(0.98) translateZ(10px) rotateX(2deg);
             box-shadow: 0 2px 8px rgba(0,86,179,0.09);
         }
+        
         .action-btn:hover, .action-btn:focus {
             background: linear-gradient(120deg, var(--secondary-color) 10%, var(--primary-color) 90%);
-            transform: translateY(-6px) scale(1.04) perspective(400px) rotateX(-4deg);
-            box-shadow: var(--shadow-btn-hover);
+            transform: translateY(-6px) scale(1.04) translateZ(20px) rotateX(-4deg);
+            box-shadow: var(--shadow-btn-hover), 0 10px 20px rgba(0,0,0,0.2);
             border-bottom: 8px solid #b3f7c7;
         }
+        
+        .action-btn::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0) 80%);
+            transform: scale(0);
+            transition: transform 0.6s cubic-bezier(.4,0,.2,1);
+            pointer-events: none;
+        }
+        
+        .action-btn:hover::before {
+            transform: scale(1) translateZ(30px);
+        }
+        
         .action-btn svg {
             width: 32px;
             height: 32px;
             fill: #fff;
             filter: drop-shadow(0 2px 6px rgba(0,86,179,0.13));
             transition: transform 0.18s cubic-bezier(.4,0,.2,1);
+            transform-style: preserve-3d;
         }
+        
         .action-btn:hover svg, .action-btn:focus svg {
-            transform: scale(1.13) rotate(-8deg);
+            transform: scale(1.13) rotate(-8deg) translateZ(10px);
         }
+        
         footer {
             text-align: center;
             padding: 18px 0 10px 0;
@@ -162,25 +333,83 @@
             background: #f0f4f8;
             border-top: 1px solid #e0e0e0;
             box-shadow: 0 -2px 8px rgba(0,0,0,0.04);
+            position: relative;
+            z-index: 2;
+            transform-style: preserve-3d;
+            transform: translateZ(5px);
+            transition: transform 0.3s ease;
         }
+        
+        footer:hover {
+            transform: translateZ(10px);
+        }
+        
         @media (max-width: 600px) {
             .actions-card {
-                padding: 24px 8px 18px 8px;
+                padding: 24px 14px 18px 14px;
             }
             h1 { font-size: 2rem; }
             .action-btn { font-size: 1rem; padding: 16px 0; }
             .action-btn-small { font-size: 0.92rem; padding: 9px 0; }
+            .floating-cube { opacity: 0.05; }
         }
     </style>
 </head>
 <body>
+    <!-- 3D Animated Background -->
+    <div class="background-3d">
+        <div class="floating-cube">
+            <div class="cube-face face-front"></div>
+            <div class="cube-face face-back"></div>
+            <div class="cube-face face-right"></div>
+            <div class="cube-face face-left"></div>
+            <div class="cube-face face-top"></div>
+            <div class="cube-face face-bottom"></div>
+        </div>
+        <div class="floating-cube">
+            <div class="cube-face face-front"></div>
+            <div class="cube-face face-back"></div>
+            <div class="cube-face face-right"></div>
+            <div class="cube-face face-left"></div>
+            <div class="cube-face face-top"></div>
+            <div class="cube-face face-bottom"></div>
+        </div>
+        <div class="floating-cube">
+            <div class="cube-face face-front"></div>
+            <div class="cube-face face-back"></div>
+            <div class="cube-face face-right"></div>
+            <div class="cube-face face-left"></div>
+            <div class="cube-face face-top"></div>
+            <div class="cube-face face-bottom"></div>
+        </div>
+        <div class="floating-cube">
+            <div class="cube-face face-front"></div>
+            <div class="cube-face face-back"></div>
+            <div class="cube-face face-right"></div>
+            <div class="cube-face face-left"></div>
+            <div class="cube-face face-top"></div>
+            <div class="cube-face face-bottom"></div>
+        </div>
+        <div class="floating-cube">
+            <div class="cube-face face-front"></div>
+            <div class="cube-face face-back"></div>
+            <div class="cube-face face-right"></div>
+            <div class="cube-face face-left"></div>
+            <div class="cube-face face-top"></div>
+            <div class="cube-face face-bottom"></div>
+        </div>
+    </div>
+
     <header>
-        <img src="logo.png" alt="AI MAIS Logo" class="logo-img" onerror="this.style.display='none'">
+        <div class="logo-container">
+            <img src="logo.png" alt="AI MAIS Logo" class="logo-img" onerror="this.style.display='none'">
+        </div>
         <h1>AI MAIS</h1>
         <div class="subtitle">Empowering Medical Data Intelligence</div>
     </header>
-    <main>
-        <div class="actions-card">
+
+    <main id="main">
+        <div class="actions-card" id="actions-card">
             <h2>Welcome to AI MAIS Platform</h2>
             <div>Choose an analysis tool to get started:</div>
             <div class="action-btns">
@@ -201,14 +430,71 @@
                 </a>
             </div>
         </div>
-        <a href="uses.html" class="action-btn action-btn-small" style="margin-top:32px; max-width:440px; width:100%; text-align:center;">
+        <a href="uses.html" class="action-btn action-btn-small">
             <!-- Other Uses Icon -->
             <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
             Other uses
         </a>
     </main>
+
     <footer>
         &copy; 2025 AI MAIS. All rights reserved. by yazeed
     </footer>
+
+    <script>
+        // 3D parallax effect on mouse move
+        document.addEventListener('DOMContentLoaded', function() {
+            const mainElem = document.getElementById('main');
+            const cardElem = document.getElementById('actions-card');
+            
+            document.addEventListener('mousemove', function(e) {
+                // Calculate relative mouse position
+                const x = (e.clientX / window.innerWidth - 0.5) * 20;
+                const y = (e.clientY / window.innerHeight - 0.5) * 20;
+                
+                // Apply subtle rotation to card based on mouse position
+                cardElem.style.transform = `translateZ(50px) rotateY(${x * 0.3}deg) rotateX(${-y * 0.3}deg)`;
+                
+                // Apply slightly different rotation to background for parallax effect
+                document.querySelectorAll('.floating-cube').forEach(cube => {
+                    const factor = Math.random() * 0.2 + 0.1;
+                    cube.style.transform = `translateY(0) rotateX(${y * factor}deg) rotateY(${x * factor}deg) rotateZ(0)`;
+                });
+            });
+            
+            // Reset when no mouse movement (mobile)
+            document.addEventListener('mouseleave', function() {
+                cardElem.style.transform = 'translateZ(50px) rotateX(0deg)';
+            });
+            
+            // Add touch event support
+            let touchStartY = 0;
+            let touchStartX = 0;
+            
+            document.addEventListener('touchstart', function(e) {
+                touchStartX = e.touches[0].clientX;
+                touchStartY = e.touches[0].clientY;
+            });
+            
+            document.addEventListener('touchmove', function(e) {
+                if (!touchStartX || !touchStartY) return;
+                
+                const touchX = e.touches[0].clientX;
+                const touchY = e.touches[0].clientY;
+                
+                const deltaX = (touchX - touchStartX) / window.innerWidth * 20;
+                const deltaY = (touchY - touchStartY) / window.innerHeight * 20;
+                
+                // Apply more subtle effect for touch 
+                cardElem.style.transform = `translateZ(50px) rotateY(${deltaX * 0.15}deg) rotateX(${-deltaY * 0.15}deg)`;
+            });
+            
+            document.addEventListener('touchend', function() {
+                cardElem.style.transform = 'translateZ(50px) rotateX(0deg)';
+                touchStartX = 0;
+                touchStartY = 0;
+            });
+        });
+    </script>
 </body>
 </html>

@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Business Applications</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+            perspective: 1000px;
+            color: white;
+        }
+        
+        .header {
+            text-align: center;
+            padding: 40px 20px;
+            transform-style: preserve-3d;
+            transform: translateZ(50px);
+        }
+        
+        h1 {
+            font-size: 3em;
+            text-shadow: 2px 2px 8px rgba(0,0,0,0.6);
+            margin-bottom: 20px;
+        }
+        
+        .stats-container {
+            display: flex;
+            justify-content: space-around;
+            margin: 30px auto;
+            flex-wrap: wrap;
+            max-width: 1200px;
+        }
+        
+        .stat-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(5px);
+            border-radius: 15px;
+            padding: 20px;
+            margin: 15px;
+            width: 200px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+            text-align: center;
+            transform-style: preserve-3d;
+            transform: translateZ(30px);
+            transition: transform 0.3s ease;
+        }
+        
+        .stat-card:hover {
+            transform: translateZ(50px) scale(1.05);
+        }
+        
+        .stat-value {
+            font-size: 2.5em;
+            font-weight: bold;
+            margin: 10px 0;
+            color: #fdbb2d;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            transform-style: preserve-3d;
+        }
+        
+        .card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 40px;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.3);
+            transform-style: preserve-3d;
+            transform: translateZ(20px);
+            transition: transform 0.5s ease;
+        }
+        
+        .card:hover {
+            transform: translateZ(40px) scale(1.02);
+        }
+        
+        .card-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .icon {
+            font-size: 2.5em;
+            margin-right: 20px;
+            color: #fdbb2d;
+        }
+        
+        h2 {
+            font-size: 2em;
+            margin: 0;
+        }
+        
+        .features {
+            list-style-type: none;
+            padding: 0;
+            margin-top: 20px;
+        }
+        
+        .features li {
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+        }
+        
+        .features li:before {
+            content: "✓";
+            margin-right: 10px;
+            color: #4CAF50;
+            font-weight: bold;
+        }
+        
+        .chart-container {
+            height: 300px;
+            margin: 40px 0;
+            transform-style: preserve-3d;
+            transform: translateZ(30px);
+        }
+        
+        .chart-title {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.3);
+            margin-top: 50px;
+        }
+        
+        @media (max-width: 768px) {
+            .stat-card {
+                width: 100%;
+                max-width: 300px;
+            }
+        }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.1/chart.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js"></script>
+</head>
+<body>
+    <div class="header">
+        <h1>AI Business Applications</h1>
+        <p>Transforming Business Operations with Artificial Intelligence</p>
+    </div>
+    
+    <div class="stats-container">
+        <div class="stat-card">
+            <i class="fas fa-robot fa-2x"></i>
+            <p>Companies Using AI</p>
+            <div class="stat-value">75%</div>
+            <p>of enterprises</p>
+        </div>
+        <div class="stat-card">
+            <i class="fas fa-chart-line fa-2x"></i>
+            <p>Productivity Increase</p>
+            <div class="stat-value">40%</div>
+            <p>average boost</p>
+        </div>
+        <div class="stat-card">
+            <i class="fas fa-coins fa-2x"></i>
+            <p>Market Size</p>
+            <div class="stat-value">$190B</div>
+            <p>by 2025</p>
+        </div>
+        <div class="stat-card">
+            <i class="fas fa-hourglass-half fa-2x"></i>
+            <p>Time Saved</p>
+            <div class="stat-value">30%</div>
+            <p>on daily tasks</p>
+        </div>
+    </div>
+    
+    <div class="container">
+        <div class="chart-container">
+            <div class="chart-title">AI Adoption by Industry</div>
+            <canvas id="industryChart"></canvas>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <div class="icon"><i class="fas fa-user-tie"></i></div>
+                <h2>AI Recruiter</h2>
+            </div>
+            <p>A specialized recruitment robot that helps HR departments in Saudi Arabia accelerate hiring processes by sorting resumes, conducting initial interviews, and evaluating candidates efficiently and accurately.</p>
+            <ul class="features">
+                <li>Smart resume filtering based on specific criteria</li>
+                <li>Interactive and scheduled preliminary interviews</li>
+                <li>Initial assessment of candidates' skills and experience</li>
+                <li>Integration with Applicant Tracking Systems (ATS)</li>
+            </ul>
+            <div class="chart-container" style="height: 250px;">
+                <canvas id="recruiterChart"></canvas>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <div class="icon"><i class="fas fa-tasks"></i></div>
+                <h2>AI Project Manager</h2>
+            </div>
+            <p>An intelligent project management robot that helps teams in Saudi Arabia organize tasks, track progress, improve communication, and ensure projects are completed on time with the highest quality.</p>
+            <ul class="features">
+                <li>Effective task management and deadline tracking</li>
+                <li>Automatic project progress reporting</li>
+                <li>Smart alerts for potential risks and schedule delays</li>
+                <li>Integration with common project management tools</li>
+            </ul>
+            <div class="chart-container" style="height: 250px;">
+                <canvas id="projectChart"></canvas>
+            </div>
+        </div>
+    </div>
+    
+    <footer>
+        <p>© 2025 AI Business Solutions | All Rights Reserved</p>
+    </footer>
+    
+    <script>
+        // Industry Adoption Chart
+        const industryCtx = document.getElementById('industryChart').getContext('2d');
+        const industryChart = new Chart(industryCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Financial Services', 'Healthcare', 'Manufacturing', 'Retail', 'Technology', 'Energy'],
+                datasets: [{
+                    label: 'AI Adoption Rate (%)',
+                    data: [83, 67, 72, 61, 89, 54],
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.7)',
+                        'rgba(54, 162, 235, 0.7)',
+                        'rgba(255, 206, 86, 0.7)',
+                        'rgba(75, 192, 192, 0.7)',
+                        'rgba(153, 102, 255, 0.7)',
+                        'rgba(255, 159, 64, 0.7)'
+                    ],
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(153, 102, 255, 1)',
+                        'rgba(255, 159, 64, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        labels: {
+                            color: 'white'
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        },
+                        ticks: {
+                            color: 'white'
+                        }
+                    },
+                    x: {
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        },
+                        ticks: {
+                            color: 'white'
+                        }
+                    }
+                }
+            }
+        });
+        
+        // Recruiter Benefits Chart
+        const recruiterCtx = document.getElementById('recruiterChart').getContext('2d');
+        const recruiterChart = new Chart(recruiterCtx, {
+            type: 'radar',
+            data: {
+                labels: ['Time Efficiency', 'Candidate Quality', 'Cost Reduction', 'Bias Reduction', 'Candidate Experience'],
+                datasets: [{
+                    label: 'Traditional Recruiting',
+                    data: [40, 60, 45, 30, 55],
+                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                    borderColor: 'rgba(255, 99, 132, 1)',
+                    borderWidth: 2,
+                    pointBackgroundColor: 'rgba(255, 99, 132, 1)'
+                }, {
+                    label: 'AI Recruiting',
+                    data: [85, 80, 75, 90, 75],
+                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 2,
+                    pointBackgroundColor: 'rgba(54, 162, 235, 1)'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        labels: {
+                            color: 'white'
+                        }
+                    }
+                },
+                scales: {
+                    r: {
+                        angleLines: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        },
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        },
+                        pointLabels: {
+                            color: 'white'
+                        },
+                        ticks: {
+                            backdropColor: 'transparent',
+                            color: 'white'
+                        }
+                    }
+                }
+            }
+        });
+        
+        // Project Management Benefits Chart
+        const projectCtx = document.getElementById('projectChart').getContext('2d');
+        const projectChart = new Chart(projectCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Time Saved', 'Improved Accuracy', 'Risk Reduction', 'Communication Efficiency', 'Resource Optimization'],
+                datasets: [{
+                    data: [30, 25, 15, 20, 10],
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.7)',
+                        'rgba(54, 162, 235, 0.7)',
+                        'rgba(255, 206, 86, 0.7)',
+                        'rgba(75, 192, 192, 0.7)',
+                        'rgba(153, 102, 255, 0.7)'
+                    ],
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(153, 102, 255, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'right',
+                        labels: {
+                            color: 'white'
+                        }
+                    }
+                }
+            }
+        });
+        
+        // Simple 3D effect on scroll
+        window.addEventListener('scroll', function() {
+            const scrollTop = window.scrollY;
+            const cards = document.querySelectorAll('.card');
+            
+            cards.forEach((card, index) => {
+                const distance = (card.offsetTop - scrollTop) / 10;
+                if (distance > -50 && distance < 100) {
+                    card.style.transform = `translateZ(${20 + Math.abs(distance / 5)}px) rotateX(${distance / 50}deg)`;
+                }
+            });
+        });
+    </script>
+</body>
+</html>
