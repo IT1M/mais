@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="en" dir="ltr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -256,7 +256,7 @@
     <div class="container">
         <header>
             <h1>Smart Quality Assurance Agent</h1>
-            <p>نظام ذكي لفحص وتحليل جودة البيانات</p>
+            <p>Intelligent system for data quality inspection and analysis</p>
         </header>
         
         <div class="dashboard">
@@ -265,7 +265,7 @@
                     <div class="card-header">
                         <h2>Upload Production Data</h2>
                     </div>
-                    <p>قم برفع ملفات البيانات (CSV، Excel، PDF) للتحليل</p>
+                    <p>Upload data files (CSV, Excel, PDF) for analysis</p>
                     <div class="file-upload">
                         <button class="btn btn-primary" id="upload-btn">Upload Files</button>
                         <input type="file" id="file-input" accept=".csv,.xlsx,.xls,.pdf" />
@@ -282,11 +282,11 @@
                     </div>
                     
                     <div class="status-message success-message" id="success-message">
-                        تم رفع الملف بنجاح وجاري تحليله.
+                        File uploaded successfully and is being analyzed.
                     </div>
                     
                     <div class="status-message error-message" id="error-message">
-                        حدث خطأ أثناء رفع الملف. يرجى المحاولة مرة أخرى.
+                        An error occurred while uploading the file. Please try again.
                     </div>
                     
                     <div class="loader" id="loader"></div>
@@ -298,15 +298,15 @@
                     </div>
                     <div class="insights-panel" id="insights-panel">
                         <div class="insight-card">
-                            <h3>عدد السجلات</h3>
+                            <h3>Records Count</h3>
                             <div class="value" id="records-count">0</div>
                         </div>
                         <div class="insight-card">
-                            <h3>الحقول المفقودة</h3>
+                            <h3>Missing Fields</h3>
                             <div class="value" id="missing-fields">0%</div>
                         </div>
                         <div class="insight-card">
-                            <h3>جودة البيانات</h3>
+                            <h3>Data Quality</h3>
                             <div class="value" id="data-quality">N/A</div>
                         </div>
                     </div>
@@ -319,17 +319,17 @@
                         <h2>Smart QA Analysis</h2>
                         <button class="btn btn-success" id="analyze-btn" disabled>Analyze Data</button>
                     </div>
-                    <p>نتائج تحليل البيانات باستخدام الذكاء الاصطناعي</p>
+                    <p>Data analysis results using AI</p>
                     
                     <div class="qa-results" id="qa-results">
-                        <div class="qa-results-header">نتائج التحليل</div>
+                        <div class="qa-results-header">Analysis Results</div>
                         <div class="qa-results-content" id="qa-results-content">
-                            قم برفع الملفات لبدء تحليلها.
+                            Upload files to start analyzing them.
                         </div>
                     </div>
                     
                     <div class="status-message error-message" id="api-error-message" style="display: none; margin-top: 15px;">
-                        حدث خطأ في الاتصال بخدمة التحليل. يرجى المحاولة مرة أخرى لاحقاً.
+                        An error occurred while connecting to the analysis service. Please try again later.
                     </div>
                 </div>
             </div>
@@ -383,7 +383,7 @@
             console.error('Global error caught:', event.error);
             
             // Show a user-friendly error message
-            errorMessage.textContent = 'حدث خطأ غير متوقع. يرجى تحديث الصفحة والمحاولة مرة أخرى.';
+            errorMessage.textContent = 'An unexpected error occurred. Please refresh the page and try again.';
             errorMessage.style.display = 'block';
             
             // Hide loader if it was showing
@@ -472,14 +472,14 @@
                     
                 } catch (error) {
                     console.error('Error parsing file:', error);
-                    errorMessage.textContent = 'خطأ في قراءة الملف: ' + error.message;
+                    errorMessage.textContent = 'Error reading file: ' + error.message;
                     errorMessage.style.display = 'block';
                     progressBar.style.backgroundColor = 'var(--danger-color)';
                 }
             };
             
             reader.onerror = () => {
-                errorMessage.textContent = 'حدث خطأ أثناء قراءة الملف. يرجى المحاولة مرة أخرى.';
+                errorMessage.textContent = 'An error occurred while reading the file. Please try again.';
                 errorMessage.style.display = 'block';
             };
             
@@ -505,11 +505,11 @@
                     case 'pdf':
                         return parsePDF(data);
                     default:
-                        throw new Error('نوع الملف غير مدعوم');
+                        throw new Error('Unsupported file type');
                 }
             } catch (error) {
                 console.error('Error parsing file:', error);
-                throw new Error(`فشل في قراءة الملف: ${error.message}`);
+                throw new Error(`Failed to read file: ${error.message}`);
             }
         }
         
@@ -553,11 +553,11 @@
                     // Simulate Excel parsing
                     setTimeout(() => {
                         const mockData = {
-                            headers: ['اسم', 'عمر', 'مدينة', 'وظيفة'],
+                            headers: ['Name', 'Age', 'City', 'Job'],
                             records: [
-                                { 'اسم': 'أحمد', 'عمر': '30', 'مدينة': 'الرياض', 'وظيفة': 'مهندس' },
-                                { 'اسم': 'محمد', 'عمر': '25', 'مدينة': 'جدة', 'وظيفة': 'محلل بيانات' },
-                                { 'اسم': 'فاطمة', 'عمر': '28', 'مدينة': 'الدمام', 'وظيفة': 'مديرة مشروع' }
+                                { 'Name': 'Ahmed', 'Age': '30', 'City': 'Riyadh', 'Job': 'Engineer' },
+                                { 'Name': 'Mohammed', 'Age': '25', 'City': 'Jeddah', 'Job': 'Data Analyst' },
+                                { 'Name': 'Fatima', 'Age': '28', 'City': 'Dammam', 'Job': 'Project Manager' }
                             ],
                             type: 'excel'
                         };
@@ -578,7 +578,7 @@
                     // Simulate PDF parsing
                     setTimeout(() => {
                         const mockData = {
-                            text: 'هذا محتوى مستخرج من ملف PDF',
+                            text: 'This is content extracted from a PDF file',
                             type: 'pdf'
                         };
                         resolve(mockData);
@@ -637,7 +637,7 @@
                 
                 // For development - don't show errors during simulation
                 if (!USE_MOCK_DATA) {
-                    errorMessage.textContent = 'فشل في رفع الملف: ' + error.message;
+                    errorMessage.textContent = 'Failed to upload file: ' + error.message;
                     errorMessage.style.display = 'block';
                     
                     // Hide error after 5 seconds
@@ -677,16 +677,16 @@
                 
                 // Calculate data quality score
                 const qualityScore = 100 - missingPercentage;
-                let qualityLabel = 'ضعيف';
+                let qualityLabel = 'Poor';
                 
                 if (qualityScore >= 90) {
-                    qualityLabel = 'ممتاز';
+                    qualityLabel = 'Excellent';
                 } else if (qualityScore >= 80) {
-                    qualityLabel = 'جيد جداً';
+                    qualityLabel = 'Very Good';
                 } else if (qualityScore >= 70) {
-                    qualityLabel = 'جيد';
+                    qualityLabel = 'Good';
                 } else if (qualityScore >= 50) {
-                    qualityLabel = 'متوسط';
+                    qualityLabel = 'Average';
                 }
                 
                 dataQuality.textContent = qualityLabel;
@@ -704,29 +704,29 @@
             // Show loader
             loader.style.display = 'block';
             qaResults.style.display = 'block';
-            qaResultsContent.textContent = 'جاري تحليل البيانات...';
+            qaResultsContent.textContent = 'Analyzing data...';
             
             try {
                 // Prepare data for GROQ API
                 let prompt = '';
                 
                 if (parsedData.type === 'csv' || parsedData.type === 'excel') {
-                    prompt = `قم بتحليل البيانات التالية وتقديم نظرة عامة عن جودتها وأي مشاكل محتملة:\n\n`;
-                    prompt += `الحقول: ${parsedData.headers.join(', ')}\n\n`;
-                    prompt += `عدد السجلات: ${parsedData.records.length}\n\n`;
-                    prompt += `عينة من البيانات:\n`;
+                    prompt = `Analyze the following data and provide an overview of its quality and any potential issues:\n\n`;
+                    prompt += `Fields: ${parsedData.headers.join(', ')}\n\n`;
+                    prompt += `Records count: ${parsedData.records.length}\n\n`;
+                    prompt += `Sample data:\n`;
                     
                     // Add sample data (first 5 records)
                     const sampleRecords = parsedData.records.slice(0, 5);
                     sampleRecords.forEach((record, index) => {
-                        prompt += `سجل ${index + 1}:\n`;
+                        prompt += `Record ${index + 1}:\n`;
                         Object.entries(record).forEach(([key, value]) => {
                             prompt += `- ${key}: ${value}\n`;
                         });
                         prompt += '\n';
                     });
                 } else if (parsedData.type === 'pdf') {
-                    prompt = `قم بتحليل محتوى ملف PDF التالي وتقديم ملخص له:\n\n${parsedData.text}`;
+                    prompt = `Analyze the following PDF file content and provide a summary:\n\n${parsedData.text}`;
                 }
                 
                 // For development/testing environment, use mock data instead of actual API call
@@ -736,7 +736,7 @@
                 let analysisResult;
                 
                 if (USE_MOCK_API) {
-                    // Use mock data instead of actual API call
+                    // Use mock data for analysis
                     console.log('Using mock data for analysis');
                     
                     // Simulate API delay for a more realistic experience
@@ -758,7 +758,7 @@
                                 messages: [
                                     {
                                         role: 'system',
-                                        content: 'أنت مساعد لفحص جودة البيانات. قم بتحليل البيانات المقدمة بشكل دقيق وتقديم تقرير مفصل عن جودتها وأي مشاكل محتملة.'
+                                        content: 'You are a data quality inspection assistant. Analyze the provided data accurately and provide a detailed report on its quality and any potential issues.'
                                     },
                                     {
                                         role: 'user',
@@ -779,7 +779,7 @@
                         analysisResult = data.choices[0].message.content;
                     } catch (apiError) {
                         console.error('API Error:', apiError);
-                        throw new Error('فشل في الاتصال بخدمة التحليل: ' + apiError.message);
+                        throw new Error('Failed to connect to analysis service: ' + apiError.message);
                     }
                 }
                 
@@ -790,11 +790,11 @@
                 console.error('Error:', error);
                 qaResultsContent.innerHTML = `
                     <div style="color: var(--danger-color); margin-bottom: 15px;">
-                        <strong>حدث خطأ:</strong> ${error.message}
+                        <strong>Error:</strong> ${error.message}
                     </div>
                     <div>
-                        <p>يمكنك المحاولة مرة أخرى أو التحقق من الاتصال بالإنترنت.</p>
-                        <p>إذا استمرت المشكلة، يرجى التأكد من صحة مفتاح API أو الاتصال بالدعم الفني.</p>
+                        <p>You can try again or check your internet connection.</p>
+                        <p>If the problem persists, please verify your API key or contact technical support.</p>
                     </div>
                 `;
             } finally {
@@ -810,44 +810,44 @@
         
         function generateMockAnalysisResult(data) {
             if (data.type === 'csv' || data.type === 'excel') {
-                return `## تقرير تحليل جودة البيانات
+                return `## Data Quality Analysis Report
 
-### نظرة عامة
-- نوع الملف: ${data.type.toUpperCase()}
-- عدد السجلات: ${data.records.length}
-- عدد الحقول: ${data.headers.length}
+### Overview
+- File type: ${data.type.toUpperCase()}
+- Records count: ${data.records.length}
+- Fields count: ${data.headers.length}
 
-### تحليل الحقول
-${data.headers.map(header => `- ${header}: نوع البيانات مناسب`).join('\n')}
+### Field Analysis
+${data.headers.map(header => `- ${header}: Data type is appropriate`).join('\n')}
 
-### مشاكل محتملة
-- تم العثور على قيم مفقودة في بعض الحقول
-- بعض الحقول قد تحتاج إلى تنسيق أفضل
+### Potential Issues
+- Missing values found in some fields
+- Some fields may need better formatting
 
-### توصيات
-1. التأكد من اكتمال جميع البيانات المطلوبة
-2. إضافة قواعد تحقق للبيانات قبل إدخالها
-3. توحيد تنسيق البيانات (مثل التواريخ، الأرقام)
+### Recommendations
+1. Ensure all required data is complete
+2. Add validation rules before data entry
+3. Standardize data formatting (e.g., dates, numbers)
 
-### درجة الجودة الإجمالية
-الجودة: جيد (78/100)`;
+### Overall Quality Score
+Quality: Good (78/100)`;
             } else if (data.type === 'pdf') {
-                return `## تحليل محتوى ملف PDF
+                return `## PDF File Content Analysis
 
-### ملخص المحتوى
-المستند يحتوي على معلومات نصية تتعلق بتقرير أو مستند رسمي.
+### Content Summary
+The document contains textual information related to a report or official document.
 
-### التحليل
-- المستند منظم بشكل جيد
-- يحتوي على فقرات متعددة
-- قد يحتوي على بعض الجداول أو الرسوم البيانية
+### Analysis
+- The document is well organized
+- Contains multiple paragraphs
+- May contain some tables or charts
 
-### التوصيات
-1. استخراج البيانات الرقمية من المستند لتسهيل التحليل
-2. تنظيم المعلومات في هيكل أكثر تنظيماً مثل قاعدة بيانات
+### Recommendations
+1. Extract numeric data from the document for easier analysis
+2. Organize information into a more structured format such as a database
 
-### الخلاصة
-يمكن استخدام المحتوى لأغراض التحليل بعد مزيد من المعالجة والتنظيم.`;
+### Conclusion
+The content can be used for analysis purposes after further processing and organization.`;
             }
         }
         
