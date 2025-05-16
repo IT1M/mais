@@ -25,10 +25,16 @@
             --gray-light: #e9ecef;
         }
         
+        /* تحسينات جمالية إضافية */
         body {
-            background-color: #f5f7fa;
+            font-family: 'Segoe UI', 'Cairo', 'Tajawal', Arial, sans-serif;
+            background: linear-gradient(135deg, #e3f0ff 0%, #f8faff 100%);
             color: #333;
             line-height: 1.6;
+        }
+        
+        .navbar {
+            box-shadow: 0 4px 24px rgba(0,102,204,0.10);
         }
         
         .navbar-brand {
@@ -42,6 +48,7 @@
         }
         
         .dashboard-title {
+            letter-spacing: 1px;
             font-size: 1rem;
             font-weight: 400;
             color: rgba(255, 255, 255, 0.9);
@@ -49,6 +56,7 @@
         
         .card {
             border-radius: 8px;
+            border: 1.5px solid #e3eafc;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
             margin-bottom: 25px;
@@ -65,6 +73,7 @@
             align-items: center;
             padding: 1.25rem;
             border-bottom: 1px solid var(--gray-light);
+            background: linear-gradient(90deg, #f8faff 60%, #e3f0ff 100%);
         }
         
         .card-title {
@@ -116,6 +125,7 @@
             text-align: center;
             cursor: pointer;
             transition: all 0.3s ease;
+            animation: pulse 2s infinite alternate;
         }
         
         .file-upload:hover {
@@ -225,6 +235,12 @@
             display: none;
             flex-direction: column;
             overflow: hidden;
+            animation: chatbotIn 0.5s;
+        }
+        
+        @keyframes chatbotIn {
+            from { opacity: 0; transform: translateY(40px);}
+            to { opacity: 1; transform: translateY(0);}
         }
         
         .chatbot-header {
@@ -272,6 +288,7 @@
             padding: 10px 15px;
             border-radius: 18px;
             max-width: 80%;
+            font-size: 1.05rem;
         }
         
         .message-user .message-content {
@@ -321,6 +338,7 @@
             transition: right 0.3s ease;
             padding: 20px;
             overflow-y: auto;
+            border-left: 3px solid var(--primary);
         }
         
         .history-panel.show {
@@ -359,6 +377,7 @@
             margin-bottom: 10px;
             cursor: pointer;
             transition: all 0.2s;
+            background: linear-gradient(90deg, #f8faff 80%, #e3f0ff 100%);
         }
         
         .history-item:hover {
@@ -414,6 +433,23 @@
         .custom-tooltip:hover .tooltip-text {
             visibility: visible;
             opacity: 1;
+        }
+        
+        /* تحسين النقاط المتحركة في الشات بوت */
+        .typing-dot {
+            display: inline-block;
+            width: 7px;
+            height: 7px;
+            margin: 0 2px;
+            background: var(--primary);
+            border-radius: 50%;
+            animation: blink 1.4s infinite both;
+        }
+        .typing-dot:nth-child(2) { animation-delay: .2s;}
+        .typing-dot:nth-child(3) { animation-delay: .4s;}
+        @keyframes blink {
+            0%, 80%, 100% { opacity: 0.2; }
+            40% { opacity: 1; }
         }
         
         /* Responsive adjustments */
@@ -477,6 +513,7 @@
                                 <label for="productCategory" class="form-label fw-medium" data-i18n="product.category">Product Category*</label>
                                 <select class="form-select form-select-lg" id="productCategory" required>
                                     <option value="" selected disabled data-i18n="product.categoryPrompt">Select a product category</option>
+                                    <option value="general_analysis" style="font-weight:bold;color:#0066cc;">🔎 General Analysis (All Products)</option>
                                     <option value="Airway">Airway</option>
                                     <option value="Anesthesia">Anesthesia</option>
                                     <option value="Oxygen Therapy">Oxygen Therapy</option>
@@ -492,6 +529,9 @@
                                     <option value="Obstetrics & Gynecology">Obstetrics & Gynecology</option>
                                     <option value="Miscellaneous">Miscellaneous</option>
                                 </select>
+                                <div class="form-text text-primary-emphasis" id="categoryHint" style="display:none;">
+                                    <i class="fas fa-info-circle"></i> General Analysis will analyze all available sales data for overall insights.
+                                </div>
                             </div>
                             
                             <div class="mb-3" id="subProductGroup" style="display: none;">
@@ -772,6 +812,7 @@
                 
                 // Initialize UI state
                 elements.productCategory.addEventListener('change', showSubProductField);
+                elements.productCategory.addEventListener('change', showCategoryHint);
                 elements.fileUploadOption.addEventListener('change', toggleDataInputMethod);
                 elements.manualDataOption.addEventListener('change', toggleDataInputMethod);
                 
@@ -796,8 +837,18 @@
                 // Initialize Bootstrap modals if needed
             }
             
+            function showCategoryHint() {
+                const hint = document.getElementById('categoryHint');
+                if (elements.productCategory.value === 'general_analysis') {
+                    hint.style.display = 'block';
+                    elements.subProductGroup.style.display = 'none';
+                } else {
+                    hint.style.display = 'none';
+                }
+            }
+            
             function showSubProductField() {
-                if (elements.productCategory.value) {
+                if (elements.productCategory.value && elements.productCategory.value !== 'general_analysis') {
                     elements.subProductGroup.style.display = 'block';
                 } else {
                     elements.subProductGroup.style.display = 'none';
@@ -1203,9 +1254,14 @@
             }
             
             function analyzeData(category, subProduct, data) {
-                // Prepare the prompt for GROQ
-                const systemPrompt = buildSystemPrompt(category, subProduct);
-                const userPrompt = buildUserPrompt(category, subProduct, data);
+                // دعم التحليل العام
+                const isGeneral = category === 'general_analysis';
+                const systemPrompt = isGeneral
+                    ? buildGeneralSystemPrompt()
+                    : buildSystemPrompt(category, subProduct);
+                const userPrompt = isGeneral
+                    ? buildGeneralUserPrompt(data)
+                    : buildUserPrompt(category, subProduct, data);
                 
                 return callGroqAPI(systemPrompt, userPrompt);
             }
@@ -1216,6 +1272,14 @@
             
             function buildUserPrompt(category, subProduct, data) {
                 return `I need an analysis of sales data for ${category}${subProduct ? ' (specifically for ' + subProduct + ')' : ''}. Here's the data:\n\n${data}\n\nPlease provide: 1) A performance summary, 2) Sales trends analysis, 3) Drop detection with possible reasons, and 4) Optimization recommendations. Also include data points that could be visualized in a trend chart.`;
+            }
+            
+            function buildGeneralSystemPrompt() {
+                return `You are a world-class medical sales analyst. Analyze the provided sales data for all products and categories. Identify overall trends, best/worst performing segments, root causes for declines, and actionable recommendations. Provide a concise, insightful summary with bullet points and highlight key metrics.`;
+            }
+            
+            function buildGeneralUserPrompt(data) {
+                return `Please provide a comprehensive general analysis for the following sales data (all products/categories):\n\n${data}\n\nRequired: 1) Overall performance summary, 2) Key sales trends, 3) Drop detection with reasons, 4) Optimization recommendations, 5) Data points for a trend chart.`;
             }
             
             function callGroqAPI(systemPrompt, userPrompt) {
@@ -1667,6 +1731,23 @@
                 
                 // Export PDF Button
                 UI.elements.exportPdfBtn.addEventListener('click', exportPdf);
+                
+                // زر تحليل سريع (اختياري)
+                UI.elements.analyzeBtn.insertAdjacentHTML('afterend', `
+                    <button id="quickAnalyzeBtn" class="btn btn-outline-primary btn-sm mt-2" style="margin-left:10px;">
+                        <i class="fas fa-bolt"></i> Quick General Analysis
+                    </button>
+                `);
+                document.getElementById('quickAnalyzeBtn').addEventListener('click', quickGeneralAnalysis);
+            }
+            
+            async function quickGeneralAnalysis() {
+                // يختار التحليل العام تلقائيا ويحلل
+                UI.elements.productCategory.value = 'general_analysis';
+                UI.elements.subProduct.value = '';
+                document.getElementById('categoryHint').style.display = 'block';
+                UI.hideError();
+                await handleAnalysis();
             }
             
             async function handleAnalysis() {
