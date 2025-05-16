@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI MAIS - Home</title>
+    <style>
+        :root {
+            --primary-color: #0056b3;
+            --secondary-color: #4CAF50;
+            --accent-color: #ff9800;
+            --background-color: #f5f7fa;
+            --card-color: #fff;
+            --text-color: #222;
+            --shadow: 0 8px 32px rgba(0,0,0,0.18), 0 1.5px 4px rgba(0,0,0,0.10);
+            --shadow-btn: 0 6px 20px rgba(0,86,179,0.18), 0 1.5px 4px rgba(0,0,0,0.10);
+            --shadow-btn-hover: 0 12px 32px rgba(76,175,80,0.18), 0 4px 16px rgba(0,86,179,0.18);
+            --border-radius: 18px;
+            --transition: all 0.22s cubic-bezier(.4,0,.2,1);
+        }
+        body {
+            background: var(--background-color);
+            color: var(--text-color);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        header {
+            background: linear-gradient(120deg, var(--primary-color) 60%, var(--secondary-color) 100%);
+            color: #fff;
+            padding: 44px 0 28px 0;
+            text-align: center;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.10);
+            position: relative;
+            z-index: 2;
+        }
+        .logo-img {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background: #fff;
+            margin-bottom: 12px;
+            object-fit: contain;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.13), 0 1.5px 4px rgba(0,0,0,0.10);
+        }
+        h1 {
+            font-size: 2.8rem;
+            margin: 0 0 10px 0;
+            letter-spacing: 1px;
+            font-weight: 800;
+            text-shadow: 0 2px 8px rgba(0,0,0,0.10);
+        }
+        .subtitle {
+            font-size: 1.25rem;
+            font-weight: 400;
+            margin-bottom: 0;
+            color: #e0e0e0;
+            text-shadow: 0 1px 4px rgba(0,0,0,0.09);
+        }
+        main {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 10px 30px 10px;
+            background: linear-gradient(135deg, #eaf6ff 0%, #f5f7fa 100%);
+        }
+        .actions-card {
+            background: linear-gradient(145deg, #ffffff 70%, #e3f0ff 100%);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            padding: 48px 36px 38px 36px;
+            max-width: 440px;
+            width: 100%;
+            text-align: center;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+            border: 1.5px solid #e3eaf7;
+        }
+        .actions-card::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            border-radius: var(--border-radius);
+            box-shadow: 0 16px 48px 8px rgba(0,86,179,0.08);
+            z-index: -1;
+        }
+        .actions-card h2 {
+            font-size: 1.6rem;
+            margin-bottom: 18px;
+            color: var(--primary-color);
+            font-weight: 700;
+            text-shadow: 0 1px 4px rgba(0,86,179,0.07);
+        }
+        .action-btns {
+            display: flex;
+            flex-direction: column;
+            gap: 28px;
+            margin-top: 22px;
+        }
+        .action-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 14px;
+            background: linear-gradient(120deg, #e3f0ff 0%, var(--primary-color) 80%);
+            color: #fff;
+            font-size: 1.18rem;
+            font-weight: 600;
+            padding: 22px 0;
+            border: none;
+            border-radius: 14px;
+            box-shadow: var(--shadow-btn);
+            cursor: pointer;
+            text-decoration: none;
+            transition: var(--transition);
+            letter-spacing: 0.5px;
+            position: relative;
+            overflow: hidden;
+            perspective: 400px;
+            border-bottom: 4px solid #b3d1f7;
+        }
+        .action-btn:active {
+            transform: translateY(2px) scale(0.98) perspective(400px) rotateX(2deg);
+            box-shadow: 0 2px 8px rgba(0,86,179,0.09);
+        }
+        .action-btn:hover, .action-btn:focus {
+            background: linear-gradient(120deg, var(--secondary-color) 10%, var(--primary-color) 90%);
+            transform: translateY(-6px) scale(1.04) perspective(400px) rotateX(-4deg);
+            box-shadow: var(--shadow-btn-hover);
+            border-bottom: 8px solid #b3f7c7;
+        }
+        .action-btn svg {
+            width: 32px;
+            height: 32px;
+            fill: #fff;
+            filter: drop-shadow(0 2px 6px rgba(0,86,179,0.13));
+            transition: transform 0.18s cubic-bezier(.4,0,.2,1);
+        }
+        .action-btn:hover svg, .action-btn:focus svg {
+            transform: scale(1.13) rotate(-8deg);
+        }
+        footer {
+            text-align: center;
+            padding: 18px 0 10px 0;
+            color: #888;
+            font-size: 1rem;
+            background: #f0f4f8;
+            border-top: 1px solid #e0e0e0;
+            box-shadow: 0 -2px 8px rgba(0,0,0,0.04);
+        }
+        @media (max-width: 600px) {
+            .actions-card {
+                padding: 24px 8px 18px 8px;
+            }
+            h1 { font-size: 2rem; }
+            .action-btn { font-size: 1rem; padding: 16px 0; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <img src="logo.png" alt="AI MAIS Logo" class="logo-img" onerror="this.style.display='none'">
+        <h1>AI MAIS</h1>
+        <div class="subtitle">Empowering Medical Data Intelligence</div>
+    </header>
+    <main>
+        <div class="actions-card">
+            <h2>Welcome to AI MAIS Platform</h2>
+            <div>Choose an analysis tool to get started:</div>
+            <div class="action-btns">
+                <a href="g.html" class="action-btn">
+                    <!-- Sales Analysis Icon -->
+                    <svg viewBox="0 0 24 24"><path d="M3 17v2a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-2"/><path d="M16 6l-4-4-4 4"/><path d="M12 2v14"/></svg>
+                    Sales Data Analysis
+                </a>
+                <a href="SM.html" class="action-btn">
+                    <!-- QA Icon -->
+                    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9 12l2 2 4-4"/></svg>
+                    Smart Quality Assurance
+                </a>
+                <a href="Competitor-analysis.html" class="action-btn">
+                    <!-- Competitor Icon -->
+                    <svg viewBox="0 0 24 24"><rect x="2" y="7" width="7" height="14" rx="2"/><rect x="15" y="2" width="7" height="19" rx="2"/></svg>
+                    Competitor Analysis
+                </a>
+            </div>
+        </div>
+    </main>
+    <footer>
+        &copy; 2025 AI MAIS. All rights reserved.
+    </footer>
+</body>
+</html>
