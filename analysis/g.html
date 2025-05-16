@@ -663,6 +663,52 @@
             "Temperature Probe"
         ];
 
+        // General Surgery subcategories
+        const generalSurgerySubcategories = [
+            "PVC Wound Drainage Set (Silicon Multi Channel Tube)",
+            "Open Surgery Abdominal Drain (Without trocar) Sterile",
+            "Hi-Vacuum Wound Drainage Set Spring Type",
+            "Silicon Hubless Wound Drainage (Silicon Multi Channel Tube)",
+            "Wound Drainage Set Pre-evacuated – Sterile",
+            "Wound Drainage Set Bellow Pump – Sterile",
+            "Under Water Drainage System 2000/3000 Thoracic",
+            "Under Water Drainage System 700/2000 Pleural",
+            "Under Water Drainage System: Two Bottle",
+            "Under Water Drainage System: One Bottle"
+        ];
+
+        // Urology subcategories
+        const urologySubcategories = [
+            "Tiemann Catheter",
+            "Nelaton Catheter Male",
+            "Nelaton Catheter Female",
+            "Double Lumen Catheter, Radio-Opaque, Graduated Soft Tip",
+            "Set Replacement, Polyurethane Pigtail",
+            "2-Way Foley Catheter 100% Pure Silicone",
+            "2-Way Foley Catheter Natural Latex Silicone Coated",
+            "Ureteral Stent (Indwelling Catheter) Distal End Opened – PUR",
+            "Ureteral Stent (Indwelling Catheter) Distal End Closed – PUR"
+        ];
+
+        // Obstetrics & Gynecology subcategories
+        const obstetricsGynecologySubcategories = [
+            "Vaginal Dilator Set",
+            "Water Based Gel"
+        ];
+
+        // Miscellaneous subcategories
+        const miscellaneousSubcategories = [
+            "IV Cannula With Port – Sterile",
+            "IV Cannula Without Port (Small Wings) – Sterile",
+            "Safety Intravenous (I.V) Cannula",
+            "Scalp Vein",
+            "IV Butterfly",
+            "Vacuum Tube",
+            "Multi Sample Needle",
+            "Multi Sample Holder & Adapter",
+            "Arterial Catheter"
+        ];
+
         // Update subcategory dropdown based on category selection
         productCategorySelect.addEventListener('change', function() {
             if (this.value === "Airway") {
@@ -792,6 +838,42 @@
             } else if (this.value === "Pulse Oximeter") {
                 productSubcategorySelect.innerHTML = '<option value="">-- Optional --</option>';
                 pulseOximeterSubcategories.forEach(sub => {
+                    const opt = document.createElement('option');
+                    opt.value = sub;
+                    opt.textContent = sub;
+                    productSubcategorySelect.appendChild(opt);
+                });
+                productSubcategorySelect.disabled = false;
+            } else if (this.value === "General Surgery") {
+                productSubcategorySelect.innerHTML = '<option value="">-- Optional --</option>';
+                generalSurgerySubcategories.forEach(sub => {
+                    const opt = document.createElement('option');
+                    opt.value = sub;
+                    opt.textContent = sub;
+                    productSubcategorySelect.appendChild(opt);
+                });
+                productSubcategorySelect.disabled = false;
+            } else if (this.value === "Urology") {
+                productSubcategorySelect.innerHTML = '<option value="">-- Optional --</option>';
+                urologySubcategories.forEach(sub => {
+                    const opt = document.createElement('option');
+                    opt.value = sub;
+                    opt.textContent = sub;
+                    productSubcategorySelect.appendChild(opt);
+                });
+                productSubcategorySelect.disabled = false;
+            } else if (this.value === "Obstetrics & Gynecology") {
+                productSubcategorySelect.innerHTML = '<option value="">-- Optional --</option>';
+                obstetricsGynecologySubcategories.forEach(sub => {
+                    const opt = document.createElement('option');
+                    opt.value = sub;
+                    opt.textContent = sub;
+                    productSubcategorySelect.appendChild(opt);
+                });
+                productSubcategorySelect.disabled = false;
+            } else if (this.value === "Miscellaneous") {
+                productSubcategorySelect.innerHTML = '<option value="">-- Optional --</option>';
+                miscellaneousSubcategories.forEach(sub => {
                     const opt = document.createElement('option');
                     opt.value = sub;
                     opt.textContent = sub;
