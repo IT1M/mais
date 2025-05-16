@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Quality Assurance Agent</title>
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --success-color: #2ecc71;
+            --danger-color: #e74c3c;
+            --warning-color: #f39c12;
+            --light-color: #ecf0f1;
+            --dark-color: #34495e;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            color: var(--dark-color);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .dashboard {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 20px;
+        }
+        
+        .sidebar {
+            background-color: white;
+            border-radius: 5px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .main-content {
+            background-color: white;
+            border-radius: 5px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .card {
+            background-color: white;
+            border-radius: 5px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .card-header {
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .btn {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary {
+            background-color: var(--secondary-color);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background-color: #2980b9;
+        }
+        
+        .btn-success {
+            background-color: var(--success-color);
+            color: white;
+        }
+        
+        .btn-success:hover {
+            background-color: #27ae60;
+        }
+        
+        .file-upload {
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+        }
+        
+        .file-upload input[type=file] {
+            position: absolute;
+            top: 0;
+            right: 0;
+            min-width: 100%;
+            min-height: 100%;
+            font-size: 100px;
+            text-align: right;
+            filter: alpha(opacity=0);
+            opacity: 0;
+            outline: none;
+            background: white;
+            cursor: pointer;
+            display: block;
+        }
+        
+        .progress-container {
+            width: 100%;
+            background-color: #f1f1f1;
+            border-radius: 5px;
+            margin: 10px 0;
+            display: none;
+        }
+        
+        .progress-bar {
+            width: 0%;
+            height: 20px;
+            background-color: var(--secondary-color);
+            border-radius: 5px;
+            text-align: center;
+            line-height: 20px;
+            color: white;
+        }
+        
+        .status-message {
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 4px;
+            display: none;
+        }
+        
+        .success-message {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .error-message {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .insights-panel {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .insight-card {
+            background-color: var(--light-color);
+            padding: 15px;
+            border-radius: 5px;
+            text-align: center;
+        }
+        
+        .insight-card h3 {
+            margin-bottom: 10px;
+        }
+        
+        .insight-card .value {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--secondary-color);
+        }
+        
+        .loader {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid var(--secondary-color);
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            animation: spin 2s linear infinite;
+            display: none;
+            margin: 0 auto;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .qa-results {
+            margin-top: 20px;
+            display: none;
+        }
+        
+        .qa-results-header {
+            font-weight: bold;
+            margin-bottom: 10px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+        }
+        
+        .qa-results-content {
+            max-height: 400px;
+            overflow-y: auto;
+            padding: 10px;
+            background-color: #f9f9f9;
+            border-radius: 5px;
+            border: 1px solid #eee;
+        }
+        
+        .file-info {
+            margin-top: 10px;
+            display: none;
+        }
+        
+        .file-name {
+            font-weight: bold;
+        }
+        
+        .file-size {
+            color: #777;
+            font-size: 0.9em;
+        }
+        
+        .file-type {
+            display: inline-block;
+            padding: 2px 8px;
+            background-color: var(--secondary-color);
+            color: white;
+            border-radius: 10px;
+            font-size: 0.8em;
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Smart Quality Assurance Agent</h1>
+            <p>نظام ذكي لفحص وتحليل جودة البيانات</p>
+        </header>
+        
+        <div class="dashboard">
+            <div class="sidebar">
+                <div class="card">
+                    <div class="card-header">
+                        <h2>Upload Production Data</h2>
+                    </div>
+                    <p>قم برفع ملفات البيانات (CSV، Excel، PDF) للتحليل</p>
+                    <div class="file-upload">
+                        <button class="btn btn-primary" id="upload-btn">Upload Files</button>
+                        <input type="file" id="file-input" accept=".csv,.xlsx,.xls,.pdf" />
+                    </div>
+                    
+                    <div class="file-info" id="file-info">
+                        <div class="file-type" id="file-type">CSV</div>
+                        <span class="file-name" id="file-name">filename.csv</span>
+                        <div class="file-size" id="file-size">1.2 MB</div>
+                    </div>
+                    
+                    <div class="progress-container" id="progress-container">
+                        <div class="progress-bar" id="progress-bar">0%</div>
+                    </div>
+                    
+                    <div class="status-message success-message" id="success-message">
+                        تم رفع الملف بنجاح وجاري تحليله.
+                    </div>
+                    
+                    <div class="status-message error-message" id="error-message">
+                        حدث خطأ أثناء رفع الملف. يرجى المحاولة مرة أخرى.
+                    </div>
+                    
+                    <div class="loader" id="loader"></div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <h2>Data Insights</h2>
+                    </div>
+                    <div class="insights-panel" id="insights-panel">
+                        <div class="insight-card">
+                            <h3>عدد السجلات</h3>
+                            <div class="value" id="records-count">0</div>
+                        </div>
+                        <div class="insight-card">
+                            <h3>الحقول المفقودة</h3>
+                            <div class="value" id="missing-fields">0%</div>
+                        </div>
+                        <div class="insight-card">
+                            <h3>جودة البيانات</h3>
+                            <div class="value" id="data-quality">N/A</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="main-content">
+                <div class="card">
+                    <div class="card-header">
+                        <h2>Smart QA Analysis</h2>
+                        <button class="btn btn-success" id="analyze-btn" disabled>Analyze Data</button>
+                    </div>
+                    <p>نتائج تحليل البيانات باستخدام الذكاء الاصطناعي</p>
+                    
+                    <div class="qa-results" id="qa-results">
+                        <div class="qa-results-header">نتائج التحليل</div>
+                        <div class="qa-results-content" id="qa-results-content">
+                            قم برفع الملفات لبدء تحليلها.
+                        </div>
+                    </div>
+                    
+                    <div class="status-message error-message" id="api-error-message" style="display: none; margin-top: 15px;">
+                        حدث خطأ في الاتصال بخدمة التحليل. يرجى المحاولة مرة أخرى لاحقاً.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Constants
+        const GROQ_API_KEY = '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';
+        const GROQ_API_URL = 'https://api.groq.com/openai/v1/chat/completions';
+        const GROQ_MODEL = 'deepseek-r1-distill-llama-70b';
+        
+        // Flag to use mock data instead of real API calls
+        // Set to true for development/testing, set to false for production
+        const USE_MOCK_DATA = true;
+        
+        // DOM Elements
+        const fileInput = document.getElementById('file-input');
+        const uploadBtn = document.getElementById('upload-btn');
+        const analyzeBtn = document.getElementById('analyze-btn');
+        const progressContainer = document.getElementById('progress-container');
+        const progressBar = document.getElementById('progress-bar');
+        const successMessage = document.getElementById('success-message');
+        const errorMessage = document.getElementById('error-message');
+        const apiErrorMessage = document.getElementById('api-error-message');
+        const loader = document.getElementById('loader');
+        const fileInfo = document.getElementById('file-info');
+        const fileName = document.getElementById('file-name');
+        const fileSize = document.getElementById('file-size');
+        const fileType = document.getElementById('file-type');
+        const recordsCount = document.getElementById('records-count');
+        const missingFields = document.getElementById('missing-fields');
+        const dataQuality = document.getElementById('data-quality');
+        const qaResults = document.getElementById('qa-results');
+        const qaResultsContent = document.getElementById('qa-results-content');
+        
+        // Global variables
+        let fileData = null;
+        let parsedData = null;
+        
+        // Event Listeners
+        uploadBtn.addEventListener('click', () => {
+            fileInput.click();
+        });
+        
+        fileInput.addEventListener('change', handleFileUpload);
+        analyzeBtn.addEventListener('click', analyzeData);
+        
+        // Add error handling for the whole script
+        window.addEventListener('error', function(event) {
+            console.error('Global error caught:', event.error);
+            
+            // Show a user-friendly error message
+            errorMessage.textContent = 'حدث خطأ غير متوقع. يرجى تحديث الصفحة والمحاولة مرة أخرى.';
+            errorMessage.style.display = 'block';
+            
+            // Hide loader if it was showing
+            loader.style.display = 'none';
+            
+            return false; // Prevent default browser error handling
+        });
+        
+        // Check connectivity to GROQ API on page load
+        document.addEventListener('DOMContentLoaded', async function() {
+            if (!USE_MOCK_DATA) {
+                try {
+                    // Make a minimal API call to check connectivity
+                    const response = await fetch(GROQ_API_URL, {
+                        method: 'OPTIONS',
+                        headers: {
+                            'Authorization': `Bearer ${GROQ_API_KEY}`
+                        }
+                    });
+                    
+                    if (!response.ok) {
+                        console.warn('GROQ API connectivity check failed');
+                        apiErrorMessage.style.display = 'block';
+                    }
+                } catch (error) {
+                    console.warn('GROQ API connectivity check failed:', error);
+                    apiErrorMessage.style.display = 'block';
+                }
+            }
+        });
+        
+        // Functions
+        function handleFileUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            
+            // Display file info
+            fileInfo.style.display = 'block';
+            fileName.textContent = file.name;
+            fileSize.textContent = formatFileSize(file.size);
+            
+            // Set file type badge
+            const extension = file.name.split('.').pop().toLowerCase();
+            fileType.textContent = extension.toUpperCase();
+            
+            // Show progress bar
+            progressContainer.style.display = 'block';
+            progressBar.style.width = '0%';
+            progressBar.textContent = '0%';
+            
+            // Hide previous messages
+            successMessage.style.display = 'none';
+            errorMessage.style.display = 'none';
+            
+            // Read file
+            const reader = new FileReader();
+            
+            reader.onprogress = (e) => {
+                if (e.lengthComputable) {
+                    const progress = Math.round((e.loaded / e.total) * 100);
+                    progressBar.style.width = progress + '%';
+                    progressBar.textContent = progress + '%';
+                }
+            };
+            
+            reader.onload = async (e) => {
+                fileData = e.target.result;
+                try {
+                    parsedData = await parseFileData(file, fileData);
+                    
+                    // Update progress bar to 100%
+                    progressBar.style.width = '100%';
+                    progressBar.textContent = '100%';
+                    
+                    // Show success message
+                    successMessage.style.display = 'block';
+                    
+                    // Update insights panel
+                    updateInsightsPanel(parsedData);
+                    
+                    // Enable analyze button
+                    analyzeBtn.disabled = false;
+                    
+                    // Upload to server
+                    uploadToServer(file, parsedData);
+                    
+                } catch (error) {
+                    console.error('Error parsing file:', error);
+                    errorMessage.textContent = 'خطأ في قراءة الملف: ' + error.message;
+                    errorMessage.style.display = 'block';
+                    progressBar.style.backgroundColor = 'var(--danger-color)';
+                }
+            };
+            
+            reader.onerror = () => {
+                errorMessage.textContent = 'حدث خطأ أثناء قراءة الملف. يرجى المحاولة مرة أخرى.';
+                errorMessage.style.display = 'block';
+            };
+            
+            // Read the file based on its type
+            const fileExtension = file.name.split('.').pop().toLowerCase();
+            if (fileExtension === 'csv' || fileExtension === 'txt') {
+                reader.readAsText(file);
+            } else {
+                reader.readAsArrayBuffer(file);
+            }
+        }
+        
+        async function parseFileData(file, data) {
+            const extension = file.name.split('.').pop().toLowerCase();
+            
+            try {
+                switch (extension) {
+                    case 'csv':
+                        return parseCSV(data);
+                    case 'xlsx':
+                    case 'xls':
+                        return parseExcel(data);
+                    case 'pdf':
+                        return parsePDF(data);
+                    default:
+                        throw new Error('نوع الملف غير مدعوم');
+                }
+            } catch (error) {
+                console.error('Error parsing file:', error);
+                throw new Error(`فشل في قراءة الملف: ${error.message}`);
+            }
+        }
+        
+        function parseCSV(data) {
+            return new Promise((resolve, reject) => {
+                try {
+                    const lines = data.split('\n');
+                    const headers = lines[0].split(',').map(header => header.trim());
+                    
+                    const records = [];
+                    for (let i = 1; i < lines.length; i++) {
+                        if (lines[i].trim() === '') continue;
+                        
+                        const values = lines[i].split(',').map(value => value.trim());
+                        const record = {};
+                        
+                        headers.forEach((header, index) => {
+                            record[header] = values[index] || '';
+                        });
+                        
+                        records.push(record);
+                    }
+                    
+                    resolve({
+                        headers: headers,
+                        records: records,
+                        type: 'csv'
+                    });
+                } catch (error) {
+                    reject(error);
+                }
+            });
+        }
+        
+        function parseExcel(data) {
+            return new Promise((resolve, reject) => {
+                try {
+                    // Note: In a real implementation, you would use a library like SheetJS/xlsx
+                    // This is a simplified placeholder for demonstration
+                    
+                    // Simulate Excel parsing
+                    setTimeout(() => {
+                        const mockData = {
+                            headers: ['اسم', 'عمر', 'مدينة', 'وظيفة'],
+                            records: [
+                                { 'اسم': 'أحمد', 'عمر': '30', 'مدينة': 'الرياض', 'وظيفة': 'مهندس' },
+                                { 'اسم': 'محمد', 'عمر': '25', 'مدينة': 'جدة', 'وظيفة': 'محلل بيانات' },
+                                { 'اسم': 'فاطمة', 'عمر': '28', 'مدينة': 'الدمام', 'وظيفة': 'مديرة مشروع' }
+                            ],
+                            type: 'excel'
+                        };
+                        resolve(mockData);
+                    }, 1000);
+                } catch (error) {
+                    reject(error);
+                }
+            });
+        }
+        
+        function parsePDF(data) {
+            return new Promise((resolve, reject) => {
+                try {
+                    // Note: In a real implementation, you would use a PDF parsing library
+                    // This is a simplified placeholder for demonstration
+                    
+                    // Simulate PDF parsing
+                    setTimeout(() => {
+                        const mockData = {
+                            text: 'هذا محتوى مستخرج من ملف PDF',
+                            type: 'pdf'
+                        };
+                        resolve(mockData);
+                    }, 1000);
+                } catch (error) {
+                    reject(error);
+                }
+            });
+        }
+        
+        async function uploadToServer(file, parsedData) {
+            // Show loader
+            loader.style.display = 'block';
+            
+            try {
+                // In development mode, simulate upload success
+                if (USE_MOCK_DATA) {
+                    // Simulate network delay
+                    await new Promise(resolve => setTimeout(resolve, 1000));
+                    
+                    console.log('File upload simulated:', file.name);
+                    console.log('Parsed data:', parsedData);
+                    
+                    // Return simulated success
+                    return { success: true };
+                }
+                
+                // For production: create FormData and send to server
+                const formData = new FormData();
+                formData.append('file', file);
+                formData.append('data', JSON.stringify(parsedData));
+                
+                // Add GROQ API key to request headers
+                const headers = new Headers();
+                headers.append('X-API-Key', GROQ_API_KEY);
+                
+                // Make actual API request
+                const response = await fetch('/api/upload', {
+                    method: 'POST',
+                    headers: headers,
+                    body: formData,
+                    // Add timeout to prevent hanging requests
+                    signal: AbortSignal.timeout(30000) // 30 seconds timeout
+                });
+                
+                if (!response.ok) {
+                    const errorData = await response.json().catch(() => ({}));
+                    throw new Error(errorData.message || `HTTP Error: ${response.status}`);
+                }
+                
+                const responseData = await response.json();
+                return responseData;
+                
+            } catch (error) {
+                console.error('Upload error:', error);
+                
+                // For development - don't show errors during simulation
+                if (!USE_MOCK_DATA) {
+                    errorMessage.textContent = 'فشل في رفع الملف: ' + error.message;
+                    errorMessage.style.display = 'block';
+                    
+                    // Hide error after 5 seconds
+                    setTimeout(() => {
+                        errorMessage.style.display = 'none';
+                    }, 5000);
+                }
+                
+                // Return error object
+                return { success: false, error: error.message };
+            } finally {
+                // Hide loader
+                loader.style.display = 'none';
+            }
+        }
+        
+        function updateInsightsPanel(data) {
+            if (data.type === 'csv' || data.type === 'excel') {
+                // Update records count
+                recordsCount.textContent = data.records.length;
+                
+                // Calculate missing fields
+                let totalFields = data.records.length * data.headers.length;
+                let missingCount = 0;
+                
+                data.records.forEach(record => {
+                    Object.values(record).forEach(value => {
+                        if (!value || value.trim() === '') {
+                            missingCount++;
+                        }
+                    });
+                });
+                
+                const missingPercentage = totalFields > 0 ? 
+                    Math.round((missingCount / totalFields) * 100) : 0;
+                missingFields.textContent = missingPercentage + '%';
+                
+                // Calculate data quality score
+                const qualityScore = 100 - missingPercentage;
+                let qualityLabel = 'ضعيف';
+                
+                if (qualityScore >= 90) {
+                    qualityLabel = 'ممتاز';
+                } else if (qualityScore >= 80) {
+                    qualityLabel = 'جيد جداً';
+                } else if (qualityScore >= 70) {
+                    qualityLabel = 'جيد';
+                } else if (qualityScore >= 50) {
+                    qualityLabel = 'متوسط';
+                }
+                
+                dataQuality.textContent = qualityLabel;
+            } else if (data.type === 'pdf') {
+                // For PDF files, we'll just show some basic info
+                recordsCount.textContent = 'N/A';
+                missingFields.textContent = 'N/A';
+                dataQuality.textContent = 'N/A';
+            }
+        }
+        
+        async function analyzeData() {
+            if (!parsedData) return;
+            
+            // Show loader
+            loader.style.display = 'block';
+            qaResults.style.display = 'block';
+            qaResultsContent.textContent = 'جاري تحليل البيانات...';
+            
+            try {
+                // Prepare data for GROQ API
+                let prompt = '';
+                
+                if (parsedData.type === 'csv' || parsedData.type === 'excel') {
+                    prompt = `قم بتحليل البيانات التالية وتقديم نظرة عامة عن جودتها وأي مشاكل محتملة:\n\n`;
+                    prompt += `الحقول: ${parsedData.headers.join(', ')}\n\n`;
+                    prompt += `عدد السجلات: ${parsedData.records.length}\n\n`;
+                    prompt += `عينة من البيانات:\n`;
+                    
+                    // Add sample data (first 5 records)
+                    const sampleRecords = parsedData.records.slice(0, 5);
+                    sampleRecords.forEach((record, index) => {
+                        prompt += `سجل ${index + 1}:\n`;
+                        Object.entries(record).forEach(([key, value]) => {
+                            prompt += `- ${key}: ${value}\n`;
+                        });
+                        prompt += '\n';
+                    });
+                } else if (parsedData.type === 'pdf') {
+                    prompt = `قم بتحليل محتوى ملف PDF التالي وتقديم ملخص له:\n\n${parsedData.text}`;
+                }
+                
+                // For development/testing environment, use mock data instead of actual API call
+                // This will prevent actual API calls during testing
+                const USE_MOCK_API = true;
+                
+                let analysisResult;
+                
+                if (USE_MOCK_API) {
+                    // Use mock data instead of actual API call
+                    console.log('Using mock data for analysis');
+                    
+                    // Simulate API delay for a more realistic experience
+                    await new Promise(resolve => setTimeout(resolve, 1500));
+                    
+                    // Generate mock analysis result
+                    analysisResult = generateMockAnalysisResult(parsedData);
+                } else {
+                    // Call GROQ API with proper error handling
+                    try {
+                        const response = await fetch(GROQ_API_URL, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'Authorization': `Bearer ${GROQ_API_KEY}`
+                            },
+                            body: JSON.stringify({
+                                model: GROQ_MODEL,
+                                messages: [
+                                    {
+                                        role: 'system',
+                                        content: 'أنت مساعد لفحص جودة البيانات. قم بتحليل البيانات المقدمة بشكل دقيق وتقديم تقرير مفصل عن جودتها وأي مشاكل محتملة.'
+                                    },
+                                    {
+                                        role: 'user',
+                                        content: prompt
+                                    }
+                                ],
+                                temperature: 0.7,
+                                max_tokens: 1024
+                            })
+                        });
+                        
+                        if (!response.ok) {
+                            const errorData = await response.json().catch(() => ({}));
+                            throw new Error(errorData.error?.message || `HTTP Error: ${response.status}`);
+                        }
+                        
+                        const data = await response.json();
+                        analysisResult = data.choices[0].message.content;
+                    } catch (apiError) {
+                        console.error('API Error:', apiError);
+                        throw new Error('فشل في الاتصال بخدمة التحليل: ' + apiError.message);
+                    }
+                }
+                
+                // Display results
+                qaResultsContent.innerHTML = formatAnalysisResult(analysisResult);
+                
+            } catch (error) {
+                console.error('Error:', error);
+                qaResultsContent.innerHTML = `
+                    <div style="color: var(--danger-color); margin-bottom: 15px;">
+                        <strong>حدث خطأ:</strong> ${error.message}
+                    </div>
+                    <div>
+                        <p>يمكنك المحاولة مرة أخرى أو التحقق من الاتصال بالإنترنت.</p>
+                        <p>إذا استمرت المشكلة، يرجى التأكد من صحة مفتاح API أو الاتصال بالدعم الفني.</p>
+                    </div>
+                `;
+            } finally {
+                // Hide loader
+                loader.style.display = 'none';
+            }
+        }
+        
+        function formatAnalysisResult(result) {
+            // Convert line breaks to HTML
+            return result.replace(/\n/g, '<br>');
+        }
+        
+        function generateMockAnalysisResult(data) {
+            if (data.type === 'csv' || data.type === 'excel') {
+                return `## تقرير تحليل جودة البيانات
+
+### نظرة عامة
+- نوع الملف: ${data.type.toUpperCase()}
+- عدد السجلات: ${data.records.length}
+- عدد الحقول: ${data.headers.length}
+
+### تحليل الحقول
+${data.headers.map(header => `- ${header}: نوع البيانات مناسب`).join('\n')}
+
+### مشاكل محتملة
+- تم العثور على قيم مفقودة في بعض الحقول
+- بعض الحقول قد تحتاج إلى تنسيق أفضل
+
+### توصيات
+1. التأكد من اكتمال جميع البيانات المطلوبة
+2. إضافة قواعد تحقق للبيانات قبل إدخالها
+3. توحيد تنسيق البيانات (مثل التواريخ، الأرقام)
+
+### درجة الجودة الإجمالية
+الجودة: جيد (78/100)`;
+            } else if (data.type === 'pdf') {
+                return `## تحليل محتوى ملف PDF
+
+### ملخص المحتوى
+المستند يحتوي على معلومات نصية تتعلق بتقرير أو مستند رسمي.
+
+### التحليل
+- المستند منظم بشكل جيد
+- يحتوي على فقرات متعددة
+- قد يحتوي على بعض الجداول أو الرسوم البيانية
+
+### التوصيات
+1. استخراج البيانات الرقمية من المستند لتسهيل التحليل
+2. تنظيم المعلومات في هيكل أكثر تنظيماً مثل قاعدة بيانات
+
+### الخلاصة
+يمكن استخدام المحتوى لأغراض التحليل بعد مزيد من المعالجة والتنظيم.`;
+            }
+        }
+        
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+    </script>
+</body>
+</html>

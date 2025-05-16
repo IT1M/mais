@@ -11,8 +11,8 @@
 // const GEMINI_API_KEY = envApiKey;
 
 // Placeholder for demonstration - Replace with your actual secure access method
-const GEMINI_API_KEY = process.env['Yazeed_2-0_flash'] || 'YOUR_API_KEY_ENV_VARIABLE_NOT_SET'; // Use EXPO_PUBLIC_ prefix for Expo Router env vars
-const GROQ_API_KEY = process.env.Yazeed_r1 || 'YOUR_API_KEY_ENV_VARIABLE_NOT_SET';
+const GEMINI_API_KEY = process.env.EXPO_PUBLIC_GEMINI_API_KEY || 'YOUR_API_KEY_ENV_VARIABLE_NOT_SET'; // Use EXPO_PUBLIC_ prefix for Expo Router env vars
+const GROQ_API_KEY = process.env.EXPO_PUBLIC_GROQ_API_KEY || 'YOUR_API_KEY_ENV_VARIABLE_NOT_SET';
 
 const GEMINI_API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent';
 const GROQ_API_URL = 'https://api.groq.com/openai/v1/chat/completions';
@@ -21,6 +21,11 @@ const GROQ_MODEL = 'deepseek-r1-distill-llama-70b';
 // Basic check to warn if the key looks like the placeholder or is missing
 if (GEMINI_API_KEY === 'YOUR_API_KEY_ENV_VARIABLE_NOT_SET') {
   console.warn('Gemini API Key is not set. Please configure it in your environment variables (e.g., .env file with EXPO_PUBLIC_GEMINI_API_KEY).');
+}
+
+// إذا كنت تستخدم HTML مباشرة وتحتاج المتغير في window:
+if (typeof window !== 'undefined') {
+  window.GROQ_API_KEY = GROQ_API_KEY;
 }
 
 export { GEMINI_API_KEY, GEMINI_API_URL, GROQ_API_KEY, GROQ_API_URL, GROQ_MODEL };
