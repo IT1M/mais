@@ -372,6 +372,120 @@
             50% { transform: scale(1.1) rotate(180deg); }
             100% { transform: scale(1) rotate(360deg); }
         }
+
+        /* 3D Support Button Styles */
+        .support-btn-3d {
+            position: fixed;
+            bottom: 32px;
+            right: 32px;
+            z-index: 9999;
+            width: 64px;
+            height: 64px;
+            background: linear-gradient(145deg, #0056b3 60%, #4CAF50 100%);
+            border-radius: 50%;
+            box-shadow: 0 8px 24px rgba(0,86,179,0.25), 0 2px 8px rgba(0,0,0,0.10);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            border: none;
+            outline: none;
+        }
+        .support-btn-3d:hover {
+            transform: translateY(-6px) scale(1.07);
+            box-shadow: 0 16px 32px rgba(0,86,179,0.30), 0 4px 16px rgba(0,0,0,0.12);
+        }
+        .support-btn-3d svg {
+            width: 36px;
+            height: 36px;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.18));
+        }
+
+        /* Support Modal Styles */
+        .support-modal-bg {
+            display: none;
+            position: fixed;
+            z-index: 10000;
+            left: 0; top: 0; width: 100vw; height: 100vh;
+            background: rgba(0,0,0,0.25);
+            align-items: center;
+            justify-content: center;
+        }
+        .support-modal {
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(0,86,179,0.18);
+            max-width: 400px;
+            width: 95vw;
+            padding: 28px 24px 18px 24px;
+            position: relative;
+            animation: supportModalIn 0.25s;
+        }
+        @keyframes supportModalIn {
+            from { transform: scale(0.92) translateY(40px); opacity: 0; }
+            to { transform: scale(1) translateY(0); opacity: 1; }
+        }
+        .support-modal-close {
+            position: absolute;
+            top: 14px; right: 18px;
+            background: none;
+            border: none;
+            font-size: 22px;
+            color: #888;
+            cursor: pointer;
+        }
+        .support-modal-title {
+            font-size: 20px;
+            font-weight: bold;
+            color: var(--primary-color);
+            margin-bottom: 12px;
+        }
+        .support-modal-desc {
+            font-size: 15px;
+            color: #444;
+            margin-bottom: 18px;
+        }
+        .support-modal textarea {
+            width: 100%;
+            min-height: 80px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 10px;
+            font-size: 15px;
+            margin-bottom: 12px;
+            resize: vertical;
+        }
+        .support-modal .support-send-btn {
+            background: var(--primary-color);
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            padding: 10px 22px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .support-modal .support-send-btn:disabled {
+            background: #b0b0b0;
+            cursor: not-allowed;
+        }
+        .support-modal .support-response {
+            margin-top: 16px;
+            background: #f6faff;
+            border-radius: 6px;
+            padding: 12px;
+            font-size: 15px;
+            color: #222;
+            min-height: 32px;
+            white-space: pre-line;
+        }
+        .support-modal .support-loading {
+            margin-top: 10px;
+            color: var(--primary-color);
+            font-size: 15px;
+        }
     </style>
 </head>
 <body>
@@ -500,6 +614,40 @@
             </div>
         </div>
     </footer>
+
+    <!-- 3D Support Button -->
+    <button class="support-btn-3d" id="support-btn" title="دعم فني">
+        <!-- 3D headset icon SVG -->
+        <svg viewBox="0 0 64 64" fill="none">
+            <defs>
+                <radialGradient id="g1" cx="50%" cy="50%" r="70%">
+                    <stop offset="0%" stop-color="#4CAF50"/>
+                    <stop offset="100%" stop-color="#0056b3"/>
+                </radialGradient>
+            </defs>
+            <ellipse cx="32" cy="32" rx="30" ry="30" fill="url(#g1)" />
+            <ellipse cx="32" cy="38" rx="18" ry="10" fill="#fff" opacity="0.18"/>
+            <path d="M16 36v-6c0-8.8 7.2-16 16-16s16 7.2 16 16v6" stroke="#fff" stroke-width="3" stroke-linecap="round"/>
+            <rect x="14" y="36" width="8" height="14" rx="4" fill="#fff" stroke="#0056b3" stroke-width="2"/>
+            <rect x="42" y="36" width="8" height="14" rx="4" fill="#fff" stroke="#0056b3" stroke-width="2"/>
+            <circle cx="32" cy="32" r="7" fill="#fff" stroke="#0056b3" stroke-width="2"/>
+            <ellipse cx="32" cy="32" rx="4" ry="4" fill="#4CAF50"/>
+            <path d="M50 50c0 4-6 6-18 6s-18-2-18-6" stroke="#0056b3" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+    </button>
+
+    <!-- Support Modal -->
+    <div class="support-modal-bg" id="support-modal-bg">
+        <div class="support-modal">
+            <button class="support-modal-close" id="support-modal-close" title="إغلاق">&times;</button>
+            <div class="support-modal-title">الدعم الفني - MAIS</div>
+            <div class="support-modal-desc">اكتب مشكلتك أو استفسارك حول منصة MAIS وسيتم الرد عليك بواسطة الذكاء الاصطناعي.</div>
+            <textarea id="support-input" placeholder="صف مشكلتك أو سؤالك هنا..."></textarea>
+            <button class="support-send-btn" id="support-send-btn" disabled>إرسال</button>
+            <div class="support-loading" id="support-loading" style="display:none;">جاري معالجة الطلب...</div>
+            <div class="support-response" id="support-response"></div>
+        </div>
+    </div>
 
     <script>
         // DOM elements
@@ -1148,6 +1296,83 @@ Your analysis should be evidence-based, strategic, and actionable. Highlight spe
                 updateAnalyzeButtonState();
             }
         });
+
+        // ====== Support Button & Modal Logic ======
+        const supportBtn = document.getElementById('support-btn');
+        const supportModalBg = document.getElementById('support-modal-bg');
+        const supportModalClose = document.getElementById('support-modal-close');
+        const supportInput = document.getElementById('support-input');
+        const supportSendBtn = document.getElementById('support-send-btn');
+        const supportLoading = document.getElementById('support-loading');
+        const supportResponse = document.getElementById('support-response');
+
+        // Open modal
+        supportBtn.addEventListener('click', () => {
+            supportModalBg.style.display = 'flex';
+            supportInput.value = '';
+            supportResponse.textContent = '';
+            supportSendBtn.disabled = true;
+            supportLoading.style.display = 'none';
+        });
+        // Close modal
+        supportModalClose.addEventListener('click', () => {
+            supportModalBg.style.display = 'none';
+        });
+        // Enable send button if input not empty
+        supportInput.addEventListener('input', () => {
+            supportSendBtn.disabled = supportInput.value.trim() === '';
+        });
+
+        // Send support request
+        supportSendBtn.addEventListener('click', async () => {
+            const userMsg = supportInput.value.trim();
+            if (!userMsg) return;
+            supportSendBtn.disabled = true;
+            supportLoading.style.display = 'block';
+            supportResponse.textContent = '';
+            try {
+                const reply = await supportGroqAPI(userMsg);
+                supportResponse.textContent = reply;
+            } catch (e) {
+                supportResponse.textContent = 'حدث خطأ أثناء التواصل مع الدعم. حاول مرة أخرى.';
+            }
+            supportLoading.style.display = 'none';
+            supportSendBtn.disabled = false;
+        });
+
+        // Support API call
+        async function supportGroqAPI(userMsg) {
+            const GROQ_API_KEY = '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';
+            const GROQ_API_ENDPOINT = 'https://api.groq.com/openai/v1/chat/completions';
+            const MODEL_NAME = 'deepseek-r1-distill-llama-70b';
+            const supportPrompt = `أنت مساعد دعم فني ذكي لمنصة MAIS. 
+ساعد المستخدمين في حل مشاكلهم التقنية أو استفساراتهم حول استخدام المنصة أو منتجاتها أو تقاريرها.
+- أجب بشكل واضح ومباشر وبأسلوب ودود.
+- إذا كان السؤال خارج نطاق MAIS، اعتذر بلطف ووجه المستخدم للاتصال بالدعم البشري إذا لزم الأمر.
+- لا تقدم نصائح طبية أو مالية.
+- إذا كان السؤال عن بيانات أو تقارير، وضح كيفية رفع البيانات أو الاستفادة من التحليلات.
+- أجب باللغة العربية الفصحى.`;
+
+            const response = await fetch(GROQ_API_ENDPOINT, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${GROQ_API_KEY}`
+                },
+                body: JSON.stringify({
+                    model: MODEL_NAME,
+                    messages: [
+                        { role: "system", content: supportPrompt },
+                        { role: "user", content: userMsg }
+                    ],
+                    temperature: 0.3,
+                    max_tokens: 700
+                })
+            });
+            if (!response.ok) throw new Error('API error');
+            const data = await response.json();
+            return data.choices[0].message.content.trim();
+        }
     </script>
 </body>
 </html>
