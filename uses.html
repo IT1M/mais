@@ -134,6 +134,23 @@
             font-size: 1.5em;
         }
         
+        .video-container {
+            display: flex;
+            justify-content: center;
+            margin: 40px auto;
+            max-width: 1200px;
+            transform-style: preserve-3d;
+            transform: translateZ(30px);
+        }
+        
+        .video-container iframe {
+            border-radius: 15px;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.3);
+            width: 100%;
+            max-width: 800px;
+            height: 450px;
+        }
+        
         footer {
             text-align: center;
             padding: 20px;
@@ -145,6 +162,10 @@
             .stat-card {
                 width: 100%;
                 max-width: 300px;
+            }
+            
+            .video-container iframe {
+                height: 300px;
             }
         }
     </style>
@@ -223,6 +244,17 @@
                 <canvas id="projectChart"></canvas>
             </div>
         </div>
+    </div>
+    
+    <!-- إضافة الفيديو هنا -->
+    <div class="video-container">
+        <iframe 
+            src="https://www.youtube.com/embed/dPr6id1CYek?si=Qa83t-6mOq8rmV_W&autoplay=1&mute=1" 
+            title="AI Business Applications Video" 
+            frameborder="0" 
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+            allowfullscreen>
+        </iframe>
     </div>
     
     <footer>
