@@ -1,365 +1,1203 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
 <head>
-  <meta charset="UTF-8">
-  <title>منصة الذكاء الاصطناعي للأعمال | AI Business Platform</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <style>
-    /* ...existing code... */
-    body {
-      margin: 0;
-      padding: 0;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: #f4f7f9;
-      color: #222;
-      direction: ltr;
-      transition: direction 0.3s;
-    }
-    .container {
-      max-width: 900px;
-      margin: 2rem auto;
-      padding: 1.5rem;
-      background: #fff;
-      border-radius: 16px;
-      box-shadow: 0 4px 16px rgba(0,91,150,0.07);
-    }
-    header {
-      text-align: center;
-      margin-bottom: 2rem;
-    }
-    .lang-toggle {
-      float: right;
-      margin-top: 1rem;
-      margin-left: 1rem;
-    }
-    .lang-toggle button {
-      background: #e3eaf3;
-      border: none;
-      border-radius: 6px;
-      padding: 0.5rem 1rem;
-      margin-left: 0.5rem;
-      font-weight: 600;
-      cursor: pointer;
-      color: #005b96;
-      transition: background 0.2s;
-    }
-    .lang-toggle button.active {
-      background: #005b96;
-      color: #fff;
-    }
-    section {
-      margin-bottom: 2.5rem;
-      padding: 1.5rem 1rem;
-      border: 1px solid #e3eaf3;
-      border-radius: 12px;
-      background: #fafcff;
-    }
-    h2 {
-      margin-top: 0;
-      color: #005b96;
-    }
-    label {
-      display: block;
-      margin: 1rem 0 0.5rem 0;
-      font-weight: 500;
-    }
-    textarea, input, select {
-      width: 100%;
-      padding: 0.7rem;
-      border: 1px solid #cfd8dc;
-      border-radius: 6px;
-      font-size: 1rem;
-      margin-bottom: 1rem;
-      box-sizing: border-box;
-      background: #fff;
-      color: #222;
-    }
-    .output-box {
-      background: #f4f7f9;
-      border: 1px solid #e3eaf3;
-      border-radius: 8px;
-      padding: 1rem;
-      min-height: 3rem;
-      margin-top: 0.5rem;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      white-space: pre-wrap;
-    }
-    .section-actions {
-      text-align: right;
-    }
-    button[type="submit"] {
-      background: #005b96;
-      color: #fff;
-      border: none;
-      border-radius: 6px;
-      padding: 0.7rem 1.5rem;
-      font-size: 1rem;
-      font-weight: 600;
-      cursor: pointer;
-      transition: background 0.2s;
-    }
-    button[type="submit"]:hover {
-      background: #003f6b;
-    }
-    @media (max-width: 600px) {
-      .container {
-        padding: 0.5rem;
-      }
-      section {
-        padding: 1rem 0.3rem;
-      }
-      .lang-toggle {
-        float: none;
-        text-align: center;
-        display: block;
-        margin: 1rem auto;
-      }
-    }
-    /* RTL support */
-    body[dir="rtl"] {
-      direction: rtl;
-    }
-    body[dir="rtl"] .lang-toggle {
-      float: left;
-      margin-left: 0;
-      margin-right: 1rem;
-    }
-    body[dir="rtl"] section, body[dir="rtl"] .output-box, body[dir="rtl"] input, body[dir="rtl"] textarea, body[dir="rtl"] select {
-      text-align: right;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Business Platform | منصة الذكاء الاصطناعي للأعمال</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+            transition: all 0.3s ease;
+        }
+
+        /* RTL Support */
+        [dir="rtl"] {
+            font-family: 'Arial', 'Tahoma', sans-serif;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .main-title {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            color: #666;
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+        }
+
+        /* Language Toggle */
+        .language-toggle {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .lang-btn {
+            padding: 8px 16px;
+            border: 2px solid #667eea;
+            background: transparent;
+            color: #667eea;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+        }
+
+        .lang-btn.active {
+            background: #667eea;
+            color: white;
+        }
+
+        .lang-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        }
+
+        /* Main Content */
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        /* Section Styling */
+        .section {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            transition: transform 0.3s ease;
+        }
+
+        .section:hover {
+            transform: translateY(-5px);
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+            color: #667eea;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+        }
+
+        .section-subtitle {
+            color: #666;
+            margin-bottom: 20px;
+            font-style: italic;
+        }
+
+        /* Features */
+        .features {
+            margin-bottom: 25px;
+        }
+
+        .features h4 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .feature-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .feature-tag {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        /* Form Elements */
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .input-group textarea,
+        .input-group input,
+        .input-group select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e1e5e9;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .input-group textarea:focus,
+        .input-group input:focus,
+        .input-group select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .input-group textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .file-upload {
+            position: relative;
+            display: inline-block;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        .file-upload input[type=file] {
+            position: absolute;
+            left: -9999px;
+        }
+
+        .file-upload-label {
+            display: block;
+            padding: 12px;
+            border: 2px dashed #667eea;
+            border-radius: 8px;
+            text-align: center;
+            color: #667eea;
+            background: rgba(102, 126, 234, 0.05);
+            transition: all 0.3s ease;
+        }
+
+        .file-upload:hover .file-upload-label {
+            background: rgba(102, 126, 234, 0.1);
+            border-color: #764ba2;
+        }
+
+        /* Buttons */
+        .btn {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            width: 100%;
+            margin-top: 15px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Enhanced Output Areas */
+        .output-area {
+            margin-top: 25px;
+            padding: 0;
+            background: transparent;
+            border: none;
+            min-height: 100px;
+            display: none;
+        }
+
+        .output-area.visible {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Professional Result Card */
+        .result-card {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            border-left: 5px solid #667eea;
+            margin-bottom: 20px;
+        }
+
+        .result-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #e9ecef;
+        }
+
+        .result-title {
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: #667eea;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .ai-badge {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        .result-content {
+            line-height: 1.8;
+            color: #333;
+        }
+
+        .result-section {
+            margin-bottom: 25px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+        }
+
+        .result-section h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .result-section ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .result-section li {
+            margin-bottom: 10px;
+            padding-left: 25px;
+            position: relative;
+        }
+
+        .result-section li:before {
+            content: "✦";
+            color: #667eea;
+            position: absolute;
+            left: 0;
+            font-weight: bold;
+        }
+
+        .highlight-box {
+            background: linear-gradient(45deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+            border: 1px solid rgba(102, 126, 234, 0.3);
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .stat-number {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: #666;
+            margin-top: 5px;
+        }
+
+        .loading {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #667eea;
+            padding: 30px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .spinner {
+            width: 24px;
+            height: 24px;
+            border: 3px solid #e1e5e9;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-right: 15px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .loading-text {
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        /* Action Buttons */
+        .result-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .action-btn {
+            background: rgba(102, 126, 234, 0.1);
+            color: #667eea;
+            border: 1px solid #667eea;
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .action-btn:hover {
+            background: #667eea;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        /* Error Styling */
+        .error-card {
+            background: linear-gradient(135deg, #fff5f5 0%, #fed7d7 100%);
+            border: 1px solid #fc8181;
+            border-radius: 10px;
+            padding: 20px;
+            color: #c53030;
+        }
+
+        .error-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Icons */
+        .icon {
+            font-size: 1.2rem;
+        }
+
+        /* Hidden Content */
+        .hidden {
+            display: none;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .main-title {
+                font-size: 2rem;
+            }
+
+            .section {
+                padding: 20px;
+            }
+
+            .section-title {
+                font-size: 1.5rem;
+            }
+
+            .container {
+                padding: 15px;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .result-actions {
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .main-title {
+                font-size: 1.5rem;
+            }
+
+            .section-title {
+                font-size: 1.3rem;
+            }
+
+            .feature-list {
+                flex-direction: column;
+            }
+
+            .language-toggle {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
 </head>
 <body>
-  <div class="container">
-    <div class="lang-toggle">
-      <button id="en-btn" class="active">English</button>
-      <button id="ar-btn">العربية</button>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <h1 class="main-title" data-en="AI Business Platform" data-ar="منصة الذكاء الاصطناعي للأعمال">AI Business Platform</h1>
+            <p class="subtitle" data-en="Empowering businesses with intelligent AI solutions powered by yazeed AI" data-ar="تمكين الأعمال بحلول الذكاء الاصطناعي المتقدمة بقوة يـزيـد AI">Empowering businesses with intelligent AI solutions powered by yazeed AI</p>
+            
+            <!-- Language Toggle -->
+            <div class="language-toggle">
+                <button class="lang-btn active" onclick="setLanguage('en')">English</button>
+                <button class="lang-btn" onclick="setLanguage('ar')">العربية</button>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- R&D Intelligence Section -->
+            <section id="rd-section" class="section">
+                <h2 class="section-title" data-en="R&D Intelligence" data-ar="الابتكار والتطوير">R&D Intelligence</h2>
+                <p class="section-subtitle" data-en="Smart research assistant for innovation and technology" data-ar="مساعد البحث الذكي للابتكار والتكنولوجيا">Smart research assistant for innovation and technology</p>
+                
+                <!-- Features -->
+                <div class="features">
+                    <h4 data-en="Features:" data-ar="الميزات:">Features:</h4>
+                    <div class="feature-list">
+                        <span class="feature-tag" data-en="Text Summarization" data-ar="تلخيص النصوص">Text Summarization</span>
+                        <span class="feature-tag" data-en="Idea Generation" data-ar="توليد الأفكار">Idea Generation</span>
+                        <span class="feature-tag" data-en="Trend Analysis" data-ar="تحليل الاتجاهات">Trend Analysis</span>
+                    </div>
+                </div>
+
+                <!-- Input Form -->
+                <form id="rd-form" onsubmit="handleRDSubmit(event)">
+                    <div class="input-group">
+                        <label for="rd-text" data-en="Research Content:" data-ar="محتوى البحث:">Research Content:</label>
+                        <textarea id="rd-text" placeholder="Enter your research content, ideas, or questions..." data-placeholder-en="Enter your research content, ideas, or questions..." data-placeholder-ar="أدخل محتوى البحث أو الأفكار أو الأسئلة..."></textarea>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="rd-file" data-en="Or Upload Document:" data-ar="أو قم بتحميل مستند:">Or Upload Document:</label>
+                        <div class="file-upload">
+                            <input type="file" id="rd-file" accept=".pdf,.doc,.docx,.txt" onchange="handleFileUpload('rd')">
+                            <label for="rd-file" class="file-upload-label" data-en="Click to upload PDF, DOC, or TXT file" data-ar="انقر لتحميل ملف PDF أو DOC أو TXT">Click to upload PDF, DOC, or TXT file</label>
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="rd-task" data-en="Analysis Type:" data-ar="نوع التحليل:">Analysis Type:</label>
+                        <select id="rd-task">
+                            <option value="summarize" data-en="Summarize Content" data-ar="تلخيص المحتوى">Summarize Content</option>
+                            <option value="generate-ideas" data-en="Generate New Ideas" data-ar="توليد أفكار جديدة">Generate New Ideas</option>
+                            <option value="trend-analysis" data-en="Analyze Trends" data-ar="تحليل الاتجاهات">Analyze Trends</option>
+                            <option value="research-gaps" data-en="Identify Research Gaps" data-ar="تحديد فجوات البحث">Identify Research Gaps</option>
+                        </select>
+                    </div>
+
+                    <button type="submit" class="btn" data-en="Analyze with AI" data-ar="تحليل بالذكاء الاصطناعي">Analyze with AI</button>
+                </form>
+
+                <!-- Output Area -->
+                <div id="rd-output" class="output-area">
+                    <div id="rd-loading" class="loading hidden">
+                        <div class="spinner"></div>
+                        <span class="loading-text" data-en="Processing with yazeed AI..." data-ar="جاري المعالجة بـ يـزيـد AI...">Processing with yazeed AI...</span>
+                    </div>
+                    <div id="rd-result"></div>
+                </div>
+            </section>
+
+            <!-- Smart Marketing & CRM Section -->
+            <section id="marketing-section" class="section">
+                <h2 class="section-title" data-en="Smart Marketing & CRM" data-ar="التسويق الذكي والعملاء">Smart Marketing & CRM</h2>
+                <p class="section-subtitle" data-en="Marketing insights and CRM assistant powered by AI" data-ar="رؤى التسويق ومساعد إدارة العملاء بالذكاء الاصطناعي">Marketing insights and CRM assistant powered by AI</p>
+                
+                <!-- Features -->
+                <div class="features">
+                    <h4 data-en="Features:" data-ar="الميزات:">Features:</h4>
+                    <div class="feature-list">
+                        <span class="feature-tag" data-en="Campaign Suggestions" data-ar="اقتراحات الحملات">Campaign Suggestions</span>
+                        <span class="feature-tag" data-en="Sentiment Analysis" data-ar="تحليل المشاعر">Sentiment Analysis</span>
+                        <span class="feature-tag" data-en="CRM Content Helper" data-ar="مساعد محتوى العملاء">CRM Content Helper</span>
+                    </div>
+                </div>
+
+                <!-- Input Form -->
+                <form id="marketing-form" onsubmit="handleMarketingSubmit(event)">
+                    <div class="input-group">
+                        <label for="marketing-task" data-en="Marketing Task:" data-ar="مهمة التسويق:">Marketing Task:</label>
+                        <select id="marketing-task" onchange="updateMarketingForm()">
+                            <option value="campaign" data-en="Generate Campaign Ideas" data-ar="توليد أفكار الحملات">Generate Campaign Ideas</option>
+                            <option value="sentiment" data-en="Analyze Customer Sentiment" data-ar="تحليل مشاعر العملاء">Analyze Customer Sentiment</option>
+                            <option value="crm-content" data-en="Create CRM Content" data-ar="إنشاء محتوى إدارة العملاء">Create CRM Content</option>
+                            <option value="market-analysis" data-en="Market Analysis" data-ar="تحليل السوق">Market Analysis</option>
+                        </select>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="marketing-industry" data-en="Industry/Product:" data-ar="الصناعة/المنتج:">Industry/Product:</label>
+                        <input type="text" id="marketing-industry" placeholder="e.g., Tech startup, Fashion brand, etc." data-placeholder-en="e.g., Tech startup, Fashion brand, etc." data-placeholder-ar="مثل: شركة تقنية ناشئة، علامة أزياء، إلخ">
+                    </div>
+
+                    <div class="input-group">
+                        <label for="marketing-audience" data-en="Target Audience:" data-ar="الجمهور المستهدف:">Target Audience:</label>
+                        <input type="text" id="marketing-audience" placeholder="e.g., Young adults 18-30, Business professionals, etc." data-placeholder-en="e.g., Young adults 18-30, Business professionals, etc." data-placeholder-ar="مثل: الشباب 18-30، المهنيين، إلخ">
+                    </div>
+
+                    <div class="input-group" id="marketing-content-group">
+                        <label for="marketing-content" data-en="Additional Context:" data-ar="السياق الإضافي:">Additional Context:</label>
+                        <textarea id="marketing-content" placeholder="Provide any additional details, customer feedback, or specific requirements..." data-placeholder-en="Provide any additional details, customer feedback, or specific requirements..." data-placeholder-ar="قدم أي تفاصيل إضافية أو ملاحظات العملاء أو متطلبات محددة..."></textarea>
+                    </div>
+
+                    <button type="submit" class="btn" data-en="Generate Marketing Insights" data-ar="توليد رؤى التسويق">Generate Marketing Insights</button>
+                </form>
+
+                <!-- Output Area -->
+                <div id="marketing-output" class="output-area">
+                    <div id="marketing-loading" class="loading hidden">
+                        <div class="spinner"></div>
+                        <span class="loading-text" data-en="Generating insights with yazeed AI..." data-ar="جاري توليد الرؤى بـ يـزيـد AI...">Generating insights with yazeed AI...</span>
+                    </div>
+                    <div id="marketing-result"></div>
+                </div>
+            </section>
+        </main>
     </div>
-    <header>
-      <h1 id="main-title">AI Business Platform</h1>
-      <div id="main-subtitle" style="color:#555;">Empowering your business with AI-driven insights</div>
-    </header>
 
-    <!-- R&D Intelligence Section -->
-    <section id="rd-section">
-      <h2 id="rd-title">R&D Intelligence</h2>
-      <div id="rd-subtitle" style="margin-bottom:1rem;color:#666;">Smart research assistant for innovation and technology.</div>
-      <form id="rd-form">
-        <label for="rd-input" id="rd-input-label">Paste text or upload a document:</label>
-        <textarea id="rd-input" rows="5" placeholder="Paste your technical document here..."></textarea>
-        <input type="file" id="rd-file" accept=".pdf,.doc,.docx,.txt" style="margin-bottom:1rem;">
-        <div class="section-actions">
-          <button type="submit" id="rd-submit">Analyze</button>
-        </div>
-      </form>
-      <div id="rd-output-label" style="margin-top:1rem;font-weight:500;">AI Output:</div>
-      <div class="output-box" id="rd-output"></div>
-      <div style="font-size:0.95em;color:#888;margin-top:0.5rem;">
-        <strong>Example prompt:</strong> Summarize this technical document and generate 3 new R&D ideas.
-      </div>
-    </section>
+    <script>
+        // Gemini API Configuration
+        const GEMINI_API_KEY = 'AIzaSyDsAfBjKrEGQWhacA6ttntVhgjCubDdifI';
+        const GEMINI_API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-exp:generateContent';
 
-    <!-- Marketing & CRM Section -->
-    <section id="marketing-section">
-      <h2 id="marketing-title">Smart Marketing & CRM</h2>
-      <div id="marketing-subtitle" style="margin-bottom:1rem;color:#666;">Marketing insights and CRM assistant powered by AI.</div>
-      <form id="marketing-form">
-        <label for="marketing-feature" id="marketing-feature-label">Select feature:</label>
-        <select id="marketing-feature">
-          <option value="campaign">Campaign suggestion generator</option>
-          <option value="sentiment">Customer sentiment analyzer</option>
-          <option value="crm">CRM content helper</option>
-        </select>
-        <label for="marketing-input" id="marketing-input-label">Enter details:</label>
-        <input type="text" id="marketing-input" placeholder="Describe your product, audience, or campaign goal...">
-        <div class="section-actions">
-          <button type="submit" id="marketing-submit">Generate</button>
-        </div>
-      </form>
-      <div id="marketing-output-label" style="margin-top:1rem;font-weight:500;">AI Output:</div>
-      <div class="output-box" id="marketing-output"></div>
-      <div style="font-size:0.95em;color:#888;margin-top:0.5rem;">
-        <strong>Example prompt:</strong> Generate a customer retention campaign for a tech product targeting young adults.
-      </div>
-    </section>
-  </div>
-  <script>
-    // --- Bilingual content ---
-    const translations = {
-      en: {
-        mainTitle: "AI Business Platform",
-        mainSubtitle: "Empowering your business with AI-driven insights",
-        rdTitle: "R&D Intelligence",
-        rdSubtitle: "Smart research assistant for innovation and technology.",
-        rdInputLabel: "Paste text or upload a document:",
-        rdSubmit: "Analyze",
-        rdOutputLabel: "AI Output:",
-        rdExample: "Summarize this technical document and generate 3 new R&D ideas.",
-        marketingTitle: "Smart Marketing & CRM",
-        marketingSubtitle: "Marketing insights and CRM assistant powered by AI.",
-        marketingFeatureLabel: "Select feature:",
-        marketingInputLabel: "Enter details:",
-        marketingSubmit: "Generate",
-        marketingOutputLabel: "AI Output:",
-        marketingExample: "Generate a customer retention campaign for a tech product targeting young adults.",
-        features: [
-          "Campaign suggestion generator",
-          "Customer sentiment analyzer",
-          "CRM content helper"
-        ]
-      },
-      ar: {
-        mainTitle: "منصة الذكاء الاصطناعي للأعمال",
-        mainSubtitle: "تمكين أعمالك برؤى مدعومة بالذكاء الاصطناعي",
-        rdTitle: "الابتكار والتطوير",
-        rdSubtitle: "مساعد بحث ذكي للابتكار والتقنية.",
-        rdInputLabel: "الصق النص أو قم برفع ملف:",
-        rdSubmit: "تحليل",
-        rdOutputLabel: "مخرجات الذكاء الاصطناعي:",
-        rdExample: "لخص هذا المستند التقني وابتكر 3 أفكار جديدة للبحث والتطوير.",
-        marketingTitle: "التسويق الذكي والعملاء",
-        marketingSubtitle: "مساعد التسويق وتحليل العملاء مدعوم بالذكاء الاصطناعي.",
-        marketingFeatureLabel: "اختر الميزة:",
-        marketingInputLabel: "أدخل التفاصيل:",
-        marketingSubmit: "توليد",
-        marketingOutputLabel: "مخرجات الذكاء الاصطناعي:",
-        marketingExample: "أنشئ حملة للاحتفاظ بالعملاء لمنتج تقني يستهدف الشباب.",
-        features: [
-          "مولد اقتراحات الحملات",
-          "محلل مشاعر العملاء",
-          "مساعد محتوى إدارة علاقات العملاء"
-        ]
-      }
-    };
+        // Language Management
+        let currentLanguage = 'en';
+        
+        function setLanguage(lang) {
+            currentLanguage = lang;
+            document.documentElement.setAttribute('lang', lang);
+            document.documentElement.setAttribute('dir', lang === 'ar' ? 'rtl' : 'ltr');
+            
+            // Update active button
+            document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            // Update all text content
+            document.querySelectorAll('[data-' + lang + ']').forEach(element => {
+                element.textContent = element.getAttribute('data-' + lang);
+            });
+            
+            // Update placeholders
+            document.querySelectorAll('[data-placeholder-' + lang + ']').forEach(element => {
+                element.placeholder = element.getAttribute('data-placeholder-' + lang);
+            });
+            
+            console.log(`Language switched to: ${lang}`);
+        }
 
-    let currentLang = 'en';
+        // File Upload Handler
+        function handleFileUpload(section) {
+            const fileInput = document.getElementById(section + '-file');
+            const file = fileInput.files[0];
+            
+            if (file) {
+                console.log(`File uploaded for ${section}:`, file.name, file.type, file.size);
+                
+                // Update label to show file name
+                const label = fileInput.nextElementSibling;
+                label.textContent = `Selected: ${file.name}`;
+                label.style.color = '#28a745';
+                
+                // Read file content for text files
+                if (file.type === 'text/plain' || file.name.endsWith('.txt')) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        const content = e.target.result;
+                        document.getElementById(section + '-text').value = content;
+                        console.log('File content loaded into textarea');
+                    };
+                    reader.readAsText(file);
+                }
+            }
+        }
 
-    function setLanguage(lang) {
-      currentLang = lang;
-      document.documentElement.lang = lang;
-      document.body.dir = lang === 'ar' ? 'rtl' : 'ltr';
+        // R&D Section Handler
+        async function handleRDSubmit(event) {
+            event.preventDefault();
+            
+            const textContent = document.getElementById('rd-text').value;
+            const fileInput = document.getElementById('rd-file');
+            const task = document.getElementById('rd-task').value;
+            
+            if (!textContent && !fileInput.files[0]) {
+                alert(currentLanguage === 'en' ? 'Please provide text content or upload a file.' : 'يرجى تقديم محتوى نصي أو تحميل ملف.');
+                return;
+            }
+            
+            // Show loading and output area
+            showLoading('rd');
+            
+            // Prepare enhanced prompt based on task type
+            let prompt = '';
+            const content = textContent || 'Uploaded file content';
+            
+            switch(task) {
+                case 'summarize':
+                    prompt = `As an expert R&D analyst, provide a comprehensive analysis of the following content. Include:
+1. Executive Summary (3-4 key points)
+2. Main Insights and Findings
+3. Strategic Recommendations
+4. Innovation Opportunities
+5. Technical Assessment
 
-      // Toggle button active state
-      document.getElementById('en-btn').classList.toggle('active', lang === 'en');
-      document.getElementById('ar-btn').classList.toggle('active', lang === 'ar');
+Content: ${content}
 
-      // Update all text content
-      const t = translations[lang];
-      document.getElementById('main-title').textContent = t.mainTitle;
-      document.getElementById('main-subtitle').textContent = t.mainSubtitle;
-      document.getElementById('rd-title').textContent = t.rdTitle;
-      document.getElementById('rd-subtitle').textContent = t.rdSubtitle;
-      document.getElementById('rd-input-label').textContent = t.rdInputLabel;
-      document.getElementById('rd-submit').textContent = t.rdSubmit;
-      document.getElementById('rd-output-label').textContent = t.rdOutputLabel;
-      document.querySelector('#rd-section .output-box').setAttribute('placeholder', t.rdOutputLabel);
-      document.querySelector('#rd-section strong').nextSibling.textContent = " " + t.rdExample;
+Format your response in clear sections with actionable insights.`;
+                    break;
+                case 'generate-ideas':
+                    prompt = `As an innovation strategist, analyze the following content and generate:
+1. 5 Revolutionary R&D Ideas based on the content
+2. Market Opportunity Assessment for each idea
+3. Technical Feasibility Analysis
+4. Resource Requirements
+5. Implementation Timeline
 
-      document.getElementById('marketing-title').textContent = t.marketingTitle;
-      document.getElementById('marketing-subtitle').textContent = t.marketingSubtitle;
-      document.getElementById('marketing-feature-label').textContent = t.marketingFeatureLabel;
-      document.getElementById('marketing-input-label').textContent = t.marketingInputLabel;
-      document.getElementById('marketing-submit').textContent = t.marketingSubmit;
-      document.getElementById('marketing-output-label').textContent = t.marketingOutputLabel;
-      document.querySelector('#marketing-section strong').nextSibling.textContent = " " + t.marketingExample;
+Content: ${content}
 
-      // Update select options
-      const featureSelect = document.getElementById('marketing-feature');
-      featureSelect.innerHTML = '';
-      t.features.forEach((f, i) => {
-        const opt = document.createElement('option');
-        opt.value = ['campaign', 'sentiment', 'crm'][i];
-        opt.textContent = f;
-        featureSelect.appendChild(opt);
-      });
-    }
+Provide detailed, actionable innovation concepts with clear business value.`;
+                    break;
+                case 'trend-analysis':
+                    prompt = `As a technology trend analyst, examine the following content and provide:
+1. Current Technology Trends identified
+2. Emerging Market Opportunities
+3. Competitive Landscape Analysis
+4. Future Technology Predictions (2-5 years)
+5. Strategic Positioning Recommendations
 
-    document.getElementById('en-btn').onclick = () => setLanguage('en');
-    document.getElementById('ar-btn').onclick = () => setLanguage('ar');
+Content: ${content}
 
-    // --- Gemini API Placeholder Functions ---
-    async function callGeminiAPI(promptText, section) {
-      // TODO: Replace this with actual Gemini API integration
-      console.log(`[Gemini API] Section: ${section}, Prompt:`, promptText);
-      // Simulate API delay
-      await new Promise(res => setTimeout(res, 1200));
-      // Return a placeholder response
-      if (section === 'rd') {
-        return currentLang === 'ar'
-          ? "هذه استجابة تجريبية من الذكاء الاصطناعي لقسم الابتكار والتطوير."
-          : "This is a sample AI response for the R&D Intelligence section.";
-      } else {
-        return currentLang === 'ar'
-          ? "هذه استجابة تجريبية من الذكاء الاصطناعي لقسم التسويق والعملاء."
-          : "This is a sample AI response for the Smart Marketing & CRM section.";
-      }
-    }
+Include data-driven insights and market intelligence.`;
+                    break;
+                case 'research-gaps':
+                    prompt = `As a research strategy consultant, analyze the following content and identify:
+1. Critical Research Gaps
+2. Unexplored Opportunities
+3. Market White Spaces
+4. Technology Limitations to Address
+5. Recommended Research Priorities
 
-    // --- R&D Form Handler ---
-    document.getElementById('rd-form').onsubmit = async function(e) {
-      e.preventDefault();
-      const text = document.getElementById('rd-input').value.trim();
-      const fileInput = document.getElementById('rd-file');
-      let promptText = text;
+Content: ${content}
 
-      // If file uploaded, read its content (simulate for now)
-      if (fileInput.files.length > 0) {
-        // TODO: Integrate file reading and text extraction (PDF/DOC)
-        promptText = currentLang === 'ar'
-          ? "تم رفع ملف. (هنا سيتم استخراج النص من الملف للمعالجة لاحقاً)"
-          : "File uploaded. (Text extraction from file will be handled here in the future)";
-      }
+Provide strategic research roadmap with priority levels.`;
+                    break;
+            }
+            
+            console.log('R&D Analysis Request:', {
+                task: task,
+                hasFile: !!fileInput.files[0],
+                contentLength: textContent.length,
+                prompt: prompt.substring(0, 200) + '...'
+            });
+            
+            // Call Gemini API
+            try {
+                const result = await callGeminiAPI(prompt, 'rd');
+                displayEnhancedResult('rd', result, task);
+            } catch (error) {
+                console.error('R&D API Error:', error);
+                displayError('rd', error.message);
+            }
+        }
 
-      if (!promptText) {
-        document.getElementById('rd-output').textContent = currentLang === 'ar'
-          ? "يرجى إدخال نص أو رفع ملف."
-          : "Please enter text or upload a file.";
-        return;
-      }
+        // Marketing Section Handler
+        async function handleMarketingSubmit(event) {
+            event.preventDefault();
+            
+            const task = document.getElementById('marketing-task').value;
+            const industry = document.getElementById('marketing-industry').value;
+            const audience = document.getElementById('marketing-audience').value;
+            const content = document.getElementById('marketing-content').value;
+            
+            if (!industry || !audience) {
+                alert(currentLanguage === 'en' ? 'Please fill in industry and target audience.' : 'يرجى ملء الصناعة والجمهور المستهدف.');
+                return;
+            }
+            
+            // Show loading and output area
+            showLoading('marketing');
+            
+            // Prepare enhanced prompt based on task type
+            let prompt = '';
+            switch(task) {
+                case 'campaign':
+                    prompt = `As a senior marketing strategist, create a comprehensive campaign strategy for ${industry} targeting ${audience}.
 
-      document.getElementById('rd-output').textContent = currentLang === 'ar'
-        ? "جاري المعالجة..."
-        : "Processing...";
-      const aiResponse = await callGeminiAPI(promptText, 'rd');
-      document.getElementById('rd-output').textContent = aiResponse;
-    };
+Include:
+1. 3 Creative Campaign Concepts with unique positioning
+2. Multi-channel Marketing Strategy (digital, social, traditional)
+3. Content Calendar and Key Messages
+4. Budget Allocation Recommendations
+5. Success Metrics and KPIs
+6. Timeline and Implementation Plan
 
-    // --- Marketing Form Handler ---
-    document.getElementById('marketing-form').onsubmit = async function(e) {
-      e.preventDefault();
-      const feature = document.getElementById('marketing-feature').value;
-      const input = document.getElementById('marketing-input').value.trim();
-      if (!input) {
-        document.getElementById('marketing-output').textContent = currentLang === 'ar'
-          ? "يرجى إدخال التفاصيل."
-          : "Please enter details.";
-        return;
-      }
-      let promptText = '';
-      // Example prompt construction
-      if (feature === 'campaign') {
-        promptText = currentLang === 'ar'
-          ? `أنشئ اقتراح حملة تسويقية بناءً على: ${input}`
-          : `Generate a marketing campaign suggestion based on: ${input}`;
-      } else if (feature === 'sentiment') {
-        promptText = currentLang === 'ar'
-          ? `حلل مشاعر العملاء بناءً على: ${input}`
-          : `Analyze customer sentiment based on: ${input}`;
-      } else {
-        promptText = currentLang === 'ar'
-          ? `ساعد في إنشاء محتوى CRM بناءً على: ${input}`
-          : `Help generate CRM content based on: ${input}`;
-      }
+Additional Context: ${content}
 
-      document.getElementById('marketing-output').textContent = currentLang === 'ar'
-        ? "جاري المعالجة..."
-        : "Processing...";
-      const aiResponse = await callGeminiAPI(promptText, 'marketing');
-      document.getElementById('marketing-output').textContent = aiResponse;
-    };
+Provide actionable, data-driven campaign strategies with clear ROI expectations.`;
+                    break;
+                case 'sentiment':
+                    prompt = `As a customer insights analyst, perform comprehensive sentiment analysis for ${industry} targeting ${audience}.
 
-    // --- Initialize page in English ---
-    setLanguage('en');
-  </script>
+Analyze and provide:
+1. Overall Sentiment Score and Classification
+2. Key Sentiment Drivers (positive/negative factors)
+3. Emotional Response Patterns
+4. Customer Journey Sentiment Mapping
+5. Actionable Recommendations for Improvement
+6. Competitive Sentiment Comparison
+
+Customer Data: ${content}
+
+Include statistical insights and predictive sentiment trends.`;
+                    break;
+                case 'crm-content':
+                    prompt = `As a CRM content specialist, create comprehensive customer communication strategy for ${industry} targeting ${audience}.
+
+Develop:
+1. Personalized Email Sequences (Welcome, Nurture, Retention)
+2. SMS/Push Notification Templates
+3. Customer Segmentation Strategies
+4. Automated Response Systems
+5. Customer Lifecycle Communications
+6. Performance Optimization Guidelines
+
+Context: ${content}
+
+Provide ready-to-use templates with personalization variables and A/B testing suggestions.`;
+                    break;
+                case 'market-analysis':
+                    prompt = `As a market research analyst, conduct comprehensive market analysis for ${industry} targeting ${audience}.
+
+Provide:
+1. Market Size and Growth Projections
+2. Competitive Landscape Analysis
+3. Customer Behavior Insights
+4. Market Entry Strategies
+5. Pricing Strategy Recommendations
+6. Risk Assessment and Mitigation
+7. Market Opportunity Mapping
+
+Additional Info: ${content}
+
+Include quantitative insights, market trends, and strategic recommendations.`;
+                    break;
+            }
+            
+            console.log('Marketing Analysis Request:', {
+                task: task,
+                industry: industry,
+                audience: audience,
+                contentLength: content.length,
+                prompt: prompt.substring(0, 200) + '...'
+            });
+            
+            // Call Gemini API
+            try {
+                const result = await callGeminiAPI(prompt, 'marketing');
+                displayEnhancedResult('marketing', result, task);
+            } catch (error) {
+                console.error('Marketing API Error:', error);
+                displayError('marketing', error.message);
+            }
+        }
+
+        // Update marketing form based on selected task
+        function updateMarketingForm() {
+            const task = document.getElementById('marketing-task').value;
+            const contentGroup = document.getElementById('marketing-content-group');
+            const contentLabel = contentGroup.querySelector('label');
+            const contentTextarea = document.getElementById('marketing-content');
+            
+            // Update label and placeholder based on task
+            switch(task) {
+                case 'campaign':
+                    contentLabel.textContent = currentLanguage === 'en' ? 'Campaign Requirements:' : 'متطلبات الحملة:';
+                    contentTextarea.placeholder = currentLanguage === 'en' ? 
+                        'Describe your campaign goals, budget, timeline, or specific requirements...' :
+                        'اوصف أهداف الحملة والميزانية والجدول الزمني أو المتطلبات المحددة...';
+                    break;
+                case 'sentiment':
+                    contentLabel.textContent = currentLanguage === 'en' ? 'Customer Feedback:' : 'ملاحظات العملاء:';
+                    contentTextarea.placeholder = currentLanguage === 'en' ? 
+                        'Paste customer reviews, comments, or feedback to analyze...' :
+                        'الصق مراجعات العملاء أو التعليقات أو الملاحظات للتحليل...';
+                    break;
+                case 'crm-content':
+                    contentLabel.textContent = currentLanguage === 'en' ? 'Content Requirements:' : 'متطلبات المحتوى:';
+                    contentTextarea.placeholder = currentLanguage === 'en' ? 
+                        'Specify the type of CRM content needed (emails, SMS, notifications, etc.)...' :
+                        'حدد نوع محتوى إدارة العملاء المطلوب (رسائل بريد إلكتروني، رسائل نصية، إشعارات، إلخ)...';
+                    break;
+                case 'market-analysis':
+                    contentLabel.textContent = currentLanguage === 'en' ? 'Market Context:' : 'سياق السوق:';
+                    contentTextarea.placeholder = currentLanguage === 'en' ? 
+                        'Provide market conditions, competitors, or specific analysis requirements...' :
+                        'قدم ظروف السوق أو المنافسين أو متطلبات التحليل المحددة...';
+                    break;
+            }
+        }
+
+        // Show loading state
+        function showLoading(section) {
+            const outputArea = document.getElementById(section + '-output');
+            const loadingDiv = document.getElementById(section + '-loading');
+            const resultDiv = document.getElementById(section + '-result');
+            
+            outputArea.classList.add('visible');
+            loadingDiv.classList.remove('hidden');
+            resultDiv.innerHTML = '';
+        }
+
+        // Hide loading state
+        function hideLoading(section) {
+            const loadingDiv = document.getElementById(section + '-loading');
+            loadingDiv.classList.add('hidden');
+        }
+
+        // Enhanced result display function
+        function displayEnhancedResult(section, result, taskType) {
+            hideLoading(section);
+            const resultDiv = document.getElementById(section + '-result');
+            
+            // Parse and structure the result
+            const structuredResult = parseAIResponse(result, taskType, section);
+            
+            resultDiv.innerHTML = `
+                <div class="result-card">
+                    <div class="result-header">
+                        <div class="result-title">
+                            <span class="icon">🤖</span>
+                            ${currentLanguage === 'en' ? 'AI Analysis Results' : 'نتائج تحليل الذكاء الاصطناعي'}
+                        </div>
+                        <div class="ai-badge">yazeed AI</div>
+                    </div>
+                    
+                    <div class="result-content">
+                        ${structuredResult}
+                    </div>
+                    
+                    <div class="result-actions">
+                        <button class="action-btn" onclick="copyResult('${section}')">
+                            📋 ${currentLanguage === 'en' ? 'Copy Results' : 'نسخ النتائج'}
+                        </button>
+                        <button class="action-btn" onclick="exportResult('${section}')">
+                            📄 ${currentLanguage === 'en' ? 'Export PDF' : 'تصدير PDF'}
+                        </button>
+                        <button class="action-btn" onclick="shareResult('${section}')">
+                            🔗 ${currentLanguage === 'en' ? 'Share' : 'مشاركة'}
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Parse AI response into structured format
+        function parseAIResponse(response, taskType, section) {
+            // Split response into sections and format
+            const lines = response.split('\n').filter(line => line.trim());
+            let structuredHTML = '';
+            let currentSection = '';
+            let sectionContent = [];
+            
+            lines.forEach(line => {
+                line = line.trim();
+                
+                // Check if line is a header (contains numbers or bullets)
+                if (line.match(/^\d+\./) || line.match(/^[#*-]/) || line.includes(':') && line.length < 100) {
+                    // Save previous section
+                    if (currentSection && sectionContent.length > 0) {
+                        structuredHTML += createResultSection(currentSection, sectionContent, section);
+                        sectionContent = [];
+                    }
+                    
+                    // Start new section
+                    currentSection = line.replace(/^\d+\.\s*/, '').replace(/^[#*-]\s*/, '').replace(':', '');
+                } else if (line.length > 0) {
+                    sectionContent.push(line);
+                }
+            });
+            
+            // Add final section
+            if (currentSection && sectionContent.length > 0) {
+                structuredHTML += createResultSection(currentSection, sectionContent, section);
+            }
+            
+            // If no sections found, display as single block
+            if (!structuredHTML) {
+                structuredHTML = `
+                    <div class="result-section">
+                        <h3><span class="icon">📊</span> Analysis Results</h3>
+                        <div class="highlight-box">${response.replace(/\n/g, '<br>')}</div>
+                    </div>
+                `;
+            }
+            
+            return structuredHTML;
+        }
+
+        // Create formatted result section
+        function createResultSection(title, content, section) {
+            const icon = getSectionIcon(title, section);
+            const formattedContent = content.map(item => {
+                // Check if item looks like a list item or sub-point
+                if (item.includes('•') || item.includes('-') || item.match(/^\d+\./)) {
+                    return `<li>${item.replace(/^[•-]\s*/, '').replace(/^\d+\.\s*/, '')}</li>`;
+                } else {
+                    return `<p>${item}</p>`;
+                }
+            }).join('');
+            
+            const listContent = content.some(item => 
+                item.includes('•') || item.includes('-') || item.match(/^\d+\./)
+            ) ? `<ul>${formattedContent}</ul>` : formattedContent;
+            
+            return `
+                <div class="result-section">
+                    <h3>${icon} ${title}</h3>
+                    <div>${listContent}</div>
+                </div>
+            `;
+        }
+
+        // Get appropriate icon for section
+        function getSectionIcon(title, section) {
+            const titleLower = title.toLowerCase();
+            
+            if (titleLower.includes('summary') || titleLower.includes('executive')) return '📋';
+            if (titleLower.includes('insight') || titleLower.includes('finding')) return '💡';
+            if (titleLower.includes('recommend') || titleLower.includes('strategy')) return '🎯';
+            if (titleLower.includes('innovation') || titleLower.includes('idea')) return '🚀';
+            if (titleLower.includes('technical') || titleLower.includes('technology')) return '⚙️';
+            if (titleLower.includes('market') || titleLower.includes('competitive')) return '📈';
+            if (titleLower.includes('campaign') || titleLower.includes('marketing')) return '📢';
+            if (titleLower.includes('sentiment') || titleLower.includes('customer')) return '❤️';
+            if (titleLower.includes('trend') || titleLower.includes('analysis')) return '📊';
+            if (titleLower.includes('opportunity') || titleLower.includes('gap')) return '🔍';
+            
+            return section === 'rd' ? '🔬' : '📊';
+        }
+
+        // Action button functions
+        function copyResult(section) {
+            const resultText = document.getElementById(section + '-result').innerText;
+            navigator.clipboard.writeText(resultText).then(() => {
+                alert(currentLanguage === 'en' ? 'Results copied to clipboard!' : 'تم نسخ النتائج إلى الحافظة!');
+            });
+        }
+
+        function exportResult(section) {
+            // This would implement PDF export functionality
+            alert(currentLanguage === 'en' ? 'PDF export feature coming soon!' : 'ميزة تصدير PDF قريباً!');
+        }
+
+        function shareResult(section) {
+            // This would implement sharing functionality
+            if (navigator.share) {
+                const resultText = document.getElementById(section + '-result').innerText;
+                navigator.share({
+                    title: 'AI Analysis Results',
+                    text: resultText
+                });
+            } else {
+                copyResult(section);
+            }
+        }
+
+        // Display error
+        function displayError(section, error) {
+            hideLoading(section);
+            const resultDiv = document.getElementById(section + '-result');
+            resultDiv.innerHTML = `
+                <div class="error-card">
+                    <div class="error-title">
+                        <span class="icon">❌</span>
+                        ${currentLanguage === 'en' ? 'Error Processing Request' : 'خطأ في معالجة الطلب'}
+                    </div>
+                    <p>${error}</p>
+                    <p style="margin-top: 10px; font-size: 0.9rem; opacity: 0.8;">
+                        ${currentLanguage === 'en' ? 'Please try again or contact support if the problem persists.' : 'يرجى المحاولة مرة أخرى أو الاتصال بالدعم إذا استمرت المشكلة.'}
+                    </p>
+                </div>
+            `;
+        }
+
+        // Main Gemini API Integration Function
+        async function callGeminiAPI(promptText, section) {
+            console.log(`Calling yazeed AI API for ${section} section:`, promptText.substring(0, 100) + '...');
+            
+            try {
+                const response = await fetch(`${GEMINI_API_URL}?key=${GEMINI_API_KEY}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        contents: [{
+                            parts: [{
+                                text: promptText
+                            }]
+                        }],
+                        generationConfig: {
+                            temperature: 0.7,
+                            topK: 40,
+                            topP: 0.95,
+                            maxOutputTokens: 8192,
+                        },
+                        safetySettings: [
+                            {
+                                category: "HARM_CATEGORY_HARASSMENT",
+                                threshold: "BLOCK_MEDIUM_AND_ABOVE"
+                            },
+                            {
+                                category: "HARM_CATEGORY_HATE_SPEECH",
+                                threshold: "BLOCK_MEDIUM_AND_ABOVE"
+                            },
+                            {
+                                category: "HARM_CATEGORY_SEXUALLY_EXPLICIT",
+                                threshold: "BLOCK_MEDIUM_AND_ABOVE"
+                            },
+                            {
+                                category: "HARM_CATEGORY_DANGEROUS_CONTENT",
+                                threshold: "BLOCK_MEDIUM_AND_ABOVE"
+                            }
+                        ]
+                    })
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(`API request failed: ${response.status} - ${errorData.error?.message || 'Unknown error'}`);
+                }
+
+                const data = await response.json();
+                
+                if (!data.candidates || !data.candidates[0] || !data.candidates[0].content) {
+                    throw new Error('Invalid response format from API');
+                }
+
+                const result = data.candidates[0].content.parts[0].text;
+                console.log('Gemini API Response received:', result.substring(0, 200) + '...');
+                
+                return result;
+                
+            } catch (error) {
+                console.error('Gemini API Error:', error);
+                
+                // Provide user-friendly error messages
+                if (error.message.includes('API_KEY')) {
+                    throw new Error(currentLanguage === 'en' ? 
+                        'API key error. Please check the API configuration.' : 
+                        'خطأ في مفتاح API. يرجى التحقق من إعدادات API.');
+                } else if (error.message.includes('QUOTA')) {
+                    throw new Error(currentLanguage === 'en' ? 
+                        'API quota exceeded. Please try again later.' : 
+                        'تم تجاوز حصة API. يرجى المحاولة لاحقاً.');
+                } else if (error.message.includes('403')) {
+                    throw new Error(currentLanguage === 'en' ? 
+                        'Access denied. Please check API permissions.' : 
+                        'تم رفض الوصول. يرجى التحقق من صلاحيات API.');
+                } else {
+                    throw new Error(currentLanguage === 'en' ? 
+                        'Connection error. Please check your internet connection and try again.' : 
+                        'خطأ في الاتصال. يرجى التحقق من اتصال الإنترنت والمحاولة مرة أخرى.');
+                }
+            }
+        }
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('AI Business Platform with yazeed AI loaded successfully');
+            console.log('API Configuration:', {
+                model: 'gemini-2.0-flash-exp',
+                apiUrl: GEMINI_API_URL,
+                hasApiKey: !!GEMINI_API_KEY
+            });
+            
+            // Set initial language
+            setLanguage('en');
+            
+            // Initialize marketing form
+            updateMarketingForm();
+        });
+    </script>
 </body>
 </html>
