@@ -758,135 +758,128 @@
 
         /* تحسين للهواتف المحمولة */
         @media (max-width: 768px) {
+            .container {
+                padding: 8px;
+            }
             .analysis-grid {
                 grid-template-columns: 1fr;
             }
-            
             .header h1 {
-                font-size: 2.5em;
+                font-size: 2em;
             }
-            
+            .header {
+                padding: 20px 0;
+            }
             .input-group {
                 flex-direction: column;
+                gap: 6px;
             }
-
             .navigation {
-                gap: 8px;
+                gap: 6px;
+                flex-wrap: wrap;
             }
-
             .nav-btn {
-                padding: 8px 12px;
+                padding: 7px 10px;
                 font-size: 12px;
             }
-
             .input-options {
                 flex-direction: column;
-                gap: 10px;
+                gap: 8px;
             }
-
             .results-header {
                 flex-direction: column;
                 align-items: flex-start;
+                gap: 8px;
             }
-
             .export-controls {
                 width: 100%;
-                justify-content: space-between;
+                justify-content: flex-start;
             }
-
             .stats-grid {
-                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-                gap: 15px;
+                grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+                gap: 8px;
             }
-
             .stat-value {
-                font-size: 2em;
-            }
-
-            .formatted-content {
-                font-size: 14px;
-            }
-
-            .formatted-content h1 {
-                font-size: 1.5em;
-            }
-
-            .formatted-content h2 {
                 font-size: 1.3em;
             }
-
+            .formatted-content {
+                font-size: 13px;
+            }
+            .formatted-content h1 {
+                font-size: 1.1em;
+            }
+            .formatted-content h2 {
+                font-size: 1em;
+            }
             .formatted-content table {
-                font-size: 12px;
+                font-size: 11px;
             }
-
             .formatted-content th, .formatted-content td {
-                padding: 8px 10px;
+                padding: 6px 7px;
             }
-
             .metric-value {
-                font-size: 1.8em;
+                font-size: 1.1em;
             }
-
             .results-section {
-                max-height: 500px;
-                padding: 20px;
+                max-height: 300px;
+                padding: 10px;
             }
-
             .api-status {
                 position: relative;
                 top: 0;
                 right: 0;
-                margin: 10px 0;
+                margin: 8px 0;
                 display: block;
                 text-align: center;
+                font-size: 12px;
+                padding: 6px 10px;
+            }
+            .card-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 4px;
+            }
+            .section-card, .analysis-card {
+                padding: 12px;
             }
         }
 
         /* تحسين للشاشات الصغيرة جداً */
         @media (max-width: 480px) {
             .container {
-                padding: 10px;
+                padding: 3px;
             }
-
             .header {
-                padding: 20px 0;
+                padding: 10px 0;
             }
-
             .header h1 {
-                font-size: 2em;
+                font-size: 1.2em;
             }
-
             .nav-btn {
-                padding: 6px 10px;
-                font-size: 11px;
+                padding: 4px 6px;
+                font-size: 10px;
             }
-
             .analysis-card, .section-card {
-                padding: 20px;
+                padding: 8px;
             }
-
             .input-section {
-                padding: 15px;
+                padding: 7px;
             }
-
             .text-input, .focus-input {
-                font-size: 14px;
-            }
-
-            .btn {
-                padding: 12px 20px;
                 font-size: 12px;
+                padding: 8px;
             }
-
+            .btn {
+                padding: 7px 10px;
+                font-size: 10px;
+            }
             .results-section {
-                padding: 15px;
-                max-height: 400px;
+                padding: 6px;
+                max-height: 180px;
             }
-
             .formatted-content ul, .formatted-content ol {
-                padding: 10px 20px;
+                padding: 6px 10px;
             }
-
             .stats-grid {
                 grid-template-columns: 1fr 1fr;
             }
@@ -1844,6 +1837,13 @@
                 ## Quality Improvement Roadmap
 
                 ### Phase 1: Immediate Actions (0-3 months)
+                1. **Upgrade sterilization validation protocols**
+                   - Implement continuous monitoring systems
+                   - Enhanced process documentation
+                   - Staff retraining on critical parameters
+
+                2. **Strengthen supplier quality controls**
+                   - Implement supplier auditing program
                 1. **Upgrade sterilization validation protocols**
                    - Implement continuous monitoring systems
                    - Enhanced process documentation
