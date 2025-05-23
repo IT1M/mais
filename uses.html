@@ -34,6 +34,9 @@
             margin: 30px auto;
             flex-wrap: wrap;
             max-width: 1200px;
+            gap: 10px;
+            /* Add horizontal scroll for very small screens */
+            overflow-x: auto;
         }
         
         .stat-card {
@@ -48,6 +51,8 @@
             transform-style: preserve-3d;
             transform: translateZ(30px);
             transition: transform 0.3s ease;
+            min-width: 180px;
+            flex: 1 1 200px;
         }
         
         .stat-card:hover {
@@ -78,6 +83,8 @@
             transform-style: preserve-3d;
             transform: translateZ(20px);
             transition: transform 0.5s ease;
+            width: 100%;
+            box-sizing: border-box;
         }
         
         .card:hover {
@@ -88,6 +95,7 @@
             display: flex;
             align-items: center;
             margin-bottom: 20px;
+            flex-wrap: wrap;
         }
         
         .icon {
@@ -126,6 +134,9 @@
             margin: 40px 0;
             transform-style: preserve-3d;
             transform: translateZ(30px);
+            width: 100%;
+            max-width: 100%;
+            box-sizing: border-box;
         }
         
         .chart-title {
@@ -140,11 +151,86 @@
             background: rgba(0, 0, 0, 0.3);
             margin-top: 50px;
         }
-        
+
+        /* Responsive styles */
+        @media (max-width: 1024px) {
+            .container {
+                padding: 10px;
+            }
+            .card {
+                padding: 20px;
+            }
+            .chart-container {
+                height: 220px;
+                margin: 25px 0;
+            }
+            h1 {
+                font-size: 2.2em;
+            }
+            h2 {
+                font-size: 1.3em;
+            }
+        }
         @media (max-width: 768px) {
+            .stats-container {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 0;
+            }
             .stat-card {
                 width: 100%;
-                max-width: 300px;
+                max-width: 100%;
+                margin: 10px 0;
+            }
+            .container {
+                padding: 5px;
+            }
+            .card {
+                margin-bottom: 25px;
+                padding: 15px;
+            }
+            .chart-container {
+                height: 180px;
+                margin: 15px 0;
+            }
+            h1 {
+                font-size: 1.5em;
+            }
+            h2 {
+                font-size: 1.1em;
+            }
+            .icon {
+                font-size: 2em;
+                margin-right: 10px;
+            }
+            .features li {
+                font-size: 0.95em;
+                padding: 7px 0;
+            }
+        }
+        @media (max-width: 480px) {
+            .header {
+                padding: 20px 5px;
+            }
+            .stat-card {
+                font-size: 0.95em;
+                padding: 10px;
+            }
+            .card {
+                padding: 8px;
+                border-radius: 12px;
+            }
+            .chart-container {
+                height: 120px;
+            }
+            h1 {
+                font-size: 1.1em;
+            }
+            h2 {
+                font-size: 1em;
+            }
+            .features li {
+                font-size: 0.9em;
             }
         }
     </style>
@@ -221,6 +307,64 @@
             </ul>
             <div class="chart-container" style="height: 250px;">
                 <canvas id="projectChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Cost Reduction Stat for AI Digital Marketing Agent -->
+        <div class="stats-container">
+            <div class="stat-card">
+                <i class="fas fa-percentage fa-2x"></i>
+                <p>Estimated Cost Reduction</p>
+                <div class="stat-value">35%</div>
+                <p>in marketing expenses</p>
+            </div>
+        </div>
+        <!-- AI Digital Marketing Agent Card -->
+        <div class="card">
+            <div class="card-header">
+                <div class="icon"><i class="fas fa-bullhorn"></i></div>
+                <h2>AI Digital Marketing Agent</h2>
+            </div>
+            <p>
+                An intelligent digital marketing agent that empowers Saudi businesses to automate campaigns, analyze market trends, and optimize advertising strategies for maximum reach and engagement.
+            </p>
+            <ul class="features">
+                <li>Automated campaign creation and management</li>
+                <li>Real-time analytics and performance tracking</li>
+                <li>Personalized content recommendations</li>
+                <li>Integration with major social media and ad platforms</li>
+            </ul>
+            <div class="chart-container" style="height: 250px;">
+                <canvas id="marketingChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Cost Reduction Stat for AI HR Performance Optimizer -->
+        <div class="stats-container">
+            <div class="stat-card">
+                <i class="fas fa-percentage fa-2x"></i>
+                <p>Estimated Cost Reduction</p>
+                <div class="stat-value">28%</div>
+                <p>in HR operational costs</p>
+            </div>
+        </div>
+        <!-- AI HR Performance Optimizer Card -->
+        <div class="card">
+            <div class="card-header">
+                <div class="icon"><i class="fas fa-users-cog"></i></div>
+                <h2>AI HR Performance Optimizer</h2>
+            </div>
+            <p>
+                Smart tools to enhance HR performance and boost productivity, providing advanced analytics on employee performance and identifying training needs for Saudi talent.
+            </p>
+            <ul class="features">
+                <li>Automated employee performance analysis</li>
+                <li>Personalized training recommendations</li>
+                <li>Productivity tracking and reporting</li>
+                <li>Insights for workforce development and upskilling</li>
+            </ul>
+            <div class="chart-container" style="height: 250px;">
+                <canvas id="hrChart"></canvas>
             </div>
         </div>
     </div>
@@ -381,6 +525,101 @@
             }
         });
         
+        // Marketing Chart: Traditional vs AI (Cost & ROI)
+        const marketingCtx = document.getElementById('marketingChart').getContext('2d');
+        const marketingChart = new Chart(marketingCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Marketing Cost', 'ROI', 'Lead Generation', 'Conversion Rate'],
+                datasets: [
+                    {
+                        label: 'Traditional',
+                        data: [100, 60, 70, 55],
+                        backgroundColor: 'rgba(255, 99, 132, 0.6)',
+                        borderColor: 'rgba(255, 99, 132, 1)',
+                        borderWidth: 1
+                    },
+                    {
+                        label: 'AI-Powered',
+                        data: [65, 90, 95, 80],
+                        backgroundColor: 'rgba(54, 162, 235, 0.6)',
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        borderWidth: 1
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        labels: { color: 'white' }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: { color: 'rgba(255,255,255,0.1)' },
+                        ticks: { color: 'white' }
+                    },
+                    x: {
+                        grid: { color: 'rgba(255,255,255,0.1)' },
+                        ticks: { color: 'white' }
+                    }
+                }
+            }
+        });
+
+        // HR Chart: Traditional vs AI (KPIs)
+        const hrCtx = document.getElementById('hrChart').getContext('2d');
+        const hrChart = new Chart(hrCtx, {
+            type: 'radar',
+            data: {
+                labels: [
+                    'Employee Productivity',
+                    'Training Effectiveness',
+                    'Turnover Reduction',
+                    'Performance Insights',
+                    'Cost Efficiency'
+                ],
+                datasets: [
+                    {
+                        label: 'Traditional HR',
+                        data: [60, 55, 50, 45, 58],
+                        backgroundColor: 'rgba(255, 206, 86, 0.2)',
+                        borderColor: 'rgba(255, 206, 86, 1)',
+                        borderWidth: 2,
+                        pointBackgroundColor: 'rgba(255, 206, 86, 1)'
+                    },
+                    {
+                        label: 'AI-Optimized HR',
+                        data: [85, 80, 75, 90, 82],
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        borderWidth: 2,
+                        pointBackgroundColor: 'rgba(75, 192, 192, 1)'
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        labels: { color: 'white' }
+                    }
+                },
+                scales: {
+                    r: {
+                        angleLines: { color: 'rgba(255,255,255,0.1)' },
+                        grid: { color: 'rgba(255,255,255,0.1)' },
+                        pointLabels: { color: 'white' },
+                        ticks: { backdropColor: 'transparent', color: 'white' }
+                    }
+                }
+            }
+        });
+
         // Simple 3D effect on scroll
         window.addEventListener('scroll', function() {
             const scrollTop = window.scrollY;

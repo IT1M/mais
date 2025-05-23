@@ -181,11 +181,18 @@
             100% { filter: brightness(1.2); }
         }
 
-        /* Help Button */
-        .help-btn {
+        /* Button Container */
+        .button-container {
             position: fixed;
             top: 2rem;
             right: 2rem;
+            z-index: 1000;
+            display: flex;
+            gap: 1rem;
+        }
+
+        /* Help Button */
+        .help-btn {
             width: 60px;
             height: 60px;
             background: var(--glass-bg);
@@ -196,7 +203,6 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            z-index: 1000;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             box-shadow: var(--shadow-3d);
         }
@@ -208,6 +214,55 @@
         }
 
         .help-btn svg {
+            width: 24px;
+            height: 24px;
+            fill: var(--text-primary);
+        }
+
+        /* Voice Support Button */
+        .voice-support-btn {
+            width: 60px;
+            height: 60px;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 50%;
+            backdrop-filter: blur(20px);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: var(--shadow-3d);
+            position: relative;
+        }
+
+        .voice-support-btn:hover {
+            transform: scale(1.1) translateZ(10px);
+            box-shadow: var(--shadow-3d), 0 0 40px rgba(244, 67, 54, 0.3);
+            background: rgba(244, 67, 54, 0.2);
+        }
+
+        .voice-support-btn.recording {
+            background: rgba(244, 67, 54, 0.3);
+            animation: recordingPulse 1.5s infinite;
+        }
+
+        .voice-support-btn.loading {
+            background: rgba(255, 193, 7, 0.3);
+            animation: loadingPulse 1s infinite;
+        }
+
+        @keyframes recordingPulse {
+            0%, 100% { box-shadow: var(--shadow-3d), 0 0 20px rgba(244, 67, 54, 0.5); }
+            50% { box-shadow: var(--shadow-3d), 0 0 40px rgba(244, 67, 54, 0.8); }
+        }
+
+        @keyframes loadingPulse {
+            0%, 100% { box-shadow: var(--shadow-3d), 0 0 20px rgba(255, 193, 7, 0.5); }
+            50% { box-shadow: var(--shadow-3d), 0 0 40px rgba(255, 193, 7, 0.8); }
+        }
+
+        .voice-support-btn svg {
             width: 24px;
             height: 24px;
             fill: var(--text-primary);
@@ -473,6 +528,128 @@
             font-size: 1.2rem;
         }
 
+        /* Voice Support Modal */
+        .voice-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            z-index: 2000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .voice-modal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .voice-content {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 3rem;
+            max-width: 500px;
+            width: 90%;
+            backdrop-filter: blur(20px);
+            box-shadow: var(--shadow-3d);
+            transform: scale(0.8) translateY(50px);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            text-align: center;
+        }
+
+        .voice-modal.active .voice-content {
+            transform: scale(1) translateY(0);
+        }
+
+        .voice-close {
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
+            width: 40px;
+            height: 40px;
+            border: none;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-primary);
+            font-size: 1.5rem;
+            transition: background 0.3s ease;
+        }
+
+        .voice-close:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .voice-status {
+            margin-bottom: 2rem;
+        }
+
+        .voice-status h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .voice-status p {
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+        }
+
+        .voice-controls {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .voice-btn {
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 12px;
+            background: var(--primary-gradient);
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .voice-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .voice-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .voice-response {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-top: 1rem;
+            text-align: left;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .voice-response p {
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
         /* Footer */
         .footer {
             text-align: center;
@@ -497,16 +674,22 @@
                 padding: 2rem 1.5rem;
             }
             
-            .help-content {
+            .help-content,
+            .voice-content {
                 padding: 2rem;
                 margin: 1rem;
             }
             
-            .help-btn {
-                width: 50px;
-                height: 50px;
+            .button-container {
                 top: 1rem;
                 right: 1rem;
+                flex-direction: column;
+            }
+
+            .help-btn,
+            .voice-support-btn {
+                width: 50px;
+                height: 50px;
             }
         }
     </style>
@@ -520,11 +703,21 @@
         <div class="floating-geometry geometry-4"></div>
     </div>
 
-    <!-- Help Button -->
-    <div class="help-btn" onclick="toggleHelpModal()">
-        <svg viewBox="0 0 24 24">
-            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17h-2v-2h2v2zm2.07-7.75l-.9.92C13.45 12.9 13 13.5 13 15h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H8c0-2.21 1.79-4 4-4s4 1.79 4 4c0 .88-.36 1.68-.93 2.25z"/>
-        </svg>
+    <!-- Button Container -->
+    <div class="button-container">
+        <!-- Voice Support Button -->
+        <div class="voice-support-btn" onclick="toggleVoiceModal()" id="voiceSupportBtn">
+            <svg viewBox="0 0 24 24">
+                <path d="M12 14c1.66 0 2.99-1.34 2.99-3L15 5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm5.3-3c0 3-2.54 5.1-5.3 5.1S6.7 14 6.7 11H5c0 3.41 2.72 6.23 6 6.72V21h2v-3.28c3.28-.48 6-3.3 6-6.72h-1.7z"/>
+            </svg>
+        </div>
+
+        <!-- Help Button -->
+        <div class="help-btn" onclick="toggleHelpModal()">
+            <svg viewBox="0 0 24 24">
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17h-2v-2h2v2zm2.07-7.75l-.9.92C13.45 12.9 13 13.5 13 15h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H8c0-2.21 1.79-4 4-4s4 1.79 4 4c0 .88-.36 1.68-.93 2.25z"/>
+            </svg>
+        </div>
     </div>
 
     <!-- Header -->
@@ -639,7 +832,227 @@
         </div>
     </div>
 
+    <!-- Voice Support Modal -->
+    <div class="voice-modal" id="voiceModal">
+        <div class="voice-content">
+            <button class="voice-close" onclick="toggleVoiceModal()">&times;</button>
+            
+            <div class="voice-status">
+                <h3 id="voiceTitle">AI MAIS Voice Assistant</h3>
+                <p id="voiceStatusText">Click "Start Recording" to ask your question</p>
+            </div>
+
+            <div class="voice-controls">
+                <button class="voice-btn" id="startRecordingBtn" onclick="startRecording()">Start Recording</button>
+                <button class="voice-btn" id="stopRecordingBtn" onclick="stopRecording()" disabled>Stop Recording</button>
+            </div>
+
+            <div class="voice-response" id="voiceResponse" style="display: none;">
+                <p id="responseText"></p>
+            </div>
+        </div>
+    </div>
+
     <script>
+        // Voice Support Variables
+        let mediaRecorder;
+        let audioChunks = [];
+        let isRecording = false;
+        const API_KEY = 'AIzaSyDsAfBjKrEGQWhacA6ttntVhgjCubDdifI';
+
+        // Voice Support Functions
+        async function startRecording() {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                mediaRecorder = new MediaRecorder(stream);
+                audioChunks = [];
+                
+                mediaRecorder.ondataavailable = event => {
+                    audioChunks.push(event.data);
+                };
+                
+                mediaRecorder.onstop = async () => {
+                    const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
+                    await processAudio(audioBlob);
+                };
+                
+                mediaRecorder.start();
+                isRecording = true;
+                
+                // Update UI
+                document.getElementById('voiceStatusText').textContent = 'Recording... Speak your question';
+                document.getElementById('startRecordingBtn').disabled = true;
+                document.getElementById('stopRecordingBtn').disabled = false;
+                document.getElementById('voiceSupportBtn').classList.add('recording');
+                
+            } catch (error) {
+                console.error('Error accessing microphone:', error);
+                alert('Unable to access microphone. Please check your permissions.');
+            }
+        }
+
+        function stopRecording() {
+            if (mediaRecorder && isRecording) {
+                mediaRecorder.stop();
+                mediaRecorder.stream.getTracks().forEach(track => track.stop());
+                isRecording = false;
+                
+                // Update UI
+                document.getElementById('voiceStatusText').textContent = 'Processing your question...';
+                document.getElementById('startRecordingBtn').disabled = false;
+                document.getElementById('stopRecordingBtn').disabled = true;
+                document.getElementById('voiceSupportBtn').classList.remove('recording');
+                document.getElementById('voiceSupportBtn').classList.add('loading');
+            }
+        }
+
+        async function processAudio(audioBlob) {
+            try {
+                // Convert audio to text using Web Speech API (fallback method)
+                const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+                recognition.lang = 'ar-SA'; // Arabic
+                recognition.interimResults = false;
+                recognition.maxAlternatives = 1;
+
+                // Create audio URL for speech recognition
+                const audioUrl = URL.createObjectURL(audioBlob);
+                const audio = new Audio(audioUrl);
+                
+                // For demonstration, we'll use a simple text input simulation
+                // In production, you would implement proper speech-to-text
+                const userQuestion = await simulateSTT(audioBlob);
+                
+                if (userQuestion) {
+                    await getGeminiResponse(userQuestion);
+                } else {
+                    showError('لم أتمكن من فهم السؤال. يرجى المحاولة مرة أخرى.');
+                }
+                
+            } catch (error) {
+                console.error('Error processing audio:', error);
+                showError('حدث خطأ في معالجة الصوت. يرجى المحاولة مرة أخرى.');
+            }
+        }
+
+        async function simulateSTT(audioBlob) {
+            // This is a simulation. In production, implement real STT
+            return new Promise((resolve) => {
+                setTimeout(() => {
+                    // Simulate user questions for demo
+                    const demoQuestions = [
+                        'كيف أستخدم منصة AI MAIS؟',
+                        'ما هي خدمات التحليل المتقدم؟',
+                        'كيف يمكنني ضمان جودة البيانات؟',
+                        'ما هي أدوات التسويق الذكي؟'
+                    ];
+                    const randomQuestion = demoQuestions[Math.floor(Math.random() * demoQuestions.length)];
+                    resolve(randomQuestion);
+                }, 2000);
+            });
+        }
+
+        async function getGeminiResponse(question) {
+            try {
+                const prompt = `
+أنت مساعد ذكي متخصص في منصة AI MAIS للذكاء الطبي. يجب أن تجيب باللغة العربية و الإنجليزية اطلب من المستخدم اولا بالعربية ان يحدد اي لغة يريد ان يتحدث عربي او إنجليزي بشكل مهني ومفيد.
+
+معلومات عن المنصة:
+- AI MAIS هي منصة ذكاء طبي متقدمة
+- تقدم ثلاث خدمات رئيسية:
+  1. التحليل المتقدم بالذكاء الاصطناعي: لمعالجة البيانات الطبية المعقدة بدقة وسرعة عالية
+  2. ضمان الجودة الذكي: لضمان سلامة البيانات والامتثال للمعايير الطبية
+  3. التسويق الذكي وإدارة علاقات العملاء و البحث والتطوير: لتحليل اتجاهات السوق وبيانات العملاء واستخبارات البحث والتطوير
+
+إرشادات الإجابة:
+- كن مهنياً ومفيداً
+- اجب بشكل واضح ومباشر
+- قدم معلومات عملية ومفيدة
+- إذا لم تكن متأكداً من شيء، اعترف بذلك واقترح بدائل
+- حافظ على الطابع الودود والمهني
+
+سؤال المستخدم: ${question}
+
+الرجاء تقديم إجابة شاملة ومفيدة:
+`;
+
+                const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${API_KEY}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        contents: [{
+                            parts: [{
+                                text: prompt
+                            }]
+                        }]
+                    })
+                });
+
+                const data = await response.json();
+                
+                if (data.candidates && data.candidates[0] && data.candidates[0].content) {
+                    const aiResponse = data.candidates[0].content.parts[0].text;
+                    showResponse(question, aiResponse);
+                } else {
+                    showError('عذراً، لم أتمكن من الحصول على إجابة. يرجى المحاولة مرة أخرى.');
+                }
+                
+            } catch (error) {
+                console.error('Error calling Gemini API:', error);
+                showError('حدث خطأ في الاتصال بالخدمة. يرجى المحاولة مرة أخرى.');
+            }
+        }
+
+        function showResponse(question, response) {
+            document.getElementById('voiceStatusText').innerHTML = `
+                <strong>سؤالك:</strong> ${question}
+            `;
+            document.getElementById('responseText').textContent = response;
+            document.getElementById('voiceResponse').style.display = 'block';
+            document.getElementById('voiceSupportBtn').classList.remove('loading');
+            
+            // Text to speech for the response
+            speakResponse(response);
+        }
+
+        function showError(errorMessage) {
+            document.getElementById('voiceStatusText').textContent = 'خطأ في المعالجة';
+            document.getElementById('responseText').textContent = errorMessage;
+            document.getElementById('voiceResponse').style.display = 'block';
+            document.getElementById('voiceSupportBtn').classList.remove('loading');
+        }
+
+        function speakResponse(text) {
+            if ('speechSynthesis' in window) {
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = 'ar-SA';
+                utterance.rate = 0.9;
+                utterance.pitch = 1;
+                speechSynthesis.speak(utterance);
+            }
+        }
+
+        function toggleVoiceModal() {
+            const modal = document.getElementById('voiceModal');
+            modal.classList.toggle('active');
+            
+            if (modal.classList.contains('active')) {
+                document.body.style.overflow = 'hidden';
+                // Reset modal state
+                document.getElementById('voiceStatusText').textContent = 'Click "Start Recording" to ask your question';
+                document.getElementById('voiceResponse').style.display = 'none';
+                document.getElementById('startRecordingBtn').disabled = false;
+                document.getElementById('stopRecordingBtn').disabled = true;
+            } else {
+                document.body.style.overflow = 'auto';
+                // Stop recording if active
+                if (isRecording) {
+                    stopRecording();
+                }
+            }
+        }
+
         // 3D Mouse Tracking Effect
         document.addEventListener('mousemove', (e) => {
             const mouseX = (e.clientX / window.innerWidth) * 2 - 1;
@@ -686,19 +1099,30 @@
             }
         }
 
-        // Close modal when clicking outside
+        // Close modals when clicking outside
         document.getElementById('helpModal').addEventListener('click', (e) => {
             if (e.target === e.currentTarget) {
                 toggleHelpModal();
             }
         });
 
-        // Close modal with Escape key
+        document.getElementById('voiceModal').addEventListener('click', (e) => {
+            if (e.target === e.currentTarget) {
+                toggleVoiceModal();
+            }
+        });
+
+        // Close modals with Escape key
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') {
-                const modal = document.getElementById('helpModal');
-                if (modal.classList.contains('active')) {
+                const helpModal = document.getElementById('helpModal');
+                const voiceModal = document.getElementById('voiceModal');
+                
+                if (helpModal.classList.contains('active')) {
                     toggleHelpModal();
+                }
+                if (voiceModal.classList.contains('active')) {
+                    toggleVoiceModal();
                 }
             }
         });
