@@ -3,498 +3,736 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI MAIS - Home</title>
+    <title>AI MAIS - Medical Intelligence Platform</title>
     <style>
-        :root {
-            --primary-color: #0056b3;
-            --secondary-color: #4CAF50;
-            --accent-color: #ff9800;
-            --background-color: #f5f7fa;
-            --card-color: #fff;
-            --text-color: #222;
-            --shadow: 0 8px 32px rgba(0,0,0,0.18), 0 1.5px 4px rgba(0,0,0,0.10);
-            --shadow-btn: 0 6px 20px rgba(0,86,179,0.18), 0 1.5px 4px rgba(0,0,0,0.10);
-            --shadow-btn-hover: 0 12px 32px rgba(76,175,80,0.18), 0 4px 16px rgba(0,86,179,0.18);
-            --border-radius: 18px;
-            --transition: all 0.22s cubic-bezier(.4,0,.2,1);
-        }
-        body {
-            background: var(--background-color);
-            color: var(--text-color);
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        * {
             margin: 0;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            perspective: 1000px;
-            overflow-x: hidden;
+            padding: 0;
+            box-sizing: border-box;
         }
-        
-        /* 3D Animated Background */
-        .background-3d {
+
+        :root {
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --success-gradient: linear-gradient(135deg, #4ecdc4 0%, #44a08d 100%);
+            --warning-gradient: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+            --bg-color: #0f0f23;
+            --card-bg: rgba(255, 255, 255, 0.1);
+            --text-primary: #ffffff;
+            --text-secondary: #b8bcc8;
+            --glass-bg: rgba(255, 255, 255, 0.08);
+            --glass-border: rgba(255, 255, 255, 0.2);
+            --shadow-3d: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            --shadow-glow: 0 0 40px rgba(102, 126, 234, 0.3);
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-color);
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+            perspective: 1000px;
+            position: relative;
+        }
+
+        /* Animated 3D Background */
+        .bg-canvas {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            z-index: -1;
-            pointer-events: none;
-            overflow: hidden;
+            z-index: -2;
+            background: radial-gradient(ellipse at center, #1a1a3a 0%, #0f0f23 100%);
         }
-        
-        .floating-cube {
+
+        .floating-geometry {
             position: absolute;
-            width: 100px;
-            height: 100px;
-            opacity: 0.08;
+            opacity: 0.1;
+            animation: floatRotate 20s infinite ease-in-out;
             transform-style: preserve-3d;
-            animation: float 15s infinite linear;
         }
-        
-        .floating-cube:nth-child(1) {
-            top: 15%;
-            left: 10%;
+
+        .geometry-1 {
+            top: 10%;
+            left: 20%;
+            width: 120px;
+            height: 120px;
+            background: var(--primary-gradient);
+            clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
             animation-delay: -2s;
             animation-duration: 25s;
         }
-        
-        .floating-cube:nth-child(2) {
-            top: 70%;
-            left: 85%;
-            animation-delay: -7s;
+
+        .geometry-2 {
+            top: 60%;
+            right: 15%;
+            width: 100px;
+            height: 100px;
+            background: var(--secondary-gradient);
+            border-radius: 50%;
+            animation-delay: -8s;
             animation-duration: 30s;
         }
-        
-        .floating-cube:nth-child(3) {
-            top: 40%;
-            left: 20%;
-            animation-delay: -12s;
+
+        .geometry-3 {
+            bottom: 20%;
+            left: 10%;
+            width: 80px;
+            height: 80px;
+            background: var(--success-gradient);
+            transform: rotate(45deg);
+            animation-delay: -15s;
             animation-duration: 22s;
         }
-        
-        .floating-cube:nth-child(4) {
-            top: 60%;
-            left: 75%;
+
+        .geometry-4 {
+            top: 30%;
+            right: 30%;
+            width: 140px;
+            height: 140px;
+            background: linear-gradient(45deg, transparent 30%, rgba(102, 126, 234, 0.2) 70%);
+            clip-path: polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%);
             animation-delay: -5s;
             animation-duration: 18s;
         }
-        
-        .floating-cube:nth-child(5) {
-            top: 10%;
-            left: 90%;
-            animation-delay: -9s;
-            animation-duration: 20s;
+
+        @keyframes floatRotate {
+            0%, 100% { 
+                transform: translateY(0px) translateX(0px) rotateZ(0deg) rotateY(0deg);
+            }
+            25% { 
+                transform: translateY(-30px) translateX(20px) rotateZ(90deg) rotateY(90deg);
+            }
+            50% { 
+                transform: translateY(-60px) translateX(-20px) rotateZ(180deg) rotateY(180deg);
+            }
+            75% { 
+                transform: translateY(-30px) translateX(-40px) rotateZ(270deg) rotateY(270deg);
+            }
         }
-        
-        .cube-face {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            background: var(--primary-color);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            backface-visibility: visible;
-        }
-        
-        .face-front { transform: translateZ(50px); }
-        .face-back { transform: rotateY(180deg) translateZ(50px); }
-        .face-right { transform: rotateY(90deg) translateZ(50px); }
-        .face-left { transform: rotateY(-90deg) translateZ(50px); }
-        .face-top { transform: rotateX(90deg) translateZ(50px); }
-        .face-bottom { transform: rotateX(-90deg) translateZ(50px); }
-        
-        @keyframes float {
-            0% { transform: translateY(0) rotateX(0) rotateY(0) rotateZ(0); }
-            50% { transform: translateY(-100px) rotateX(180deg) rotateY(180deg) rotateZ(90deg); }
-            100% { transform: translateY(0) rotateX(360deg) rotateY(360deg) rotateZ(180deg); }
-        }
-        
-        header {
-            background: linear-gradient(120deg, var(--primary-color) 60%, var(--secondary-color) 100%);
-            color: #fff;
-            padding: 44px 0 28px 0;
+
+        /* Header */
+        .header {
             text-align: center;
-            box-shadow: 0 4px 24px rgba(0,0,0,0.10);
+            padding: 2rem 1rem;
             position: relative;
-            z-index: 2;
-            transform-style: preserve-3d;
-            transform: translateZ(20px);
-            transition: transform 0.5s ease-out;
+            z-index: 10;
         }
-        
-        header:hover {
-            transform: translateZ(40px) scale(1.02);
-        }
-        
+
         .logo-container {
-            position: relative;
+            perspective: 800px;
             display: inline-block;
-            perspective: 1000px;
+            margin-bottom: 1.5rem;
+        }
+
+        .logo-3d {
+            width: 80px;
+            height: 80px;
+            background: var(--primary-gradient);
+            border-radius: 20px;
             transform-style: preserve-3d;
-            margin-bottom: 12px;
-        }
-        
-        .logo-img {
-            width: 70px;
-            height: 70px;
-            border-radius: 50%;
-            background: #fff;
-            object-fit: contain;
-            box-shadow: 0 4px 16px rgba(0,0,0,0.13), 0 1.5px 4px rgba(0,0,0,0.10);
-            transition: transform 0.6s ease-out;
-            transform-style: preserve-3d;
-            transform: rotateY(0deg) translateZ(0);
-        }
-        
-        .logo-container:hover .logo-img {
-            transform: rotateY(360deg) translateZ(20px);
-        }
-        
-        h1 {
-            font-size: 2.8rem;
-            margin: 0 0 10px 0;
-            letter-spacing: 1px;
-            font-weight: 800;
-            text-shadow: 0 2px 8px rgba(0,0,0,0.10);
-            transform-style: preserve-3d;
-            transition: all 0.3s ease;
-        }
-        
-        h1:hover {
-            text-shadow: 0 4px 12px rgba(0,0,0,0.2);
-            transform: translateZ(15px);
-        }
-        
-        .subtitle {
-            font-size: 1.25rem;
-            font-weight: 400;
-            margin-bottom: 0;
-            color: #e0e0e0;
-            text-shadow: 0 1px 4px rgba(0,0,0,0.09);
-            transition: all 0.3s ease;
-        }
-        
-        .subtitle:hover {
-            transform: translateZ(10px);
-            text-shadow: 0 2px 8px rgba(0,0,0,0.15);
-        }
-        
-        main {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 40px 10px 30px 10px;
-            background: linear-gradient(135deg, #eaf6ff 0%, #f5f7fa 100%);
-            perspective: 1000px;
-            transform-style: preserve-3d;
-        }
-        
-        .actions-card {
-            background: linear-gradient(145deg, #ffffff 70%, #e3f0ff 100%);
-            border-radius: var(--border-radius);
-            box-shadow: var(--shadow);
-            padding: 48px 36px 38px 36px;
-            max-width: 440px;
-            width: 100%;
-            text-align: center;
-            position: relative;
-            z-index: 1;
-            border: 1.5px solid #e3eaf7;
-            transform-style: preserve-3d;
-            transition: transform 0.4s ease-out, box-shadow 0.4s ease;
-            transform: translateZ(50px) rotateX(0deg);
-        }
-        
-        .actions-card:hover {
-            box-shadow: 0 24px 48px rgba(0,0,0,0.2), 0 4px 12px rgba(0,0,0,0.15);
-            transform: translateZ(80px) rotateX(2deg);
-        }
-        
-        .actions-card::before {
-            content: "";
-            position: absolute;
-            inset: 0;
-            border-radius: var(--border-radius);
-            box-shadow: 0 16px 48px 8px rgba(0,86,179,0.08);
-            z-index: -1;
-        }
-        
-        .actions-card h2 {
-            font-size: 1.6rem;
-            margin-bottom: 18px;
-            color: var(--primary-color);
-            font-weight: 700;
-            text-shadow: 0 1px 4px rgba(0,86,179,0.07);
-            transform-style: preserve-3d;
-            transition: transform 0.3s ease;
-        }
-        
-        .actions-card h2:hover {
-            transform: translateZ(10px);
-        }
-        
-        .action-btns {
-            display: flex;
-            flex-direction: column;
-            gap: 28px;
-            margin-top: 22px;
-            transform-style: preserve-3d;
-        }
-        
-        .action-btn {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 14px;
-            background: linear-gradient(120deg, #e3f0ff 0%, var(--primary-color) 80%);
-            color: #fff;
-            font-size: 1.18rem;
-            font-weight: 600;
-            padding: 22px 0;
-            border: none;
-            border-radius: 14px;
-            box-shadow: var(--shadow-btn);
-            cursor: pointer;
-            text-decoration: none;
-            transition: var(--transition);
-            letter-spacing: 0.5px;
+            animation: logoFloat 6s ease-in-out infinite;
+            box-shadow: var(--shadow-3d), var(--shadow-glow);
             position: relative;
             overflow: hidden;
-            perspective: 400px;
-            border-bottom: 4px solid #b3d1f7;
-            transform-style: preserve-3d;
-            transform: translateZ(0) scale(1);
         }
-        
-        .action-btn-small {
-            font-size: 1rem;
-            padding: 12px 0;
-            border-radius: 10px;
-            gap: 10px;
-            margin-top: 32px;
-            max-width: 440px;
-            width: 100%;
-            text-align: center;
+
+        .logo-3d::before {
+            content: 'AI';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 1.5rem;
+            font-weight: 900;
+            color: white;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.3);
         }
-        
-        .action-btn-small svg {
+
+        @keyframes logoFloat {
+            0%, 100% { transform: rotateY(0deg) rotateX(0deg) translateZ(0px); }
+            50% { transform: rotateY(180deg) rotateX(10deg) translateZ(20px); }
+        }
+
+        .main-title {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 900;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+            text-shadow: 0 0 30px rgba(102, 126, 234, 0.5);
+            animation: titleGlow 3s ease-in-out infinite alternate;
+        }
+
+        .subtitle {
+            font-size: clamp(1rem, 2.5vw, 1.5rem);
+            color: var(--text-secondary);
+            font-weight: 300;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        @keyframes titleGlow {
+            0% { filter: brightness(1); }
+            100% { filter: brightness(1.2); }
+        }
+
+        /* Help Button */
+        .help-btn {
+            position: fixed;
+            top: 2rem;
+            right: 2rem;
+            width: 60px;
+            height: 60px;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 50%;
+            backdrop-filter: blur(20px);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: var(--shadow-3d);
+        }
+
+        .help-btn:hover {
+            transform: scale(1.1) translateZ(10px);
+            box-shadow: var(--shadow-3d), var(--shadow-glow);
+            background: rgba(102, 126, 234, 0.2);
+        }
+
+        .help-btn svg {
             width: 24px;
             height: 24px;
+            fill: var(--text-primary);
         }
-        
-        .action-btn:active {
-            transform: translateY(2px) scale(0.98) translateZ(10px) rotateX(2deg);
-            box-shadow: 0 2px 8px rgba(0,86,179,0.09);
+
+        /* Main Container */
+        .main-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 2rem 1rem;
+            gap: 2rem;
+            perspective: 1200px;
+            transform-style: preserve-3d;
         }
-        
-        .action-btn:hover, .action-btn:focus {
-            background: linear-gradient(120deg, var(--secondary-color) 10%, var(--primary-color) 90%);
-            transform: translateY(-6px) scale(1.04) translateZ(20px) rotateX(-4deg);
-            box-shadow: var(--shadow-btn-hover), 0 10px 20px rgba(0,0,0,0.2);
-            border-bottom: 8px solid #b3f7c7;
+
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            width: 100%;
+            margin-bottom: 2rem;
         }
-        
-        .action-btn::before {
+
+        .service-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 2.5rem 2rem;
+            backdrop-filter: blur(20px);
+            transform-style: preserve-3d;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            box-shadow: var(--shadow-3d);
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .service-card::before {
             content: '';
             position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0) 80%);
-            transform: scale(0);
-            transition: transform 0.6s cubic-bezier(.4,0,.2,1);
-            pointer-events: none;
-        }
-        
-        .action-btn:hover::before {
-            transform: scale(1) translateZ(30px);
-        }
-        
-        .action-btn svg {
-            width: 32px;
-            height: 32px;
-            fill: #fff;
-            filter: drop-shadow(0 2px 6px rgba(0,86,179,0.13));
-            transition: transform 0.18s cubic-bezier(.4,0,.2,1);
-            transform-style: preserve-3d;
-        }
-        
-        .action-btn:hover svg, .action-btn:focus svg {
-            transform: scale(1.13) rotate(-8deg) translateZ(10px);
-        }
-        
-        footer {
-            text-align: center;
-            padding: 18px 0 10px 0;
-            color: #888;
-            font-size: 1rem;
-            background: #f0f4f8;
-            border-top: 1px solid #e0e0e0;
-            box-shadow: 0 -2px 8px rgba(0,0,0,0.04);
-            position: relative;
-            z-index: 2;
-            transform-style: preserve-3d;
-            transform: translateZ(5px);
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--primary-gradient);
+            transform: scaleX(0);
             transition: transform 0.3s ease;
         }
-        
-        footer:hover {
-            transform: translateZ(10px);
+
+        .service-card:hover::before {
+            transform: scaleX(1);
         }
-        
-        @media (max-width: 600px) {
-            .actions-card {
-                padding: 24px 14px 18px 14px;
+
+        .service-card:hover {
+            transform: translateY(-15px) rotateX(5deg) translateZ(30px);
+            box-shadow: var(--shadow-3d), 0 0 50px rgba(102, 126, 234, 0.4);
+            border-color: rgba(102, 126, 234, 0.5);
+        }
+
+        .service-card:nth-child(1):hover { box-shadow: var(--shadow-3d), 0 0 50px rgba(102, 126, 234, 0.4); }
+        .service-card:nth-child(2):hover { box-shadow: var(--shadow-3d), 0 0 50px rgba(76, 175, 80, 0.4); }
+        .service-card:nth-child(3):hover { box-shadow: var(--shadow-3d), 0 0 50px rgba(245, 87, 108, 0.4); }
+
+        .card-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+            transform-style: preserve-3d;
+            transition: transform 0.3s ease;
+        }
+
+        .service-card:hover .card-icon {
+            transform: rotateY(180deg) translateZ(20px);
+        }
+
+        .card-icon-1 { background: var(--primary-gradient); }
+        .card-icon-2 { background: var(--success-gradient); }
+        .card-icon-3 { background: var(--secondary-gradient); }
+
+        .card-icon svg {
+            width: 32px;
+            height: 32px;
+            fill: white;
+        }
+
+        .card-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .card-description {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+
+        .card-arrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: rgba(102, 126, 234, 0.8);
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+        }
+
+        .service-card:hover .card-arrow {
+            color: rgba(102, 126, 234, 1);
+            transform: translateX(10px);
+        }
+
+        /* Other Uses Button */
+        .other-uses-btn {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 1.5rem 3rem;
+            backdrop-filter: blur(20px);
+            text-decoration: none;
+            color: var(--text-primary);
+            display: inline-flex;
+            align-items: center;
+            gap: 1rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: var(--shadow-3d);
+        }
+
+        .other-uses-btn:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: var(--shadow-3d), var(--shadow-glow);
+            background: rgba(102, 126, 234, 0.1);
+        }
+
+        .other-uses-btn svg {
+            width: 24px;
+            height: 24px;
+            fill: currentColor;
+        }
+
+        /* Help Modal */
+        .help-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            z-index: 2000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .help-modal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .help-content {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 3rem;
+            max-width: 600px;
+            width: 90%;
+            backdrop-filter: blur(20px);
+            box-shadow: var(--shadow-3d);
+            transform: scale(0.8) translateY(50px);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+        }
+
+        .help-modal.active .help-content {
+            transform: scale(1) translateY(0);
+        }
+
+        .help-close {
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
+            width: 40px;
+            height: 40px;
+            border: none;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-primary);
+            font-size: 1.5rem;
+            transition: background 0.3s ease;
+        }
+
+        .help-close:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .help-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 2rem;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .help-section {
+            margin-bottom: 2rem;
+        }
+
+        .help-section h3 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .help-section p {
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        .help-list {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .help-list li {
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 0.5rem;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+
+        .help-list li::before {
+            content: '•';
+            color: rgba(102, 126, 234, 0.8);
+            position: absolute;
+            left: 0;
+            font-size: 1.2rem;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 2rem 1rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            margin-top: 4rem;
+        }
+
+        .footer p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .cards-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
             }
-            h1 { font-size: 2rem; }
-            .action-btn { font-size: 1rem; padding: 16px 0; }
-            .action-btn-small { font-size: 0.92rem; padding: 9px 0; }
-            .floating-cube { opacity: 0.05; }
+            
+            .service-card {
+                padding: 2rem 1.5rem;
+            }
+            
+            .help-content {
+                padding: 2rem;
+                margin: 1rem;
+            }
+            
+            .help-btn {
+                width: 50px;
+                height: 50px;
+                top: 1rem;
+                right: 1rem;
+            }
         }
     </style>
 </head>
 <body>
-    <!-- 3D Animated Background -->
-    <div class="background-3d">
-        <div class="floating-cube">
-            <div class="cube-face face-front"></div>
-            <div class="cube-face face-back"></div>
-            <div class="cube-face face-right"></div>
-            <div class="cube-face face-left"></div>
-            <div class="cube-face face-top"></div>
-            <div class="cube-face face-bottom"></div>
-        </div>
-        <div class="floating-cube">
-            <div class="cube-face face-front"></div>
-            <div class="cube-face face-back"></div>
-            <div class="cube-face face-right"></div>
-            <div class="cube-face face-left"></div>
-            <div class="cube-face face-top"></div>
-            <div class="cube-face face-bottom"></div>
-        </div>
-        <div class="floating-cube">
-            <div class="cube-face face-front"></div>
-            <div class="cube-face face-back"></div>
-            <div class="cube-face face-right"></div>
-            <div class="cube-face face-left"></div>
-            <div class="cube-face face-top"></div>
-            <div class="cube-face face-bottom"></div>
-        </div>
-        <div class="floating-cube">
-            <div class="cube-face face-front"></div>
-            <div class="cube-face face-back"></div>
-            <div class="cube-face face-right"></div>
-            <div class="cube-face face-left"></div>
-            <div class="cube-face face-top"></div>
-            <div class="cube-face face-bottom"></div>
-        </div>
-        <div class="floating-cube">
-            <div class="cube-face face-front"></div>
-            <div class="cube-face face-back"></div>
-            <div class="cube-face face-right"></div>
-            <div class="cube-face face-left"></div>
-            <div class="cube-face face-top"></div>
-            <div class="cube-face face-bottom"></div>
-        </div>
+    <!-- Animated Background -->
+    <div class="bg-canvas">
+        <div class="floating-geometry geometry-1"></div>
+        <div class="floating-geometry geometry-2"></div>
+        <div class="floating-geometry geometry-3"></div>
+        <div class="floating-geometry geometry-4"></div>
     </div>
 
-    <header>
+    <!-- Help Button -->
+    <div class="help-btn" onclick="toggleHelpModal()">
+        <svg viewBox="0 0 24 24">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17h-2v-2h2v2zm2.07-7.75l-.9.92C13.45 12.9 13 13.5 13 15h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H8c0-2.21 1.79-4 4-4s4 1.79 4 4c0 .88-.36 1.68-.93 2.25z"/>
+        </svg>
+    </div>
+
+    <!-- Header -->
+    <header class="header">
         <div class="logo-container">
-            <img src="logo.png" alt="AI MAIS Logo" class="logo-img" onerror="this.style.display='none'">
+            <div class="logo-3d"></div>
         </div>
-        <h1>AI MAIS</h1>
-        <div class="subtitle">Empowering Medical Data Intelligence</div>
+        <h1 class="main-title">AI MAIS</h1>
+        <p class="subtitle">Medical Intelligence Platform</p>
     </header>
 
-    <main id="main">
-        <div class="actions-card" id="actions-card">
-            <h2>Welcome to AI MAIS Platform</h2>
-            <div>Choose an analysis tool to get started:</div>
-            <div class="action-btns">
-                <a href="analysis/g.html" class="action-btn">
-                    <!-- Sales Analysis Icon -->
-                    <svg viewBox="0 0 24 24"><path d="M3 17v2a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-2"/><path d="M16 6l-4-4-4 4"/><path d="M12 2v14"/></svg>
-                    Sales Data Analysis
-                </a>
-                <a href="analysis/SM.html" class="action-btn">
-                    <!-- QA Icon -->
-                    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9 12l2 2 4-4"/></svg>
-                    Smart Quality Assurance
-                </a>
-                <a href="analysis/Competitor-analysis.html" class="action-btn">
-                    <!-- Competitor Icon -->
-                    <svg viewBox="0 0 24 24"><rect x="2" y="7" width="7" height="14" rx="2"/><rect x="15" y="2" width="7" height="19" rx="2"/></svg>
-                    Competitor Analysis
-                </a>
-            </div>
+    <!-- Main Content -->
+    <main class="main-container">
+        <div class="cards-grid">
+            <!-- Advanced Analysis Card -->
+            <a href="analysis/in.html" class="service-card">
+                <div class="card-icon card-icon-1">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+                    </svg>
+                </div>
+                <h3 class="card-title">Advanced AI Analysis</h3>
+                <p class="card-description">
+                    Cutting-edge AI-powered analysis system that processes complex medical data with unprecedented accuracy and speed.
+                </p>
+                <span class="card-arrow">
+                    Explore System →
+                </span>
+            </a>
+
+            <!-- Quality Assurance Card -->
+            <a href="analysis/SM.html" class="service-card">
+                <div class="card-icon card-icon-2">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                </div>
+                <h3 class="card-title">Smart Quality Assurance</h3>
+                <p class="card-description">
+                    Intelligent quality control systems that ensure data integrity and compliance with medical standards.
+                </p>
+                <span class="card-arrow">
+                    Access QA Tools →
+                </span>
+            </a>
+
+            <!-- Marketing & CRM Card -->
+            <a href="analysis/Competitor-analysis.html" class="service-card">
+                <div class="card-icon card-icon-3">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+                    </svg>
+                </div>
+                <h3 class="card-title">Smart Marketing & CRM</h3>
+                <p class="card-description">
+                    Advanced marketing intelligence and R&D analytics to drive strategic decisions and customer relationships.
+                </p>
+                <span class="card-arrow">
+                    Launch Platform →
+                </span>
+            </a>
         </div>
-        <a href="uses.html" class="action-btn action-btn-small">
-            <!-- Other Uses Icon -->
-            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
-            Other uses
+
+        <!-- Other Uses Button -->
+        <a href="uses.html" class="other-uses-btn">
+            <svg viewBox="0 0 24 24">
+                <path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+            Other Uses & Applications
         </a>
     </main>
 
-    <footer>
-        &copy; 2025 AI MAIS. All rights reserved. by yazeed
+    <!-- Footer -->
+    <footer class="footer">
+        <p>&copy; 2025 AI MAIS. All rights reserved. Developed by Yazeed</p>
     </footer>
 
+    <!-- Help Modal -->
+    <div class="help-modal" id="helpModal">
+        <div class="help-content">
+            <button class="help-close" onclick="toggleHelpModal()">&times;</button>
+            <h2 class="help-title">How to Use AI MAIS</h2>
+            
+            <div class="help-section">
+                <h3>Getting Started</h3>
+                <p>AI MAIS is your comprehensive medical intelligence platform. Choose from our three main analysis tools:</p>
+            </div>
+
+            <div class="help-section">
+                <h3>Available Tools</h3>
+                <ul class="help-list">
+                    <li><strong>Advanced AI Analysis:</strong> Upload your medical data and get AI-powered insights with detailed reports and visualizations.</li>
+                    <li><strong>Smart Quality Assurance:</strong> Ensure your data meets medical standards with automated quality checks and validation.</li>
+                    <li><strong>Smart Marketing & CRM:</strong> Analyze market trends, customer data, and R&D intelligence for strategic planning.</li>
+                </ul>
+            </div>
+
+            <div class="help-section">
+                <h3>Quick Tips</h3>
+                <ul class="help-list">
+                    <li>Start with the Advanced AI Analysis for general medical data processing</li>
+                    <li>Use Quality Assurance before submitting critical reports</li>
+                    <li>Explore Marketing & CRM for business intelligence needs</li>
+                    <li>Check "Other Uses" for additional specialized applications</li>
+                </ul>
+            </div>
+
+            <div class="help-section">
+                <h3>Support</h3>
+                <p>For technical support or questions, contact our team through the platform or refer to the detailed documentation in each tool section.</p>
+            </div>
+        </div>
+    </div>
+
     <script>
-        // 3D parallax effect on mouse move
-        document.addEventListener('DOMContentLoaded', function() {
-            const mainElem = document.getElementById('main');
-            const cardElem = document.getElementById('actions-card');
-            
-            document.addEventListener('mousemove', function(e) {
-                // Calculate relative mouse position
-                const x = (e.clientX / window.innerWidth - 0.5) * 20;
-                const y = (e.clientY / window.innerHeight - 0.5) * 20;
-                
-                // Apply subtle rotation to card based on mouse position
-                cardElem.style.transform = `translateZ(50px) rotateY(${x * 0.3}deg) rotateX(${-y * 0.3}deg)`;
-                
-                // Apply slightly different rotation to background for parallax effect
-                document.querySelectorAll('.floating-cube').forEach(cube => {
-                    const factor = Math.random() * 0.2 + 0.1;
-                    cube.style.transform = `translateY(0) rotateX(${y * factor}deg) rotateY(${x * factor}deg) rotateZ(0)`;
-                });
+        // 3D Mouse Tracking Effect
+        document.addEventListener('mousemove', (e) => {
+            const mouseX = (e.clientX / window.innerWidth) * 2 - 1;
+            const mouseY = (e.clientY / window.innerHeight) * 2 - 1;
+
+            // Apply parallax to floating geometries
+            document.querySelectorAll('.floating-geometry').forEach((elem, index) => {
+                const speed = (index + 1) * 0.02;
+                const x = mouseX * speed * 50;
+                const y = mouseY * speed * 50;
+                elem.style.transform = `translateX(${x}px) translateY(${y}px)`;
             });
-            
-            // Reset when no mouse movement (mobile)
-            document.addEventListener('mouseleave', function() {
-                cardElem.style.transform = 'translateZ(50px) rotateX(0deg)';
-            });
-            
-            // Add touch event support
-            let touchStartY = 0;
-            let touchStartX = 0;
-            
-            document.addEventListener('touchstart', function(e) {
-                touchStartX = e.touches[0].clientX;
-                touchStartY = e.touches[0].clientY;
-            });
-            
-            document.addEventListener('touchmove', function(e) {
-                if (!touchStartX || !touchStartY) return;
+
+            // Apply subtle 3D effect to cards
+            document.querySelectorAll('.service-card').forEach((card) => {
+                const rect = card.getBoundingClientRect();
+                const cardCenterX = rect.left + rect.width / 2;
+                const cardCenterY = rect.top + rect.height / 2;
                 
-                const touchX = e.touches[0].clientX;
-                const touchY = e.touches[0].clientY;
+                const angleX = (e.clientY - cardCenterY) / 30;
+                const angleY = (cardCenterX - e.clientX) / 30;
                 
-                const deltaX = (touchX - touchStartX) / window.innerWidth * 20;
-                const deltaY = (touchY - touchStartY) / window.innerHeight * 20;
-                
-                // Apply more subtle effect for touch 
-                cardElem.style.transform = `translateZ(50px) rotateY(${deltaX * 0.15}deg) rotateX(${-deltaY * 0.15}deg)`;
-            });
-            
-            document.addEventListener('touchend', function() {
-                cardElem.style.transform = 'translateZ(50px) rotateX(0deg)';
-                touchStartX = 0;
-                touchStartY = 0;
+                card.style.transform = `perspective(1000px) rotateX(${angleX}deg) rotateY(${angleY}deg) translateZ(0)`;
             });
         });
+
+        // Reset card transforms when mouse leaves
+        document.addEventListener('mouseleave', () => {
+            document.querySelectorAll('.service-card').forEach((card) => {
+                card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) translateZ(0)';
+            });
+        });
+
+        // Help Modal Functions
+        function toggleHelpModal() {
+            const modal = document.getElementById('helpModal');
+            modal.classList.toggle('active');
+            
+            // Prevent body scroll when modal is open
+            if (modal.classList.contains('active')) {
+                document.body.style.overflow = 'hidden';
+            } else {
+                document.body.style.overflow = 'auto';
+            }
+        }
+
+        // Close modal when clicking outside
+        document.getElementById('helpModal').addEventListener('click', (e) => {
+            if (e.target === e.currentTarget) {
+                toggleHelpModal();
+            }
+        });
+
+        // Close modal with Escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                const modal = document.getElementById('helpModal');
+                if (modal.classList.contains('active')) {
+                    toggleHelpModal();
+                }
+            }
+        });
+
+        // Add loading animation on page load
+        window.addEventListener('load', () => {
+            document.querySelectorAll('.service-card').forEach((card, index) => {
+                setTimeout(() => {
+                    card.style.opacity = '0';
+                    card.style.transform = 'translateY(50px)';
+                    card.style.transition = 'all 0.6s cubic-bezier(0.4, 0, 0.2, 1)';
+                    
+                    setTimeout(() => {
+                        card.style.opacity = '1';
+                        card.style.transform = 'translateY(0)';
+                    }, 100);
+                }, index * 200);
+            });
+        });
+
+        // Add touch support for mobile
+        document.addEventListener('touchstart', handleTouch);
+        document.addEventListener('touchmove', handleTouch);
+
+        function handleTouch(e) {
+            if (e.touches.length === 1) {
+                const touch = e.touches[0];
+                const mouseEvent = new MouseEvent('mousemove', {
+                    clientX: touch.clientX,
+                    clientY: touch.clientY
+                });
+                document.dispatchEvent(mouseEvent);
+            }
+        }
     </script>
 </body>
 </html>

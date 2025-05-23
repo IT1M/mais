@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="en" dir="ltr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>تحليل الأعمال الذكي - Saudi Mais Co</title>
+    <title>Smart Business Analytics - Saudi Mais Co</title>
     <style>
         * {
             margin: 0;
@@ -21,7 +21,7 @@
         }
 
         .container {
-            max-width: 1400px;
+            max-width: 1600px;
             margin: 0 auto;
             padding: 20px;
             transform-style: preserve-3d;
@@ -43,9 +43,58 @@
             font-size: 3.5em;
             background: linear-gradient(45deg, #00c6ff, #0072ff, #ff6b6b);
             -webkit-background-clip: text;
+            background-clip: text;
             -webkit-text-fill-color: transparent;
             text-shadow: 0 0 30px rgba(0, 198, 255, 0.5);
             margin-bottom: 20px;
+        }
+
+        .navigation {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 30px 0;
+            flex-wrap: wrap;
+            transform: translateZ(50px);
+        }
+
+        .nav-btn {
+            padding: 12px 25px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            border: none;
+            border-radius: 25px;
+            color: white;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            transform: translateZ(10px);
+            border: 2px solid transparent;
+        }
+
+        .nav-btn:hover, .nav-btn.active {
+            transform: translateZ(20px) scale(1.05);
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .section {
+            display: none;
+            animation: fadeInUp 0.6s ease;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .company-info {
@@ -66,7 +115,7 @@
 
         .analysis-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
             gap: 30px;
             margin: 40px 0;
             transform-style: preserve-3d;
@@ -117,10 +166,110 @@
 
         .card-icon {
             font-size: 2.5em;
-            margin-left: 15px;
+            margin-right: 15px;
             background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
             -webkit-background-clip: text;
+            background-clip: text;
             -webkit-text-fill-color: transparent;
+        }
+
+        .input-section {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 25px;
+            margin: 20px 0;
+        }
+
+        .input-options {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            justify-content: center;
+        }
+
+        .option-btn {
+            padding: 10px 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .option-btn.active {
+            background: linear-gradient(45deg, #00c6ff, #0072ff);
+            border-color: rgba(255, 255, 255, 0.5);
+        }
+
+        .input-area {
+            display: none;
+        }
+
+        .input-area.active {
+            display: block;
+        }
+
+        .text-input {
+            width: 100%;
+            min-height: 120px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+            color: white;
+            padding: 15px;
+            font-size: 16px;
+            resize: vertical;
+        }
+
+        .text-input::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .focus-input {
+            width: 100%;
+            height: 80px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+            color: white;
+            padding: 15px;
+            font-size: 14px;
+            margin-top: 10px;
+            resize: vertical;
+        }
+
+        .focus-input::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .file-upload {
+            width: 100%;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px dashed rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .file-upload:hover {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(255, 255, 255, 0.5);
+        }
+
+        .file-upload input {
+            display: none;
+        }
+
+        .file-processing {
+            background: rgba(76, 175, 80, 0.2);
+            border: 1px solid rgba(76, 175, 80, 0.5);
+            padding: 15px;
+            border-radius: 10px;
+            margin: 10px 0;
+            text-align: center;
         }
 
         .gemini-integration {
@@ -138,7 +287,9 @@
             border-radius: 15px;
             padding: 20px;
             margin: 20px 0;
-            min-height: 300px;
+            min-height: 400px;
+            max-height: 500px;
+            overflow-y: auto;
             border: 1px solid rgba(255, 255, 255, 0.2);
         }
 
@@ -146,10 +297,12 @@
             display: flex;
             gap: 10px;
             margin-top: 20px;
+            flex-wrap: wrap;
         }
 
         .input-group input {
             flex: 1;
+            min-width: 200px;
             padding: 15px;
             background: rgba(255, 255, 255, 0.1);
             border: 1px solid rgba(255, 255, 255, 0.3);
@@ -163,20 +316,32 @@
         }
 
         .btn {
-            padding: 15px 30px;
+            padding: 15px 25px;
             background: linear-gradient(45deg, #00c6ff, #0072ff);
             border: none;
             border-radius: 10px;
             color: white;
             cursor: pointer;
-            font-size: 16px;
+            font-size: 14px;
             transition: all 0.3s ease;
             transform: translateZ(10px);
+            white-space: nowrap;
+            margin: 5px;
         }
 
         .btn:hover {
             transform: translateZ(20px) scale(1.05);
             box-shadow: 0 10px 20px rgba(0, 114, 255, 0.4);
+        }
+
+        .export-btn {
+            background: linear-gradient(45deg, #28a745, #20c997);
+            font-size: 12px;
+            padding: 10px 15px;
+        }
+
+        .export-btn:hover {
+            box-shadow: 0 10px 20px rgba(40, 167, 69, 0.4);
         }
 
         .chart-container {
@@ -186,6 +351,7 @@
             margin: 20px 0;
             transform: translateZ(30px);
             box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.1);
+            height: 300px;
         }
 
         .stats-grid {
@@ -215,6 +381,7 @@
             font-weight: bold;
             background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
             -webkit-background-clip: text;
+            background-clip: text;
             -webkit-text-fill-color: transparent;
             margin: 10px 0;
         }
@@ -273,6 +440,323 @@
             100% { transform: translateZ(40px) scale(1); }
         }
 
+        /* محسن - تصميم مخرجات النتائج */
+        .results-section {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 30px;
+            margin: 30px 0;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            max-height: 700px;
+            overflow-y: auto;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            position: relative;
+        }
+
+        .results-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #00c6ff, #0072ff, #ff6b6b);
+            border-radius: 20px 20px 0 0;
+        }
+
+        .results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .results-header h4 {
+            font-size: 1.4em;
+            background: linear-gradient(45deg, #00c6ff, #4ecdc4);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .export-controls {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .progress-bar {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            height: 8px;
+            margin: 10px 0;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            background: linear-gradient(45deg, #00c6ff, #0072ff);
+            height: 100%;
+            border-radius: 10px;
+            transition: width 0.3s ease;
+        }
+
+        .api-status {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-size: 14px;
+            z-index: 1000;
+        }
+
+        .api-connected {
+            background: rgba(76, 175, 80, 0.9);
+            color: white;
+        }
+
+        .api-disconnected {
+            background: rgba(244, 67, 54, 0.9);
+            color: white;
+        }
+
+        .status-messages {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+            margin: 15px 0;
+            font-size: 14px;
+            display: none;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .status-step {
+            margin: 8px 0;
+            opacity: 0.7;
+            transition: all 0.3s ease;
+            padding: 5px 0;
+        }
+
+        .status-step.active {
+            opacity: 1;
+            color: #00c6ff;
+            font-weight: bold;
+        }
+
+        /* تحسين تنسيق المحتوى */
+        .formatted-content {
+            line-height: 1.8;
+            font-size: 15px;
+        }
+
+        .formatted-content h1 {
+            color: #00c6ff;
+            font-size: 1.8em;
+            margin: 25px 0 15px 0;
+            padding: 15px 0;
+            border-bottom: 2px solid rgba(0, 198, 255, 0.3);
+            background: linear-gradient(45deg, #00c6ff, #4ecdc4);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .formatted-content h2 {
+            color: #4ecdc4;
+            font-size: 1.5em;
+            margin: 20px 0 12px 0;
+            padding: 12px 0 8px 0;
+            border-left: 4px solid #4ecdc4;
+            padding-left: 15px;
+        }
+
+        .formatted-content h3 {
+            color: #ff6b6b;
+            font-size: 1.3em;
+            margin: 18px 0 10px 0;
+            padding: 10px 0;
+        }
+
+        .formatted-content h4 {
+            color: #ffa726;
+            font-size: 1.1em;
+            margin: 15px 0 8px 0;
+        }
+
+        .formatted-content ul, .formatted-content ol {
+            margin: 15px 0;
+            padding-left: 25px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 10px;
+            padding: 15px 25px;
+        }
+
+        .formatted-content li {
+            margin: 8px 0;
+            padding: 5px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .formatted-content li:last-child {
+            border-bottom: none;
+        }
+
+        .formatted-content p {
+            margin: 12px 0;
+            text-align: justify;
+        }
+
+        .formatted-content table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .formatted-content th, .formatted-content td {
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 12px 15px;
+            text-align: left;
+        }
+
+        .formatted-content th {
+            background: rgba(0, 198, 255, 0.2);
+            font-weight: bold;
+            color: #00c6ff;
+        }
+
+        .formatted-content td {
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .formatted-content strong {
+            color: #4ecdc4;
+            font-weight: bold;
+        }
+
+        .formatted-content em {
+            color: #ff6b6b;
+            font-style: italic;
+        }
+
+        .formatted-content blockquote {
+            background: rgba(255, 255, 255, 0.05);
+            border-left: 4px solid #00c6ff;
+            margin: 15px 0;
+            padding: 15px 20px;
+            border-radius: 0 10px 10px 0;
+            font-style: italic;
+        }
+
+        /* تحسين بطاقات النتائج المتخصصة */
+        .analysis-result-card {
+            background: rgba(255, 255, 255, 0.06);
+            border-radius: 15px;
+            padding: 20px;
+            margin: 15px 0;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .analysis-result-card:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-3px);
+        }
+
+        .result-icon {
+            font-size: 2em;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .metric-card {
+            background: linear-gradient(135deg, rgba(0, 198, 255, 0.1), rgba(76, 236, 196, 0.1));
+            border-radius: 12px;
+            padding: 20px;
+            margin: 10px 0;
+            text-align: center;
+            border: 1px solid rgba(0, 198, 255, 0.2);
+        }
+
+        .metric-value {
+            font-size: 2.2em;
+            font-weight: bold;
+            color: #00c6ff;
+            margin: 10px 0;
+        }
+
+        .metric-label {
+            font-size: 0.9em;
+            opacity: 0.8;
+            margin-top: 5px;
+        }
+
+        .quality-indicator {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: bold;
+            margin: 3px;
+        }
+
+        .quality-excellent {
+            background: rgba(76, 175, 80, 0.3);
+            color: #4caf50;
+            border: 1px solid #4caf50;
+        }
+
+        .quality-good {
+            background: rgba(76, 236, 196, 0.3);
+            color: #4cecbc;
+            border: 1px solid #4cecbc;
+        }
+
+        .quality-warning {
+            background: rgba(255, 167, 38, 0.3);
+            color: #ffa726;
+            border: 1px solid #ffa726;
+        }
+
+        .quality-critical {
+            background: rgba(244, 67, 54, 0.3);
+            color: #f44336;
+            border: 1px solid #f44336;
+        }
+
+        .recommendation-box {
+            background: linear-gradient(135deg, rgba(76, 175, 80, 0.1), rgba(139, 195, 74, 0.1));
+            border-left: 4px solid #4caf50;
+            border-radius: 0 10px 10px 0;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .warning-box {
+            background: linear-gradient(135deg, rgba(255, 167, 38, 0.1), rgba(255, 193, 7, 0.1));
+            border-left: 4px solid #ffa726;
+            border-radius: 0 10px 10px 0;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .critical-box {
+            background: linear-gradient(135deg, rgba(244, 67, 54, 0.1), rgba(229, 57, 53, 0.1));
+            border-left: 4px solid #f44336;
+            border-radius: 0 10px 10px 0;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        /* تحسين للهواتف المحمولة */
         @media (max-width: 768px) {
             .analysis-grid {
                 grid-template-columns: 1fr;
@@ -284,6 +768,127 @@
             
             .input-group {
                 flex-direction: column;
+            }
+
+            .navigation {
+                gap: 8px;
+            }
+
+            .nav-btn {
+                padding: 8px 12px;
+                font-size: 12px;
+            }
+
+            .input-options {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .results-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .export-controls {
+                width: 100%;
+                justify-content: space-between;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+                gap: 15px;
+            }
+
+            .stat-value {
+                font-size: 2em;
+            }
+
+            .formatted-content {
+                font-size: 14px;
+            }
+
+            .formatted-content h1 {
+                font-size: 1.5em;
+            }
+
+            .formatted-content h2 {
+                font-size: 1.3em;
+            }
+
+            .formatted-content table {
+                font-size: 12px;
+            }
+
+            .formatted-content th, .formatted-content td {
+                padding: 8px 10px;
+            }
+
+            .metric-value {
+                font-size: 1.8em;
+            }
+
+            .results-section {
+                max-height: 500px;
+                padding: 20px;
+            }
+
+            .api-status {
+                position: relative;
+                top: 0;
+                right: 0;
+                margin: 10px 0;
+                display: block;
+                text-align: center;
+            }
+        }
+
+        /* تحسين للشاشات الصغيرة جداً */
+        @media (max-width: 480px) {
+            .container {
+                padding: 10px;
+            }
+
+            .header {
+                padding: 20px 0;
+            }
+
+            .header h1 {
+                font-size: 2em;
+            }
+
+            .nav-btn {
+                padding: 6px 10px;
+                font-size: 11px;
+            }
+
+            .analysis-card, .section-card {
+                padding: 20px;
+            }
+
+            .input-section {
+                padding: 15px;
+            }
+
+            .text-input, .focus-input {
+                font-size: 14px;
+            }
+
+            .btn {
+                padding: 12px 20px;
+                font-size: 12px;
+            }
+
+            .results-section {
+                padding: 15px;
+                max-height: 400px;
+            }
+
+            .formatted-content ul, .formatted-content ol {
+                padding: 10px 20px;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr 1fr;
             }
         }
 
@@ -308,9 +913,94 @@
             0% { transform: translateY(100vh) rotate(0deg); }
             100% { transform: translateY(-100px) rotate(360deg); }
         }
+
+        .section-card {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 30px;
+            margin: 20px 0;
+            transform: translateZ(40px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.6s ease;
+        }
+
+        .section-card:hover {
+            transform: translateZ(60px);
+        }
+
+        /* تحسين قابلية القراءة */
+        .results-section::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .results-section::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+        }
+
+        .results-section::-webkit-scrollbar-thumb {
+            background: linear-gradient(45deg, #00c6ff, #0072ff);
+            border-radius: 10px;
+        }
+
+        .results-section::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(45deg, #0072ff, #00c6ff);
+        }
+
+        /* تحسين الرسوم البيانية للهواتف */
+        @media (max-width: 768px) {
+            .chart-container {
+                height: 250px;
+                padding: 15px;
+            }
+        }
+
+        /* إضافة تأثير التمويه للخلفية */
+        .results-section {
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+        }
+
+        /* تحسين الرسوم المتحركة */
+        .loading-enhanced {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 15px;
+            background: rgba(0, 198, 255, 0.1);
+            border-radius: 10px;
+            border: 1px solid rgba(0, 198, 255, 0.3);
+        }
+
+        .loading-dots {
+            display: flex;
+            gap: 4px;
+        }
+
+        .loading-dot {
+            width: 8px;
+            height: 8px;
+            background: #00c6ff;
+            border-radius: 50%;
+            animation: loadingDots 1.4s infinite;
+        }
+
+        .loading-dot:nth-child(2) { animation-delay: 0.2s; }
+        .loading-dot:nth-child(3) { animation-delay: 0.4s; }
+
+        @keyframes loadingDots {
+            0%, 80%, 100% { opacity: 0.3; transform: scale(0.8); }
+            40% { opacity: 1; transform: scale(1); }
+        }
     </style>
 </head>
 <body>
+    <div id="apiStatus" class="api-status api-disconnected">
+        🔴 Not connected to Yazeed AI API
+    </div>
+
     <div class="floating-elements">
         <div class="floating-element" style="left: 10%; width: 50px; height: 50px; animation-delay: 0s;"></div>
         <div class="floating-element" style="left: 20%; width: 30px; height: 30px; animation-delay: 5s;"></div>
@@ -320,161 +1010,297 @@
 
     <div class="container">
         <div class="header">
-            <h1>🔍 تحليل الأعمال الذكي</h1>
-            <h2>Saudi Mais Co. للمنتجات الطبية</h2>
-            <p>نظام تحليل متقدم بالذكاء الاصطناعي لحل الأزمات المالية</p>
+            <h1>🔍 Smart Business Analytics</h1>
+            <h2>Saudi Mais Co. Medical Products</h2>
+            <p>Advanced AI-powered analysis system for financial crisis resolution</p>
         </div>
 
-        <div class="company-info">
-            <h3>📋 معلومات الشركة</h3>
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <div class="stat-value">1994</div>
-                    <p>سنة التأسيس</p>
+        <div class="navigation">
+            <button class="nav-btn active" onclick="showSection('overview')">🏠 Overview</button>
+            <button class="nav-btn" onclick="showSection('advanced-analysis')">📊 Advanced Analysis</button>
+            <button class="nav-btn" onclick="showSection('quality-management')">🏥 Quality Management</button>
+            <button class="nav-btn" onclick="showSection('demand-forecasting')">📈 Demand Forecasting</button>
+            <button class="nav-btn" onclick="showSection('competitor-analysis')">🎯 Competitor Analysis</button>
+            <button class="nav-btn" onclick="showSection('ai-chat')">🤖 AI Assistant</button>
+        </div>
+
+        <!-- Overview -->
+        <div id="overview" class="section active">
+            <div class="company-info">
+                <h3>📋 Company Information</h3>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-value">1994</div>
+                        <p>Year Founded</p>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">Riyadh</div>
+                        <p>Headquarters</p>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">Medical</div>
+                        <p>Specialized Products</p>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">Middle East</div>
+                        <p>Target Market</p>
+                    </div>
                 </div>
-                <div class="stat-card">
-                    <div class="stat-value">الرياض</div>
-                    <p>المقر الرئيسي</p>
+            </div>
+
+            <div class="crisis-indicator">
+                <h3>⚠️ Current Financial Crisis Status</h3>
+                <p>Company facing losses and debts - requires immediate intervention</p>
+            </div>
+
+            <div class="analysis-grid">
+                <div class="analysis-card">
+                    <div class="card-header">
+                        <span class="card-icon">📊</span>
+                        <h3>Market Analysis</h3>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="marketChart"></canvas>
+                    </div>
                 </div>
-                <div class="stat-card">
-                    <div class="stat-value">طبية</div>
-                    <p>المنتجات التخصصية</p>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-value">الشرق الأوسط</div>
-                    <p>السوق المستهدف</p>
+
+                <div class="analysis-card">
+                    <div class="card-header">
+                        <span class="card-icon">💰</span>
+                        <h3>Financial Analysis</h3>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="financialChart"></canvas>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <div class="crisis-indicator">
-            <h3>⚠️ حالة الأزمة المالية الحالية</h3>
-            <p>الشركة تواجه خسائر وديون - يتطلب تدخل فوري</p>
-        </div>
-
-        <div class="gemini-integration">
-            <h3>🤖 مساعد Gemini AI للتحليل المالي</h3>
-            <div class="gemini-chat" id="chatContainer">
-                <div id="chatMessages">
-                    <p><strong>Gemini AI:</strong> مرحباً! أنا مساعدك الذكي لتحليل وضع شركة Saudi Mais Co. سأقوم بتحليل شامل للوضع المالي وتقديم استراتيجيات للخروج من الأزمة.</p>
-                </div>
-            </div>
-            <div class="input-group">
-                <input type="text" id="userInput" placeholder="اسأل عن التحليل المالي أو استراتيجيات الإنقاذ...">
-                <button class="btn" onclick="sendMessage()">إرسال</button>
-                <button class="btn" onclick="startComprehensiveAnalysis()">تحليل شامل</button>
-            </div>
-        </div>
-
-        <div class="analysis-grid">
-            <div class="analysis-card">
+        <!-- Advanced Analysis -->
+        <div id="advanced-analysis" class="section">
+            <div class="section-card">
                 <div class="card-header">
                     <span class="card-icon">📊</span>
-                    <h3>تحليل السوق</h3>
+                    <h3>Advanced Data Analytics System</h3>
                 </div>
-                <div class="chart-container">
-                    <canvas id="marketChart"></canvas>
-                </div>
-                <div id="marketAnalysis">
-                    <h4>تحليل السوق الطبي السعودي:</h4>
-                    <ul>
-                        <li>✅ نمو القطاع الصحي 8.5% سنوياً</li>
-                        <li>⚠️ منافسة شديدة من الشركات العالمية</li>
-                        <li>🎯 فرص في التوطين والاكتفاء الذاتي</li>
-                        <li>📈 زيادة الطلب على المنتجات الطبية</li>
-                    </ul>
-                </div>
-            </div>
-
-            <div class="analysis-card">
-                <div class="card-header">
-                    <span class="card-icon">💰</span>
-                    <h3>التحليل المالي</h3>
-                </div>
-                <div class="chart-container">
-                    <canvas id="financialChart"></canvas>
-                </div>
-                <div id="financialAnalysis">
-                    <h4>المؤشرات المالية الحرجة:</h4>
-                    <div class="solution-card">
-                        <strong>🔴 نقاط الضعف:</strong>
-                        <li>انخفاض التدفق النقدي</li>
-                        <li>زيادة في التكاليف التشغيلية</li>
-                        <li>ديون متراكمة</li>
+                <p>Comprehensive analysis of market trends and operational performance with strategic recommendations</p>
+                
+                <div class="input-section">
+                    <div class="input-options">
+                        <button class="option-btn active" onclick="toggleInputMode('advanced', 'text')">📝 Text Input</button>
+                        <button class="option-btn" onclick="toggleInputMode('advanced', 'file')">📁 File Upload</button>
                     </div>
-                </div>
-            </div>
-
-            <div class="analysis-card">
-                <div class="card-header">
-                    <span class="card-icon">🎯</span>
-                    <h3>التخطيط الاستراتيجي</h3>
-                </div>
-                <div id="strategicPlan">
-                    <h4>خطة الإنقاذ المقترحة:</h4>
-                    <div class="solution-card">
-                        <strong>المرحلة الأولى (0-6 شهور):</strong>
-                        <li>إعادة هيكلة الديون</li>
-                        <li>تقليل التكاليف بنسبة 30%</li>
-                        <li>التركيز على المنتجات عالية الربحية</li>
+                    
+                    <div id="advanced-text" class="input-area active">
+                        <textarea id="advancedTextInput" class="text-input" placeholder="Enter company data for advanced analysis (financial data, sales, production, etc...)"></textarea>
+                        <textarea id="advancedFocusInput" class="focus-input" placeholder="Specific focus areas or questions (e.g., 'Analyze competitor impact in respiratory products sector', 'Evaluate new regulation effects')"></textarea>
                     </div>
-                    <div class="solution-card">
-                        <strong>المرحلة الثانية (6-12 شهر):</strong>
-                        <li>تطوير شراكات استراتيجية</li>
-                        <li>الاستثمار في التكنولوجيا</li>
-                        <li>توسيع قاعدة العملاء</li>
+                    
+                    <div id="advanced-file" class="input-area">
+                        <div class="file-upload" onclick="document.getElementById('advancedFileInput').click()">
+                            <p>📁 Drag file here or click to select</p>
+                            <p style="font-size: 14px; opacity: 0.7;">Supports: Excel, CSV, PDF, Word, TXT</p>
+                            <input type="file" id="advancedFileInput" accept=".xlsx,.xls,.csv,.pdf,.doc,.docx,.txt" onchange="handleFileUpload('advanced', this)">
+                        </div>
+                        <textarea id="advancedFocusInputFile" class="focus-input" placeholder="Specific focus areas for file analysis"></textarea>
                     </div>
+                    
+                    <button class="btn" onclick="startAdvancedAnalysis()">🚀 Start Advanced Analysis</button>
                 </div>
-            </div>
-
-            <div class="analysis-card">
-                <div class="card-header">
-                    <span class="card-icon">🚀</span>
-                    <h3>الابتكار والتطوير</h3>
+                
+                <div id="advancedStatus" class="status-messages">
+                    <div class="status-step" id="advancedStep1">📄 Processing file content...</div>
+                    <div class="status-step" id="advancedStep2">🔄 Sending data to Yazeed AI...</div>
+                    <div class="status-step" id="advancedStep3">🧠 AI analysis in progress...</div>
+                    <div class="status-step" id="advancedStep4">📊 Formatting results...</div>
                 </div>
-                <div id="innovationPlan">
-                    <h4>استراتيجية الابتكار:</h4>
-                    <div class="solution-card">
-                        <strong>🔬 البحث والتطوير:</strong>
-                        <li>تطوير منتجات مبتكرة</li>
-                        <li>تحسين الجودة والمعايير</li>
-                        <li>الاستثمار في التقنيات الحديثة</li>
+                
+                <div id="advancedResults" class="results-section" style="display: none;">
+                    <div class="results-header">
+                        <h4>📊 Advanced Analysis Results</h4>
+                        <div class="export-controls">
+                            <button class="btn export-btn" onclick="exportResults('advanced', 'txt')">📄 Export TXT</button>
+                            <button class="btn export-btn" onclick="exportResults('advanced', 'md')">📝 Export MD</button>
+                            <button class="btn export-btn" onclick="exportResults('advanced', 'pdf')">📑 Export PDF</button>
+                        </div>
                     </div>
-                    <div class="solution-card">
-                        <strong>🌐 التحول الرقمي:</strong>
-                        <li>نظام إدارة متقدم</li>
-                        <li>التجارة الإلكترونية</li>
-                        <li>تحليل البيانات والذكاء الاصطناعي</li>
-                    </div>
+                    <div id="advancedAnalysisContent" class="formatted-content"></div>
                 </div>
             </div>
         </div>
 
-        <div class="recommendations">
-            <h3>🎯 التوصيات الفورية لإنقاذ الشركة</h3>
-            <div id="aiRecommendations">
-                <div class="solution-card">
-                    <h4>📈 استراتيجيات زيادة الإيرادات:</h4>
-                    <li>التوسع في أسواق دول الخليج</li>
-                    <li>تطوير منتجات جديدة عالية الجودة</li>
-                    <li>إقامة شراكات مع المستشفيات الكبرى</li>
-                    <li>الاستفادة من برامج الدعم الحكومية</li>
+        <!-- Quality Management -->
+        <div id="quality-management" class="section">
+            <div class="section-card">
+                <div class="card-header">
+                    <span class="card-icon">🏥</span>
+                    <h3>Smart Quality Management System</h3>
+                </div>
+                <p>Quality monitoring according to international standards ISO 13485 and FDA requirements</p>
+                
+                <div class="input-section">
+                    <div class="input-options">
+                        <button class="option-btn active" onclick="toggleInputMode('quality', 'text')">📝 Text Input</button>
+                        <button class="option-btn" onclick="toggleInputMode('quality', 'file')">📁 File Upload</button>
+                    </div>
+                    
+                    <div id="quality-text" class="input-area active">
+                        <textarea id="qualityTextInput" class="text-input" placeholder="Enter quality data (production defects, customer complaints, test results, etc...)"></textarea>
+                        <textarea id="qualityFocusInput" class="focus-input" placeholder="Quality focus areas (e.g., 'ISO compliance assessment', 'Customer satisfaction analysis')"></textarea>
+                    </div>
+                    
+                    <div id="quality-file" class="input-area">
+                        <div class="file-upload" onclick="document.getElementById('qualityFileInput').click()">
+                            <p>📁 Drag quality data file here</p>
+                            <p style="font-size: 14px; opacity: 0.7;">Quality reports, inspection records, customer complaints</p>
+                            <input type="file" id="qualityFileInput" accept=".xlsx,.xls,.csv,.pdf,.doc,.docx,.txt" onchange="handleFileUpload('quality', this)">
+                        </div>
+                        <textarea id="qualityFocusInputFile" class="focus-input" placeholder="Quality analysis focus areas"></textarea>
+                    </div>
+                    
+                    <button class="btn" onclick="startQualityAnalysis()">🔍 Analyze Quality</button>
                 </div>
                 
-                <div class="solution-card">
-                    <h4>💸 تقليل التكاليف:</h4>
-                    <li>إعادة تفاوض عقود الموردين</li>
-                    <li>تحسين كفاءة العمليات التشغيلية</li>
-                    <li>الاستثمار في التكنولوجيا الموفرة</li>
-                    <li>تقليل الهدر في الإنتاج</li>
+                <div id="qualityStatus" class="status-messages">
+                    <div class="status-step" id="qualityStep1">📄 Reading quality data...</div>
+                    <div class="status-step" id="qualityStep2">🔄 Sending to AI analysis...</div>
+                    <div class="status-step" id="qualityStep3">🏥 Quality assessment in progress...</div>
+                    <div class="status-step" id="qualityStep4">📊 Generating quality report...</div>
                 </div>
+                
+                <div id="qualityResults" class="results-section" style="display: none;">
+                    <div class="results-header">
+                        <h4>🏥 Quality Analysis Results</h4>
+                        <div class="export-controls">
+                            <button class="btn export-btn" onclick="exportResults('quality', 'txt')">📄 Export TXT</button>
+                            <button class="btn export-btn" onclick="exportResults('quality', 'md')">📝 Export MD</button>
+                            <button class="btn export-btn" onclick="exportResults('quality', 'pdf')">📑 Export PDF</button>
+                        </div>
+                    </div>
+                    <div id="qualityAnalysisContent" class="formatted-content"></div>
+                </div>
+            </div>
+        </div>
 
-                <div class="solution-card">
-                    <h4>🏦 إدارة الديون:</h4>
-                    <li>إعادة هيكلة الديون مع البنوك</li>
-                    <li>البحث عن مستثمرين استراتيجيين</li>
-                    <li>تحسين دورة رأس المال العامل</li>
-                    <li>وضع خطة سداد متدرجة</li>
+        <!-- Demand Forecasting -->
+        <div id="demand-forecasting" class="section">
+            <div class="section-card">
+                <div class="card-header">
+                    <span class="card-icon">📈</span>
+                    <h3>Demand Forecasting & Inventory System</h3>
+                </div>
+                <p>Predict future demand and optimize inventory levels using artificial intelligence</p>
+                
+                <div class="input-section">
+                    <div class="input-options">
+                        <button class="option-btn active" onclick="toggleInputMode('demand', 'text')">📝 Text Input</button>
+                        <button class="option-btn" onclick="toggleInputMode('demand', 'file')">📁 File Upload</button>
+                    </div>
+                    
+                    <div id="demand-text" class="input-area active">
+                        <textarea id="demandTextInput" class="text-input" placeholder="Enter historical sales and inventory data (periods, quantities, seasons, etc...)"></textarea>
+                        <textarea id="demandFocusInput" class="focus-input" placeholder="Forecasting focus (e.g., 'Q4 seasonal trends', 'New product demand projection')"></textarea>
+                    </div>
+                    
+                    <div id="demand-file" class="input-area">
+                        <div class="file-upload" onclick="document.getElementById('demandFileInput').click()">
+                            <p>📁 Drag sales and inventory data file</p>
+                            <p style="font-size: 14px; opacity: 0.7;">Historical sales data, inventory levels</p>
+                            <input type="file" id="demandFileInput" accept=".xlsx,.xls,.csv,.pdf,.doc,.docx,.txt" onchange="handleFileUpload('demand', this)">
+                        </div>
+                        <textarea id="demandFocusInputFile" class="focus-input" placeholder="Demand forecasting focus areas"></textarea>
+                    </div>
+                    
+                    <button class="btn" onclick="startDemandForecasting()">📊 Forecast Demand</button>
+                </div>
+                
+                <div id="demandStatus" class="status-messages">
+                    <div class="status-step" id="demandStep1">📄 Processing historical data...</div>
+                    <div class="status-step" id="demandStep2">🔄 AI model preparation...</div>
+                    <div class="status-step" id="demandStep3">📈 Generating forecasts...</div>
+                    <div class="status-step" id="demandStep4">📊 Creating inventory recommendations...</div>
+                </div>
+                
+                <div id="demandResults" class="results-section" style="display: none;">
+                    <div class="results-header">
+                        <h4>📈 Demand Forecasting Results</h4>
+                        <div class="export-controls">
+                            <button class="btn export-btn" onclick="exportResults('demand', 'txt')">📄 Export TXT</button>
+                            <button class="btn export-btn" onclick="exportResults('demand', 'md')">📝 Export MD</button>
+                            <button class="btn export-btn" onclick="exportResults('demand', 'pdf')">📑 Export PDF</button>
+                        </div>
+                    </div>
+                    <div id="demandAnalysisContent" class="formatted-content"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Competitor Analysis -->
+        <div id="competitor-analysis" class="section">
+            <div class="section-card">
+                <div class="card-header">
+                    <span class="card-icon">🎯</span>
+                    <h3>Competitor Analysis System</h3>
+                </div>
+                <p>Comprehensive competitive analysis in the medical equipment market and strategic opportunity identification</p>
+                
+                <div class="input-section">
+                    <div class="input-options">
+                        <button class="option-btn active" onclick="toggleInputMode('competitor', 'text')">📝 Text Input</button>
+                        <button class="option-btn" onclick="toggleInputMode('competitor', 'file')">📁 File Upload</button>
+                    </div>
+                    
+                    <div id="competitor-text" class="input-area active">
+                        <textarea id="competitorTextInput" class="text-input" placeholder="Enter competitor data (company names, prices, services, strengths and weaknesses, etc...)"></textarea>
+                        <textarea id="competitorFocusInput" class="focus-input" placeholder="Competitive analysis focus (e.g., 'Pricing strategy comparison', 'Market positioning analysis')"></textarea>
+                    </div>
+                    
+                    <div id="competitor-file" class="input-area">
+                        <div class="file-upload" onclick="document.getElementById('competitorFileInput').click()">
+                            <p>📁 Drag competitor data file</p>
+                            <p style="font-size: 14px; opacity: 0.7;">Market reports, competitor information, comparison studies</p>
+                            <input type="file" id="competitorFileInput" accept=".xlsx,.xls,.csv,.pdf,.doc,.docx,.txt" onchange="handleFileUpload('competitor', this)">
+                        </div>
+                        <textarea id="competitorFocusInputFile" class="focus-input" placeholder="Competitor analysis focus areas"></textarea>
+                    </div>
+                    
+                    <button class="btn" onclick="startCompetitorAnalysis()">🔎 Analyze Competition</button>
+                </div>
+                
+                <div id="competitorStatus" class="status-messages">
+                    <div class="status-step" id="competitorStep1">📄 Processing competitor data...</div>
+                    <div class="status-step" id="competitorStep2">🔄 Market analysis in progress...</div>
+                    <div class="status-step" id="competitorStep3">🎯 Competitive positioning analysis...</div>
+                    <div class="status-step" id="competitorStep4">📊 Strategic recommendations generation...</div>
+                </div>
+                
+                <div id="competitorResults" class="results-section" style="display: none;">
+                    <div class="results-header">
+                        <h4>🎯 Competitor Analysis Results</h4>
+                        <div class="export-controls">
+                            <button class="btn export-btn" onclick="exportResults('competitor', 'txt')">📄 Export TXT</button>
+                            <button class="btn export-btn" onclick="exportResults('competitor', 'md')">📝 Export MD</button>
+                            <button class="btn export-btn" onclick="exportResults('competitor', 'pdf')">📑 Export PDF</button>
+                        </div>
+                    </div>
+                    <div id="competitorAnalysisContent" class="formatted-content"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- AI Assistant -->
+        <div id="ai-chat" class="section">
+            <div class="gemini-integration">
+                <h3>🤖 Yazeed AI Smart Assistant</h3>
+                <div class="gemini-chat" id="chatContainer">
+                    <div id="chatMessages">
+                        <p><strong>Yazeed AI:</strong> Welcome! I'm your smart assistant for analyzing Saudi Mais Co.'s situation. I'll provide comprehensive analysis of the financial situation and strategies for crisis recovery.</p>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <input type="text" id="userInput" placeholder="Ask about financial analysis or recovery strategies...">
+                    <button class="btn" onclick="sendMessage()">Send</button>
+                    <button class="btn" onclick="startComprehensiveAnalysis()">Comprehensive Analysis</button>
                 </div>
             </div>
         </div>
@@ -482,281 +1308,1586 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
     <script>
-        // إعداد المخططات
-        function initializeCharts() {
-            // مخطط تحليل السوق
-            const marketCtx = document.getElementById('marketChart').getContext('2d');
-            new Chart(marketCtx, {
-                type: 'radar',
-                data: {
-                    labels: ['حجم السوق', 'النمو', 'المنافسة', 'الجودة', 'السعر', 'التوزيع'],
-                    datasets: [{
-                        label: 'الوضع الحالي',
-                        data: [40, 30, 25, 70, 60, 45],
-                        backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                        borderColor: 'rgba(255, 99, 132, 1)',
-                        borderWidth: 2
-                    }, {
-                        label: 'الهدف المستقبلي',
-                        data: [80, 75, 70, 90, 85, 80],
-                        backgroundColor: 'rgba(54, 162, 235, 0.2)',
-                        borderColor: 'rgba(54, 162, 235, 1)',
-                        borderWidth: 2
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            labels: { color: 'white' }
-                        }
-                    },
-                    scales: {
-                        r: {
-                            angleLines: { color: 'rgba(255, 255, 255, 0.1)' },
-                            grid: { color: 'rgba(255, 255, 255, 0.1)' },
-                            pointLabels: { color: 'white' },
-                            ticks: { backdropColor: 'transparent', color: 'white' }
-                        }
-                    }
-                }
-            });
+        // System variables
+        let currentSection = 'overview';
+        let uploadedFiles = {};
+        let analysisHistory = {};
+        let fileContents = {};
 
-            // مخطط التحليل المالي
-            const financialCtx = document.getElementById('financialChart').getContext('2d');
-            new Chart(financialCtx, {
-                type: 'line',
-                data: {
-                    labels: ['2020', '2021', '2022', '2023', '2024', '2025 (مخطط)'],
-                    datasets: [{
-                        label: 'الإيرادات (مليون ريال)',
-                        data: [50, 45, 40, 35, 30, 60],
-                        borderColor: 'rgb(75, 192, 192)',
-                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                        tension: 0.4
-                    }, {
-                        label: 'الأرباح (مليون ريال)',
-                        data: [10, 5, 0, -5, -10, 15],
-                        borderColor: 'rgb(255, 99, 132)',
-                        backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                        tension: 0.4
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            labels: { color: 'white' }
-                        }
+        // Gemini API settings (replace with actual key)
+        const GEMINI_API_KEY = 'AIzaSyCV3Kb2rHMQoyAiYkrAFA82UlcGbYAAC0M';
+        const GEMINI_API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent';
+
+        // Check API connection status
+        function checkAPIConnection() {
+            const status = document.getElementById('apiStatus');
+            if (GEMINI_API_KEY !== 'YOUR_GEMINI_API_KEY_HERE') {
+                status.className = 'api-status api-connected';
+                status.innerHTML = '🟢 Connected to Yazeed AI API';
+            } else {
+                status.className = 'api-status api-disconnected';
+                status.innerHTML = '🔴 Not connected to Yazeed AI API';
+            }
+        }
+
+        // Initialize charts
+        function initializeCharts() {
+            // Market analysis chart
+            const marketCtx = document.getElementById('marketChart');
+            if (marketCtx) {
+                new Chart(marketCtx.getContext('2d'), {
+                    type: 'radar',
+                    data: {
+                        labels: ['Market Size', 'Growth', 'Competition', 'Quality', 'Price', 'Distribution'],
+                        datasets: [{
+                            label: 'Current Status',
+                            data: [40, 30, 25, 70, 60, 45],
+                            backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                            borderColor: 'rgba(255, 99, 132, 1)',
+                            borderWidth: 2
+                        }, {
+                            label: 'Future Target',
+                            data: [80, 75, 70, 90, 85, 80],
+                            backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                            borderColor: 'rgba(54, 162, 235, 1)',
+                            borderWidth: 2
+                        }]
                     },
-                    scales: {
-                        y: {
-                            grid: { color: 'rgba(255, 255, 255, 0.1)' },
-                            ticks: { color: 'white' }
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                labels: { color: 'white' }
+                            }
                         },
-                        x: {
-                            grid: { color: 'rgba(255, 255, 255, 0.1)' },
-                            ticks: { color: 'white' }
+                        scales: {
+                            r: {
+                                angleLines: { color: 'rgba(255, 255, 255, 0.1)' },
+                                grid: { color: 'rgba(255, 255, 255, 0.1)' },
+                                pointLabels: { color: 'white' },
+                                ticks: { backdropColor: 'transparent', color: 'white' }
+                            }
                         }
                     }
+                });
+            }
+
+            // Financial analysis chart
+            const financialCtx = document.getElementById('financialChart');
+            if (financialCtx) {
+                new Chart(financialCtx.getContext('2d'), {
+                    type: 'line',
+                    data: {
+                        labels: ['2020', '2021', '2022', '2023', '2024', '2025 (Planned)'],
+                        datasets: [{
+                            label: 'Revenue (Million SAR)',
+                            data: [50, 45, 40, 35, 30, 60],
+                            borderColor: 'rgb(75, 192, 192)',
+                            backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                            tension: 0.4
+                        }, {
+                            label: 'Profit (Million SAR)',
+                            data: [10, 5, 0, -5, -10, 15],
+                            borderColor: 'rgb(255, 99, 132)',
+                            backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                            tension: 0.4
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                labels: { color: 'white' }
+                            }
+                        },
+                        scales: {
+                            y: {
+                                grid: { color: 'rgba(255, 255, 255, 0.1)' },
+                                ticks: { color: 'white' }
+                            },
+                            x: {
+                                grid: { color: 'rgba(255, 255, 255, 0.1)' },
+                                ticks: { color: 'white' }
+                            }
+                        }
+                    }
+                });
+            }
+        }
+
+        // Navigate between sections
+        function showSection(sectionId) {
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            document.getElementById(sectionId).classList.add('active');
+            event.target.classList.add('active');
+            currentSection = sectionId;
+        }
+
+        // Toggle input mode (text or file)
+        function toggleInputMode(section, mode) {
+            const textArea = document.getElementById(`${section}-text`);
+            const fileArea = document.getElementById(`${section}-file`);
+            const buttons = document.querySelectorAll(`#${section} .option-btn`);
+            
+            buttons.forEach(btn => btn.classList.remove('active'));
+            
+            if (mode === 'text') {
+                textArea.classList.add('active');
+                fileArea.classList.remove('active');
+                buttons[0].classList.add('active');
+            } else {
+                textArea.classList.remove('active');
+                fileArea.classList.add('active');
+                buttons[1].classList.add('active');
+            }
+        }
+
+        // Handle file upload and content reading
+        async function handleFileUpload(section, input) {
+            const file = input.files[0];
+            if (file) {
+                uploadedFiles[section] = file;
+                const uploadArea = input.parentElement;
+                
+                uploadArea.innerHTML = `
+                    <div class="file-processing">
+                        <div class="loading-enhanced">
+                            <div class="loading-dots">
+                                <div class="loading-dot"></div>
+                                <div class="loading-dot"></div>
+                                <div class="loading-dot"></div>
+                            </div>
+                            Reading file content: ${file.name}
+                        </div>
+                    </div>
+                `;
+
+                try {
+                    let content = '';
+                    
+                    if (file.type === 'text/plain' || file.name.endsWith('.txt')) {
+                        content = await readTextFile(file);
+                    } else if (file.type === 'text/csv' || file.name.endsWith('.csv')) {
+                        content = await readTextFile(file);
+                    } else if (file.type === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' || file.name.endsWith('.docx')) {
+                        content = await readDocxFile(file);
+                    } else if (file.type === 'application/pdf' || file.name.endsWith('.pdf')) {
+                        content = 'PDF content extraction requires specialized library - file uploaded for processing';
+                    } else {
+                        content = `File uploaded: ${file.name} (${(file.size / 1024 / 1024).toFixed(2)} MB)`;
+                    }
+                    
+                    fileContents[section] = content;
+                    
+                    uploadArea.innerHTML = `
+                        <div style="background: rgba(76, 175, 80, 0.2); border: 1px solid rgba(76, 175, 80, 0.5); padding: 15px; border-radius: 10px;">
+                            <p>✅ File processed: ${file.name}</p>
+                            <p style="font-size: 14px; opacity: 0.7;">Size: ${(file.size / 1024 / 1024).toFixed(2)} MB</p>
+                            <p style="font-size: 12px; margin-top: 10px; max-height: 100px; overflow-y: auto;">
+                                Content preview: ${content.substring(0, 200)}${content.length > 200 ? '...' : ''}
+                            </p>
+                            <button class="btn" onclick="clearFile('${section}')" style="margin-top: 10px;">🗑️ Remove File</button>
+                        </div>
+                    `;
+                } catch (error) {
+                    uploadArea.innerHTML = `
+                        <div style="background: rgba(244, 67, 54, 0.2); border: 1px solid rgba(244, 67, 54, 0.5); padding: 15px; border-radius: 10px;">
+                            <p>❌ Error reading file: ${error.message}</p>
+                            <button class="btn" onclick="clearFile('${section}')" style="margin-top: 10px;">🗑️ Remove File</button>
+                        </div>
+                    `;
                 }
+            }
+        }
+
+        // Read text file
+        function readTextFile(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = e => resolve(e.target.result);
+                reader.onerror = e => reject(new Error('Failed to read file'));
+                reader.readAsText(file);
             });
         }
 
-        // محاكاة Gemini API
-        const geminiResponses = {
-            'تحليل مالي': `
-                <strong>🔍 التحليل المالي الشامل لشركة Saudi Mais Co:</strong><br><br>
-                
-                <strong style="color: #ff6b6b;">📉 المؤشرات الحرجة:</strong><br>
-                • انخفاض الإيرادات بنسبة 40% خلال 4 سنوات<br>
-                • تراكم خسائر تقدر بـ 25 مليون ريال<br>
-                • نسبة الديون إلى الأصول: 75%<br>
-                • انخفاض السيولة النقدية بشكل حاد<br><br>
-                
-                <strong style="color: #4ecdc4;">💡 الأسباب الجذرية:</strong><br>
-                • المنافسة الشديدة من الشركات العالمية<br>
-                • ارتفاع تكاليف المواد الخام<br>
-                • نقص في الاستثمار في التطوير<br>
-                • ضعف في استراتيجيات التسويق<br><br>
-                
-                <strong style="color: #00c6ff;">🎯 خطة الإنقاذ المقترحة:</strong><br>
-                1. إعادة هيكلة الديون مع البنوك<br>
-                2. تقليل التكاليف التشغيلية بنسبة 30%<br>
-                3. التركيز على المنتجات عالية الربحية<br>
-                4. البحث عن شريك استراتيجي أو مستثمر<br>
-                5. تطوير منتجات مبتكرة للأسواق الجديدة
-            `,
-            
-            'استراتيجيات': `
-                <strong>🚀 استراتيجيات التعافي والنمو:</strong><br><br>
-                
-                <strong style="color: #ff6b6b;">⚡ المرحلة الأولى - الإنقاذ الفوري (0-6 شهور):</strong><br>
-                • التفاوض مع الدائنين لإعادة جدولة الديون<br>
-                • وقف جميع النفقات غير الضرورية<br>
-                • تسريح 20% من الموظفين (مع التعويض المناسب)<br>
-                • بيع الأصول غير المستغلة<br>
-                • التركيز على أفضل 3 منتجات ربحية<br><br>
-                
-                <strong style="color: #4ecdc4;">📈 المرحلة الثانية - الاستقرار (6-12 شهر):</strong><br>
-                • إعادة تصميم العمليات التشغيلية<br>
-                • الاستثمار في تقنيات التصنيع الحديثة<br>
-                • بناء شراكات مع المستشفيات الحكومية<br>
-                • تطوير قنوات التوزيع الإلكترونية<br>
-                • تحسين جودة المنتجات وخفض التكاليف<br><br>
-                
-                <strong style="color: #00c6ff;">🌟 المرحلة الثالثة - النمو (12-24 شهر):</strong><br>
-                • التوسع في أسواق دول الخليج<br>
-                • تطوير منتجات جديدة مبتكرة<br>
-                • الاستثمار في البحث والتطوير<br>
-                • بناء علامة تجارية قوية<br>
-                • طرح أسهم في السوق المالية
-            `,
-            
-            'منتجات': `
-                <strong>🏥 تحليل محفظة المنتجات الطبية:</strong><br><br>
-                
-                <strong style="color: #4ecdc4;">📊 المنتجات الحالية:</strong><br>
-                • منتجات الجهاز التنفسي والتخدير<br>
-                • العلاج بالأكسجين والعناية المركزة<br>
-                • منتجات حديثي الولادة<br>
-                • أدوات الجراحة العامة والمسالك البولية<br>
-                • منتجات أمراض النساء والولادة<br><br>
-                
-                <strong style="color: #ff6b6b;">⚠️ التحديات:</strong><br>
-                • منافسة شديدة من الشركات العالمية<br>
-                • ارتفاع تكاليف المواد الخام<br>
-                • تغير متطلبات السوق والمعايير<br>
-                • نقص في الابتكار والتطوير<br><br>
-                
-                <strong style="color: #00c6ff;">💡 الفرص المتاحة:</strong><br>
-                • الاستفادة من برنامج التوطين الصحي<br>
-                • تطوير منتجات للرعاية المنزلية<br>
-                • منتجات التطبيب عن بعد<br>
-                • المنتجات الذكية والمتصلة<br>
-                • التوسع في الأسواق الأفريقية<br><br>
-                
-                <strong style="color: #4ecdc4;">🎯 التوصيات:</strong><br>
-                1. التركيز على أفضل 3 خطوط إنتاج ربحية<br>
-                2. تطوير منتجات مبتكرة بالشراكة مع الجامعات<br>
-                3. الحصول على شهادات جودة عالمية<br>
-                4. بناء مختبر للبحث والتطوير<br>
-                5. إنشاء قسم للذكاء الاصطناعي والتقنيات الذكية
-            `,
-            
-            'default': `
-                <strong>🤖 مساعد Gemini AI:</strong><br><br>
-                
-                أنا هنا لمساعدة شركة Saudi Mais Co في تحليل وضعها المالي الحالي وتقديم حلول عملية للخروج من الأزمة.<br><br>
-                
-                <strong>يمكنني مساعدتك في:</strong><br>
-                • التحليل المالي الشامل<br>
-                • وضع استراتيجيات الإنقاذ<br>
-                • تحليل السوق والمنافسة<br>
-                • تطوير خطط النمو<br>
-                • تحسين العمليات التشغيلية<br><br>
-                
-                <strong>للحصول على تحليل مفصل، جرب هذه الكلمات:</strong><br>
-                • "تحليل مالي"<br>
-                • "استراتيجيات"<br>
-                • "منتجات"<br>
-                • "تحليل شامل"
-            `
-        };
+        // Read DOCX file (basic text extraction)
+        async function readDocxFile(file) {
+            // This is a simplified version - in production, you'd use a library like mammoth.js
+            const text = await readTextFile(file);
+            return `DOCX content (basic extraction): ${text.substring(0, 1000)}`;
+        }
 
-        function sendMessage() {
+        // Clear uploaded file
+        function clearFile(section) {
+            delete uploadedFiles[section];
+            delete fileContents[section];
+            const fileInput = document.getElementById(`${section}FileInput`);
+            const uploadArea = fileInput.parentElement;
+            
+            uploadArea.innerHTML = `
+                <p>📁 Drag file here or click to select</p>
+                <p style="font-size: 14px; opacity: 0.7;">Supports: Excel, CSV, PDF, Word, TXT</p>
+                <input type="file" id="${section}FileInput" accept=".xlsx,.xls,.csv,.pdf,.doc,.docx,.txt" onchange="handleFileUpload('${section}', this)">
+            `;
+        }
+
+        // Show analysis status
+        function showAnalysisStatus(section, steps) {
+            const statusElement = document.getElementById(`${section}Status`);
+            statusElement.style.display = 'block';
+            
+            // Reset all steps
+            steps.forEach((_, index) => {
+                const step = document.getElementById(`${section}Step${index + 1}`);
+                step.classList.remove('active');
+            });
+            
+            // Activate steps sequentially
+            steps.forEach((stepText, index) => {
+                setTimeout(() => {
+                    const step = document.getElementById(`${section}Step${index + 1}`);
+                    step.classList.add('active');
+                    step.innerHTML = `✅ ${stepText}`;
+                }, index * 1000);
+            });
+            
+            // Hide status after completion
+            setTimeout(() => {
+                statusElement.style.display = 'none';
+            }, steps.length * 1000 + 1000);
+        }
+
+        // Call Gemini API
+        async function callGeminiAPI(prompt) {
+            if (GEMINI_API_KEY === 'YOUR_GEMINI_API_KEY_HERE') {
+                return await simulateGeminiResponse(prompt);
+            }
+
+            try {
+                const response = await fetch(`${GEMINI_API_URL}?key=${GEMINI_API_KEY}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        contents: [{
+                            parts: [{
+                                text: prompt
+                            }]
+                        }]
+                    })
+                });
+
+                const data = await response.json();
+                return data.candidates[0].content.parts[0].text;
+            } catch (error) {
+                console.error('Error calling Gemini API:', error);
+                return await simulateGeminiResponse(prompt);
+            }
+        }
+
+        // Simulate Gemini response
+        async function simulateGeminiResponse(prompt) {
+            await new Promise(resolve => setTimeout(resolve, 2000));
+            
+            if (prompt.includes('advanced analysis') || prompt.includes('التحليل المتقدم')) {
+                return generateAdvancedAnalysisResponse();
+            } else if (prompt.includes('quality') || prompt.includes('الجودة')) {
+                return generateQualityAnalysisResponse();
+            } else if (prompt.includes('demand') || prompt.includes('inventory') || prompt.includes('الطلب') || prompt.includes('المخزون')) {
+                return generateDemandForecastResponse();
+            } else if (prompt.includes('competitor') || prompt.includes('المنافس')) {
+                return generateCompetitorAnalysisResponse();
+            } else {
+                return generateDefaultResponse();
+            }
+        }
+
+        // Enhanced format content for better display
+        function formatContent(content) {
+            // Convert basic markdown-like formatting to HTML with enhanced styling
+            let formatted = content
+                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                .replace(/\*(.*?)\*/g, '<em>$1</em>')
+                .replace(/###\s(.*?)$/gm, '<h3>$1</h3>')
+                .replace(/##\s(.*?)$/gm, '<h2>$1</h2>')
+                .replace(/#\s(.*?)$/gm, '<h1>$1</h1>')
+                .replace(/^\s*\*\s(.*)$/gm, '<li>$1</li>')
+                .replace(/^\s*\d+\.\s(.*)$/gm, '<li>$1</li>');
+            
+            // Add enhanced visual elements
+            formatted = formatted.replace(/(<li>.*<\/li>)/gs, '<ul>$1</ul>');
+            formatted = formatted.replace(/^(?!<[uo]l>|<h[1-6]>|<li>|<\/[uo]l>|<div)(.+)$/gm, '<p>$1</p>');
+            
+            // Add special boxes for recommendations
+            formatted = formatted.replace(/\[RECOMMENDATION\](.*?)\[\/RECOMMENDATION\]/gs, '<div class="recommendation-box">💡 $1</div>');
+            formatted = formatted.replace(/\[WARNING\](.*?)\[\/WARNING\]/gs, '<div class="warning-box">⚠️ $1</div>');
+            formatted = formatted.replace(/\[CRITICAL\](.*?)\[\/CRITICAL\]/gs, '<div class="critical-box">🚨 $1</div>');
+            
+            // Add metric cards
+            formatted = formatted.replace(/\[METRIC\](.*?):(.*?)\[\/METRIC\]/gs, 
+                '<div class="metric-card"><div class="metric-value">$2</div><div class="metric-label">$1</div></div>');
+            
+            return formatted;
+        }
+
+        // Export results with enhanced formatting
+        function exportResults(section, format) {
+            const content = document.getElementById(`${section}AnalysisContent`).innerText;
+            const timestamp = new Date().toISOString().split('T')[0];
+            const filename = `${section}_analysis_${timestamp}.${format}`;
+            
+            let exportContent = content;
+            if (format === 'md') {
+                exportContent = convertToMarkdown(content);
+            } else if (format === 'pdf') {
+                exportToPDF(content, filename);
+                return;
+            }
+            
+            const blob = new Blob([exportContent], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        function convertToMarkdown(content) {
+            return `# Saudi Mais Co. Analysis Report\n\n${content}\n\n---\n*Generated on ${new Date().toLocaleString()}*`;
+        }
+
+        function exportToPDF(content, filename) {
+            // This would require a PDF library like jsPDF
+            alert('PDF export feature requires additional library. Exporting as text instead.');
+            exportResults(currentSection.replace('-', ''), 'txt');
+        }
+
+        // Generate specialized responses with enhanced formatting
+        function generateAdvancedAnalysisResponse() {
+            return formatContent(`
+                # Comprehensive Data Analysis Report
+
+                ## Executive Summary
+                Saudi Mais Co. faces critical challenges but possesses significant untapped potential in the rapidly growing Saudi medical market.
+
+                [METRIC]Market Growth Rate:8.5%[/METRIC]
+                [METRIC]Local Demand Increase:15%[/METRIC]
+                [METRIC]Gulf Expansion Potential:40%[/METRIC]
+
+                ## Market Trends Analysis
+
+                ### Current Market Position
+                * Saudi medical market experiencing **unprecedented growth** at 8.5% annually
+                * Government Vision 2030 driving **localization initiatives**
+                * Private healthcare sector expansion creating **new opportunities**
+                * Post-pandemic demand for medical equipment remains **consistently high**
+
+                ### Competitive Landscape
+                * International competitors hold **65% market share**
+                * Local manufacturers gaining traction through **government support**
+                * MAIS currently holds **8% market share** with potential for significant growth
+                * **Price sensitivity** in government procurement presents opportunities
+
+                ## Operational Performance Assessment
+
+                ### Production Efficiency Analysis
+                [METRIC]Current Efficiency:65%[/METRIC]
+                [METRIC]Improvement Potential:25%[/METRIC]
+                [METRIC]Cost Savings Potential:3.2M SAR[/METRIC]
+
+                ### Key Performance Indicators
+                * Manufacturing defect rate: **2.1%** (industry average: 3.5%)
+                * Customer satisfaction score: **78%** (target: 85%)
+                * On-time delivery performance: **82%** (target: 95%)
+                * Inventory turnover ratio: **4.2x** (industry best: 6x)
+
+                ## Strategic Recommendations
+
+                ### Immediate Actions (0-6 months)
+                1. **Implement lean manufacturing principles** to reduce waste by 15%
+                2. **Establish quality control automation** to achieve <1% defect rate
+                3. **Diversify supplier base** to reduce dependency risks
+                4. **Launch digital marketing campaign** targeting private hospitals
+
+                [RECOMMENDATION]Focus on home healthcare products segment - projected 25% growth in next 2 years[/RECOMMENDATION]
+
+                ### Medium-term Strategy (6-18 months)
+                1. **Invest in AI-powered production planning** systems
+                2. **Develop strategic partnerships** with international distributors
+                3. **Expand product line** to include disposable medical supplies
+                4. **Implement ERP system** for better resource management
+
+                ### Long-term Vision (18+ months)
+                1. **Establish manufacturing hub** for Gulf region export
+                2. **Develop proprietary medical technologies**
+                3. **Create medical device innovation center**
+                4. **Target 20% market share** by 2027
+
+                ## Financial Recovery Plan
+
+                ### Revenue Enhancement
+                * **Product portfolio optimization**: Focus on high-margin items
+                * **Geographic expansion**: Target UAE and Kuwait markets
+                * **Service offerings**: Add maintenance and training services
+                * **Government contracts**: Leverage local content requirements
+
+                [METRIC]Projected Revenue Growth:25%[/METRIC]
+                [METRIC]Target Market Share:15%[/METRIC]
+                [METRIC]Cost Reduction Target:20%[/METRIC]
+
+                ### Risk Mitigation
+                [WARNING]Currency fluctuations may impact imported component costs by 5-8%[/WARNING]
+                [WARNING]Regulatory changes in medical device standards require continuous monitoring[/WARNING]
+
+                ## Innovation Opportunities
+
+                ### Technology Integration
+                * **IoT-enabled medical devices** for remote monitoring
+                * **AI-powered diagnostic tools** development
+                * **Telemedicine equipment** manufacturing
+                * **Smart hospital solutions** integration
+
+                ### Market Gaps
+                * **Pediatric medical equipment** - underserved segment
+                * **Emergency response kits** - growing demand
+                * **Home healthcare devices** - expanding market
+                * **Elderly care products** - demographic trend opportunity
+
+                ## Conclusion
+
+                Saudi Mais Co. stands at a critical juncture with significant opportunities for growth and recovery. The combination of market expansion, government support, and technological advancement creates a favorable environment for strategic repositioning.
+
+                [RECOMMENDATION]Immediate focus should be on operational efficiency improvement while building capabilities for future market expansion[/RECOMMENDATION]
+
+                **Success requires coordinated execution across all recommended areas with continuous monitoring and adaptation to market changes.**
+            `);
+        }
+
+        function generateQualityAnalysisResponse() {
+            return formatContent(`
+                # Quality Management Assessment Report
+
+                ## Quality Status Overview
+                
+                [METRIC]Overall Quality Score:78%[/METRIC]
+                [METRIC]Defect Rate:2.3%[/METRIC]
+                [METRIC]Customer Satisfaction:82%[/METRIC]
+                [METRIC]ISO Compliance:85%[/METRIC]
+
+                ## Quality Performance Analysis
+
+                ### Current Quality Metrics
+                * **Manufacturing defects**: 1.2% (Target: <1%)
+                * **Packaging defects**: 0.8% (Acceptable: <0.5%)
+                * **Delivery defects**: 0.3% (Excellent: target <0.5%)
+                * **Customer complaints**: 0.7% (Industry average: 1.2%)
+
+                ### Defect Analysis by Category
+
+                #### Critical Defects (Immediate Attention Required)
+                * **Sterilization process failures**: 0.15% of products
+                * **Dimensional tolerances**: 0.25% variance from specifications
+                * **Material composition deviations**: 0.18% of batches
+
+                [CRITICAL]Sterilization failures pose regulatory compliance risk and must be addressed immediately[/CRITICAL]
+
+                #### Major Defects (Short-term Resolution)
+                * **Packaging integrity issues**: 0.45% of shipments
+                * **Labeling errors**: 0.32% of products
+                * **Documentation inconsistencies**: 0.28% of records
+
+                #### Minor Defects (Continuous Improvement)
+                * **Surface finish variations**: 0.65% of products
+                * **Color consistency**: 0.43% deviation
+                * **Weight variations**: 0.21% outside tolerance
+
+                ## Compliance Assessment
+
+                ### ISO 13485 Medical Device Standards
+                [METRIC]Current Compliance:85%[/METRIC]
+                
+                **Compliant Areas:**
+                * Design controls: **92%**
+                * Risk management: **88%**
+                * Corrective and preventive actions: **84%**
+                * Management responsibility: **90%**
+
+                **Areas Requiring Improvement:**
+                * Document control: **78%** (Target: >90%)
+                * Process validation: **76%** (Target: >85%)
+                * Supplier controls: **72%** (Critical improvement needed)
+
+                ### Saudi FDA Requirements
+                [METRIC]Compliance Level:78%[/METRIC]
+
+                [WARNING]Registration renewals for 3 product categories due within 6 months[/WARNING]
+
+                ### CE Marking Compliance (Export Markets)
+                [METRIC]Compliance Level:90%[/METRIC]
+                
+                **Strong performance in:**
+                * Technical documentation: **95%**
+                * Conformity assessment: **92%**
+                * Declaration of conformity: **88%**
+
+                ## Quality Improvement Roadmap
+
+                ### Phase 1: Immediate Actions (0-3 months)
+                1. **Upgrade sterilization validation protocols**
+                   - Implement continuous monitoring systems
+                   - Enhanced process documentation
+                   - Staff retraining on critical parameters
+
+                2. **Strengthen supplier quality controls**
+                   - Implement supplier auditing program
+                   - Establish incoming material inspection protocols
+                   - Develop supplier scorecards
+
+                [RECOMMENDATION]Invest in automated quality inspection systems to reduce human error by 60%[/RECOMMENDATION]
+
+                ### Phase 2: System Enhancement (3-9 months)
+                1. **Implement Six Sigma methodology**
+                   - Train quality champions
+                   - Define critical quality characteristics
+                   - Establish statistical process control
+
+                2. **Digital quality management system**
+                   - Real-time quality dashboard
+                   - Automated non-conformance tracking
+                   - Predictive quality analytics
+
+                ### Phase 3: Advanced Quality Systems (9-18 months)
+                1. **AI-powered quality prediction**
+                   - Machine learning defect detection
+                   - Predictive maintenance integration
+                   - Advanced process optimization
+
+                2. **Total Quality Management culture**
+                   - Employee quality ownership programs
+                   - Continuous improvement initiatives
+                   - Customer feedback integration loops
+
+                ## Customer Satisfaction Enhancement
+
+                ### Current Customer Feedback Analysis
+                * **Product quality satisfaction**: 85% (Good)
+                * **Delivery performance**: 78% (Needs improvement)
+                * **Technical support**: 72% (Requires attention)
+                * **Documentation quality**: 80% (Acceptable)
+
+                ### Improvement Initiatives
+                1. **Enhanced customer communication**
+                   - Proactive quality notifications
+                   - Regular satisfaction surveys
+                   - Dedicated quality liaison team
+
+                2. **Service quality enhancement**
+                   - Faster complaint resolution (Target: <48 hours)
+                   - Technical support training
+                   - Quality documentation improvement
+
+                ## Quality Cost Analysis
+
+                ### Cost of Quality Breakdown
+                * **Prevention costs**: 15% of quality budget
+                * **Appraisal costs**: 45% of quality budget
+                * **Internal failure costs**: 25% of quality budget
+                * **External failure costs**: 15% of quality budget
+
+                [RECOMMENDATION]Increase prevention costs to 30% to significantly reduce failure costs[/RECOMMENDATION]
+
+                ### ROI Projections
+                [METRIC]Quality Investment:2.5M SAR[/METRIC]
+                [METRIC]Expected Savings:4.8M SAR[/METRIC]
+                [METRIC]ROI Timeline:18 months[/METRIC]
+
+                ## Risk Assessment
+
+                ### High-Risk Areas
+                [CRITICAL]Sterilization process validation requires immediate external audit[/CRITICAL]
+                [WARNING]Supplier dependency on single sources for critical components[/WARNING]
+                [WARNING]Aging quality inspection equipment needs replacement within 12 months[/WARNING]
+
+                ### Mitigation Strategies
+                1. **Redundant sterilization systems** installation
+                2. **Multi-source supplier strategy** implementation
+                3. **Equipment modernization program** initiation
+
+                ## Conclusion and Next Steps
+
+                Saudi Mais Co. demonstrates solid foundational quality practices with clear opportunities for enhancement. The quality improvement roadmap outlined above will position the company for:
+
+                * **>95% ISO 13485 compliance** within 12 months
+                * **<1% overall defect rate** achievement
+                * **>90% customer satisfaction** score
+                * **Significant cost savings** through prevention-focused approach
+
+                [RECOMMENDATION]Immediate priority should be sterilization process validation and supplier quality controls to ensure regulatory compliance and customer satisfaction[/RECOMMENDATION]
+
+                **Success in quality improvement will enhance market reputation and support business growth objectives.**
+            `);
+        }
+
+        function generateDemandForecastResponse() {
+            return formatContent(`
+                # Demand Forecasting & Inventory Optimization Report
+
+                ## Executive Summary
+                
+                Advanced analytics reveal significant seasonal patterns and growth opportunities in Saudi Mais Co.'s product portfolio with optimized inventory strategies projected to reduce costs by 25%.
+
+                [METRIC]Forecast Accuracy:91%[/METRIC]
+                [METRIC]Inventory Optimization Potential:25%[/METRIC]
+                [METRIC]Stockout Risk Reduction:40%[/METRIC]
+
+                ## Historical Demand Analysis
+
+                ### Overall Demand Trends (24-Month Analysis)
+                * **Respiratory equipment**: Consistent 15% year-over-year growth
+                * **Surgical instruments**: Stable demand with 3% seasonal variation
+                * **ICU monitoring devices**: 22% growth driven by hospital expansion
+                * **Disposable supplies**: 18% growth with quarterly fluctuations
+
+                ### Seasonal Patterns Identification
+                
+                #### Winter Season (Dec-Feb)
+                * **Respiratory equipment**: +35% demand spike
+                * **Emergency care products**: +28% increase
+                * **Home healthcare devices**: +15% growth
+                
+                [RECOMMENDATION]Increase respiratory equipment inventory by 40% before winter season to capture peak demand[/RECOMMENDATION]
+
+                #### Summer Season (Jun-Aug)
+                * **Surgical instruments**: +12% demand increase
+                * **Sterilization equipment**: +20% growth
+                * **Air quality monitors**: +45% seasonal spike
+
+                #### Ramadan Effect (Variable timing)
+                * **Overall demand**: -15% during month
+                * **Emergency products**: +25% increase
+                * **Elective surgery equipment**: -30% temporary decline
+
+                ## Demand Forecasting by Product Category
+
+                ### Respiratory Equipment Portfolio
+                [METRIC]Current Monthly Demand:1,250 units[/METRIC]
+                [METRIC]Projected Q1 2025:1,580 units[/METRIC]
+                [METRIC]Growth Rate:26%[/METRIC]
+
+                **Drivers:**
+                * Government hospital expansion program
+                * Increased awareness post-pandemic
+                * Private healthcare sector growth
+                * Medical tourism development
+
+                **Optimal Inventory Levels:**
+                * **Safety stock**: 450 units (18 days coverage)
+                * **Reorder point**: 650 units
+                * **Maximum stock**: 2,100 units
+                * **Economic order quantity**: 520 units
+
+                ### Surgical Instruments Category
+                [METRIC]Current Monthly Demand:850 units[/METRIC]
+                [METRIC]Projected Q1 2025:920 units[/METRIC]
+                [METRIC]Growth Rate:8%[/METRIC]
+
+                **Market Factors:**
+                * Steady surgical procedure volume growth
+                * Quality-focused procurement trends
+                * International standard requirements
+                * Training program expansions
+
+                **Inventory Strategy:**
+                * **Safety stock**: 285 units (15 days coverage)
+                * **Reorder point**: 420 units
+                * **Maximum stock**: 1,380 units
+                * **Economic order quantity**: 340 units
+
+                ### ICU and Critical Care Equipment
+                [METRIC]Current Monthly Demand:420 units[/METRIC]
+                [METRIC]Projected Q1 2025:565 units[/METRIC]
+                [METRIC]Growth Rate:35%[/METRIC]
+
+                **Growth Catalysts:**
+                * ICU capacity expansion nationwide
+                * Technology upgrade initiatives
+                * Critical care standard improvements
+                * Emergency preparedness programs
+
+                [WARNING]High growth rate may strain supply chain - secure additional suppliers immediately[/WARNING]
+
+                ## Advanced Demand Forecasting Models
+
+                ### Machine Learning Predictions
+                
+                **Algorithm Performance:**
+                * **ARIMA model accuracy**: 89%
+                * **Neural network accuracy**: 93%
+                * **Ensemble model accuracy**: 96%
+                * **Seasonal decomposition**: 91%
+
+                ### 12-Month Demand Projection
+
+                #### Q1 2025 (Jan-Mar)
+                * **Total units**: 3,065 (Base: 2,520)
+                * **Revenue projection**: 15.2M SAR
+                * **Peak month**: February (1,150 units)
+
+                #### Q2 2025 (Apr-Jun)
+                * **Total units**: 2,890 (Seasonal adjustment)
+                * **Revenue projection**: 14.8M SAR
+                * **Growth products**: Surgical instruments
+
+                #### Q3 2025 (Jul-Sep)
+                * **Total units**: 3,240 (Summer peak)
+                * **Revenue projection**: 16.8M SAR
+                * **Focus area**: Sterilization equipment
+
+                #### Q4 2025 (Oct-Dec)
+                * **Total units**: 3,520 (Year-end surge)
+                * **Revenue projection**: 18.5M SAR
+                * **Preparation for**: 2026 winter demand
+
+                ## Inventory Optimization Strategy
+
+                ### Current Inventory Analysis
+                * **Total inventory value**: 8.5M SAR
+                * **Turnover ratio**: 4.2x annually
+                * **Carrying cost**: 18% of inventory value
+                * **Stockout incidents**: 12 per quarter
+
+                ### Optimized Inventory Model
+
+                #### ABC Analysis Implementation
+                **Category A Products (20% of items, 80% of value):**
+                * Respiratory ventilators
+                * Advanced monitoring systems
+                * Critical surgical instruments
+                * **Strategy**: Just-in-time with safety stock
+
+                **Category B Products (30% of items, 15% of value):**
+                * Standard surgical tools
+                * Basic monitoring equipment
+                * Sterilization devices
+                * **Strategy**: Economic order quantity model
+
+                **Category C Products (50% of items, 5% of value):**
+                * Disposable supplies
+                * Basic accessories
+                * Maintenance parts
+                * **Strategy**: Bulk ordering with longer cycles
+
+                ### Smart Reorder System
+                
+                [METRIC]Automated Reorders:75%[/METRIC]
+                [METRIC]Manual Review Required:25%[/METRIC]
+                [METRIC]Stockout Prevention:95%[/METRIC]
+
+                **Technology Integration:**
+                * **IoT sensors** for real-time inventory tracking
+                * **AI algorithms** for demand prediction
+                * **Automated procurement** for routine items
+                * **Predictive analytics** for trend identification
+
+                ## Cost-Benefit Analysis
+
+                ### Current Inventory Costs
+                * **Holding costs**: 1.53M SAR annually
+                * **Ordering costs**: 0.34M SAR annually
+                * **Stockout costs**: 0.85M SAR annually
+                * **Total inventory costs**: 2.72M SAR annually
+
+                ### Optimized Inventory Projections
+                * **Reduced holding costs**: 1.15M SAR (-25%)
+                * **Efficient ordering costs**: 0.28M SAR (-18%)
+                * **Minimized stockout costs**: 0.25M SAR (-70%)
+                * **Total optimized costs**: 1.68M SAR annually
+
+                [METRIC]Annual Savings:1.04M SAR[/METRIC]
+                [METRIC]ROI on Implementation:156%[/METRIC]
+                [METRIC]Payback Period:8 months[/METRIC]
+
+                ## Market Intelligence Integration
+
+                ### External Factors Monitoring
+                1. **Government procurement cycles** - Impact on Q4 demand
+                2. **Healthcare budget allocations** - Affects annual planning
+                3. **Competitor product launches** - Market share implications
+                4. **Regulatory changes** - Compliance inventory requirements
+
+                ### Early Warning Indicators
+                * **Economic indicators**: GDP growth, healthcare spending
+                * **Demographic trends**: Population growth, aging patterns
+                * **Technology trends**: Digital health adoption rates
+                * **Policy changes**: Import regulations, local content requirements
+
+                ## Implementation Roadmap
+
+                ### Phase 1: Foundation (0-3 months)
+                1. **Implement ABC classification** for all products
+                2. **Install inventory tracking systems**
+                3. **Establish automated reorder points**
+                4. **Train staff on new procedures**
+
+                ### Phase 2: Optimization (3-9 months)
+                1. **Deploy predictive analytics platform**
+                2. **Integrate supplier data feeds**
+                3. **Implement demand sensing technology**
+                4. **Optimize warehouse layout and processes**
+
+                ### Phase 3: Advanced Analytics (9-18 months)
+                1. **Machine learning model deployment**
+                2. **Real-time demand forecasting**
+                3. **Integrated supply chain optimization**
+                4. **Predictive maintenance for inventory systems**
+
+                ## Risk Management
+
+                ### Supply Chain Risks
+                [WARNING]Single supplier dependency for 35% of critical products[/WARNING]
+                [CRITICAL]International shipping delays could impact 60% of inventory[/CRITICAL]
+
+                **Mitigation Strategies:**
+                * **Diversify supplier base** to minimum 3 suppliers per critical product
+                * **Increase safety stock** for import-dependent items by 20%
+                * **Develop local sourcing** alternatives for 50% of products
+
+                ### Demand Volatility Risks
+                * **Economic downturns**: -15% demand impact potential
+                * **Healthcare policy changes**: ±20% demand variation
+                * **Competitive pressures**: -10% market share risk
+
+                ## Conclusion and Recommendations
+
+                The demand forecasting analysis reveals significant opportunities for Saudi Mais Co. to optimize inventory management while capturing growth in expanding market segments.
+
+                ### Key Success Factors
+                1. **Technology investment** in predictive analytics
+                2. **Process standardization** across all product lines
+                3. **Staff training** on demand planning methodologies
+                4. **Supplier relationship** strengthening
+
+                [RECOMMENDATION]Immediate implementation of ABC classification and automated reorder systems will provide quick wins while building foundation for advanced analytics[/RECOMMENDATION]
+
+                **Expected outcomes within 12 months:**
+                * 25% reduction in inventory carrying costs
+                * 95% service level achievement
+                * 40% improvement in forecast accuracy
+                * 30% faster inventory turnover
+
+                **This comprehensive approach positions Saudi Mais Co. for sustainable growth while maintaining optimal inventory efficiency.**
+            `);
+        }
+
+        function generateCompetitorAnalysisResponse() {
+            return formatContent(`
+                # Comprehensive Competitor Analysis Report
+
+                ## Market Landscape Overview
+                
+                The Saudi medical equipment market demonstrates intense competition with significant opportunities for strategic positioning and market share growth through differentiated value propositions.
+
+                [METRIC]Total Market Size:2.8B SAR[/METRIC]
+                [METRIC]Annual Growth Rate:8.5%[/METRIC]
+                [METRIC]MAIS Current Share:8%[/METRIC]
+                [METRIC]Addressable Market:1.2B SAR[/METRIC]
+
+                ## Competitive Landscape Analysis
+
+                ### Market Share Distribution
+
+                #### Tier 1 Competitors (International Giants)
+                **Combined Market Share: 45%**
+
+                * **Medtronic Middle East**: 12% market share
+                * **GE Healthcare Arabia**: 11% market share  
+                * **Philips Healthcare KSA**: 10% market share
+                * **Siemens Healthineers**: 8% market share
+                * **Johnson & Johnson Medical**: 4% market share
+
+                #### Tier 2 Competitors (Regional Players)
+                **Combined Market Share: 35%**
+
+                * **Al-Naboodah Medical**: 8% market share
+                * **Jamjoom Pharma Medical**: 7% market share
+                * **United Medical Industries**: 6% market share
+                * **Arabian Healthcare Supply**: 5% market share
+                * **Gulf Medical Company**: 4% market share
+                * **Other regional players**: 5% combined
+
+                #### Tier 3 Competitors (Local Manufacturers)
+                **Combined Market Share: 12%**
+
+                * **Saudi German Hospital Supply**: 3% market share
+                * **Riyadh Medical Equipment**: 2.5% market share
+                * **Jeddah Healthcare Industries**: 2% market share
+                * **MAIS Company**: **8% market share**
+                * **Other local players**: 4.5% combined
+
+                ## Detailed Competitor Profiles
+
+                ### Primary Competitor Analysis
+
+                #### Medtronic Middle East
+                **Strengths:**
+                * Advanced technology portfolio
+                * Strong brand recognition globally
+                * Extensive distribution network
+                * Significant R&D investment
+
+                **Weaknesses:**
+                * Premium pricing strategy
+                * Limited local customization
+                * Complex procurement processes
+                * Minimal local manufacturing
+
+                **Market Strategy:**
+                * Focus on high-value, technology-intensive products
+                * Target large hospital networks
+                * Emphasis on training and education
+                * Long-term service contracts
+
+                [METRIC]Average Product Price:165% above MAIS[/METRIC]
+                [METRIC]Customer Satisfaction:88%[/METRIC]
+                [METRIC]Market Growth:+12% annually[/METRIC]
+
+                #### Al-Naboodah Medical (Key Regional Rival)
+                **Strengths:**
+                * Established regional presence
+                * Competitive pricing model
+                * Local market understanding
+                * Government contract experience
+
+                **Weaknesses:**
+                * Limited product innovation
+                * Quality consistency issues
+                * Dependence on imported products
+                * Smaller scale operations
+
+                **Direct Competition Areas:**
+                * Respiratory equipment: Head-to-head competition
+                * Government tenders: Aggressive pricing
+                * Private hospitals: Service-focused approach
+
+                [METRIC]Price Comparison:25% below MAIS[/METRIC]
+                [METRIC]Quality Rating:72%[/METRIC]
+                [METRIC]Delivery Performance:78%[/METRIC]
+
+                ### SWOT Analysis vs. Key Competitors
+
+                ## MAIS Company Competitive Position
+
+                ### Competitive Strengths
+                1. **Local Market Expertise** - 30+ years in Saudi market
+                2. **Competitive Pricing** - 15-25% below international brands
+                3. **Customization Capability** - Tailored solutions for local needs
+                4. **Government Relations** - Established procurement relationships
+                5. **Quality Standards** - ISO certified manufacturing
+                6. **Responsive Service** - Local support and maintenance
+
+                ### Competitive Weaknesses
+                1. **Brand Recognition** - Limited compared to global leaders
+                2. **Technology Gap** - 2-3 years behind cutting-edge innovations
+                3. **Scale Limitations** - Smaller production capacity
+                4. **Distribution Network** - Concentrated in central regions
+                5. **Marketing Investment** - Significantly lower than competitors
+                6. **International Presence** - Minimal export activities
+
+                ### Competitive Opportunities
+                1. **Vision 2030 Localization** - Government preference for local suppliers
+                2. **Private Healthcare Growth** - Expanding market segment
+                3. **Technology Partnerships** - Collaboration with international firms
+                4. **Gulf Expansion** - Regional market development
+                5. **Digital Health Trends** - Emerging technology adoption
+                6. **Cost-Conscious Procurement** - Budget optimization trends
+
+                ### Competitive Threats
+                1. **Price Wars** - Aggressive competitor pricing strategies
+                2. **Technology Disruption** - Rapid innovation pace
+                3. **Market Consolidation** - Merger and acquisition activities
+                4. **Regulatory Changes** - Evolving compliance requirements
+                5. **Economic Volatility** - Healthcare budget constraints
+                6. **International Trade** - Import regulation modifications
+
+                ## Pricing Strategy Analysis
+
+                ### Price Positioning Matrix
+
+                #### Premium Segment (>100% price premium)
+                * **Medtronic, GE Healthcare, Philips**
+                * Strategy: Technology differentiation
+                * Target: Major hospitals, specialized units
+                * Value proposition: Advanced features, global support
+
+                #### Mid-Market Segment (10-50% price premium)
+                * **Siemens, Johnson & Johnson**
+                * Strategy: Balanced value proposition
+                * Target: Mid-size hospitals, clinics
+                * Value proposition: Quality with reasonable pricing
+
+                #### Competitive Segment (Market price ±15%)
+                * **MAIS, Al-Naboodah, United Medical**
+                * Strategy: Value-based competition
+                * Target: Government, cost-conscious buyers
+                * Value proposition: Quality at competitive prices
+
+                #### Economy Segment (<85% of market price)
+                * **Local assemblers, import traders**
+                * Strategy: Cost leadership
+                * Target: Small clinics, rural healthcare
+                * Value proposition: Basic functionality, low cost
+
+                [RECOMMENDATION]MAIS should position itself as premium value provider in competitive segment while selectively targeting mid-market opportunities[/RECOMMENDATION]
+
+                ## Product Portfolio Comparison
+
+                ### Respiratory Equipment Category
+                **Market Leader: Medtronic (25% category share)**
+
+                | Competitor | Product Range | Technology Level | Price Position | Market Share |
+                |------------|---------------|------------------|----------------|--------------|
+                | Medtronic | Comprehensive | Advanced | Premium | 25% |
+                | Philips | Full range | High | Premium | 18% |
+                | MAIS | Focused | Standard | Competitive | 15% |
+                | Al-Naboodah | Limited | Basic | Low | 12% |
+
+                **MAIS Competitive Position:**
+                * **Strengths**: Local assembly, faster delivery, competitive pricing
+                * **Gaps**: Advanced ventilator features, remote monitoring capabilities
+                * **Opportunities**: Government hospital expansion, home care market
+
+                ### Surgical Instruments Category
+                **Market Leader: Johnson & Johnson (22% category share)**
+
+                **MAIS Performance:**
+                * Strong in basic surgical instruments (18% share)
+                * Limited in advanced laparoscopic equipment
+                * Competitive advantage in sterilization compatibility
+                * Growth opportunity in disposable instruments
+
+                ## Customer Loyalty and Satisfaction Analysis
+
+                ### Brand Loyalty Metrics
+
+                #### High Loyalty Brands (>80% repeat purchase rate)
+                * **Medtronic**: 87% loyalty rate
+                * **GE Healthcare**: 84% loyalty rate
+                * **Philips**: 81% loyalty rate
+
+                #### Moderate Loyalty Brands (60-80% repeat rate)
+                * **MAIS**: 72% loyalty rate
+                * **Al-Naboodah**: 68% loyalty rate
+                * **Siemens**: 75% loyalty rate
+
+                ### Customer Satisfaction Drivers
+                1. **Product reliability**: 35% importance weight
+                2. **Technical support quality**: 28% importance weight
+                3. **Price competitiveness**: 22% importance weight
+                4. **Delivery performance**: 15% importance weight
+
+                **MAIS Performance vs. Competitors:**
+                * Product reliability: 78% (Industry avg: 82%)
+                * Technical support: 85% (Industry avg: 79%)
+                * Price competitiveness: 91% (Industry avg: 75%)
+                * Delivery performance: 82% (Industry avg: 84%)
+
+                ## Digital and Marketing Strategy Analysis
+
+                ### Digital Presence Comparison
+
+                | Competitor | Website Quality | Social Media | Digital Marketing | E-commerce |
+                |------------|-----------------|--------------|-------------------|------------|
+                | Medtronic | Excellent | Strong | Advanced | Yes |
+                | GE Healthcare | Excellent | Strong | Advanced | Limited |
+                | Philips | Excellent | Moderate | Advanced | Yes |
+                | MAIS | Good | Limited | Basic | No |
+                | Al-Naboodah | Fair | Limited | Basic | No |
+
+                [WARNING]MAIS significantly behind in digital marketing and e-commerce capabilities[/WARNING]
+
+                ### Marketing Investment Analysis
+                * **International brands**: 3-5% of revenue on marketing
+                * **Regional competitors**: 1-2% of revenue on marketing
+                * **MAIS**: <1% of revenue on marketing
+
+                [CRITICAL]Marketing investment gap limits brand awareness and market expansion[/CRITICAL]
+
+                ## Strategic Recommendations
+
+                ### Immediate Actions (0-6 months)
+
+                #### 1. Pricing Strategy Optimization
+                * **Implement value-based pricing** for differentiated products
+                * **Maintain competitive pricing** for commodity items
+                * **Develop pricing tiers** for different customer segments
+
+                #### 2. Competitive Intelligence System
+                * **Establish competitor monitoring** processes
+                * **Track pricing changes** and market movements
+                * **Monitor customer satisfaction** trends
+
+                #### 3. Digital Marketing Enhancement
+                * **Upgrade website** with e-commerce capabilities
+                * **Develop social media presence** on LinkedIn and industry platforms
+                * **Implement content marketing** strategy
+
+                ### Medium-term Strategy (6-18 months)
+
+                #### 1. Product Differentiation
+                * **Develop unique features** for core products
+                * **Enhance customization** capabilities
+                * **Invest in quality improvements** to match premium competitors
+
+                #### 2. Market Expansion
+                * **Target private healthcare** segment aggressively
+                * **Expand geographic coverage** to eastern and western regions
+                * **Develop export capabilities** for Gulf markets
+
+                #### 3. Strategic Partnerships
+                * **Technology licensing** agreements with international firms
+                * **Distribution partnerships** for complementary products
+                * **Joint ventures** for advanced product development
+
+                ### Long-term Positioning (18+ months)
+
+                #### 1. Technology Leadership
+                * **R&D investment** increase to 3% of revenue
+                * **Innovation center** establishment
+                * **Digital health** product development
+
+                #### 2. Market Leadership
+                * **Target 15% market share** in core categories
+                * **Become #1 local manufacturer** by volume
+                * **Establish regional hub** for Gulf exports
+
+                ## Competitive Response Scenarios
+
+                ### Scenario 1: Aggressive Price Competition
+                **Trigger**: Major competitor reduces prices by 20%
+                **Response Strategy:**
+                * Selective price matching on key products
+                * Emphasize value proposition and service quality
+                * Accelerate cost reduction initiatives
+                * Focus on differentiated product segments
+
+                ### Scenario 2: Technology Disruption
+                **Trigger**: Introduction of breakthrough medical technology
+                **Response Strategy:**
+                * Rapid technology licensing or partnership
+                * Focus on implementation expertise and local support
+                * Develop complementary products and services
+                * Leverage customer relationships for adoption
+
+                ### Scenario 3: Market Consolidation
+                **Trigger**: Major competitor acquisition in the market
+                **Response Strategy:**
+                * Strengthen customer relationships
+                * Accelerate product development
+                * Consider strategic partnerships or acquisitions
+                * Focus on nimble, customer-centric approach
+
+                ## Key Performance Indicators for Competitive Success
+
+                ### Market Share Targets
+                [METRIC]2025 Target:12%[/METRIC]
+                [METRIC]2026 Target:15%[/METRIC]
+                [METRIC]2027 Target:18%[/METRIC]
+
+                ### Competitive Metrics to Monitor
+                * **Relative market share** vs. top 3 competitors
+                * **Price index** compared to market average
+                * **Customer satisfaction** relative to competitor benchmarks
+                * **Product innovation rate** vs. industry leaders
+                * **Digital engagement** metrics vs. competitors
+
+                ### Success Indicators
+                1. **Win rate improvement** in competitive tenders
+                2. **Customer acquisition** from competitor accounts
+                3. **Brand recognition** survey improvements
+                4. **Market share growth** in target segments
+
+                ## Conclusion
+
+                Saudi Mais Co. operates in a highly competitive market but possesses distinct advantages that can be leveraged for significant market share growth. The combination of local expertise, competitive pricing, and government support creates opportunities to challenge established players.
+
+                [RECOMMENDATION]Focus on becoming the premium local alternative to international brands while building capabilities for regional expansion[/RECOMMENDATION]
+
+                **Critical success factors:**
+                * Continuous competitive intelligence and market monitoring
+                * Strategic pricing and value proposition optimization
+                * Technology partnerships and innovation investment
+                * Digital marketing and brand building initiatives
+                * Customer relationship strengthening and service excellence
+
+                **With proper execution of recommended strategies, MAIS can achieve 15% market share within 3 years while establishing sustainable competitive advantages.**
+            `);
+        }
+
+        function generateDefaultResponse() {
+            return formatContent(`
+                # Yazeed AI Smart Analysis Assistant
+
+                ## Welcome to Advanced Business Analytics
+
+                I'm here to provide comprehensive analysis and strategic insights for Saudi Mais Co.'s business operations and market positioning.
+
+                ### My Specialized Capabilities
+
+                #### 📊 Advanced Data Analytics
+                * **Financial performance analysis** with trend identification
+                * **Market opportunity assessment** and competitive positioning
+                * **Operational efficiency evaluation** with improvement recommendations
+                * **Growth strategy development** based on data insights
+
+                #### 🏥 Quality Management Systems
+                * **ISO 13485 compliance assessment** and gap analysis
+                * **Defect tracking and root cause analysis**
+                * **Customer satisfaction measurement** and improvement plans
+                * **Regulatory compliance monitoring** (Saudi FDA, CE, FDA)
+
+                #### 📈 Demand Forecasting & Inventory
+                * **Predictive demand modeling** using advanced algorithms
+                * **Seasonal pattern analysis** and trend forecasting
+                * **Inventory optimization strategies** for cost reduction
+                * **Supply chain risk assessment** and mitigation planning
+
+                #### 🎯 Competitive Intelligence
+                * **Market positioning analysis** vs. key competitors
+                * **Pricing strategy optimization** and value proposition development
+                * **SWOT analysis** with actionable insights
+                * **Market opportunity identification** and strategic recommendations
+
+                ### How I Can Help Today
+
+                #### Ask Me About:
+                * **"Analyze our financial recovery options"**
+                * **"What are our main competitive advantages?"**
+                * **"How can we improve our quality management?"**
+                * **"Forecast demand for respiratory equipment"**
+                * **"Evaluate expansion opportunities in Gulf markets"**
+
+                #### Data Analysis Capabilities
+                * Upload financial reports, sales data, or market research
+                * Provide text descriptions of business challenges
+                * Ask specific questions about market trends
+                * Request strategic recommendations for growth
+
+                ### Saudi Medical Market Insights
+
+                #### Current Market Conditions
+                [METRIC]Market Growth Rate:8.5%[/METRIC]
+                [METRIC]Government Healthcare Investment:+15%[/METRIC]
+                [METRIC]Private Sector Expansion:+22%[/METRIC]
+
+                #### Key Opportunities for MAIS
+                1. **Vision 2030 localization programs** favoring local manufacturers
+                2. **Private healthcare expansion** creating new customer segments
+                3. **Digital health transformation** opening technology partnerships
+                4. **Gulf regional integration** for export market development
+
+                ### Getting Started
+
+                Choose any of the specialized analysis modules above or simply ask me a question about:
+                * Strategic planning and business development
+                * Financial analysis and crisis recovery
+                * Market research and competitive analysis
+                * Operational improvement and quality enhancement
+                * Technology integration and innovation strategies
+
+                [RECOMMENDATION]For comprehensive business insights, try asking: "Provide a complete analysis of MAIS company's current situation and recovery strategy"[/RECOMMENDATION]
+
+                **I'm ready to provide detailed, data-driven insights to support Saudi Mais Co.'s growth and success in the medical equipment market.**
+
+                *Feel free to upload data files or describe specific business challenges for customized analysis and recommendations.*
+            `);
+        }
+
+        // Enhanced analysis functions with loading indicators
+        async function startAdvancedAnalysis() {
+            const textInput = document.getElementById('advancedTextInput').value;
+            const focusInput = document.getElementById('advancedFocusInput').value || document.getElementById('advancedFocusInputFile').value;
+            const fileData = fileContents['advanced'] || uploadedFiles['advanced'];
+            const resultsContainer = document.getElementById('advancedResults');
+            const contentContainer = document.getElementById('advancedAnalysisContent');
+            
+            if (!textInput && !fileData) {
+                alert('Please enter data or upload a file for analysis');
+                return;
+            }
+            
+            const steps = [
+                'File content processed successfully',
+                'Data transmitted to Yazeed AI',
+                'Advanced analysis algorithms running',
+                'Results formatted and ready for display'
+            ];
+            
+            showAnalysisStatus('advanced', steps);
+            resultsContainer.style.display = 'block';
+            contentContainer.innerHTML = '<div class="loading-enhanced"><div class="loading-dots"><div class="loading-dot"></div><div class="loading-dot"></div><div class="loading-dot"></div></div>Advanced analysis in progress...</div>';
+            
+            const dataContent = fileData || textInput;
+            const focusArea = focusInput ? `\n\nSpecific focus areas: ${focusInput}` : '';
+            
+            const prompt = `
+                You are an expert business analyst for MAIS medical products company in Saudi Arabia.
+                Analyze the following data comprehensively:
+                - Market trends and competitive positioning in Saudi medical equipment sector
+                - Financial performance indicators and operational efficiency metrics
+                - Growth opportunities in Vision 2030 healthcare transformation
+                - Strategic recommendations for crisis recovery and market expansion
+                
+                Data for analysis: ${dataContent}${focusArea}
+
+                Provide detailed analysis in these sections:
+                1. Market Analysis: Current position and competitive landscape assessment
+                2. Financial Insights: Performance metrics and recovery strategies
+                3. Strategic Recommendations: Actionable plans for growth and development
+                4. Risk Assessment: Potential challenges and mitigation strategies
+            `;
+            
+            try {
+                const response = await callGeminiAPI(prompt);
+                contentContainer.innerHTML = formatContent(response);
+                saveAnalysisResults('advanced', response);
+            } catch (error) {
+                contentContainer.innerHTML = '<div class="critical-box">Analysis failed. Please try again or contact support.</div>';
+            }
+        }
+
+        async function startQualityAnalysis() {
+            const textInput = document.getElementById('qualityTextInput').value;
+            const focusInput = document.getElementById('qualityFocusInput').value || document.getElementById('qualityFocusInputFile').value;
+            const fileData = fileContents['quality'] || uploadedFiles['quality'];
+            const resultsContainer = document.getElementById('qualityResults');
+            const contentContainer = document.getElementById('qualityAnalysisContent');
+            
+            if (!textInput && !fileData) {
+                alert('Please enter quality data or upload a file for analysis');
+                return;
+            }
+            
+            const steps = [
+                'Quality data parsed and validated',
+                'AI quality assessment initiated',
+                'Compliance analysis completed',
+                'Quality improvement report generated'
+            ];
+            
+            showAnalysisStatus('quality', steps);
+            resultsContainer.style.display = 'block';
+            contentContainer.innerHTML = '<div class="loading-enhanced"><div class="loading-dots"><div class="loading-dot"></div><div class="loading-dot"></div><div class="loading-dot"></div></div>Quality analysis in progress...</div>';
+            
+            const dataContent = fileData || textInput;
+            const focusArea = focusInput ? `\n\nQuality focus areas: ${focusInput}` : '';
+            
+            const prompt = `
+                You are a quality management expert specializing in medical device manufacturing.
+                Analyze the provided quality data according to international standards:
+                - ISO 13485 medical device quality management requirements
+                - Saudi FDA regulatory compliance assessment
+                - CE marking standards for export markets
+                - Defect analysis and root cause identification
+                - Customer satisfaction and complaint trend analysis
+
+                Quality data: ${dataContent}${focusArea}
+
+                Provide comprehensive quality assessment:
+                1. Overall Quality Status: Current performance metrics and compliance levels
+                2. Defect Analysis: Detailed breakdown of quality issues and root causes
+                3. Compliance Assessment: Regulatory adherence and improvement requirements
+                4. Quality Improvement Plan: Specific recommendations and implementation roadmap
+            `;
+            
+            try {
+                const response = await callGeminiAPI(prompt);
+                contentContainer.innerHTML = formatContent(response);
+                saveAnalysisResults('quality', response);
+            } catch (error) {
+                contentContainer.innerHTML = '<div class="critical-box">Quality analysis failed. Please try again or contact support.</div>';
+            }
+        }
+
+        async function startDemandForecasting() {
+            const textInput = document.getElementById('demandTextInput').value;
+            const focusInput = document.getElementById('demandFocusInput').value || document.getElementById('demandFocusInputFile').value;
+            const fileData = fileContents['demand'] || uploadedFiles['demand'];
+            const resultsContainer = document.getElementById('demandResults');
+            const contentContainer = document.getElementById('demandAnalysisContent');
+            
+            if (!textInput && !fileData) {
+                alert('Please enter historical data or upload a file for analysis');
+                return;
+            }
+            
+            const steps = [
+                'Historical sales data processed',
+                'Forecasting models calibrated',
+                'Demand predictions generated',
+                'Inventory optimization strategies developed'
+            ];
+            
+            showAnalysisStatus('demand', steps);
+            resultsContainer.style.display = 'block';
+            contentContainer.innerHTML = '<div class="loading-enhanced"><div class="loading-dots"><div class="loading-dot"></div><div class="loading-dot"></div><div class="loading-dot"></div></div>Demand forecasting in progress...</div>';
+            
+            const dataContent = fileData || textInput;
+            const focusArea = focusInput ? `\n\nForecasting focus: ${focusInput}` : '';
+            
+            const prompt = `
+                You are a demand planning and inventory optimization expert for medical equipment industry.
+                Analyze historical data and market trends to provide accurate forecasting:
+                - Seasonal demand patterns for medical equipment in Saudi market
+                - Growth trends driven by healthcare sector expansion
+                - Inventory optimization for cost reduction and service improvement
+                - Supply chain risk assessment and mitigation strategies
+
+                Historical data: ${dataContent}${focusArea}
+
+                Provide comprehensive forecasting analysis:
+                1. Demand Analysis: Historical trends and seasonal patterns identification
+                2. Forecasting Results: 12-month demand projections by product category
+                3. Inventory Strategy: Optimal stock levels and reorder point recommendations
+                4. Implementation Plan: Roadmap for demand planning system optimization
+            `;
+            
+            try {
+                const response = await callGeminiAPI(prompt);
+                contentContainer.innerHTML = formatContent(response);
+                saveAnalysisResults('demand', response);
+            } catch (error) {
+                contentContainer.innerHTML = '<div class="critical-box">Demand forecasting failed. Please try again or contact support.</div>';
+            }
+        }
+
+        async function startCompetitorAnalysis() {
+            const textInput = document.getElementById('competitorTextInput').value;
+            const focusInput = document.getElementById('competitorFocusInput').value || document.getElementById('competitorFocusInputFile').value;
+            const fileData = fileContents['competitor'] || uploadedFiles['competitor'];
+            const resultsContainer = document.getElementById('competitorResults');
+            const contentContainer = document.getElementById('competitorAnalysisContent');
+            
+            if (!textInput && !fileData) {
+                alert('Please enter competitor data or upload a file for analysis');
+                return;
+            }
+            
+            const steps = [
+                'Competitor data collected and structured',
+                'Market positioning analysis initiated',
+                'Competitive benchmarking completed',
+                'Strategic recommendations formulated'
+            ];
+            
+            showAnalysisStatus('competitor', steps);
+            resultsContainer.style.display = 'block';
+            contentContainer.innerHTML = '<div class="loading-enhanced"><div class="loading-dots"><div class="loading-dot"></div><div class="loading-dot"></div><div class="loading-dot"></div></div>Competitor analysis in progress...</div>';
+            
+            const dataContent = fileData || textInput;
+            const focusArea = focusInput ? `\n\nCompetitive focus: ${focusInput}` : '';
+            
+            const prompt = `
+                You are a strategic analyst specializing in medical equipment market competition.
+                Analyze the competitive landscape and provide strategic insights:
+                - Market share analysis and competitive positioning assessment
+                - Pricing strategies and value proposition comparison
+                - Strengths and weaknesses evaluation of key competitors
+                - Market opportunities and differentiation strategies
+                - Threat assessment and competitive response planning
+
+                Competitive data: ${dataContent}${focusArea}
+
+                Provide detailed competitive analysis:
+                1. Market Landscape: Competitor positioning and market share analysis
+                2. Competitive Assessment: Strengths, weaknesses, and strategic positioning
+                3. Opportunity Analysis: Market gaps and growth opportunities identification
+                4. Strategic Recommendations: Competitive strategy and positioning plan
+            `;
+            
+            try {
+                const response = await callGeminiAPI(prompt);
+                contentContainer.innerHTML = formatContent(response);
+                saveAnalysisResults('competitor', response);
+            } catch (error) {
+                contentContainer.innerHTML = '<div class="critical-box">Competitor analysis failed. Please try again or contact support.</div>';
+            }
+        }
+
+        // Enhanced AI Assistant functions
+        async function sendMessage() {
             const input = document.getElementById('userInput');
             const message = input.value.trim();
             if (!message) return;
 
             const chatMessages = document.getElementById('chatMessages');
             
-            // إضافة رسالة المستخدم
-            chatMessages.innerHTML += `<p><strong>أنت:</strong> ${message}</p>`;
+            chatMessages.innerHTML += `<p><strong>You:</strong> ${message}</p>`;
+            chatMessages.innerHTML += `<p><strong>Yazeed AI:</strong> <div class="loading-enhanced"><div class="loading-dots"><div class="loading-dot"></div><div class="loading-dot"></div><div class="loading-dot"></div></div>Analyzing your query...</div></p>`;
             
-            // إضافة مؤشر التحميل
-            chatMessages.innerHTML += `<p><strong>Gemini AI:</strong> <span class="loading"></span></p>`;
+            const response = await callGeminiAPI(`
+                You are Yazeed AI, a specialized business consultant for Saudi Mais Co medical products company.
+                The company was founded in 1994, specializes in medical equipment, and currently faces financial challenges.
+                Provide helpful, detailed, and actionable insights for this query: ${message}
+                
+                Consider the Saudi healthcare market context, Vision 2030 initiatives, and medical equipment industry trends.
+            `);
             
-            // محاكاة الاستجابة
-            setTimeout(() => {
-                let response = geminiResponses['default'];
-                
-                if (message.includes('مالي') || message.includes('تحليل مالي')) {
-                    response = geminiResponses['تحليل مالي'];
-                } else if (message.includes('استراتيجي') || message.includes('خطة')) {
-                    response = geminiResponses['استراتيجيات'];
-                } else if (message.includes('منتج') || message.includes('طبي')) {
-                    response = geminiResponses['منتجات'];
-                }
-                
-                // إزالة مؤشر التحميل وإضافة الرد
-                const messages = chatMessages.querySelectorAll('p');
-                const lastMessage = messages[messages.length - 1];
-                lastMessage.innerHTML = `<strong>Gemini AI:</strong> ${response}`;
-                
-                chatMessages.scrollTop = chatMessages.scrollHeight;
-            }, 2000);
+            const messages = chatMessages.querySelectorAll('p');
+            const lastMessage = messages[messages.length - 1];
+            lastMessage.innerHTML = `<strong>Yazeed AI:</strong> <div class="formatted-content">${formatContent(response)}</div>`;
             
             input.value = '';
             chatMessages.scrollTop = chatMessages.scrollHeight;
         }
 
-        function startComprehensiveAnalysis() {
+        async function startComprehensiveAnalysis() {
             const chatMessages = document.getElementById('chatMessages');
             
-            chatMessages.innerHTML += `<p><strong>نظام التحليل الشامل:</strong> <span class="loading"></span></p>`;
+            chatMessages.innerHTML += `<p><strong>Comprehensive Analysis System:</strong> <div class="loading-enhanced"><div class="loading-dots"><div class="loading-dot"></div><div class="loading-dot"></div><div class="loading-dot"></div></div>Generating comprehensive business analysis...</div></p>`;
             
-            setTimeout(() => {
-                const comprehensiveAnalysis = `
-                    <strong>📊 التحليل الشامل لشركة Saudi Mais Co:</strong><br><br>
-                    
-                    <strong style="color: #ff6b6b;">🚨 حالة الطوارئ المالية:</strong><br>
-                    • الشركة في حالة خسارة متراكمة<br>
-                    • مخاطر عالية للإفلاس خلال 12 شهر<br>
-                    • ضرورة اتخاذ إجراءات فورية<br><br>
-                    
-                    <strong style="color: #4ecdc4;">💰 التوصيات المالية العاجلة:</strong><br>
-                    1. إعادة هيكلة كاملة للديون<br>
-                    2. البحث عن مستثمر استراتيجي<br>
-                    3. تقليص العمليات بنسبة 40%<br>
-                    4. التركيز على المنتجات الأساسية<br>
-                    5. تحسين دورة التحصيل<br><br>
-                    
-                    <strong style="color: #00c6ff;">🎯 فرص النجاة والنمو:</strong><br>
-                    • الاستفادة من رؤية 2030<br>
-                    • برامج الدعم الحكومية<br>
-                    • الطلب المتزايد على المنتجات الطبية<br>
-                    • إمكانية التوسع الإقليمي<br>
-                    • التحول الرقمي والذكاء الاصطناعي<br><br>
-                    
-                    <strong style="color: #ff6b6b;">⏰ الجدول الزمني للتنفيذ:</strong><br>
-                    • الشهر الأول: إجراءات الطوارئ<br>
-                    • الأشهر 2-6: إعادة الهيكلة<br>
-                    • الأشهر 7-12: الاستقرار<br>
-                    • السنة الثانية: النمو والتوسع
-                `;
+            const response = await callGeminiAPI(`
+                Provide a comprehensive strategic analysis of Saudi Mais Co medical products company.
+                Company profile: Founded 1994, Riyadh-based, medical equipment manufacturer, currently facing financial crisis.
                 
-                const messages = chatMessages.querySelectorAll('p');
-                const lastMessage = messages[messages.length - 1];
-                lastMessage.innerHTML = comprehensiveAnalysis;
+                Include comprehensive analysis of:
+                1. Current Financial Situation: Crisis assessment and recovery options
+                2. Market Position: Competitive analysis in Saudi medical equipment market
+                3. Operational Assessment: Manufacturing, quality, and efficiency evaluation
+                4. Growth Opportunities: Market expansion and product development potential
+                5. Strategic Roadmap: Detailed action plan for business recovery and growth
+                6. Risk Analysis: Potential challenges and mitigation strategies
                 
-                chatMessages.scrollTop = chatMessages.scrollHeight;
-            }, 3000);
+                Consider Vision 2030 healthcare transformation, local content requirements, and regional expansion opportunities.
+            `);
+            
+            const messages = chatMessages.querySelectorAll('p');
+            const lastMessage = messages[messages.length - 1];
+            lastMessage.innerHTML = `<strong>Comprehensive Analysis:</strong> <div class="formatted-content">${formatContent(response)}</div>`;
+            
+            chatMessages.scrollTop = chatMessages.scrollHeight;
         }
 
-        // إضافة مستمع للضغط على Enter
+        // Add Enter key listener
         document.getElementById('userInput').addEventListener('keypress', function(e) {
             if (e.key === 'Enter') {
                 sendMessage();
             }
         });
 
-        // تأثيرات ثلاثية الأبعاد عند التمرير
+        // Enhanced 3D effects on scroll
         window.addEventListener('scroll', function() {
-            const scrollTop = window.pageYOffset;
-            const cards = document.querySelectorAll('.analysis-card');
+            const cards = document.querySelectorAll('.analysis-card, .section-card, .results-section');
             
             cards.forEach((card, index) => {
                 const rect = card.getBoundingClientRect();
@@ -765,27 +2896,82 @@
                 if (isVisible) {
                     const translateZ = Math.max(20, 80 - Math.abs(rect.top - window.innerHeight / 2) / 10);
                     const rotateY = (rect.top - window.innerHeight / 2) / 100;
-                    card.style.transform = `translateZ(${translateZ}px) rotateY(${rotateY}deg)`;
+                    const scale = Math.max(0.95, 1 - Math.abs(rect.top - window.innerHeight / 2) / 2000);
+                    card.style.transform = `translateZ(${translateZ}px) rotateY(${rotateY}deg) scale(${scale})`;
                 }
             });
         });
 
-        // تشغيل التأثيرات عند تحميل الصفحة
+        // Save analysis results locally with timestamp
+        function saveAnalysisResults(section, results) {
+            analysisHistory[section] = {
+                timestamp: new Date().toISOString(),
+                results: results,
+                version: '2.0'
+            };
+            localStorage.setItem('maisAnalysisHistory', JSON.stringify(analysisHistory));
+        }
+
+        // Load saved results on page refresh
+        function loadAnalysisHistory() {
+            const saved = localStorage.getItem('maisAnalysisHistory');
+            if (saved) {
+                try {
+                    analysisHistory = JSON.parse(saved);
+                } catch (error) {
+                    console.warn('Failed to load analysis history:', error);
+                    analysisHistory = {};
+                }
+            }
+        }
+
+        // Enhanced initialization with better mobile support
         document.addEventListener('DOMContentLoaded', function() {
+            checkAPIConnection();
             initializeCharts();
+            loadAnalysisHistory();
             
-            // تأثير الطباعة للنصوص
-            const elements = document.querySelectorAll('.analysis-card, .solution-card');
+            // Enhanced animation effects on load
+            const elements = document.querySelectorAll('.analysis-card, .solution-card, .section-card');
             elements.forEach((element, index) => {
                 element.style.opacity = '0';
                 element.style.transform = 'translateZ(0px) translateY(50px)';
                 
                 setTimeout(() => {
-                    element.style.transition = 'all 0.8s ease';
+                    element.style.transition = 'all 0.8s cubic-bezier(0.23, 1, 0.320, 1)';
                     element.style.opacity = '1';
                     element.style.transform = 'translateZ(40px) translateY(0px)';
-                }, index * 200);
+                }, index * 100);
             });
+
+            // Mobile optimization
+            if (window.innerWidth <= 768) {
+                document.body.style.perspective = '1000px';
+                const cards = document.querySelectorAll('.analysis-card, .section-card');
+                cards.forEach(card => {
+                    card.style.transform = 'translateZ(20px)';
+                });
+            }
+
+            // Performance optimization for mobile
+            if ('serviceWorker' in navigator && window.innerWidth <= 768) {
+                // Disable some 3D effects on mobile for better performance
+                document.documentElement.style.setProperty('--enable-3d', '0');
+            }
+        });
+
+        // Enhanced mobile responsiveness
+        window.addEventListener('resize', function() {
+            if (window.innerWidth <= 768) {
+                // Optimize for mobile
+                const apiStatus = document.getElementById('apiStatus');
+                if (apiStatus.style.position === 'fixed') {
+                    apiStatus.style.position = 'relative';
+                    apiStatus.style.top = 'auto';
+                    apiStatus.style.right = 'auto';
+                    apiStatus.style.margin = '10px 0';
+                }
+            }
         });
     </script>
 </body>
