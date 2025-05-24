@@ -773,7 +773,7 @@
             backdrop-filter: blur(20px); /* Increased blur */
             z-index: 10000; /* Higher z-index for mobile */
             display: flex;
-            align-items: center;
+            align-items: center; /* سيتم استبدالها للجوال */
             justify-content: center;
             opacity: 0;
             visibility: hidden;
@@ -810,6 +810,18 @@
 
         .voice-modal.active .voice-content {
             transform: scale(1) translateY(0);
+        }
+
+        /* --- التعديل هنا: اجعل النافذة تظهر من الأعلى في الجوال --- */
+        @media (max-width: 600px) {
+            .voice-modal {
+                align-items: flex-start !important;
+                justify-content: center;
+            }
+            .voice-content {
+                margin-top: 2.5rem;
+                /* يمكن زيادة المسافة حسب الحاجة */
+            }
         }
 
         /* ENHANCED VOICE MODAL CLOSE BUTTON */
@@ -1971,7 +1983,7 @@
                 default:
                     startBtn.textContent = '🎤 Start Recording | بدء التسجيل';
                     stopBtn.textContent = '⏹️ Stop Recording | إيقاف التسجيل';
-                    indicator.style.opacity = '0';
+                                       indicator.style.opacity = '0';
                     break;
             }
         }
