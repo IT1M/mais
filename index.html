@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>AI MAIS - Medical Intelligence Platform</title>
+    <title data-translate-key="pageTitle">AI MAIS - Medical Intelligence Platform</title>
     <style>
         * {
             margin: 0;
@@ -40,6 +40,48 @@
             position: relative;
             -webkit-overflow-scrolling: touch;
         }
+
+        /* Language Switcher */
+        .language-switcher {
+            position: fixed;
+            top: max(1rem, env(safe-area-inset-top, 0));
+            left: 1rem;
+            z-index: 10001; /* Higher than button-container */
+            display: flex;
+            gap: 0.5rem;
+            background-color: rgba(255, 255, 255, 0.05);
+            padding: 0.35rem;
+            border-radius: 10px;
+            backdrop-filter: blur(15px);
+            border: 1px solid var(--glass-border);
+        }
+
+        .lang-btn {
+            background-color: transparent;
+            border: 1px solid transparent;
+            color: var(--text-secondary);
+            padding: 0.4rem 0.8rem;
+            border-radius: 7px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 600;
+            transition: all 0.25s ease;
+            -webkit-tap-highlight-color: transparent;
+             touch-action: manipulation;
+        }
+
+        .lang-btn:hover {
+            color: var(--text-primary);
+            background-color: rgba(255,255,255,0.1);
+        }
+
+        .lang-btn.active {
+            background: var(--primary-gradient);
+            color: white;
+            border-color: transparent;
+            box-shadow: 0 3px 10px rgba(102, 126, 234, 0.3);
+        }
+
 
         /* Mobile-optimized animated background */
         .bg-canvas {
@@ -388,6 +430,7 @@
             padding: 1.5rem 1rem;
             position: relative;
             z-index: 10;
+            margin-top: 3.5rem; /* Make space for language switcher */
         }
 
         .logo-container {
@@ -720,11 +763,19 @@
             letter-spacing: 1px;
             transition: all 0.3s ease;
         }
+        html[dir="rtl"] .card-arrow svg {
+            transform: scaleX(-1);
+        }
+
 
         .service-card:hover .card-arrow {
             color: rgba(102, 126, 234, 1);
             transform: translateX(5px);
         }
+        html[dir="rtl"] .service-card:hover .card-arrow {
+            transform: translateX(-5px);
+        }
+
 
         /* Other uses button optimized for mobile */
         .other-uses-btn {
@@ -773,7 +824,7 @@
             backdrop-filter: blur(20px); /* Increased blur */
             z-index: 10000; /* Higher z-index for mobile */
             display: flex;
-            align-items: center; /* سيتم استبدالها للجوال */
+            align-items: center;
             justify-content: center;
             opacity: 0;
             visibility: hidden;
@@ -812,18 +863,6 @@
             transform: scale(1) translateY(0);
         }
 
-        /* --- التعديل هنا: اجعل النافذة تظهر من الأعلى في الجوال --- */
-        @media (max-width: 600px) {
-            .voice-modal {
-                align-items: flex-start !important;
-                justify-content: center;
-            }
-            .voice-content {
-                margin-top: 2.5rem;
-                /* يمكن زيادة المسافة حسب الحاجة */
-            }
-        }
-
         /* ENHANCED VOICE MODAL CLOSE BUTTON */
         .voice-close {
             position: absolute;
@@ -846,6 +885,10 @@
             z-index: 10;
             backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        html[dir="rtl"] .voice-close {
+            right: auto;
+            left: 1.5rem;
         }
 
         .voice-close:active {
@@ -915,9 +958,19 @@
             background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
             transition: left 0.5s ease;
         }
+        html[dir="rtl"] .voice-btn::before {
+            left: auto;
+            right: -100%;
+            background: linear-gradient(-90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: right 0.5s ease;
+        }
+
 
         .voice-btn:hover::before {
             left: 100%;
+        }
+        html[dir="rtl"] .voice-btn:hover::before {
+            right: 100%;
         }
 
         .voice-btn:active {
@@ -985,6 +1038,9 @@
             border: 1px solid rgba(255, 255, 255, 0.15);
             box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.1);
         }
+        html[dir="rtl"] .voice-response {
+            text-align: right;
+        }
 
         .voice-response p {
             color: var(--text-primary);
@@ -1001,6 +1057,11 @@
             border-left: 4px solid rgba(102, 126, 234, 0.6);
             box-shadow: 0 4px 15px rgba(102, 126, 234, 0.1);
         }
+        html[dir="rtl"] .voice-transcription {
+            border-left: none;
+            border-right: 4px solid rgba(102, 126, 234, 0.6);
+        }
+
 
         .voice-transcription p {
             color: rgba(102, 126, 234, 0.95);
@@ -1052,6 +1113,9 @@
             -webkit-overflow-scrolling: touch;
             overscroll-behavior: contain;
         }
+         html[dir="rtl"] .help-content {
+            text-align: right;
+        }
 
         .help-modal.active .help-content {
             transform: scale(1) translateY(0);
@@ -1078,6 +1142,10 @@
             z-index: 10;
             backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        html[dir="rtl"] .help-close {
+            right: auto;
+            left: 1.5rem;
         }
 
         .help-close:active {
@@ -1122,6 +1190,7 @@
         .help-list {
             list-style: none;
             padding-left: 0;
+             html[dir="rtl"] & { padding-right: 0; }
         }
 
         .help-list li {
@@ -1132,6 +1201,10 @@
             position: relative;
             font-size: 1rem;
         }
+        html[dir="rtl"] .help-list li {
+            padding-left: 0;
+            padding-right: 1.5rem;
+        }
 
         .help-list li::before {
             content: '•';
@@ -1140,6 +1213,10 @@
             left: 0;
             font-size: 1.2rem;
             font-weight: bold;
+        }
+        html[dir="rtl"] .help-list li::before {
+            left: auto;
+            right: 0;
         }
 
         /* Footer optimized for mobile */
@@ -1205,6 +1282,10 @@
             border: 2px solid rgba(255, 255, 255, 0.3);
             pointer-events: none;
         }
+        html[dir="rtl"] .language-indicator {
+            right: auto;
+            left: -6px;
+        }
 
         .voice-support-btn.recording .language-indicator,
         .voice-support-btn.listening .language-indicator {
@@ -1250,6 +1331,9 @@
 
             .medical-geometry {
                 transform: scale(1);
+            }
+            .header {
+                 margin-top: 1.5rem; 
             }
         }
 
@@ -1297,6 +1381,18 @@
                 font-size: 1rem;
                 min-height: 52px;
             }
+             .header {
+                margin-top: 4.5rem; /* More space for lang switcher on small mobile */
+            }
+            .language-switcher {
+                left: 0.5rem;
+                top: max(0.5rem, env(safe-area-inset-top, 0));
+            }
+            .button-container {
+                right: 0.5rem;
+                top: max(0.5rem, env(safe-area-inset-top, 0));
+            }
+
         }
 
         /* ULTRA MOBILE (smaller screens) */
@@ -1304,6 +1400,15 @@
             .button-container {
                 top: max(0.5rem, env(safe-area-inset-top, 0));
                 right: 0.5rem;
+            }
+             .language-switcher {
+                left: 0.5rem;
+                top: max(0.5rem, env(safe-area-inset-top, 0));
+                gap: 0.25rem;
+            }
+            .lang-btn {
+                padding: 0.3rem 0.6rem;
+                font-size: 0.8rem;
             }
 
             .voice-support-btn,
@@ -1324,6 +1429,9 @@
 
             .service-card {
                 padding: 1.5rem 1rem;
+            }
+             .header {
+                margin-top: 4rem; 
             }
         }
 
@@ -1346,9 +1454,18 @@
                 padding-bottom: max(env(safe-area-inset-bottom, 1rem), 1rem);
             }
             
-            .button-container {
+            .button-container, .language-switcher {
                 top: calc(max(env(safe-area-inset-top, 1rem), 1rem));
             }
+             @media (max-width: 480px) {
+                 .button-container, .language-switcher {
+                    top: calc(max(env(safe-area-inset-top, 0.5rem), 0.5rem));
+                }
+                 .header {
+                    margin-top: calc(max(env(safe-area-inset-top, 0.5rem), 0.5rem) + 3.5rem);
+                }
+            }
+
 
             /* Fix iOS viewport issues */
             .voice-content,
@@ -1376,9 +1493,13 @@
         /* ACCESSIBILITY IMPROVEMENTS */
         @media (prefers-contrast: high) {
             .voice-support-btn,
-            .help-btn {
+            .help-btn,
+            .lang-btn {
                 border-width: 3px;
                 border-color: rgba(255, 255, 255, 0.8);
+            }
+             .lang-btn.active {
+                border-color: var(--primary-gradient);
             }
 
             .voice-modal,
@@ -1390,15 +1511,28 @@
         /* TOUCH DEVICE OPTIMIZATIONS */
         @media (hover: none) and (pointer: coarse) {
             .voice-support-btn:hover,
-            .help-btn:hover {
+            .help-btn:hover,
+            .lang-btn:hover {
                 transform: none;
+                 background-color: transparent; /* Keep default for non-active lang buttons */
+                 color: var(--text-secondary);
             }
+             .lang-btn.active:hover { /* Keep active style on hover for touch */
+                background: var(--primary-gradient);
+                color: white;
+            }
+
 
             .voice-support-btn:active,
             .help-btn:active {
                 transform: scale(0.95);
                 transition: transform 0.1s ease;
             }
+             .lang-btn:active {
+                transform: scale(0.95);
+                transition: transform 0.1s ease;
+            }
+
 
             .service-card:hover {
                 transform: none;
@@ -1411,6 +1545,12 @@
     </style>
 </head>
 <body>
+    <!-- Language Switcher -->
+    <div class="language-switcher">
+        <button class="lang-btn active" id="langEnBtn" type="button" aria-label="Switch to English">EN</button>
+        <button class="lang-btn" id="langArBtn" type="button" aria-label="Switch to Arabic">AR</button>
+    </div>
+
     <!-- Medical Animated Background -->
     <div class="bg-canvas">
         <!-- DNA Helix -->
@@ -1460,7 +1600,7 @@
     <!-- Enhanced Button Container -->
     <div class="button-container">
         <!-- Enhanced Voice Support Button -->
-        <button class="voice-support-btn" id="voiceSupportBtn" type="button" aria-label="Voice Assistant">
+        <button class="voice-support-btn" id="voiceSupportBtn" type="button" data-translate-aria-label="voiceAssistantAriaLabel">
             <svg viewBox="0 0 24 24" role="img" aria-hidden="true">
                 <path d="M12 14c1.66 0 2.99-1.34 2.99-3L15 5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm5.3-3c0 3-2.54 5.1-5.3 5.1S6.7 14 6.7 11H5c0 3.41 2.72 6.23 6 6.72V21h2v-3.28c3.28-.48 6-3.3 6-6.72h-1.7z"/>
             </svg>
@@ -1469,7 +1609,7 @@
         </button>
 
         <!-- Enhanced Help Button -->
-        <button class="help-btn" id="helpBtn" type="button" aria-label="Help">
+        <button class="help-btn" id="helpBtn" type="button" data-translate-aria-label="helpAriaLabel">
             <svg viewBox="0 0 24 24" role="img" aria-hidden="true">
                 <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17h-2v-2h2v2zm2.07-7.75l-.9.92C13.45 12.9 13 13.5 13 15h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H8c0-2.21 1.79-4 4-4s4 1.79 4 4c0 .88-.36 1.68-.93 2.25z"/>
             </svg>
@@ -1481,8 +1621,8 @@
         <div class="logo-container">
             <div class="logo-3d"></div>
         </div>
-        <h1 class="main-title">AI MAIS</h1>
-        <p class="subtitle">Medical Intelligence Platform</p>
+        <h1 class="main-title" data-translate-key="mainTitle">AI MAIS</h1>
+        <p class="subtitle" data-translate-key="subtitle">Medical Intelligence Platform</p>
     </header>
 
     <!-- Main Content -->
@@ -1495,11 +1635,11 @@
                         <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
                     </svg>
                 </div>
-                <h3 class="card-title">Advanced AI Analysis</h3>
-                <p class="card-description">
+                <h3 class="card-title" data-translate-key="card1Title">Advanced AI Analysis</h3>
+                <p class="card-description" data-translate-key="card1Desc">
                     Cutting-edge AI-powered analysis system that processes complex medical data with unprecedented accuracy and speed.
                 </p>
-                <span class="card-arrow">
+                <span class="card-arrow" data-translate-key="card1Arrow">
                     Explore System →
                 </span>
             </a>
@@ -1511,11 +1651,11 @@
                         <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
                     </svg>
                 </div>
-                <h3 class="card-title">Smart Quality Assurance</h3>
-                <p class="card-description">
+                <h3 class="card-title" data-translate-key="card2Title">Smart Quality Assurance</h3>
+                <p class="card-description" data-translate-key="card2Desc">
                     Intelligent quality control systems that ensure data integrity and compliance with medical standards.
                 </p>
-                <span class="card-arrow">
+                <span class="card-arrow" data-translate-key="card2Arrow">
                     Access QA Tools →
                 </span>
             </a>
@@ -1527,11 +1667,11 @@
                         <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
                     </svg>
                 </div>
-                <h3 class="card-title">Smart Marketing & CRM</h3>
-                <p class="card-description">
+                <h3 class="card-title" data-translate-key="card3Title">Smart Marketing & CRM</h3>
+                <p class="card-description" data-translate-key="card3Desc">
                     Advanced marketing intelligence and R&D analytics to drive strategic decisions and customer relationships.
                 </p>
-                <span class="card-arrow">
+                <span class="card-arrow" data-translate-key="card3Arrow">
                     Launch Platform →
                 </span>
             </a>
@@ -1542,79 +1682,79 @@
             <svg viewBox="0 0 24 24">
                 <path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
             </svg>
-            Other Uses & Applications
+            <span data-translate-key="otherUsesBtn">Other Uses & Applications</span>
         </a>
     </main>
 
     <!-- Footer -->
     <footer class="footer">
-        <p>&copy; 2025 AI MAIS. All rights reserved. Developed by Yazeed</p>
+        <p data-translate-key="footerText">&copy; 2025 AI MAIS. All rights reserved. Developed by Yazeed</p>
     </footer>
 
     <!-- Enhanced Help Modal -->
-    <div class="help-modal" id="helpModal" role="dialog" aria-modal="true" aria-labelledby="helpTitle">
+    <div class="help-modal" id="helpModal" role="dialog" aria-modal="true" data-translate-aria-labelledby="helpModalTitleLabel">
         <div class="help-content">
-            <button class="help-close" id="helpCloseBtn" type="button" aria-label="Close Help">&times;</button>
-            <h2 class="help-title" id="helpTitle">How to Use AI MAIS</h2>
+            <button class="help-close" id="helpCloseBtn" type="button" data-translate-aria-label="closeHelpAriaLabel">&times;</button>
+            <h2 class="help-title" id="helpModalTitleLabel" data-translate-key="helpModalTitle">How to Use AI MAIS</h2>
             
             <div class="help-section">
-                <h3>Getting Started</h3>
-                <p>AI MAIS is your comprehensive medical intelligence platform. Choose from our three main analysis tools:</p>
+                <h3 data-translate-key="helpSection1Title">Getting Started</h3>
+                <p data-translate-key="helpSection1Desc">AI MAIS is your comprehensive medical intelligence platform. Choose from our three main analysis tools:</p>
             </div>
 
             <div class="help-section">
-                <h3>Available Tools</h3>
+                <h3 data-translate-key="helpSection2Title">Available Tools</h3>
                 <ul class="help-list">
-                    <li><strong>Advanced AI Analysis:</strong> Upload your medical data and get AI-powered insights with detailed reports and visualizations.</li>
-                    <li><strong>Smart Quality Assurance:</strong> Ensure your data meets medical standards with automated quality checks and validation.</li>
-                    <li><strong>Smart Marketing & CRM:</strong> Analyze market trends, customer data, and R&D intelligence for strategic planning.</li>
+                    <li data-translate-key="helpTool1"><strong>Advanced AI Analysis:</strong> Upload your medical data and get AI-powered insights with detailed reports and visualizations.</li>
+                    <li data-translate-key="helpTool2"><strong>Smart Quality Assurance:</strong> Ensure your data meets medical standards with automated quality checks and validation.</li>
+                    <li data-translate-key="helpTool3"><strong>Smart Marketing & CRM:</strong> Analyze market trends, customer data, and R&D intelligence for strategic planning.</li>
                 </ul>
             </div>
 
             <div class="help-section">
-                <h3>Quick Tips</h3>
+                <h3 data-translate-key="helpSection3Title">Quick Tips</h3>
                 <ul class="help-list">
-                    <li>Start with the Advanced AI Analysis for general medical data processing</li>
-                    <li>Use Quality Assurance before submitting critical reports</li>
-                    <li>Explore Marketing & CRM for business intelligence needs</li>
-                    <li>Check "Other Uses" for additional specialized applications</li>
+                    <li data-translate-key="helpTip1">Start with the Advanced AI Analysis for general medical data processing</li>
+                    <li data-translate-key="helpTip2">Use Quality Assurance before submitting critical reports</li>
+                    <li data-translate-key="helpTip3">Explore Marketing & CRM for business intelligence needs</li>
+                    <li data-translate-key="helpTip4">Check "Other Uses" for additional specialized applications</li>
                 </ul>
             </div>
 
             <div class="help-section">
-                <h3>Voice Assistant</h3>
-                <p>Use the voice assistant button to ask questions in English or Arabic. Simply tap the microphone icon and speak your question.</p>
+                <h3 data-translate-key="helpSection4Title">Voice Assistant</h3>
+                <p data-translate-key="helpSection4Desc">Use the voice assistant button to ask questions in English or Arabic. Simply tap the microphone icon and speak your question.</p>
             </div>
 
             <div class="help-section">
-                <h3>Support</h3>
-                <p>For technical support or questions, contact our team through the platform or refer to the detailed documentation in each tool section.</p>
+                <h3 data-translate-key="helpSection5Title">Support</h3>
+                <p data-translate-key="helpSection5Desc">For technical support or questions, contact our team through the platform or refer to the detailed documentation in each tool section.</p>
             </div>
         </div>
     </div>
 
     <!-- Enhanced Voice Support Modal -->
-    <div class="voice-modal" id="voiceModal" role="dialog" aria-modal="true" aria-labelledby="voiceTitle">
+    <div class="voice-modal" id="voiceModal" role="dialog" aria-modal="true" data-translate-aria-labelledby="voiceModalTitleLabel">
         <div class="voice-content">
-            <button class="voice-close" id="voiceCloseBtn" type="button" aria-label="Close Voice Assistant">&times;</button>
+            <button class="voice-close" id="voiceCloseBtn" type="button" data-translate-aria-label="closeVoiceAssistantAriaLabel">&times;</button>
             
             <div class="voice-status">
-                <h3 id="voiceTitle">AI MAIS Voice Assistant</h3>
-                <p id="voiceStatusText">مساعد ذكي يدعم العربية والإنجليزية<br>Smart assistant supporting Arabic and English</p>
+                <h3 id="voiceModalTitleLabel" data-translate-key="voiceModalTitle">AI MAIS Voice Assistant</h3>
+                <p id="voiceStatusText" data-translate-html-key="voiceModalInitialStatus">مساعد ذكي يدعم العربية والإنجليزية<br>Smart assistant supporting Arabic and English</p>
             </div>
 
             <div class="voice-controls">
-                <button class="voice-btn" id="startRecordingBtn" type="button">
+                <button class="voice-btn" id="startRecordingBtn" type="button" data-translate-key="voiceStartRecording">
                     🎤 Start Recording | بدء التسجيل
                 </button>
-                <button class="voice-btn" id="stopRecordingBtn" type="button" disabled>
+                <button class="voice-btn" id="stopRecordingBtn" type="button" disabled data-translate-key="voiceStopRecording">
                     ⏹️ Stop Recording | إيقاف التسجيل
                 </button>
             </div>
 
             <div class="voice-response" id="voiceResponse" style="display: none;">
                 <div class="voice-transcription" id="transcriptionArea" style="display: none;">
-                    <p><strong>Your question | سؤالك:</strong></p>
+                    <p><strong data-translate-key="voiceYourQuestion">Your question | سؤالك:</strong></p>
                     <p id="transcriptionText"></p>
                 </div>
                 <p id="responseText"></p>
@@ -1623,16 +1763,152 @@
     </div>
 
     <script>
+        // --- START TRANSLATIONS ---
+        const translations = {
+            en: {
+                pageTitle: "AI MAIS - Medical Intelligence Platform",
+                mainTitle: "AI MAIS",
+                subtitle: "Medical Intelligence Platform",
+                card1Title: "Advanced AI Analysis",
+                card1Desc: "Cutting-edge AI-powered analysis system that processes complex medical data with unprecedented accuracy and speed.",
+                card1Arrow: "Explore System →",
+                card2Title: "Smart Quality Assurance",
+                card2Desc: "Intelligent quality control systems that ensure data integrity and compliance with medical standards.",
+                card2Arrow: "Access QA Tools →",
+                card3Title: "Smart Marketing & CRM",
+                card3Desc: "Advanced marketing intelligence and R&D analytics to drive strategic decisions and customer relationships.",
+                card3Arrow: "Launch Platform →",
+                otherUsesBtn: "Other Uses & Applications",
+                footerText: "&copy; 2025 AI MAIS. All rights reserved. Developed by Yazeed",
+                helpModalTitle: "How to Use AI MAIS",
+                helpSection1Title: "Getting Started",
+                helpSection1Desc: "AI MAIS is your comprehensive medical intelligence platform. Choose from our three main analysis tools:",
+                helpSection2Title: "Available Tools",
+                helpTool1: "<strong>Advanced AI Analysis:</strong> Upload your medical data and get AI-powered insights with detailed reports and visualizations.",
+                helpTool2: "<strong>Smart Quality Assurance:</strong> Ensure your data meets medical standards with automated quality checks and validation.",
+                helpTool3: "<strong>Smart Marketing & CRM:</strong> Analyze market trends, customer data, and R&D intelligence for strategic planning.",
+                helpSection3Title: "Quick Tips",
+                helpTip1: "Start with the Advanced AI Analysis for general medical data processing",
+                helpTip2: "Use Quality Assurance before submitting critical reports",
+                helpTip3: "Explore Marketing & CRM for business intelligence needs",
+                helpTip4: "Check \"Other Uses\" for additional specialized applications",
+                helpSection4Title: "Voice Assistant",
+                helpSection4Desc: "Use the voice assistant button to ask questions in English or Arabic. Simply tap the microphone icon and speak your question.",
+                helpSection5Title: "Support",
+                helpSection5Desc: "For technical support or questions, contact our team through the platform or refer to the detailed documentation in each tool section.",
+                voiceModalTitle: "AI MAIS Voice Assistant",
+                voiceModalInitialStatus: "Smart assistant supporting Arabic and English<br>مساعد ذكي يدعم العربية والإنجليزية",
+                voiceStartRecording: "🎤 Start Recording",
+                voiceStopRecording: "⏹️ Stop Recording",
+                voiceYourQuestion: "Your question:",
+                voiceAssistantAriaLabel: "Voice Assistant",
+                helpAriaLabel: "Help",
+                closeHelpAriaLabel: "Close Help",
+                closeVoiceAssistantAriaLabel: "Close Voice Assistant",
+                voiceStatusRecording: "Recording... Speak your question",
+                voiceStatusListening: "Listening...",
+                voiceStatusProcessing: "Processing your question...",
+                voiceStatusError: "Processing Error",
+                voiceStatusResponseReady: "Response ready",
+                errorMicPermission: "Please allow microphone access to use voice assistant.",
+                errorMicPermissionIOS: "For iPhone: Settings > Safari > Camera & Microphone",
+                errorMicPermissionAndroid: "For Android: App Settings > Permissions > Microphone",
+                errorNoMic: "No microphone found. Check your device.",
+                errorNetwork: "Network error. Check your connection.",
+                errorNoSpeech: "No speech detected. Please speak clearly.",
+                errorAudioCapture: "Audio capture problem. Check your microphone.",
+                errorServiceNotAllowed: "Speech recognition service not available.",
+                errorGenericRecognition: "Speech recognition error. Please try again.",
+                errorStartRecording: "Error starting recording. Check microphone permissions.",
+                errorProcessTranscription: "Error processing question. Please try again.",
+                errorGemini: "Sorry, I couldn't get a response. Please try again.",
+                errorGeminiTimeout: "Request timeout. Please try again.",
+                errorGeminiPermission: "Service permission error.",
+                errorGeminiFormat: "Request format error.",
+                errorNoInternet: "No internet connection. Check your network.",
+                errorUnhandled: "An unexpected error occurred. Please reload the page.",
+                interimListen: "Listening...",
+                noClearAudio: "No clear audio detected. Please try again."
+            },
+            ar: {
+                pageTitle: "AI MAIS - منصة الذكاء الطبي",
+                mainTitle: "AI MAIS",
+                subtitle: "منصة الذكاء الطبي",
+                card1Title: "تحليل ذكاء اصطناعي متقدم",
+                card1Desc: "نظام تحليل متطور يعمل بالذكاء الاصطناعي يعالج البيانات الطبية المعقدة بدقة وسرعة غير مسبوقة.",
+                card1Arrow: "استكشف النظام ←",
+                card2Title: "ضمان جودة ذكي",
+                card2Desc: "أنظمة ذكية لمراقبة الجودة تضمن سلامة البيانات والامتثال للمعايير الطبية.",
+                card2Arrow: "أدوات ضمان الجودة ←",
+                card3Title: "تسويق ذكي وإدارة علاقات العملاء",
+                card3Desc: "ذكاء تسويقي متقدم وتحليلات البحث والتطوير لدفع القرارات الاستراتيجية وعلاقات العملاء.",
+                card3Arrow: "شغل المنصة ←",
+                otherUsesBtn: "استخدامات وتطبيقات أخرى",
+                footerText: "© 2025 AI MAIS. جميع الحقوق محفوظة. تطوير يزيد",
+                helpModalTitle: "كيفية استخدام AI MAIS",
+                helpSection1Title: "البدء",
+                helpSection1Desc: "AI MAIS هي منصتك الشاملة للذكاء الطبي. اختر من بين أدوات التحليل الرئيسية الثلاث:",
+                helpSection2Title: "الأدوات المتاحة",
+                helpTool1: "<strong>تحليل ذكاء اصطناعي متقدم:</strong> قم بتحميل بياناتك الطبية واحصل على رؤى مدعومة بالذكاء الاصطناعي مع تقارير وتصورات مفصلة.",
+                helpTool2: "<strong>ضمان جودة ذكي:</strong> تأكد من أن بياناتك تلبي المعايير الطبية من خلال فحوصات الجودة والتحقق الآلي.",
+                helpTool3: "<strong>تسويق ذكي وإدارة علاقات العملاء:</strong> قم بتحليل اتجاهات السوق وبيانات العملاء وذكاء البحث والتطوير للتخطيط الاستراتيجي.",
+                helpSection3Title: "نصائح سريعة",
+                helpTip1: "ابدأ بتحليل الذكاء الاصطناعي المتقدم لمعالجة البيانات الطبية العامة",
+                helpTip2: "استخدم ضمان الجودة قبل تقديم التقارير الهامة",
+                helpTip3: "استكشف التسويق وإدارة علاقات العملاء لاحتياجات ذكاء الأعمال",
+                helpTip4: "راجع \"استخدامات أخرى\" للتطبيقات المتخصصة الإضافية",
+                helpSection4Title: "المساعد الصوتي",
+                helpSection4Desc: "استخدم زر المساعد الصوتي لطرح الأسئلة باللغة الإنجليزية أو العربية. ما عليك سوى النقر على أيقونة الميكروفون والتحدث بسؤالك.",
+                helpSection5Title: "الدعم",
+                helpSection5Desc: "للحصول على الدعم الفني أو طرح الأسئلة، اتصل بفريقنا عبر المنصة أو ارجع إلى الوثائق التفصيلية في قسم كل أداة.",
+                voiceModalTitle: "مساعد AI MAIS الصوتي",
+                voiceModalInitialStatus: "مساعد ذكي يدعم العربية والإنجليزية<br>Smart assistant supporting Arabic and English",
+                voiceStartRecording: "🎤 بدء التسجيل",
+                voiceStopRecording: "⏹️ إيقاف التسجيل",
+                voiceYourQuestion: "سؤالك:",
+                voiceAssistantAriaLabel: "المساعد الصوتي",
+                helpAriaLabel: "مساعدة",
+                closeHelpAriaLabel: "إغلاق المساعدة",
+                closeVoiceAssistantAriaLabel: "إغلاق المساعد الصوتي",
+                voiceStatusRecording: "جاري التسجيل... تحدث بسؤالك",
+                voiceStatusListening: "جاري الاستماع...",
+                voiceStatusProcessing: "جاري معالجة سؤالك...",
+                voiceStatusError: "خطأ في المعالجة",
+                voiceStatusResponseReady: "الإجابة جاهزة",
+                errorMicPermission: "يرجى السماح بالوصول للميكروفون لاستخدام المساعد الصوتي.",
+                errorMicPermissionIOS: "للآيفون: الإعدادات > سفاري > الكاميرا والمايكروفون",
+                errorMicPermissionAndroid: "للأندرويد: إعدادات التطبيق > الأذونات > المايكروفون",
+                errorNoMic: "لم يتم العثور على مايكروفون. تحقق من جهازك.",
+                errorNetwork: "خطأ في الشبكة. تحقق من اتصالك.",
+                errorNoSpeech: "لم يتم اكتشاف صوت. يرجى التحدث بوضوح.",
+                errorAudioCapture: "مشكلة في تسجيل الصوت. تحقق من الميكروفون.",
+                errorServiceNotAllowed: "خدمة التعرف على الصوت غير متاحة.",
+                errorGenericRecognition: "حدث خطأ في التعرف على الصوت. يرجى المحاولة مرة أخرى.",
+                errorStartRecording: "خطأ في بدء التسجيل. تحقق من أذونات الميكروفون.",
+                errorProcessTranscription: "خطأ في معالجة السؤال. يرجى المحاولة مرة أخرى.",
+                errorGemini: "عذراً، لم أتمكن من الحصول على إجابة. يرجى المحاولة مرة أخرى.",
+                errorGeminiTimeout: "انتهت مهلة الطلب. يرجى المحاولة مرة أخرى.",
+                errorGeminiPermission: "خطأ في أذونات الخدمة.",
+                errorGeminiFormat: "خطأ في تنسيق الطلب.",
+                errorNoInternet: "لا يوجد اتصال بالإنترنت. تحقق من الشبكة.",
+                errorUnhandled: "حدث خطأ غير متوقع. يرجى إعادة تحميل الصفحة.",
+                interimListen: "جاري الاستماع...",
+                noClearAudio: "لم يتم تسجيل صوت واضح. يرجى المحاولة مرة أخرى."
+            }
+        };
+        // --- END TRANSLATIONS ---
+
         // Enhanced Voice Support with Mobile Optimizations
         let recognition;
         let isRecording = false;
-        let currentLanguage = 'en-US';
+        let currentLanguage = 'en-US'; // For speech recognition API
+        let currentDisplayLanguage = 'en'; // For UI text
         let speechSynthesis = window.speechSynthesis;
         let lastTranscript = '';
         let touchStartTime = 0;
         let permissionGranted = false;
         
-        const API_KEY = 'AIzaSyDsAfBjKrEGQWhacA6ttntVhgjCubDdifI';
+        const API_KEY = 'AIzaSyDsAfBjKrEGQWhacA6ttntVhgjCubDdifI'; // Keep this as is, it's an API key
 
         // Enhanced mobile detection
         const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
@@ -1640,13 +1916,69 @@
         const isAndroid = /Android/i.test(navigator.userAgent);
         const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
 
+        // --- START LANGUAGE SWITCHER LOGIC ---
+        const langEnBtn = document.getElementById('langEnBtn');
+        const langArBtn = document.getElementById('langArBtn');
+        const htmlEl = document.documentElement;
+        const languageIndicator = document.getElementById('languageIndicator');
+
+        function updatePageLanguage(lang) {
+            currentDisplayLanguage = lang;
+            htmlEl.lang = lang;
+            htmlEl.dir = lang === 'ar' ? 'rtl' : 'ltr';
+
+            document.querySelectorAll('[data-translate-key]').forEach(el => {
+                const key = el.dataset.translateKey;
+                if (translations[lang] && translations[lang][key]) {
+                    el.textContent = translations[lang][key];
+                }
+            });
+            document.querySelectorAll('[data-translate-html-key]').forEach(el => {
+                const key = el.dataset.translateHtmlKey;
+                if (translations[lang] && translations[lang][key]) {
+                    el.innerHTML = translations[lang][key];
+                }
+            });
+             document.querySelectorAll('[data-translate-aria-label]').forEach(el => {
+                const key = el.dataset.translateAriaLabel;
+                if (translations[lang] && translations[lang][key]) {
+                    el.setAttribute('aria-label', translations[lang][key]);
+                }
+            });
+            document.querySelectorAll('[data-translate-aria-labelledby]').forEach(el => { // For modal titles
+                const key = el.dataset.translateAriaLabelledby; //This should be the ID of the title element
+                // The title element itself will be translated by its data-translate-key
+            });
+
+
+            if (lang === 'ar') {
+                langEnBtn.classList.remove('active');
+                langArBtn.classList.add('active');
+                currentLanguage = 'ar-SA'; // For speech recognition
+                if(languageIndicator) languageIndicator.textContent = 'AR';
+            } else {
+                langArBtn.classList.remove('active');
+                langEnBtn.classList.add('active');
+                currentLanguage = 'en-US'; // For speech recognition
+                if(languageIndicator) languageIndicator.textContent = 'EN';
+            }
+            // Update dynamic UI elements like voice modal state texts
+            resetVoiceModal(); // This will re-apply translations to dynamic parts
+            updateVoiceUI('idle'); // Re-translate buttons
+        }
+
+        langEnBtn.addEventListener('click', () => updatePageLanguage('en'));
+        langArBtn.addEventListener('click', () => updatePageLanguage('ar'));
+        // --- END LANGUAGE SWITCHER LOGIC ---
+
+
         // Utility functions for mobile optimization
         function preventZoom() {
             document.addEventListener('touchstart', (e) => {
                 if (e.touches.length > 1) {
                     e.preventDefault();
                 }
-            });
+            }, { passive: false });
 
             let lastTouchEnd = 0;
             document.addEventListener('touchend', (e) => {
@@ -1683,23 +2015,16 @@
             if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
                 recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
                 
-                // Mobile-optimized settings
                 recognition.continuous = false;
                 recognition.interimResults = true;
-                recognition.lang = currentLanguage;
+                recognition.lang = currentLanguage; // Will be updated by language switcher
                 recognition.maxAlternatives = 1;
                 
-                // Enhanced mobile settings
                 if (isMobile) {
                     recognition.serviceURI = 'wss://www.google.com/speech-api/v2/recognize';
-                    // Reduce timeout for mobile battery optimization
                     setTimeout(() => {
                         if (isRecording && recognition) {
-                            try {
-                                recognition.stop();
-                            } catch (e) {
-                                console.log('Recognition already stopped');
-                            }
+                            try { recognition.stop(); } catch (e) { console.log('Recognition already stopped'); }
                         }
                     }, 15000);
                 }
@@ -1708,9 +2033,7 @@
                     console.log('Voice recognition started');
                     isRecording = true;
                     updateVoiceUI('listening');
-                    if (navigator.vibrate && isMobile) {
-                        navigator.vibrate(50); // Haptic feedback
-                    }
+                    if (navigator.vibrate && isMobile) navigator.vibrate(50);
                 };
                 
                 recognition.onresult = function(event) {
@@ -1719,23 +2042,18 @@
                     
                     for (let i = event.resultIndex; i < event.results.length; i++) {
                         transcript += event.results[i][0].transcript;
-                        if (event.results[i].isFinal) {
-                            isFinal = true;
-                        }
+                        if (event.results[i].isFinal) isFinal = true;
                     }
                     
                     if (isFinal && transcript.trim()) {
                         lastTranscript = transcript.trim();
                         processTranscription(lastTranscript);
-                        if (navigator.vibrate && isMobile) {
-                            navigator.vibrate([50, 100, 50]); // Success feedback
-                        }
+                        if (navigator.vibrate && isMobile) navigator.vibrate([50, 100, 50]);
                     } else if (transcript.trim()) {
-                        // Show interim results
                         const statusEl = document.getElementById('voiceStatusText');
                         if (statusEl) {
                             statusEl.innerHTML = `
-                                Listening... | جاري الاستماع...<br>
+                                ${translations[currentDisplayLanguage].interimListen || 'Listening...'}<br>
                                 <small style="opacity: 0.7;">"${transcript}"</small>
                             `;
                         }
@@ -1745,9 +2063,7 @@
                 recognition.onerror = function(event) {
                     console.error('Speech recognition error:', event.error);
                     handleRecognitionError(event.error);
-                    if (navigator.vibrate && isMobile) {
-                        navigator.vibrate([200, 100, 200]); // Error feedback
-                    }
+                    if (navigator.vibrate && isMobile) navigator.vibrate([200, 100, 200]);
                 };
                 
                 recognition.onend = function() {
@@ -1755,35 +2071,27 @@
                     isRecording = false;
                     updateVoiceUI('idle');
                     
-                    // Enhanced mobile error handling
                     if (!lastTranscript && isMobile) {
                         setTimeout(() => {
                             if (!lastTranscript) {
-                                showError('لم يتم تسجيل صوت واضح. يرجى المحاولة مرة أخرى. | No clear audio detected. Please try again.');
+                                showError(translations[currentDisplayLanguage].noClearAudio);
                             }
                         }, 1000);
                     }
                 };
             } else {
                 console.error('Speech recognition not supported');
-                showError('المتصفح لا يدعم التعرف على الصوت. | Speech recognition not supported in this browser.');
+                showError(translations[currentDisplayLanguage].errorGenericRecognition);
             }
         }
 
-        // Enhanced microphone permission handling
         async function requestMicrophonePermission() {
             if (permissionGranted) return true;
-
             try {
                 if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
                     const stream = await navigator.mediaDevices.getUserMedia({ 
-                        audio: {
-                            echoCancellation: true,
-                            noiseSuppression: true,
-                            autoGainControl: true
-                        } 
+                        audio: { echoCancellation: true, noiseSuppression: true, autoGainControl: true } 
                     });
-                    // Stop the stream immediately, we just needed permission
                     stream.getTracks().forEach(track => track.stop());
                     permissionGranted = true;
                     return true;
@@ -1791,154 +2099,92 @@
                 return false;
             } catch (error) {
                 console.error('Microphone permission error:', error);
-                
-                let errorMessage = 'يرجى السماح بالوصول للميكروفون لاستخدام المساعد الصوتي. | Please allow microphone access to use voice assistant.';
-                
-                if (error.name === 'NotAllowedError') {
-                    if (isMobile) {
-                        errorMessage += '\n\n';
-                        if (isIOS) {
-                            errorMessage += 'للآيفون: الإعدادات > سفاري > كاميرا ومايكروفون | For iPhone: Settings > Safari > Camera & Microphone';
-                        } else if (isAndroid) {
-                            errorMessage += 'للأندرويد: إعدادات التطبيق > الأذونات > المايكروفون | For Android: App Settings > Permissions > Microphone';
-                        }
-                    }
+                let errorMessage = translations[currentDisplayLanguage].errorMicPermission;
+                if (error.name === 'NotAllowedError' && isMobile) {
+                    errorMessage += '\n\n' + (isIOS ? translations[currentDisplayLanguage].errorMicPermissionIOS : translations[currentDisplayLanguage].errorMicPermissionAndroid);
                 } else if (error.name === 'NotFoundError') {
-                    errorMessage = 'لم يتم العثور على مايكروفون. تحقق من الجهاز. | No microphone found. Check your device.';
+                    errorMessage = translations[currentDisplayLanguage].errorNoMic;
                 }
-                
                 showError(errorMessage);
                 return false;
             }
         }
 
-        // Enhanced error handling for mobile
         function handleRecognitionError(error) {
             console.error('Recognition error:', error);
-            let errorMessage = '';
+            let errorMessageKey = 'errorGenericRecognition';
             
             switch(error) {
-                case 'network':
-                    errorMessage = 'خطأ في الشبكة. تحقق من الاتصال. | Network error. Check your connection.';
-                    break;
+                case 'network': errorMessageKey = 'errorNetwork'; break;
                 case 'not-allowed':
-                    errorMessage = 'يرجى السماح بالوصول للميكروفون. | Please allow microphone access.';
+                    errorMessageKey = 'errorMicPermission';
                     if (isMobile) {
-                        errorMessage += '\n\n';
-                        if (isIOS) {
-                            errorMessage += 'الإعدادات > سفاري > الكاميرا والمايكروفون\nSettings > Safari > Camera & Microphone';
-                        } else {
-                            errorMessage += 'إعدادات المتصفح > الأذونات > المايكروفون\nBrowser settings > Permissions > Microphone';
-                        }
+                        const platformSpecificError = isIOS ? translations[currentDisplayLanguage].errorMicPermissionIOS : translations[currentDisplayLanguage].errorMicPermissionAndroid;
+                        showError(translations[currentDisplayLanguage][errorMessageKey] + "\n\n" + platformSpecificError);
+                        return;
                     }
                     break;
                 case 'no-speech':
-                    // Try alternative language
-                    if (currentLanguage === 'en-US') {
-                        currentLanguage = 'ar-SA';
-                        document.getElementById('languageIndicator').textContent = 'AR';
-                        setTimeout(() => {
-                            if (recognition && !isRecording) {
-                                startRecording();
-                            }
-                        }, 500);
+                    // Auto-switch language attempt if not already tried, or show error
+                    const otherLang = currentDisplayLanguage === 'en' ? 'ar' : 'en';
+                    if (document.getElementById('languageIndicator').textContent !== (otherLang === 'ar' ? 'AR' : 'EN')) { // Avoid infinite loop
+                        updatePageLanguage(otherLang); // This updates currentLanguage for recognition
+                        setTimeout(() => { if (recognition && !isRecording) startRecording(); }, 500);
                         return;
                     } else {
-                        errorMessage = 'لم يتم اكتشاف صوت. يرجى التحدث بوضوح. | No speech detected. Please speak clearly.';
+                        errorMessageKey = 'errorNoSpeech';
                     }
                     break;
-                case 'audio-capture':
-                    errorMessage = 'مشكلة في تسجيل الصوت. تحقق من الميكروفون. | Audio capture problem. Check your microphone.';
-                    break;
-                case 'service-not-allowed':
-                    errorMessage = 'خدمة التعرف على الصوت غير متاحة. | Speech recognition service not available.';
-                    break;
-                default:
-                    errorMessage = 'حدث خطأ في التعرف على الصوت. يرجى المحاولة مرة أخرى. | Speech recognition error. Please try again.';
+                case 'audio-capture': errorMessageKey = 'errorAudioCapture'; break;
+                case 'service-not-allowed': errorMessageKey = 'errorServiceNotAllowed'; break;
             }
-            
-            showError(errorMessage);
+            showError(translations[currentDisplayLanguage][errorMessageKey]);
         }
 
-        // Enhanced mobile voice recording
         async function startRecording() {
             try {
                 lastTranscript = '';
-                
-                // Request permission first
                 const hasPermission = await requestMicrophonePermission();
-                if (!hasPermission) {
-                    return;
-                }
+                if (!hasPermission) return;
                 
-                if (!recognition) {
-                    initializeSpeechRecognition();
-                }
+                if (!recognition) initializeSpeechRecognition();
+                if (!recognition) throw new Error('Speech recognition not supported');
                 
-                if (!recognition) {
-                    throw new Error('Speech recognition not supported');
-                }
+                if (speechSynthesis.speaking) speechSynthesis.cancel();
                 
-                // Stop any ongoing speech synthesis
-                if (speechSynthesis.speaking) {
-                    speechSynthesis.cancel();
-                }
-                
-                // Enhanced mobile preparation
-                if (isMobile) {
-                    // Prevent screen lock during recording
-                    if ('wakeLock' in navigator) {
-                        try {
-                            await navigator.wakeLock.request('screen');
-                        } catch (e) {
-                            console.log('Wake lock not available');
-                        }
-                    }
+                if (isMobile && 'wakeLock' in navigator) {
+                    try { await navigator.wakeLock.request('screen'); } catch (e) { console.log('Wake lock not available'); }
                 }
                 
                 isRecording = true;
-                recognition.lang = currentLanguage;
+                recognition.lang = currentLanguage; // Ensure it's up-to-date
                 recognition.start();
                 
                 updateVoiceUI('recording');
                 const statusEl = document.getElementById('voiceStatusText');
-                if (statusEl) {
-                    statusEl.textContent = 'Recording... Speak your question | جاري التسجيل... تحدث بسؤالك';
-                }
+                if (statusEl) statusEl.textContent = translations[currentDisplayLanguage].voiceStatusRecording;
                 
-                // Auto-stop with longer duration for mobile
                 if (isMobile) {
-                    setTimeout(() => {
-                        if (isRecording) {
-                            stopRecording();
-                        }
-                    }, 20000); // Increased to 20 seconds
+                    setTimeout(() => { if (isRecording) stopRecording(); }, 20000);
                 }
                 
             } catch (error) {
                 console.error('Error starting recording:', error);
-                showError('خطأ في بدء التسجيل. تحقق من أذونات الميكروفون. | Error starting recording. Check microphone permissions.');
+                showError(translations[currentDisplayLanguage].errorStartRecording);
                 updateVoiceUI('idle');
             }
         }
 
         function stopRecording() {
             if (recognition && isRecording) {
-                try {
-                    recognition.stop();
-                } catch (e) {
-                    console.log('Recognition already stopped');
-                }
+                try { recognition.stop(); } catch (e) { console.log('Recognition already stopped'); }
                 isRecording = false;
                 updateVoiceUI('processing');
                 const statusEl = document.getElementById('voiceStatusText');
-                if (statusEl) {
-                    statusEl.textContent = 'Processing your question... | جاري معالجة سؤالك...';
-                }
+                if (statusEl) statusEl.textContent = translations[currentDisplayLanguage].voiceStatusProcessing;
             }
         }
 
-        // Enhanced UI state management
         function updateVoiceUI(state) {
             const btn = document.getElementById('voiceSupportBtn');
             const startBtn = document.getElementById('startRecordingBtn');
@@ -1947,11 +2193,14 @@
             
             if (!btn || !startBtn || !stopBtn || !indicator) return;
             
-            // Reset all states
             btn.classList.remove('recording', 'loading', 'listening');
             startBtn.classList.remove('recording', 'processing');
             startBtn.disabled = false;
             stopBtn.disabled = true;
+
+            // Always re-apply base translations for buttons
+            startBtn.textContent = translations[currentDisplayLanguage].voiceStartRecording;
+            stopBtn.textContent = translations[currentDisplayLanguage].voiceStopRecording;
             
             switch(state) {
                 case 'recording':
@@ -1959,76 +2208,58 @@
                     startBtn.classList.add('recording');
                     startBtn.disabled = true;
                     stopBtn.disabled = false;
-                    startBtn.textContent = '🔴 Recording... | جاري التسجيل...';
+                    startBtn.textContent = `🔴 ${translations[currentDisplayLanguage].voiceStatusRecording.split('...')[0]}...`;
                     indicator.style.opacity = '1';
                     break;
-                    
                 case 'listening':
                     btn.classList.add('listening');
-                    startBtn.textContent = '👂 Listening... | جاري الاستماع...';
+                    startBtn.textContent = `👂 ${translations[currentDisplayLanguage].voiceStatusListening.split('...')[0]}...`;
                     startBtn.disabled = true;
                     stopBtn.disabled = false;
                     indicator.style.opacity = '1';
                     break;
-                    
                 case 'processing':
                     btn.classList.add('loading');
                     startBtn.classList.add('processing');
-                    startBtn.textContent = '⚙️ Processing... | جاري المعالجة...';
+                    startBtn.textContent = `⚙️ ${translations[currentDisplayLanguage].voiceStatusProcessing.split('...')[0]}...`;
                     startBtn.disabled = true;
                     stopBtn.disabled = true;
                     break;
-                    
-                case 'idle':
-                default:
-                    startBtn.textContent = '🎤 Start Recording | بدء التسجيل';
-                    stopBtn.textContent = '⏹️ Stop Recording | إيقاف التسجيل';
-                                       indicator.style.opacity = '0';
+                case 'idle': default:
+                    indicator.style.opacity = '0';
                     break;
             }
         }
 
-        // Enhanced transcription processing
         async function processTranscription(transcript) {
             const transcriptionArea = document.getElementById('transcriptionArea');
             const transcriptionText = document.getElementById('transcriptionText');
             
             if (transcriptionArea && transcriptionText) {
-                // Show transcription
                 transcriptionText.textContent = transcript;
                 transcriptionArea.style.display = 'block';
             }
             
             const statusEl = document.getElementById('voiceStatusText');
-            if (statusEl) {
-                statusEl.innerHTML = `
-                    <strong>Processing your question... | جاري معالجة سؤالك...</strong>
-                `;
-            }
+            if (statusEl) statusEl.innerHTML = `<strong>${translations[currentDisplayLanguage].voiceStatusProcessing}</strong>`;
             
             try {
                 await getGeminiResponse(transcript);
             } catch (error) {
                 console.error('Error processing transcription:', error);
-                showError('خطأ في معالجة السؤال. يرجى المحاولة مرة أخرى. | Error processing question. Please try again.');
+                showError(translations[currentDisplayLanguage].errorProcessTranscription);
             }
         }
 
-        // Enhanced Gemini API integration with mobile optimizations
         async function getGeminiResponse(question) {
             try {
-                const isArabic = /[\u0600-\u06FF\u0750-\u077F]/.test(question);
-                
                 const prompt = `
 You are an intelligent medical assistant for AI MAIS (Medical Intelligence Platform). 
-
 IMPORTANT: Detect if the user's question is in Arabic or English and respond in the SAME language.
-
 AI MAIS offers:
 1. Advanced AI Analysis: Cutting-edge AI-powered analysis system for medical data
 2. Smart Quality Assurance: Quality control systems for medical standards compliance  
 3. Smart Marketing & CRM: Marketing intelligence and R&D analytics
-
 Instructions:
 - Respond in the same language as the question (Arabic or English)
 - Be professional, helpful, and concise (especially for mobile users)
@@ -2036,105 +2267,57 @@ Instructions:
 - Keep responses under 200 words for mobile optimization
 - If uncertain, acknowledge it and suggest alternatives
 - Focus on how AI MAIS can help with medical intelligence
-
 User's question: "${question}"
+Provide a helpful response in the same language:`;
 
-Provide a helpful response in the same language:
-`;
-
-                // Enhanced fetch with mobile optimization
                 const controller = new AbortController();
-                const timeoutId = setTimeout(() => controller.abort(), 15000); // 15 second timeout for mobile
+                const timeoutId = setTimeout(() => controller.abort(), 15000);
 
-                const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${API_KEY}`, {
+                const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${API_KEY}`, { // Updated model
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
-                        contents: [{
-                            parts: [{
-                                text: prompt
-                            }]
-                        }],
-                        generationConfig: {
-                            temperature: 0.7,
-                            topK: 40,
-                            topP: 0.95,
-                            maxOutputTokens: 300,
-                        }
+                        contents: [{ parts: [{ text: prompt }] }],
+                        generationConfig: { temperature: 0.7, topK: 40, topP: 0.95, maxOutputTokens: 300 }
                     }),
                     signal: controller.signal
                 });
-
                 clearTimeout(timeoutId);
 
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-
+                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
                 const data = await response.json();
                 
                 if (data.candidates && data.candidates[0] && data.candidates[0].content) {
-                    const aiResponse = data.candidates[0].content.parts[0].text;
-                    showResponse(question, aiResponse);
+                    showResponse(question, data.candidates[0].content.parts[0].text);
                 } else {
-                    showError('عذراً، لم أتمكن من الحصول على إجابة. يرجى المحاولة مرة أخرى. | Sorry, I couldn\'t get a response. Please try again.');
+                    showError(translations[currentDisplayLanguage].errorGemini);
                 }
-                
             } catch (error) {
                 console.error('Error calling Gemini API:', error);
-                
-                let errorMessage = 'خطأ في الاتصال بالخدمة. يرجى المحاولة مرة أخرى. | Connection error. Please try again.';
-                
-                if (error.name === 'AbortError') {
-                    errorMessage = 'انتهت مهلة الطلب. يرجى المحاولة مرة أخرى. | Request timeout. Please try again.';
-                } else if (error.message.includes('403')) {
-                    errorMessage = 'خطأ في أذونات الخدمة. | Service permission error.';
-                } else if (error.message.includes('400')) {
-                    errorMessage = 'خطأ في تنسيق الطلب. | Request format error.';
-                } else if (!navigator.onLine) {
-                    errorMessage = 'لا يوجد اتصال بالإنترنت. تحقق من الشبكة. | No internet connection. Check your network.';
-                }
-                
-                showError(errorMessage);
+                let errorKey = 'errorGemini';
+                if (error.name === 'AbortError') errorKey = 'errorGeminiTimeout';
+                else if (error.message.includes('403')) errorKey = 'errorGeminiPermission';
+                else if (error.message.includes('400')) errorKey = 'errorGeminiFormat';
+                else if (!navigator.onLine) errorKey = 'errorNoInternet';
+                showError(translations[currentDisplayLanguage][errorKey]);
             }
         }
 
-        // Enhanced response display with mobile optimization
         function showResponse(question, response) {
             const statusEl = document.getElementById('voiceStatusText');
             const responseEl = document.getElementById('responseText');
             const voiceResponseEl = document.getElementById('voiceResponse');
             
-            if (statusEl) {
-                statusEl.innerHTML = `
-                    <strong>Response ready | الإجابة جاهزة</strong>
-                `;
-            }
-            
-            if (responseEl) {
-                responseEl.textContent = response;
-            }
-            
-            if (voiceResponseEl) {
-                voiceResponseEl.style.display = 'block';
-            }
+            if (statusEl) statusEl.innerHTML = `<strong>${translations[currentDisplayLanguage].voiceStatusResponseReady}</strong>`;
+            if (responseEl) responseEl.textContent = response;
+            if (voiceResponseEl) voiceResponseEl.style.display = 'block';
             
             updateVoiceUI('idle');
-            
-            // Enhanced text-to-speech for mobile
             speakResponse(response);
             
-            // Scroll to response on mobile with better timing
             if (isMobile) {
                 setTimeout(() => {
-                    if (voiceResponseEl) {
-                        voiceResponseEl.scrollIntoView({ 
-                            behavior: 'smooth', 
-                            block: 'center' 
-                        });
-                    }
+                    if (voiceResponseEl) voiceResponseEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
                 }, 500);
             }
         }
@@ -2145,182 +2328,97 @@ Provide a helpful response in the same language:
             const voiceResponseEl = document.getElementById('voiceResponse');
             const transcriptionArea = document.getElementById('transcriptionArea');
             
-            if (statusEl) {
-                statusEl.textContent = 'خطأ في المعالجة | Processing Error';
-            }
-            
-            if (responseEl) {
-                responseEl.textContent = errorMessage;
-            }
-            
-            if (voiceResponseEl) {
-                voiceResponseEl.style.display = 'block';
-            }
-            
-            if (transcriptionArea) {
-                transcriptionArea.style.display = 'none';
-            }
+            if (statusEl) statusEl.textContent = translations[currentDisplayLanguage].voiceStatusError;
+            if (responseEl) responseEl.textContent = errorMessage;
+            if (voiceResponseEl) voiceResponseEl.style.display = 'block';
+            if (transcriptionArea) transcriptionArea.style.display = 'none';
             
             updateVoiceUI('idle');
         }
 
-        // Enhanced text-to-speech with mobile optimization
         function speakResponse(text) {
             if (!speechSynthesis) return;
-            
-            // Stop any ongoing speech
             speechSynthesis.cancel();
             
-            // Enhanced mobile compatibility
             setTimeout(() => {
                 const utterance = new SpeechSynthesisUtterance(text);
-                
-                // Detect language and set appropriate voice
-                const isArabic = /[\u0600-\u06FF\u0750-\u077F]/.test(text);
-                utterance.lang = isArabic ? 'ar-SA' : 'en-US';
-                
-                // Mobile-optimized settings
+                const isArabicText = /[\u0600-\u06FF\u0750-\u077F]/.test(text);
+                utterance.lang = isArabicText ? 'ar-SA' : 'en-US';
                 utterance.rate = isMobile ? 0.8 : 0.9;
                 utterance.pitch = 1;
                 utterance.volume = 0.8;
                 
-                // Enhanced mobile speech handling
                 if (isMobile && text.length > 200) {
                     const sentences = text.split(/[.!?]/).filter(s => s.trim());
                     let currentIndex = 0;
-                    
                     function speakNext() {
                         if (currentIndex < sentences.length) {
                             const sentence = sentences[currentIndex].trim();
                             if (sentence) {
                                 const sentenceUtterance = new SpeechSynthesisUtterance(sentence);
-                                sentenceUtterance.lang = utterance.lang;
-                                sentenceUtterance.rate = utterance.rate;
-                                sentenceUtterance.pitch = utterance.pitch;
-                                sentenceUtterance.volume = utterance.volume;
-                                
-                                sentenceUtterance.onend = () => {
-                                    currentIndex++;
-                                    setTimeout(speakNext, 300); // Longer pause between sentences
-                                };
-                                
-                                sentenceUtterance.onerror = (event) => {
-                                    console.error('Speech synthesis error:', event);
-                                    currentIndex++;
-                                    speakNext();
-                                };
-                                
+                                Object.assign(sentenceUtterance, { lang: utterance.lang, rate: utterance.rate, pitch: utterance.pitch, volume: utterance.volume });
+                                sentenceUtterance.onend = () => { currentIndex++; setTimeout(speakNext, 300); };
+                                sentenceUtterance.onerror = (event) => { console.error('Speech synthesis error:', event); currentIndex++; speakNext(); };
                                 speechSynthesis.speak(sentenceUtterance);
-                            } else {
-                                currentIndex++;
-                                speakNext();
-                            }
+                            } else { currentIndex++; speakNext(); }
                         }
                     }
-                    
                     speakNext();
                 } else {
-                    utterance.onerror = function(event) {
-                        console.error('Speech synthesis error:', event);
-                    };
-                    
+                    utterance.onerror = (event) => console.error('Speech synthesis error:', event);
                     speechSynthesis.speak(utterance);
                 }
             }, 200);
         }
 
-        // Enhanced modal management
-        function toggleVoiceModal() {
-            const modal = document.getElementById('voiceModal');
-            
+        function toggleModal(modalId, shouldOpen) {
+            const modal = document.getElementById(modalId);
             if (!modal) return;
-            
+
             const isActive = modal.classList.contains('active');
-            
-            if (!isActive) {
+            const openAction = shouldOpen === undefined ? !isActive : shouldOpen;
+
+            if (openAction) {
                 modal.classList.add('active');
                 disableBodyScroll();
-                resetVoiceModal();
+                if (modalId === 'voiceModal') resetVoiceModal();
                 
-                // Enhanced mobile focus
                 if (isMobile) {
                     setTimeout(() => {
-                        const content = document.querySelector('.voice-content');
-                        if (content) {
-                            content.scrollTo(0, 0);
-                        }
+                        const content = modal.querySelector('.voice-content, .help-content');
+                        if (content) content.scrollTo(0, 0);
                     }, 400);
                 }
             } else {
                 modal.classList.remove('active');
                 enableBodyScroll();
-                
-                // Cleanup
-                if (isRecording) {
-                    stopRecording();
-                }
-                if (speechSynthesis.speaking) {
-                    speechSynthesis.cancel();
+                if (modalId === 'voiceModal') {
+                    if (isRecording) stopRecording();
+                    if (speechSynthesis.speaking) speechSynthesis.cancel();
                 }
             }
         }
+        
+        function toggleVoiceModal() { toggleModal('voiceModal'); }
+        function toggleHelpModal() { toggleModal('helpModal'); }
+
 
         function resetVoiceModal() {
             const statusEl = document.getElementById('voiceStatusText');
             const responseEl = document.getElementById('voiceResponse');
             const transcriptionArea = document.getElementById('transcriptionArea');
-            const indicator = document.getElementById('languageIndicator');
             
-            if (statusEl) {
-                statusEl.innerHTML = 'مساعد ذكي يدعم العربية والإنجليزية<br>Smart assistant supporting Arabic and English';
-            }
+            if (statusEl) statusEl.innerHTML = translations[currentDisplayLanguage].voiceModalInitialStatus;
+            if (responseEl) responseEl.style.display = 'none';
+            if (transcriptionArea) transcriptionArea.style.display = 'none';
             
-            if (responseEl) {
-                responseEl.style.display = 'none';
-            }
-            
-            if (transcriptionArea) {
-                transcriptionArea.style.display = 'none';
-            }
-            
-            if (indicator) {
-                indicator.textContent = 'EN';
-            }
-            
+            // Indicator text is already updated by updatePageLanguage
+            // currentLanguage (for speech recognition) is also updated by updatePageLanguage
             updateVoiceUI('idle');
-            currentLanguage = 'en-US';
             lastTranscript = '';
         }
 
-        function toggleHelpModal() {
-            const modal = document.getElementById('helpModal');
-            
-            if (!modal) return;
-            
-            const isActive = modal.classList.contains('active');
-            
-            if (!isActive) {
-                modal.classList.add('active');
-                disableBodyScroll();
-                
-                // Enhanced mobile focus
-                if (isMobile) {
-                    setTimeout(() => {
-                        const content = document.querySelector('.help-content');
-                        if (content) {
-                            content.scrollTo(0, 0);
-                        }
-                    }, 400);
-                }
-            } else {
-                modal.classList.remove('active');
-                enableBodyScroll();
-            }
-        }
-
-        // Enhanced event listeners for mobile
         function addMobileEventListeners() {
-            // Enhanced button event listeners with proper touch handling
             const voiceBtn = document.getElementById('voiceSupportBtn');
             const helpBtn = document.getElementById('helpBtn');
             const startRecordingBtn = document.getElementById('startRecordingBtn');
@@ -2328,304 +2426,149 @@ Provide a helpful response in the same language:
             const voiceCloseBtn = document.getElementById('voiceCloseBtn');
             const helpCloseBtn = document.getElementById('helpCloseBtn');
 
-            // Voice support button
             if (voiceBtn) {
-                voiceBtn.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    toggleVoiceModal();
-                });
-
-                // Enhanced touch events
-                voiceBtn.addEventListener('touchstart', (e) => {
-                    e.preventDefault();
-                    touchStartTime = Date.now();
-                }, { passive: false });
-
+                voiceBtn.addEventListener('click', (e) => { e.preventDefault(); e.stopPropagation(); toggleVoiceModal(); });
+                voiceBtn.addEventListener('touchstart', (e) => { e.preventDefault(); touchStartTime = Date.now(); }, { passive: false });
                 voiceBtn.addEventListener('touchend', (e) => {
                     e.preventDefault();
-                    const touchDuration = Date.now() - touchStartTime;
-                    if (touchDuration < 1000) { // Prevent accidental long taps
-                        toggleVoiceModal();
-                    }
+                    if (Date.now() - touchStartTime < 1000) toggleVoiceModal();
                 }, { passive: false });
             }
-
-            // Help button
             if (helpBtn) {
-                helpBtn.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    toggleHelpModal();
-                });
-
-                helpBtn.addEventListener('touchstart', (e) => {
-                    e.preventDefault();
-                }, { passive: false });
-
-                helpBtn.addEventListener('touchend', (e) => {
-                    e.preventDefault();
-                    toggleHelpModal();
-                }, { passive: false });
+                helpBtn.addEventListener('click', (e) => { e.preventDefault(); e.stopPropagation(); toggleHelpModal(); });
+                helpBtn.addEventListener('touchstart', (e) => e.preventDefault(), { passive: false });
+                helpBtn.addEventListener('touchend', (e) => { e.preventDefault(); toggleHelpModal(); }, { passive: false });
             }
+            if (startRecordingBtn) startRecordingBtn.addEventListener('click', startRecording);
+            if (stopRecordingBtn) stopRecordingBtn.addEventListener('click', stopRecording);
+            if (voiceCloseBtn) voiceCloseBtn.addEventListener('click', toggleVoiceModal);
+            if (helpCloseBtn) helpCloseBtn.addEventListener('click', toggleHelpModal);
 
-            // Recording buttons
-            if (startRecordingBtn) {
-                startRecordingBtn.addEventListener('click', startRecording);
-            }
-
-            if (stopRecordingBtn) {
-                stopRecordingBtn.addEventListener('click', stopRecording);
-            }
-
-            // Close buttons
-            if (voiceCloseBtn) {
-                voiceCloseBtn.addEventListener('click', toggleVoiceModal);
-            }
-
-            if (helpCloseBtn) {
-                helpCloseBtn.addEventListener('click', toggleHelpModal);
-            }
-
-            // Enhanced modal closing
             const helpModal = document.getElementById('helpModal');
             const voiceModal = document.getElementById('voiceModal');
+            if (helpModal) helpModal.addEventListener('click', (e) => { if (e.target === helpModal) toggleHelpModal(); });
+            if (voiceModal) voiceModal.addEventListener('click', (e) => { if (e.target === voiceModal) toggleVoiceModal(); });
 
-            if (helpModal) {
-                helpModal.addEventListener('click', (e) => {
-                    if (e.target === helpModal) {
-                        toggleHelpModal();
-                    }
-                });
-            }
-
-            if (voiceModal) {
-                voiceModal.addEventListener('click', (e) => {
-                    if (e.target === voiceModal) {
-                        toggleVoiceModal();
-                    }
-                });
-            }
-
-            // Enhanced keyboard support
             document.addEventListener('keydown', (e) => {
                 if (e.key === 'Escape') {
-                    if (helpModal && helpModal.classList.contains('active')) {
-                        toggleHelpModal();
-                    }
-                    if (voiceModal && voiceModal.classList.contains('active')) {
-                        toggleVoiceModal();
-                    }
+                    if (helpModal && helpModal.classList.contains('active')) toggleHelpModal();
+                    if (voiceModal && voiceModal.classList.contains('active')) toggleVoiceModal();
                 }
             });
 
-            // Handle orientation change
             window.addEventListener('orientationchange', () => {
                 setTimeout(() => {
-                    // Reset any transformations that might be affected
-                    document.querySelectorAll('.service-card').forEach(card => {
-                        card.style.transform = '';
-                    });
-                    
-                    // Recalculate modal positions
-                    const modals = document.querySelectorAll('.voice-modal.active, .help-modal.active');
-                    modals.forEach(modal => {
+                    document.querySelectorAll('.service-card').forEach(card => card.style.transform = '');
+                    document.querySelectorAll('.voice-modal.active, .help-modal.active').forEach(modal => {
                         const content = modal.querySelector('.voice-content, .help-content');
-                        if (content) {
-                            content.scrollTo(0, 0);
-                        }
+                        if (content) content.scrollTo(0, 0);
                     });
                 }, 200);
             });
 
-            // Handle visibility change (for battery optimization)
             document.addEventListener('visibilitychange', () => {
                 if (document.hidden) {
-                    // Stop recording and speech when page is hidden
-                    if (isRecording) {
-                        stopRecording();
-                    }
-                    if (speechSynthesis.speaking) {
-                        speechSynthesis.cancel();
-                    }
+                    if (isRecording) stopRecording();
+                    if (speechSynthesis.speaking) speechSynthesis.cancel();
                 }
             });
 
-            // Enhanced focus management for modals
             document.addEventListener('focusin', (e) => {
-                const voiceModal = document.getElementById('voiceModal');
-                const helpModal = document.getElementById('helpModal');
-                
-                if (voiceModal && voiceModal.classList.contains('active')) {
-                    if (!voiceModal.contains(e.target)) {
-                        const firstFocusable = voiceModal.querySelector('button:not([disabled])');
-                        if (firstFocusable) {
-                            firstFocusable.focus();
-                        }
+                [voiceModal, helpModal].forEach(modal => {
+                    if (modal && modal.classList.contains('active') && !modal.contains(e.target)) {
+                        const firstFocusable = modal.querySelector('button:not([disabled])');
+                        if (firstFocusable) firstFocusable.focus();
                     }
-                }
-                
-                if (helpModal && helpModal.classList.contains('active')) {
-                    if (!helpModal.contains(e.target)) {
-                        const firstFocusable = helpModal.querySelector('button:not([disabled])');
-                        if (firstFocusable) {
-                            firstFocusable.focus();
-                        }
-                    }
-                }
+                });
             });
         }
 
-        // Enhanced initialization
         window.addEventListener('load', () => {
-            // Prevent zoom
             preventZoom();
-            
-            // Initialize components
+            updatePageLanguage('en'); // Set initial language to English
             initializeSpeechRecognition();
             addMobileEventListeners();
             
-            // Mobile-specific optimizations
             if (isMobile) {
-                // Add mobile class to body
                 document.body.classList.add('mobile-device');
-                
-                // Optimize viewport
                 const viewport = document.querySelector('meta[name=viewport]');
-                if (viewport) {
-                    viewport.setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover');
-                }
-                
-                // Preload critical resources
-                if ('serviceWorker' in navigator) {
-                    // Register service worker for better mobile performance (if implemented)
-                }
+                if (viewport) viewport.setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover');
             }
             
-            // Add loading animation for cards
             const cards = document.querySelectorAll('.service-card');
             cards.forEach((card, index) => {
                 setTimeout(() => {
-                    card.style.opacity = '0';
-                    card.style.transform = 'translateY(30px)';
+                    card.style.opacity = '0'; card.style.transform = 'translateY(30px)';
                     card.style.transition = 'all 0.8s cubic-bezier(0.4, 0, 0.2, 1)';
-                    
-                    setTimeout(() => {
-                        card.style.opacity = '1';
-                        card.style.transform = 'translateY(0)';
-                    }, 100);
+                    setTimeout(() => { card.style.opacity = '1'; card.style.transform = 'translateY(0)'; }, 100);
                 }, index * 200);
             });
 
-            // Enhanced button visibility check
             setTimeout(() => {
-                const voiceBtn = document.getElementById('voiceSupportBtn');
-                const helpBtn = document.getElementById('helpBtn');
-                
-                if (voiceBtn) {
-                    const rect = voiceBtn.getBoundingClientRect();
-                    if (rect.width === 0 || rect.height === 0) {
-                        console.warn('Voice button not visible, attempting to fix...');
-                        voiceBtn.style.display = 'flex';
-                        voiceBtn.style.visibility = 'visible';
-                        voiceBtn.style.opacity = '1';
+                [document.getElementById('voiceSupportBtn'), document.getElementById('helpBtn')].forEach(btn => {
+                    if (btn) {
+                        const rect = btn.getBoundingClientRect();
+                        if (rect.width === 0 || rect.height === 0) {
+                            console.warn(`${btn.id} not visible, attempting to fix...`);
+                            Object.assign(btn.style, { display: 'flex', visibility: 'visible', opacity: '1' });
+                        }
                     }
-                }
-                
-                if (helpBtn) {
-                    const rect = helpBtn.getBoundingClientRect();
-                    if (rect.width === 0 || rect.height === 0) {
-                        console.warn('Help button not visible, attempting to fix...');
-                        helpBtn.style.display = 'flex';
-                        helpBtn.style.visibility = 'visible';
-                        helpBtn.style.opacity = '1';
-                    }
-                }
+                });
             }, 1000);
         });
 
-        // Enhanced touch and mouse tracking (mobile optimized)
         function addInteractionTracking() {
             let isTouch = false;
-            
-            document.addEventListener('touchstart', () => {
-                isTouch = true;
-            }, { passive: true });
-            
+            document.addEventListener('touchstart', () => isTouch = true, { passive: true });
             document.addEventListener('mousemove', (e) => {
-                if (isTouch) return; // Skip mouse events on touch devices
-                
+                if (isTouch) return;
                 const mouseX = (e.clientX / window.innerWidth) * 2 - 1;
                 const mouseY = (e.clientY / window.innerHeight) * 2 - 1;
-
-                // Reduced parallax for performance
-                const geometries = document.querySelectorAll('.medical-geometry');
-                geometries.forEach((elem, index) => {
+                document.querySelectorAll('.medical-geometry').forEach((elem, index) => {
                     const speed = (index + 1) * 0.01;
-                    const x = mouseX * speed * 20;
-                    const y = mouseY * speed * 20;
-                    elem.style.transform = `translateX(${x}px) translateY(${y}px)`;
+                    elem.style.transform = `translateX(${mouseX * speed * 20}px) translateY(${mouseY * speed * 20}px)`;
                 });
             });
-            
-            // Enhanced touch support with minimal parallax
             document.addEventListener('touchmove', (e) => {
                 if (e.touches.length === 1) {
                     const touch = e.touches[0];
                     const touchX = (touch.clientX / window.innerWidth) * 2 - 1;
                     const touchY = (touch.clientY / window.innerHeight) * 2 - 1;
-                    
-                    const geometries = document.querySelectorAll('.medical-geometry');
-                    geometries.forEach((elem, index) => {
-                        const speed = (index + 1) * 0.003; // Much reduced for mobile
-                        const x = touchX * speed * 10;
-                        const y = touchY * speed * 10;
-                        elem.style.transform = `translateX(${x}px) translateY(${y}px)`;
+                    document.querySelectorAll('.medical-geometry').forEach((elem, index) => {
+                        const speed = (index + 1) * 0.003;
+                        elem.style.transform = `translateX(${touchX * speed * 10}px) translateY(${touchY * speed * 10}px)`;
                     });
                 }
             }, { passive: true });
         }
-
-        // Initialize interaction tracking
         addInteractionTracking();
 
-        // Enhanced error boundary for mobile
         window.addEventListener('error', (e) => {
             console.error('Global error:', e);
-            // Log error for debugging but don't break user experience
             if (isMobile) {
-                // Show user-friendly error message on mobile
                 setTimeout(() => {
                     if (document.getElementById('voiceModal').classList.contains('active')) {
-                        showError('حدث خطأ غير متوقع. يرجى إعادة تحميل الصفحة. | An unexpected error occurred. Please reload the page.');
+                        showError(translations[currentDisplayLanguage].errorUnhandled);
                     }
                 }, 1000);
             }
         });
+        window.addEventListener('unhandledrejection', (e) => console.error('Unhandled promise rejection:', e));
 
-        window.addEventListener('unhandledrejection', (e) => {
-            console.error('Unhandled promise rejection:', e);
-            // Log error for debugging but don't break user experience
-        });
-
-        // Enhanced network status handling
         window.addEventListener('online', () => {
             console.log('Network connection restored');
             if (isMobile) {
                 const statusEl = document.getElementById('voiceStatusText');
-                if (statusEl && statusEl.textContent.includes('No internet')) {
-                    statusEl.innerHTML = 'مساعد ذكي يدعم العربية والإنجليزية<br>Smart assistant supporting Arabic and English';
+                if (statusEl && statusEl.textContent.includes(translations[currentDisplayLanguage].errorNoInternet.split(' ')[0])) { // Check first word
+                    statusEl.innerHTML = translations[currentDisplayLanguage].voiceModalInitialStatus;
                 }
             }
         });
-
         window.addEventListener('offline', () => {
             console.log('Network connection lost');
             if (isMobile) {
                 const statusEl = document.getElementById('voiceStatusText');
-                if (statusEl) {
-                    statusEl.textContent = 'لا يوجد اتصال بالإنترنت | No internet connection';
-                }
+                if (statusEl) statusEl.textContent = translations[currentDisplayLanguage].errorNoInternet;
             }
         });
     </script>
