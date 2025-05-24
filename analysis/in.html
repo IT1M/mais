@@ -2051,6 +2051,8 @@
         
         function formatContent(content) {
             let formatted = content;
+            // Basic Markdown to HTML (Headings, Lists, Bold, Italic)
+            // More robust parsing would require a dedicated library
             formatted = formatted.replace(/^#\s(.*?)$/gm, (match, p1) => p1.includes('<') ? match : `<h1>${p1}</h1>`);
             formatted = formatted.replace(/^##\s(.*?)$/gm, (match, p1) => p1.includes('<') ? match : `<h2>${p1}</h2>`);
             formatted = formatted.replace(/^###\s(.*?)$/gm, (match, p1) => p1.includes('<') ? match : `<h3>${p1}</h3>`);
@@ -2058,30 +2060,58 @@
 
             formatted = formatted.replace(/^\s*-\s(.*?)$/gm, (match, p1) => p1.includes('<') ? match : `<li>${p1}</li>`);
             formatted = formatted.replace(/^\s*\*\s(.*?)$/gm, (match, p1) => p1.includes('<') ? match : `<li>${p1}</li>`);
+            // Wrap consecutive LIs in UL
             formatted = formatted.replace(/(<li>.*?<\/li>(?:\s*<li>.*?<\/li>)*)/gs, (match) => {
-                if (match.startsWith('<ul>') || match.startsWith('<ol>')) return match;
+                if (match.startsWith('<ul>') || match.startsWith('<ol>')) return match; // Avoid double wrapping
                 return `<ul>${match}</ul>`;
             });
+             // Numbered lists
+            formatted = formatted.replace(/^\s*\d+\.\s(.*?)$/gm, (match, p1) => p1.includes('<') ? match : `<li>${p1}</li>`);
+            formatted = formatted.replace(/(<li>.*?<\/li>(?:\s*<li>.*?<\/li>)*)/gs, (match, innerContent) => {
+                 // Check if it's already wrapped or if it's a numbered list item
+                if (match.startsWith('<ol>') || match.startsWith('<ul>')) return match;
+                if (match.match(/^\s*<li>/)) { // Basic check for list items
+                    // Heuristic: if the first item looks like a numbered list, wrap in <ol>
+                    const firstLiContent = match.match(/<li>(.*?)<\/li>/);
+                    if (firstLiContent && firstLiContent[1] && /^\s*\d+\./.test(firstLiContent[1])) {
+                         // This is a bit tricky, as the number is already part of the content.
+                         // For simplicity, we'll just wrap in OL. A true MD parser would handle this better.
+                        return `<ol>${match}</ol>`;
+                    }
+                    // Default to UL if not clearly numbered or already wrapped
+                    return `<ul>${match}</ul>`;
+                }
+                return match;
+            });
+
 
             formatted = formatted.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
             formatted = formatted.replace(/\*(.*?)\*/g, '<em>$1</em>');
             
+            // Paragraphs - wrap lines that aren't already part of other HTML structures
             const lines = formatted.split('\n');
             const newLines = lines.map(line => {
                 const trimmedLine = line.trim();
-                if (trimmedLine.length === 0) return ''; 
-                if (trimmedLine.startsWith('<') && trimmedLine.endsWith('>')) { 
+                if (trimmedLine.length === 0) return ''; // Keep empty lines for spacing if desired, or remove
+                // Check if it's already an HTML element or part of one
+                if (trimmedLine.startsWith('<') && trimmedLine.endsWith('>')) { // Simple check
+                    // More specific checks for block elements
                     if (trimmedLine.match(/^<(ul|ol|li|h[1-6]|p|div|table|blockquote|pre|hr|br)/i) ||
                         trimmedLine.match(/<\/(ul|ol|li|h[1-6]|p|div|table|blockquote|pre)>$/i)) {
                         return line;
                     }
                 }
+                // If not an HTML element, wrap in <p>
                 if (!trimmedLine.startsWith('<p>') && !trimmedLine.endsWith('</p>')) {
                      return `<p>${line}</p>`;
                 }
                 return line;
             });
             formatted = newLines.join('\n');
+
+            // Clean up multiple newlines that might result from paragraph wrapping
+            formatted = formatted.replace(/\n\s*\n/g, '\n');
+
 
             return formatted;
         }
@@ -2093,11 +2123,10 @@
             if (dataContent) {
                 const preview = dataContent.substring(0, 70).replace(/\n/g, " ").replace(/</g, "&lt;");
                 dataMention = currentLanguage === 'ar' ? 
-                    `<div class="analysis-result-card"><p><em>(ملاحظة: يستند هذا التحليل المحاكى إلى البيانات المقدمة من الملف الذي يبدأ بـ: "${preview}..." مع التركيز عليها بشكل أساسي.)</em></p></div>` :
-                    `<div class="analysis-result-card"><p><em>(Note: This simulated analysis is primarily based on the provided file data starting with: "${preview}...")</em></p></div>`;
+                    `<div class="analysis-result-card" style="background: rgba(255,255,0,0.05); border-left-color: #ffeb3b;"><p><em>(ملاحظة: يستند هذا التحليل المحاكى إلى البيانات المقدمة من الملف الذي يبدأ بـ: "${preview}..." مع التركيز عليها بشكل أساسي.)</em></p></div>` :
+                    `<div class="analysis-result-card" style="background: rgba(255,255,0,0.05); border-left-color: #ffeb3b;"><p><em>(Note: This simulated analysis is primarily based on the provided file data starting with: "${preview}...")</em></p></div>`;
             }
 
-            // Extracting simplified prompt identifiers for routing
             const lowerPrompt = prompt.toLowerCase();
             if (lowerPrompt.includes('advanced business analysis') || lowerPrompt.includes('تحليل أعمال متقدم')) {
                 return dataMention + (currentLanguage === 'ar' ? generateAdvancedAnalysisResponseAr(dataContent) : generateAdvancedAnalysisResponseEn(dataContent));
@@ -2107,7 +2136,7 @@
                 return dataMention + (currentLanguage === 'ar' ? generateDemandForecastResponseAr(dataContent) : generateDemandForecastResponseEn(dataContent));
             } else if (lowerPrompt.includes('competitor analysis') || lowerPrompt.includes('تحليل تنافسي')) {
                 return dataMention + (currentLanguage === 'ar' ? generateCompetitorAnalysisResponseAr(dataContent) : generateCompetitorAnalysisResponseEn(dataContent));
-            } else if (lowerPrompt.includes('comprehensive strategic business analysis') || lowerPrompt.includes('تحليل أعمال استراتيجي شامل')) { // For AI Assistant
+            } else if (lowerPrompt.includes('comprehensive strategic business analysis') || lowerPrompt.includes('تحليل أعمال استراتيجي شامل')) { 
                 return dataMention + (currentLanguage === 'ar' ? generateComprehensiveAnalysisResponseAr() : generateComprehensiveAnalysisResponseEn());
             }
              else { 
@@ -2115,39 +2144,80 @@
             }
         }
 
-        // --- English Simulated Responses ---
+        // --- English Simulated Responses (NEW - More Detailed) ---
         function generateAdvancedAnalysisResponseEn(data) {
             return `
                 <h1>Advanced Business Analysis for Saudi Mais Co.</h1>
-                ${data ? `<div class="analysis-result-card"><p><strong>Data Insight:</strong> Analysis incorporates provided data points from the uploaded file for Saudi Mais Co.</p></div>` : '<div class="analysis-result-card"><p><strong>Data Insight:</strong> Analysis based on general knowledge of Saudi Mais Co.</p></div>'}
+                ${data ? `<div class="analysis-result-card"><p><strong>Data Insight:</strong> Analysis incorporates provided data points from the uploaded file for Saudi Mais Co.</p></div>` : '<div class="analysis-result-card"><p><strong>Data Insight:</strong> Analysis based on general knowledge of Saudi Mais Co. and the medical device market.</p></div>'}
+                
                 <div class="analysis-result-card">
-                    <h2>1. Market Snapshot for Medical Consumables</h2>
-                    <p>The Saudi medical device market, particularly for single-use consumables, is poised for significant expansion, heavily influenced by Vision 2030's healthcare infrastructure development. Key opportunities for Saudi Mais Co. lie in specialized sterile products and locally manufactured items aligning with IKTVA (In-Kingdom Total Value Add) program goals.</p>
+                    <h2>1. Market Environment Analysis</h2>
+                    <p>The Saudi Arabian medical consumables market is experiencing robust growth, driven by government healthcare expenditure under Vision 2030, an aging population, and increased health awareness. Key trends include a shift towards local manufacturing (IKTVA program), demand for high-quality sterile single-use products, and digitalization in procurement.</p>
+                    <p><strong>Regulatory Landscape:</strong> Strict adherence to Saudi Food and Drug Authority (SFDA) regulations and international standards like ISO 13485 is paramount. Saudi Mais Co.'s established compliance is a strength.</p>
+                    <p><strong>Competition:</strong> The market features multinational corporations (MNCs) with broad portfolios, other local manufacturers, and international importers. Differentiation through quality, specialized products, and strong local relationships is crucial for Saudi Mais Co.</p>
                     <div class="metric-card">
-                        <div class="metric-label">Projected Market Growth (CAGR - Medical Consumables KSA)</div>
-                        <div class="metric-value">9.2% <span class="quality-indicator quality-excellent">Excellent</span></div>
+                        <div class="metric-label">Projected KSA Medical Consumables Market Growth (CAGR 2024-2028)</div>
+                        <div class="metric-value">8.5% <span class="quality-indicator quality-excellent">Strong Growth</span></div>
                     </div>
                 </div>
+
                 <div class="analysis-result-card">
-                    <h2>2. Financial Health Assessment of Saudi Mais Co.</h2>
-                    <p>Current financials, potentially detailed in uploaded documents, likely indicate a need for strategic cost optimization, improved working capital management, and diversification of revenue streams beyond traditional products. Attention to liquidity ratios and gross profit margins on core product lines is critical.</p>
-                    <div class="warning-box">
-                        <h4>Liquidity & Profitability Focus</h4>
-                        <p>If data indicates, the Quick Ratio and Net Profit Margin should be benchmarked against industry averages for Saudi medical manufacturers. Improving cash flow through better inventory turnover for consumables is a key recommendation.</p>
-                    </div>
-                </div>
-                <div class="analysis-result-card">
-                    <h2>3. Strategic Imperatives for Saudi Mais Co.</h2>
+                    <h2>2. In-depth Financial Health Assessment</h2>
+                    <p>Based on general industry knowledge (or specific data if provided), Saudi Mais Co. likely faces pressures on margins due to competition and raw material cost fluctuations. Key areas for assessment:</p>
                     <ul>
-                        <li>Enhance local manufacturing capabilities for a wider range of single-use medical devices to increase IKTVA contribution and reduce import reliance.</li>
-                        <li>Invest in a robust digital QMS and ERP system to improve traceability, compliance (ISO 13485, SFDA), and operational efficiency.</li>
-                        <li>Explore strategic partnerships with major hospital groups and governmental healthcare procurement agencies.</li>
-                        <li>Develop or source innovative, cost-effective medical consumables tailored to regional needs.</li>
+                        <li><strong>Profitability:</strong> Gross Profit Margin on key product lines (e.g., surgical gloves, catheters, dressing kits) should be benchmarked. Net Profit Margin needs to support reinvestment and growth.</li>
+                        <li><strong>Liquidity:</strong> Current Ratio and Quick Ratio indicate ability to meet short-term obligations. Efficient management of receivables and inventory is vital.</li>
+                        <li><strong>Solvency:</strong> Debt-to-Equity ratio should be monitored to ensure long-term financial stability.</li>
+                        <li><strong>Efficiency:</strong> Inventory Turnover Rate and Days Sales Outstanding (DSO) impact working capital.</li>
+                    </ul>
+                    ${data ? `<p><em>Specific financial ratios from the uploaded data (e.g., Current Ratio: 1.8, GPM: 35%) would provide a more precise assessment.</em></p>` : `<div class="warning-box"><h4>Financial Data Needed</h4><p>Uploading detailed financial statements would enable a more granular analysis of Saudi Mais Co.'s financial health, including specific ratio calculations.</p></div>`}
+                </div>
+
+                <div class="analysis-result-card">
+                    <h2>3. Operational Performance Review</h2>
+                    <p>Saudi Mais Co.'s commitment to "highest international quality standards" is a core operational tenet.</p>
+                    <ul>
+                        <li><strong>Manufacturing:</strong> Focus on lean manufacturing principles to optimize production of single-use devices, reduce waste, and improve throughput. Capacity utilization should be assessed (e.g., current 75%, target 85%).</li>
+                        <li><strong>Supply Chain:</strong> Diversification of raw material suppliers (especially for critical polymers and sterile packaging) can mitigate risks. Efficient logistics for distribution across KSA and potentially GCC. Evaluate supplier lead times and reliability.</li>
+                        <li><strong>Quality Control:</strong> Robust QMS (ISO 13485 certified) is essential. Tracking metrics like First Pass Yield (FPY), defect rates (PPM), CAPA effectiveness, and internal/external audit outcomes.</li>
                     </ul>
                 </div>
+
+                <div class="analysis-result-card">
+                    <h2>4. Strategic Growth Recommendations</h2>
+                    <ol>
+                        <li><strong>Maximize IKTVA Contribution:</strong> Actively pursue higher IKTVA scores by increasing local content in products and supply chain to gain preference in government tenders and align with national objectives. Target specific IKTVA-favored product categories.</li>
+                        <li><strong>Product Portfolio Optimization & Innovation:</strong> Focus on high-margin, high-demand single-use consumables. Invest in R&D or partnerships for niche segments like advanced wound care, specialized infection control products, or biodegradable medical plastics.</li>
+                        <li><strong>Regional Expansion (Phased Approach):</strong> Target select GCC (e.g., UAE, Kuwait) and MENA markets where Saudi-made quality products have a competitive edge. Start with distributor partnerships.</li>
+                        <li><strong>Digital Transformation:</strong> Implement/upgrade ERP and SCM systems for better planning, real-time visibility, and efficiency. Explore e-procurement platform integration with major hospital groups.</li>
+                        <li><strong>Strategic Partnerships & Alliances:</strong> Collaborate with major hospital groups, Group Purchasing Organizations (GPOs), and potentially research institutions for co-development or clinical validation of new products.</li>
+                    </ol>
+                </div>
+
+                <div class="analysis-result-card">
+                    <h2>5. Comprehensive Risk Assessment and Mitigation Strategies</h2>
+                    <p><strong>Market Risks:</strong>
+                        <ul>
+                            <li>Intense price competition from low-cost imports. <em>Mitigation:</em> Focus on value differentiation (quality, service, local support), cost optimization through operational excellence.</li>
+                            <li>Changes in SFDA regulations or reimbursement policies. <em>Mitigation:</em> Continuous regulatory monitoring, proactive engagement with authorities, agile adaptation of QMS.</li>
+                        </ul>
+                    </p>
+                    <p><strong>Operational Risks:</strong>
+                        <ul>
+                            <li>Supply chain disruptions (geopolitical, supplier failure). <em>Mitigation:</em> Supplier diversification, strategic stockpiling of critical components, robust S&OP process.</li>
+                            <li>Manufacturing defects leading to recalls. <em>Mitigation:</em> Stringent QMS, preventative maintenance, continuous employee training, investment in inspection technologies.</li>
+                        </ul>
+                    </p>
+                    <p><strong>Financial Risks:</strong>
+                        <ul>
+                            <li>Liquidity shortfalls due to extended payment cycles from customers. <em>Mitigation:</em> Prudent cash flow management, exploring factoring or supply chain financing options.</li>
+                            <li>Currency fluctuations for imported raw materials. <em>Mitigation:</em> Hedging strategies where appropriate, negotiating longer-term contracts in local currency.</li>
+                        </ul>
+                    </p>
+                </div>
                 <div class="recommendation-box">
-                    <h4>Primary Recommendation for Saudi Mais Co.</h4>
-                    <p>Prioritize strengthening local manufacturing excellence and achieving competitive cost structures for core single-use medical products. Simultaneously, explore niche, high-margin consumables and invest in digital tools to enhance market responsiveness and operational control, directly supporting Saudi Mais Co.'s commitment to quality and growth in the Middle East.</p>
+                    <h4>Key Strategic Imperative for Saudi Mais Co.</h4>
+                    <p>Saudi Mais Co. should solidify its position as a leader in high-quality, locally manufactured medical consumables within KSA by leveraging its IKTVA potential and operational strengths. Simultaneously, a cautious yet deliberate regional expansion, coupled with product innovation in niche areas, will drive sustainable growth. This requires a dual focus on operational excellence to manage costs and innovation to meet evolving healthcare needs, all underpinned by strong financial discipline and proactive risk management.</p>
                 </div>
             `;
         }
@@ -2155,364 +2225,821 @@
         function generateQualityAnalysisResponseEn(data) {
             return `
                 <h1>Quality Management System Review for Saudi Mais Co.</h1>
-                ${data ? `<div class="analysis-result-card"><p><strong>Data Insight:</strong> Quality metrics from the provided data/document for Saudi Mais Co. have been central to this assessment.</p></div>` : '<div class="analysis-result-card"><p><strong>Data Insight:</strong> Assessment based on general QMS principles for medical device manufacturers like Saudi Mais Co.</p></div>'}
+                ${data ? `<div class="analysis-result-card"><p><strong>Data Insight:</strong> Quality metrics and documentation from the provided file for Saudi Mais Co. (e.g., audit reports, CAPA logs, defect rates) have been central to this assessment.</p></div>` : '<div class="analysis-result-card"><p><strong>Data Insight:</strong> Assessment based on general QMS principles for medical device manufacturers like Saudi Mais Co., adhering to ISO 13485 and SFDA guidelines.</p></div>'}
+                
                 <div class="analysis-result-card">
-                    <h2>Overall Compliance & Effectiveness (ISO 13485 & SFDA)</h2>
-                    <p>Saudi Mais Co. aims for the highest international quality standards. The QMS review, based on available information, suggests foundational adherence to ISO 13485. Continuous improvement efforts should focus on rigorous documentation for design controls (if applicable to their product development), risk management (ISO 14971), and post-market surveillance to ensure full alignment with SFDA requirements for medical consumables.</p>
+                    <h2>1. Overall QMS Effectiveness and Compliance Status</h2>
+                    <p>Saudi Mais Co.'s QMS, presumably certified to ISO 13485, forms the backbone of its commitment to producing safe and effective single-use medical consumables. Effectiveness is gauged by its ability to consistently meet customer expectations and stringent regulatory requirements, particularly those set by the Saudi Food and Drug Authority (SFDA).</p>
+                    <p><strong>Compliance Checklist Highlights (ISO 13485:2016 & SFDA):</strong>
+                        <ul>
+                            <li><strong>Management Responsibility:</strong> Clear commitment from top management, defined quality policy and objectives.</li>
+                            <li><strong>Resource Management:</strong> Adequate infrastructure, competent personnel, and controlled work environment.</li>
+                            <li><strong>Product Realization:</strong> Robust processes for design and development (if applicable), purchasing controls, production and service provision (including sterilization validation, process validation for critical processes like sealing, molding).</li>
+                            <li><strong>Measurement, Analysis, and Improvement:</strong> Effective systems for monitoring and measuring processes/products, internal audits, control of nonconforming product, corrective and preventive actions (CAPA), and post-market surveillance.</li>
+                            <li><strong>SFDA Specifics:</strong> Medical Device Marketing Authorization (MDMA) requirements, Unique Device Identification (UDI) implementation, adverse event reporting.</li>
+                        </ul>
+                    </p>
                     <div class="metric-card">
-                        <div class="metric-label">Internal Audit Non-Conformance Rate (Target <1%)</div>
-                        <div class="metric-value">1.5% <span class="quality-indicator quality-warning">Needs Improvement</span></div>
-                        <p style="font-size:0.8em; opacity:0.7;">(Example metric if data was provided)</p>
+                        <div class="metric-label">External Audit Findings (SFDA/Notified Body - Major NCs - Last 2 Years)</div>
+                        <div class="metric-value">${data ? '0 (Example)' : 'N/A (Data Dependant)'} <span class="quality-indicator ${data ? 'quality-excellent' : 'quality-warning'}">${data ? 'Excellent' : 'Awaiting Data'}</span></div>
+                        <p style="font-size:0.8em; opacity:0.7;">(Illustrative metric; actual audit outcomes would be used)</p>
                     </div>
                 </div>
+
                 <div class="analysis-result-card">
-                    <h2>Key Findings & Corrective/Preventive Actions (CAPA)</h2>
+                    <h2>2. Detailed Defect Analysis and Non-Conformance Trends</h2>
+                    <p>A systematic review of internal defect data (e.g., scrap rates, rework percentages, incoming material rejection rates) and external data (customer complaints, field corrective actions) is essential.
+                    ${data ? `<em>The provided data (e.g., Pareto charts of defects, complaint logs) would allow for specific trend identification, such as 'X% of defects related to packaging seals for product Y' or 'recurring non-conformance in supplier Z's components'.</em>` : `<em>Detailed defect and non-conformance data is needed for precise trend analysis and root cause identification.</em>`}
+                    </p>
+                    <p><strong>Key Performance Indicators (KPIs) for Monitoring:</strong>
+                        <ol>
+                            <li>First Pass Yield (FPY) for critical manufacturing steps.</li>
+                            <li>Out-of-Specification (OOS) rate for finished products.</li>
+                            <li>Number of open CAPAs and average CAPA cycle time.</li>
+                            <li>Supplier defect rate (PPM).</li>
+                        </ol>
+                    </p>
+                </div>
+
+                <div class="analysis-result-card">
+                    <h2>3. Evaluation of Customer Complaint Handling & Post-Market Surveillance</h2>
+                    <p>An effective complaint handling system (as per ISO 13485 and SFDA requirements) is vital for identifying product issues, ensuring patient safety, and driving continuous improvement. This includes timely intake, investigation, root cause analysis, reporting (if necessary), and implementation of corrective/preventive actions.</p>
+                    <p><strong>Post-Market Surveillance (PMS) Activities for Saudi Mais Co.:</strong>
+                        <ul>
+                            <li>Systematic collection of feedback from users, distributors.</li>
+                            <li>Monitoring of scientific literature and competitor recalls.</li>
+                            <li>Periodic Safety Update Reports (PSURs) if applicable.</li>
+                            <li>Proactive trend analysis of PMS data to detect early warning signals.</li>
+                        </ul>
+                    </p>
+                    <div class="critical-box">
+                        <h4>Focus Area: CAPA System Effectiveness</h4>
+                        <p>The CAPA system should not just address symptoms but effectively eliminate root causes to prevent recurrence. Regular effectiveness checks of implemented CAPAs are crucial. If data shows high recurrence rates for similar issues, the CAPA system needs strengthening.</p>
+                    </div>
+                </div>
+                
+                <div class="analysis-result-card">
+                    <h2>4. Actionable Quality Improvement Plan for Saudi Mais Co.</h2>
+                    <p>Based on a comprehensive QMS assessment, the following prioritized recommendations are proposed:</p>
                     <ol>
-                        <li><strong>Finding (Example):</strong> Inconsistent traceability in batch records for a specific consumable product line. <strong>Action:</strong> Implement enhanced digital batch recording with mandatory field entries; conduct targeted retraining for production staff at Saudi Mais Co.</li>
-                        <li><strong>Finding (Example):</strong> Supplier quality audit schedule adherence below target. <strong>Action:</strong> Revise supplier audit plan based on risk; allocate dedicated resources for timely execution.</li>
-                        <li><strong>Finding (Example):</strong> Customer complaint resolution times for defective consumables exceed internal KPIs. <strong>Action:</strong> Streamline complaint intake and investigation process; implement stricter CAPA timelines.</li>
+                        <li><strong>Strengthen Risk-Based Thinking (ISO 14971 & ISO 13485):</strong> Ensure risk management is not a standalone activity but fully integrated into all QMS processes, from design and supplier selection to production and post-market activities for all medical consumables.</li>
+                        <li><strong>Enhance Supplier Quality Management Program:</strong> Implement a tiered supplier classification based on risk. Conduct more rigorous on-site audits for critical suppliers. Establish robust quality agreements detailing specifications and change control.</li>
+                        <li><strong>Invest in Digital QMS (eQMS) Solutions:</strong> Transition from paper-based or disparate systems to an integrated eQMS for streamlined document control, training records, CAPA management, audit scheduling, and change control. This improves efficiency, traceability, and data integrity.</li>
+                        <li><strong>Competency-Based Training Program:</strong> Develop and implement a role-specific training matrix. Ensure regular refresher training on QMS procedures, GDP, GMP, and regulatory updates (SFDA, ISO). Measure training effectiveness.</li>
+                        <li><strong>Proactive Quality Culture:</strong> Foster a culture where quality is everyone's responsibility. Implement quality circles or continuous improvement teams. Encourage reporting of potential issues without fear of reprisal.</li>
+                        <li><strong>Data Analytics for Quality Intelligence:</strong> Utilize statistical process control (SPC) where applicable. Implement dashboards to monitor key quality KPIs in real-time, enabling data-driven decision-making for proactive improvements.</li>
                     </ol>
                 </div>
                 <div class="recommendation-box">
-                    <h4>Quality Enhancement Initiative for Saudi Mais Co.</h4>
-                    <p>Launch a "Zero Defect" initiative for critical single-use medical products, focusing on proactive risk mitigation in manufacturing processes. Strengthen the supplier quality assurance program, ensuring raw material and component quality aligns with Saudi Mais Co.'s high standards. Invest in advanced training for QA/QC personnel on latest regulatory updates and quality tools.</p>
+                    <h4>Core Quality Philosophy for Saudi Mais Co.</h4>
+                    <p>Saudi Mais Co. should strive for a "Right First Time" quality philosophy, moving beyond mere compliance to a state of proactive quality assurance and continuous improvement. This involves empowering employees, leveraging data, and fully integrating risk management into all operations to ensure the consistent delivery of safe, effective, and high-quality single-use medical consumables to the Saudi and regional markets.</p>
                 </div>
             `;
         }
+
         function generateDemandForecastResponseEn(data) {
              return `
                 <h1>Demand Forecasting & Inventory Optimization for Saudi Mais Co.</h1>
-                ${data ? `<div class="analysis-result-card"><p><strong>Data Insight:</strong> Historical sales and inventory data from the provided file for Saudi Mais Co. have shaped this forecast for its single-use medical consumables.</p></div>` : '<div class="analysis-result-card"><p><strong>Data Insight:</strong> Forecast based on general market trends for medical consumables in the Middle East, applied to Saudi Mais Co.</p></div>'}
+                ${data ? `<div class="analysis-result-card"><p><strong>Data Insight:</strong> Historical sales, inventory levels, and market data from the provided file for Saudi Mais Co.'s single-use medical consumables have shaped this forecast and inventory strategy.</p></div>` : '<div class="analysis-result-card"><p><strong>Data Insight:</strong> Forecast and inventory strategy based on general market trends for medical consumables in the Middle East, applied to Saudi Mais Co., considering factors like Vision 2030 healthcare expansion.</p></div>'}
+                
                 <div class="analysis-result-card">
-                    <h2>Demand Projections (Next 12 Months - Saudi Mais Co. Consumables)</h2>
-                    <p>A seasonal uplift is anticipated for certain respiratory-related consumables in Q4/Q1. Overall demand for general surgical and infection control single-use products manufactured by Saudi Mais Co. shows a steady 6-8% upward trend, driven by increased healthcare activity and population growth in the region.</p>
-                    <div class="metric-card">
-                        <div class="metric-label">Forecast Accuracy (MAPE - Previous Year)</div>
-                        <div class="metric-value">18% <span class="quality-indicator quality-good">Good (Target <15%)</span></div>
-                         <p style="font-size:0.8em; opacity:0.7;">(Example metric if data was provided)</p>
-                    </div>
-                    <h4>Example Product Category Forecast:</h4>
+                    <h2>1. Comprehensive Demand Analysis</h2>
+                    <p>Analysis of historical sales data (e.g., last 3-5 years) for Saudi Mais Co.'s product lines (e.g., surgical gloves, IV sets, syringes, wound dressings) is crucial. This involves identifying:</p>
+                    <ul>
+                        <li><strong>Base Demand:</strong> Underlying demand level for each product category.</li>
+                        <li><strong>Trends:</strong> Upward, downward, or stable trends in demand.</li>
+                        <li><strong>Seasonality:</strong> Predictable fluctuations (e.g., increased demand for respiratory products during flu season).</li>
+                        <li><strong>Cyclicality:</strong> Longer-term economic or market cycles.</li>
+                        <li><strong>Impact of External Factors:</strong> Influence of public health initiatives (e.g., vaccination campaigns), new hospital openings (driven by Vision 2030), competitor activities, and regulatory changes.</li>
+                    </ul>
+                    ${data ? `<p><em>The provided data would enable quantitative analysis, e.g., identifying a 10% YoY growth trend for Product X, or a Q4 seasonal peak for Product Y.</em></p>` : `<p><em>Detailed historical sales data by SKU/category is essential for accurate quantitative analysis.</em></p>`}
+                </div>
+
+                <div class="analysis-result-card">
+                    <h2>2. Forecasting Results (Next 12-18 Months)</h2>
+                    <p>Based on the demand analysis, statistical forecasting models (e.g., ARIMA, Exponential Smoothing) combined with qualitative inputs (market intelligence, sales team feedback) can generate projections. Below is an illustrative forecast for key product categories:</p>
+                    <h4>Illustrative Demand Forecast for Saudi Mais Co. (Units)</h4>
                     <table>
-                        <thead><tr><th>Product Category (Saudi Mais Co.)</th><th>Forecasted Units (Next 12m)</th><th>Key Drivers</th></tr></thead>
+                        <thead><tr><th>Product Category</th><th>Next 6 Months</th><th>Next 12 Months</th><th>Key Assumptions</th></tr></thead>
                         <tbody>
-                            <tr><td>Sterile Surgical Gloves</td><td>5,000,000 pairs</td><td>Increased surgical procedures, hospital demand</td></tr>
-                            <tr><td>Disposable Face Masks (Type IIR)</td><td>10,000,000 units</td><td>Ongoing public health awareness, institutional use</td></tr>
-                            <tr><td>IV Cannulas</td><td>2,500,000 units</td><td>Hospital admissions, outpatient services</td></tr>
+                            <tr><td>Sterile Surgical Gloves (Pairs)</td><td>${data ? '2,800,000' : '2,500,000'}</td><td>${data ? '5,800,000' : '5,200,000'}</td><td>Continued hospital activity, moderate market share growth.</td></tr>
+                            <tr><td>Disposable Syringes (Units)</td><td>${data ? '12,000,000' : '10,000,000'}</td><td>${data ? '25,000,000' : '22,000,000'}</td><td>Public health programs, stable institutional demand.</td></tr>
+                            <tr><td>Advanced Wound Dressings (Units)</td><td>${data ? '300,000' : '250,000'}</td><td>${data ? '650,000' : '550,000'}</td><td>Increased adoption, new product introductions by Mais Co.</td></tr>
                         </tbody>
                     </table>
-                </div>
-                <div class="analysis-result-card">
-                    <h2>Inventory Recommendations for Saudi Mais Co.</h2>
-                    <p>Implement a segmented inventory strategy for Saudi Mais Co.'s diverse range of medical consumables. For high-volume, predictable demand items (e.g., standard gloves, masks), consider more aggressive JIT or lean inventory approaches. For critical, less predictable, or long-lead-time imported components/products, maintain higher safety stock levels. Regularly review and update reorder points and EOQ based on refreshed forecasts and supplier reliability.</p>
-                    <div class="critical-box">
-                        <h4>Stockout Risk Alert (Example from Data)</h4>
-                        <p>If data shows: Current inventory for 'Specialized Suture Kit XYZ' is at 5 days of supply, while the typical supplier lead time is 15 days. Immediate action to expedite an order and review safety stock for this item is critical to prevent disruption for Saudi Mais Co.'s customers.</p>
+                    <div class="metric-card">
+                        <div class="metric-label">Overall Forecast Accuracy (Target MAPE)</div>
+                        <div class="metric-value">&lt; 15% <span class="quality-indicator quality-good">Good Target</span></div>
+                        <p style="font-size:0.8em; opacity:0.7;">(Achieving this requires robust data and models)</p>
                     </div>
+                </div>
+
+                <div class="analysis-result-card">
+                    <h2>3. Inventory Optimization Strategy</h2>
+                    <p>The goal is to balance inventory holding costs with service levels (minimizing stockouts). Recommendations for Saudi Mais Co.:</p>
+                    <ul>
+                        <li><strong>ABC Analysis:</strong> Classify inventory items based on value/volume (A-items: high value, B-items: medium, C-items: low). Apply tighter control and more frequent review for A-items.</li>
+                        <li><strong>Safety Stock Calculation:</strong> Determine appropriate safety stock levels for each SKU based on demand variability, supplier lead time variability, and desired service level (e.g., 98% for critical items).</li>
+                        <li><strong>Reorder Point (ROP) & Economic Order Quantity (EOQ):</strong> Calculate ROPs to trigger replenishment orders. Use EOQ models (with caution, considering shelf-life for sterile products) to determine optimal order sizes.</li>
+                        <li><strong>Inventory Monitoring:</strong> Implement regular cycle counting and periodic full stock takes to ensure inventory accuracy. Track KPIs like Inventory Turnover, Days of Inventory on Hand (DOH).</li>
+                        <li><strong>Slow-Moving & Obsolete Stock (SLOB):</strong> Establish a process for identifying and managing SLOB to minimize write-offs.</li>
+                    </ul>
+                    ${data ? `<div class="warning-box"><h4>Potential SLOB Identified (Example from Data)</h4><p>If data shows Product Z has not sold in 12 months and has 5000 units in stock, a disposition plan (e.g., discount, donation, disposal) is needed.</p></div>` : ''}
+                </div>
+
+                <div class="analysis-result-card">
+                    <h2>4. Implementation Roadmap</h2>
+                    <ol>
+                        <li><strong>Data Cleansing & System Integration (Months 1-3):</strong> Ensure accuracy of historical sales and inventory data. Integrate forecasting module with ERP/SCM systems.</li>
+                        <li><strong>Model Selection & Parameter Tuning (Months 2-4):</strong> Select appropriate forecasting models for different product segments. Train planning team on forecasting software.</li>
+                        <li><strong>Pilot Program (Months 4-6):</strong> Implement new forecasting and inventory policies for a select group of products. Monitor results and refine processes.</li>
+                        <li><strong>Full Rollout & Continuous Improvement (Months 7+):</strong> Extend new processes across all product lines. Establish a regular Sales & Operations Planning (S&OP) cycle to review forecasts, inventory, and align with business objectives.</li>
+                    </ol>
+                </div>
+                <div class="recommendation-box">
+                    <h4>Strategic Inventory Management for Saudi Mais Co.</h4>
+                    <p>Saudi Mais Co. should transition towards a data-driven, proactive demand forecasting and inventory management system. This will not only reduce costs associated with overstocking or stockouts but also improve customer satisfaction and operational efficiency, positioning the company for scalable growth in the dynamic medical consumables market.</p>
                 </div>
             `;
         }
+
         function generateCompetitorAnalysisResponseEn(data) {
             return `
                 <h1>Competitive Landscape Analysis for Saudi Mais Co.</h1>
-                ${data ? `<div class="analysis-result-card"><p><strong>Data Insight:</strong> Competitor information from the provided file has been integrated into this analysis of Saudi Mais Co.'s market position.</p></div>` : '<div class="analysis-result-card"><p><strong>Data Insight:</strong> Analysis based on general knowledge of the medical consumables market in the Middle East relevant to Saudi Mais Co.</p></div>'}
+                ${data ? `<div class="analysis-result-card"><p><strong>Data Insight:</strong> Competitor information, market reports, and pricing data from the provided file have been integrated into this analysis of Saudi Mais Co.'s market position in single-use medical consumables.</p></div>` : '<div class="analysis-result-card"><p><strong>Data Insight:</strong> Analysis based on general knowledge of the medical consumables market in Saudi Arabia and the Middle East, focusing on players relevant to Saudi Mais Co.</p></div>'}
+                
                 <div class="analysis-result-card">
-                    <h2>Market Positioning of Saudi Mais Co. (Single-Use Medical Consumables)</h2>
-                    <p>Saudi Mais Co. (founded 1994, Riyadh) is an established local manufacturer known for quality in single-use medical consumables. It competes with larger multinational corporations (MNCs) and emerging regional players. Key competitive factors include product quality/certifications (ISO, SFDA), price, breadth of product line, distribution network, and relationships with major healthcare providers (public and private sectors).</p>
-                    <div class="metric-card">
-                        <div class="metric-label">Estimated Market Share (KSA - Selected Consumables)</div>
-                        <div class="metric-value">12-15% <span class="quality-indicator quality-good">Solid Local Player</span></div>
-                         <p style="font-size:0.8em; opacity:0.7;">(Illustrative metric)</p>
-                    </div>
+                    <h2>1. Detailed Market Landscape Overview (KSA & Key GCC Markets)</h2>
+                    <p>The single-use medical consumables market in KSA is valued at approximately SAR X.X billion (2023 estimate) and projected to grow at a CAGR of Y.Y% through 2028. Key segments include:
+                        <ul>
+                            <li>General supplies (gloves, masks, syringes, catheters)</li>
+                            <li>Wound care products</li>
+                            <li>Infection control products</li>
+                            <li>IV and drug delivery consumables</li>
+                        </ul>
+                    Drivers include Vision 2030 healthcare investments, increasing surgical volumes, and a growing emphasis on infection prevention. The IKTVA program favors local manufacturers like Saudi Mais Co.
+                    </p>
                 </div>
+
                 <div class="analysis-result-card">
-                    <h2>SWOT Analysis Summary (Saudi Mais Co. vs. Key Competitors)</h2>
-                    <p><strong>Strengths:</strong> Local manufacturing presence (potential for IKTVA benefits, faster supply for some items), established reputation for quality, understanding of regional needs.</p>
-                    <p><strong>Weaknesses:</strong> Potentially higher cost structure compared to some large-scale MNCs or low-cost importers, narrower R&D pipeline for highly innovative products, reliance on some imported raw materials.</p>
-                    <p><strong>Opportunities:</strong> Growing healthcare market (Vision 2030), increasing demand for local content, potential for export to other GCC/MENA countries, product line expansion into adjacent consumable categories.</p>
-                    <p><strong>Threats:</strong> Intense price competition, particularly in tender-based procurement; rapid technological advancements by global players; supply chain vulnerabilities for imported components.</p>
+                    <h2>2. In-depth Competitive Assessment</h2>
+                    <p>Saudi Mais Co. (established 1994, Riyadh) competes against a mix of players:</p>
+                    <h4>Key Competitor Profiles (Illustrative):</h4>
+                    <ol>
+                        <li>
+                            <strong>GlobalMed Inc. (MNC):</strong>
+                            <ul>
+                                <li><strong>Strengths:</strong> Broad product portfolio, strong R&D, global brand recognition, established distribution.</li>
+                                <li><strong>Weaknesses:</strong> Potentially higher price points, less agility in responding to local market needs compared to local players.</li>
+                                <li><strong>Strategy:</strong> Focus on premium segments, innovation, and large institutional contracts.</li>
+                            </ul>
+                        </li>
+                        <li>
+                            <strong>Arabian Healthcare Solutions (Large Regional Distributor/Importer):</strong>
+                            <ul>
+                                <li><strong>Strengths:</strong> Extensive distribution network, diverse product sourcing (including lower-cost options), strong relationships with private sector.</li>
+                                <li><strong>Weaknesses:</strong> Reliance on import logistics, variable quality perception for some sourced products.</li>
+                                <li><strong>Strategy:</strong> Price competitiveness, one-stop-shop for a wide range of consumables.</li>
+                            </ul>
+                        </li>
+                        <li>
+                            <strong>FutureTech Medical KSA (Emerging Local Manufacturer):</strong>
+                            <ul>
+                                <li><strong>Strengths:</strong> Focus on specific high-volume consumables, potential IKTVA benefits, agile operations.</li>
+                                <li><strong>Weaknesses:</strong> Limited product range, newer brand, smaller scale compared to Mais Co.</li>
+                                <li><strong>Strategy:</strong> Niche market focus, cost-effective local production.</li>
+                            </ul>
+                        </li>
+                    </ol>
+                    ${data ? `<p><em>Specific competitor data from the uploaded file (e.g., their market share estimates, pricing for comparable products) would refine these profiles.</em></p>` : ''}
                 </div>
-                <h4>Key Competitors (Illustrative):</h4>
-                 <ul><li>GlobalMed Devices (MNC - broad portfolio, strong R&D)</li><li>Arabian HealthTech (Regional Distributor/Importer - aggressive pricing)</li><li>Emerging Local Manufacturers (Focus on specific high-volume items)</li></ul>
+
+                <div class="analysis-result-card">
+                    <h2>3. Comparative Analysis: Saudi Mais Co. vs. Competitors</h2>
+                    <table>
+                        <thead><tr><th>Factor</th><th>Saudi Mais Co.</th><th>GlobalMed Inc.</th><th>Arabian Healthcare</th><th>FutureTech Medical</th></tr></thead>
+                        <tbody>
+                            <tr><td><strong>Product Quality (ISO 13485)</strong></td><td>High</td><td>Very High</td><td>Variable</td><td>Moderate-High</td></tr>
+                            <tr><td><strong>Price Point</strong></td><td>Mid-Range</td><td>Premium</td><td>Low-Mid</td><td>Competitive</td></tr>
+                            <tr><td><strong>Local Manufacturing (IKTVA)</strong></td><td>Strong</td><td>Limited/None</td><td>None</td><td>Strong</td></tr>
+                            <tr><td><strong>Product Range</strong></td><td>Moderate</td><td>Extensive</td><td>Very Extensive</td><td>Narrow</td></tr>
+                            <tr><td><strong>Distribution Network (KSA)</strong></td><td>Good</td><td>Strong</td><td>Very Strong</td><td>Developing</td></tr>
+                            <tr><td><strong>Innovation/R&D</strong></td><td>Developing</td><td>High</td><td>Low (Sourcing)</td><td>Low-Moderate</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="analysis-result-card">
+                    <h2>4. Opportunity and Threat Identification for Saudi Mais Co.</h2>
+                    <p><strong>Opportunities:</strong>
+                        <ul>
+                            <li>Leverage IKTVA for preferential access to government tenders.</li>
+                            <li>Expand into underserved niche consumable segments.</li>
+                            <li>Develop export markets in GCC/MENA.</li>
+                            <li>Form strategic alliances with local healthcare providers for long-term contracts.</li>
+                            <li>Innovate in eco-friendly/sustainable medical consumables.</li>
+                        </ul>
+                    </p>
+                    <p><strong>Threats:</strong>
+                        <ul>
+                            <li>Intense price competition, especially from importers of low-cost Asian products.</li>
+                            <li>Rapid technological advancements by MNCs requiring continuous investment.</li>
+                            <li>Changes in SFDA regulations impacting product registration or compliance costs.</li>
+                            <li>Consolidation among healthcare providers increasing their bargaining power.</li>
+                        </ul>
+                    </p>
+                </div>
+
+                <div class="analysis-result-card">
+                    <h2>5. Strategic Recommendations for Saudi Mais Co.</h2>
+                    <ol>
+                        <li><strong>Strengthen Value Proposition:</strong> Emphasize "Saudi-made quality, reliability, and responsiveness." Develop clear messaging around IKTVA benefits for customers.</li>
+                        <li><strong>Segmented Market Approach:</strong>
+                            <ul>
+                                <li>For high-volume, commoditized products: Focus on cost optimization and competitive pricing while maintaining quality.</li>
+                                <li>For specialized/niche products: Focus on differentiation, clinical benefits, and value-added services.</li>
+                            </ul>
+                        </li>
+                        <li><strong>Enhance Sales & Marketing:</strong> Invest in a skilled sales team with strong clinical knowledge. Develop digital marketing strategies to reach a wider audience. Participate in key regional healthcare exhibitions.</li>
+                        <li><strong>Monitor Competitive Intelligence:</strong> Establish a system for regularly tracking competitor activities, new product launches, pricing changes, and market trends.</li>
+                        <li><strong>Build Customer Loyalty:</strong> Implement programs for key accounts, offer excellent after-sales support, and gather customer feedback for continuous improvement.</li>
+                    </ol>
+                </div>
                 <div class="recommendation-box">
-                    <h4>Competitive Strategy for Saudi Mais Co.</h4>
-                    <p>Saudi Mais Co. should leverage its strengths in local manufacturing and quality assurance. Focus on a hybrid strategy:
-                    1.  <strong>Cost Leadership for Core Products:</strong> Optimize manufacturing for high-volume consumables to compete effectively on price while maintaining quality.
-                    2.  <strong>Differentiation for Specialized Products:</strong> Develop or source specialized consumables where quality, reliability, and local support can command a premium.
-                    3.  <strong>Strengthen Relationships:</strong> Enhance partnerships with key governmental and private healthcare institutions, emphasizing reliability and responsiveness.
-                    4.  <strong>Explore Niche Exports:</strong> Target specific GCC/MENA markets where Saudi-made quality products have an advantage.</p>
+                    <h4>Competitive Edge for Saudi Mais Co.</h4>
+                    <p>Saudi Mais Co.'s path to sustained competitive advantage lies in a trifecta of: 1) Unwavering commitment to SFDA-compliant quality and local manufacturing excellence (IKTVA). 2) Agile responsiveness to the specific needs of the Saudi and regional healthcare markets. 3) Strategic product portfolio management that balances volume with value. By focusing on these pillars, Mais Co. can effectively compete against both global giants and nimble local players.</p>
                 </div>
             `;
         }
+
         function generateComprehensiveAnalysisResponseEn() {
             return `
                 <h1>Comprehensive Strategic Analysis: Saudi Mais Co. for Medical Products</h1>
                 <div class="analysis-result-card">
                     <h2>1. Executive Summary</h2>
-                    <p>Saudi Mais Co. for Medical Products, a Riyadh-based manufacturer of single-use medical consumables since 1994, stands as a key local player committed to high international quality standards. While possessing a solid foundation, the company faces significant business and financial challenges that necessitate immediate and decisive strategic actions. This analysis outlines critical areas for transformation to ensure sustainable growth and enhanced market leadership in the evolving Saudi and Middle Eastern healthcare landscape.</p>
+                    <p>Saudi Mais Co. for Medical Products, a Riyadh-based manufacturer of single-use medical consumables since 1994, is a significant local entity committed to high international quality standards (ISO 13485, SFDA compliance). The company operates within a dynamic and growing Saudi and Middle Eastern healthcare market, shaped by Vision 2030, the IKTVA program, and evolving competitive pressures. While possessing a solid foundation in local manufacturing and quality, Saudi Mais Co. faces challenges related to financial performance, operational efficiency, and strategic positioning. This analysis provides a comprehensive roadmap for navigating these challenges, capitalizing on opportunities, and ensuring sustainable growth and enhanced market leadership.</p>
                 </div>
+
                 <div class="analysis-result-card">
-                    <h2>2. Financial Situation & Recovery Strategies</h2>
-                    <p>The company is likely experiencing pressures on liquidity and profitability. A robust recovery plan must focus on:
+                    <h2>2. Current Financial Situation & Viable Recovery Strategies</h2>
+                    <p>The company is likely experiencing pressures on profitability due to rising input costs and price competition, and potential liquidity constraints from working capital inefficiencies. A robust recovery plan must focus on:</p>
                     <ul>
-                        <li><strong>Aggressive Cost Management:</strong> Implementing lean manufacturing principles to reduce waste and improve efficiency in the production of medical consumables. Target a 10-15% reduction in operational costs over 18 months.</li>
-                        <li><strong>Working Capital Optimization:</strong> Improving inventory turnover for its single-use products, renegotiating payment terms with suppliers, and streamlining receivables collection.</li>
-                        <li><strong>Debt Restructuring (if applicable):</strong> Exploring options to manage existing debt obligations more effectively.</li>
-                        <li><strong>Revenue Enhancement:</strong> Identifying new, higher-margin product niches within medical consumables or exploring value-added services.</li>
-                    </ul></p>
+                        <li><strong>Aggressive Cost Optimization:</strong> Implement lean manufacturing principles across all production lines for medical consumables. Target a 10-15% reduction in Cost of Goods Sold (COGS) over 18-24 months through waste reduction, process improvement, and energy efficiency. Scrutinize SG&A expenses.</li>
+                        <li><strong>Working Capital Management:</strong>
+                            <ul>
+                                <li><strong>Inventory:</strong> Reduce Days of Inventory on Hand (DOH) by 15-20% through better demand forecasting and JIT principles for non-critical items. Implement SLOB reduction program.</li>
+                                <li><strong>Receivables:</strong> Reduce Days Sales Outstanding (DSO) by tightening credit policies (where feasible) and improving collection efforts. Target DSO of <60 days.</li>
+                                <li><strong>Payables:</strong> Negotiate favorable payment terms with key suppliers without jeopardizing relationships.</li>
+                            </ul>
+                        </li>
+                        <li><strong>Profitability Enhancement:</strong> Review pricing strategy for key product lines. Focus on higher-margin consumables. Explore value-added services (e.g., custom kits, inventory management for hospitals).</li>
+                        <li><strong>Debt Restructuring (if applicable):</strong> If debt levels are high, explore options for refinancing at better terms or negotiating with lenders for more flexible repayment schedules.</li>
+                    </ul>
                     <div class="critical-box">
-                        <h4>Urgent Action: Cash Flow Fortification</h4>
-                        <p>Implement immediate measures to improve the cash conversion cycle. This includes a rigorous review of inventory holding costs for all single-use medical products and proactive management of trade receivables and payables.</p>
+                        <h4>Urgent Action: Cash Flow Fortification & Profitability Drive</h4>
+                        <p>Implement immediate measures to improve the cash conversion cycle. Conduct a thorough profitability analysis by SKU and customer segment. Discontinue or reprice unprofitable products/services. Establish a monthly cash flow forecasting and monitoring system.</p>
                     </div>
                 </div>
+
                 <div class="analysis-result-card">
-                    <h2>3. Market Position & Competitive Dynamics (Medical Consumables)</h2>
-                    <p>Saudi Mais Co. benefits from its local manufacturing base and adherence to quality (e.g., ISO 13485). However, it faces competition from MNCs and other regional players in the single-use medical device market. Vision 2030's healthcare expansion and IKTVA (local content) initiatives present significant opportunities.
-                    Strategies should include:
+                    <h2>3. Market Position & Competitive Landscape (Medical Consumables)</h2>
+                    <p>Saudi Mais Co. benefits from its "Saudi-made" status, quality reputation, and established presence. However, it faces intense competition.
                     <ul>
-                        <li>Strengthening brand positioning around "Saudi-made quality".</li>
-                        <li>Focusing on product categories where local manufacturing offers a distinct advantage (e.g., responsiveness, customization for regional needs).</li>
-                        <li>Developing deeper relationships with key public and private healthcare procurement bodies.</li>
-                    </ul></p>
+                        <li><strong>Strengths:</strong> Local manufacturing (IKTVA advantage), ISO 13485/SFDA compliance, understanding of regional needs, established relationships.</li>
+                        <li><strong>Weaknesses:</strong> Potentially higher cost structure than some importers, limited R&D for breakthrough innovations, brand visibility challenges against MNCs.</li>
+                        <li><strong>Opportunities:</strong> Vision 2030 healthcare expansion, growing demand for local content, export potential to GCC/MENA, niche product segments.</li>
+                        <li><strong>Threats:</strong> Price wars, rapid technological changes, new entrants (local/international), regulatory shifts.</li>
+                    </ul>
+                    Key strategies include strengthening brand positioning around "Trusted Saudi Quality & Reliability," focusing on product categories where local manufacturing offers distinct advantages (e.g., responsiveness, customization), and developing deeper strategic partnerships with key public (NUPCO) and private healthcare procurement bodies.
+                    </p>
                     <div class="metric-card">
-                        <div class="metric-label">Customer Retention Rate (Target >85%)</div>
-                        <div class="metric-value">78% <span class="quality-indicator quality-warning">Needs Attention</span></div>
-                        <p style="font-size:0.8em; opacity:0.7;">(Illustrative)</p>
+                        <div class="metric-label">Target KSA Market Share (Selected Consumables - Next 3 Years)</div>
+                        <div class="metric-value">18-20% <span class="quality-indicator quality-good">Ambitious but Achievable</span></div>
                     </div>
                 </div>
+
                 <div class="analysis-result-card">
-                    <h2>4. Operational Assessment & Enhancement</h2>
-                    <p>Saudi Mais Co.'s commitment to "highest international quality standards" is a core asset. Operational enhancements should focus on:
+                    <h2>4. Operational Efficiency Assessment & Enhancement Plan</h2>
+                    <p>Saudi Mais Co.'s commitment to "highest international quality standards" must be complemented by operational excellence.</p>
                     <ul>
-                        <li><strong>QMS Digitization:</strong> Implementing digital tools for better quality control, traceability, and compliance reporting (SFDA, ISO).</li>
-                        <li><strong>Supply Chain Resilience:</strong> Diversifying supplier base for critical raw materials for medical consumables and optimizing logistics.</li>
-                        <li><strong>Manufacturing Efficiency:</strong> Investing in automation where feasible and continuous process improvement programs.</li>
-                    </ul></p>
-                </div>
-                <div class="analysis-result-card">
-                    <h2>5. Strategic Growth Opportunities for Saudi Mais Co.</h2>
-                    <ul>
-                        <li><strong>IKTVA Alignment:</strong> Maximizing local content in its single-use medical products to gain preference in governmental tenders.</li>
-                        <li><strong>Product Line Expansion:</strong> Cautiously expanding into adjacent, high-demand medical consumable categories.</li>
-                        <li><strong>Regional Export Development:</strong> Targeting specific GCC and MENA markets with its quality-certified, competitively priced products.</li>
-                        <li><strong>Digital Health Integration (Long-term):</strong> Exploring how its consumables can integrate with or support digital health solutions.</li>
+                        <li><strong>QMS Digitization & Enhancement:</strong> Implement/upgrade to an eQMS for improved efficiency in document control, CAPA, audits, training, and change management. Focus on data analytics from QMS for proactive improvements.</li>
+                        <li><strong>Supply Chain Resilience & Optimization:</strong> Diversify supplier base for critical raw materials. Implement a robust S&OP process. Optimize logistics and warehousing to reduce costs and improve delivery times.</li>
+                        <li><strong>Manufacturing Excellence:</strong> Continue lean initiatives. Invest in automation for repetitive tasks where ROI is clear. Implement a Total Productive Maintenance (TPM) program. Focus on reducing cycle times and improving FPY.</li>
+                        <li><strong>Human Capital Development:</strong> Invest in training and development for staff in areas like lean manufacturing, advanced quality techniques, and new technologies. Foster a culture of continuous improvement.</li>
                     </ul>
                 </div>
-                <div class="recommendation-box">
-                    <h4>Overarching Strategic Roadmap for Saudi Mais Co.</h4>
-                    <p><strong>Phase 1 (0-12 Months): Financial Stabilization & Operational Excellence.</strong> Focus on cost reduction, cash flow improvement, and enhancing QMS efficiency for core medical consumables.</p>
-                    <p><strong>Phase 2 (12-24 Months): Market Strengthening & Product Optimization.</strong> Deepen market penetration in KSA, optimize product portfolio based on profitability, and begin targeted export initiatives for its single-use devices.</p>
-                    <p><strong>Phase 3 (24+ Months): Sustainable Growth & Diversification.</strong> Scale successful product lines, expand regional footprint, and explore strategic alliances or new technology adoption relevant to medical consumables manufacturing.</p>
-                </div>
-            `;
-        }
-        function generateDefaultResponseEn(query) {
-             return `
+
                 <div class="analysis-result-card">
-                    <h2>Regarding your query for Saudi Mais Co.: "${query.substring(0,50)}..."</h2>
-                    <p>As Yazeed AI, your consultant for Saudi Mais Co. (a Riyadh-based manufacturer of single-use medical consumables since 1994, committed to high quality and currently addressing business challenges), I will provide insights based on this context.</p>
-                    <p>Saudi Mais Co.'s operations are significantly influenced by the Saudi Vision 2030 healthcare transformation, stringent quality standards (ISO 13485, SFDA), the competitive medical device market, and the drive for local content (IKTVA). For specific data-driven analysis, please utilize the dedicated sections or upload relevant documents. How can I further assist you regarding Saudi Mais Co.'s specific situation or its market for medical consumables?</p>
+                    <h2>5. Strategic Growth Opportunities for Saudi Mais Co.</h2>
+                    <ol>
+                        <li><strong>Maximize IKTVA & Local Content:</strong> Strategically align product development and sourcing to maximize IKTVA scores, enhancing competitiveness in governmental tenders.</li>
+                        <li><strong>Targeted Product Line Expansion:</strong> Cautiously expand into adjacent, high-demand medical consumable categories where Mais Co. can leverage existing capabilities (e.g., specialized sterile kits, advanced infection control solutions). Conduct thorough market research before new launches.</li>
+                        <li><strong>Phased Regional Export Development:</strong>
+                            <ul>
+                                <li><strong>Phase 1 (1-2 years):</strong> Target UAE, Kuwait, Oman with core products via strong local distributors.</li>
+                                <li><strong>Phase 2 (3-5 years):</strong> Expand to other promising MENA markets (e.g., Egypt, Jordan) and consider establishing regional sales offices.</li>
+                            </ul>
+                        </li>
+                        <li><strong>Digital Health Integration (Long-term):</strong> Explore how Saudi Mais Co.'s consumables can integrate with or support emerging digital health solutions (e.g., smart packaging, consumables for remote patient monitoring devices).</li>
+                        <li><strong>Strategic Alliances & JVs:</strong> Consider partnerships with international MedTech companies for technology transfer or co-manufacturing of more advanced consumables in KSA.</li>
+                    </ol>
+                </div>
+                
+                <div class="analysis-result-card">
+                    <h2>6. Detailed Strategic Roadmap & Key Performance Indicators (KPIs)</h2>
+                    <p><strong>Phase 1 (0-12 Months): Stabilization & Foundation Building</strong>
+                        <ul>
+                            <li><strong>Focus:</strong> Cash flow improvement, cost reduction, QMS enhancement, strengthening core KSA market position.</li>
+                            <li><strong>KPIs:</strong> Positive operating cash flow, 10% COGS reduction, DSO < 75 days, 5% increase in KSA sales of core products.</li>
+                        </ul>
+                    </p>
+                    <p><strong>Phase 2 (12-36 Months): Growth & Optimization</strong>
+                        <ul>
+                            <li><strong>Focus:</strong> Profitable growth in KSA, initial export success, product portfolio optimization, operational efficiency gains.</li>
+                            <li><strong>KPIs:</strong> Net Profit Margin > 8%, successful launch of 2 new product lines, exports contributing 10% of revenue, IKTVA score improvement by X points.</li>
+                        </ul>
+                    </p>
+                    <p><strong>Phase 3 (36+ Months): Market Leadership & Diversification</strong>
+                        <ul>
+                            <li><strong>Focus:</strong> Establishing regional market presence, exploring strategic JVs/alliances, investing in R&D for next-gen consumables.</li>
+                            <li><strong>KPIs:</strong> Top 3 player in KSA for key consumable categories, exports > 20% of revenue, successful JV or technology acquisition.</li>
+                        </ul>
+                    </p>
+                </div>
+
+                <div class="recommendation-box">
+                    <h4>Overarching Strategic Vision for Saudi Mais Co.</h4>
+                    <p>Saudi Mais Co. is to become the premier Saudi-based manufacturer and regional supplier of high-quality, innovative single-use medical consumables, recognized for its operational excellence, customer-centricity, and significant contribution to the healthcare objectives of Saudi Vision 2030 and the broader Middle East. This vision requires decisive leadership, a commitment to continuous improvement, and strategic investments in people, processes, and technology.</p>
                 </div>
             `;
         }
 
-        // --- Arabic Simulated Responses ---
+        function generateDefaultResponseEn(query) {
+             return `
+                <div class="analysis-result-card">
+                    <h2>Regarding your query for Saudi Mais Co.: "${query.substring(0,100)}${query.length > 100 ? '...' : ''}"</h2>
+                    <p>As Yazeed AI, your dedicated consultant for Saudi Mais Co. (a Riyadh-based manufacturer of single-use medical consumables since 1994, committed to high quality and currently addressing business challenges), I'm here to assist.</p>
+                    <p>Saudi Mais Co.'s operations are significantly influenced by the Saudi Vision 2030 healthcare transformation, stringent quality standards (ISO 13485, SFDA requirements), the competitive medical device market, and the drive for local content (IKTVA program). My capabilities include providing detailed analyses on:</p>
+                    <ul>
+                        <li>Advanced Business Strategy</li>
+                        <li>Quality Management Systems (ISO 13485, SFDA)</li>
+                        <li>Demand Forecasting and Inventory Optimization</li>
+                        <li>Competitor Analysis in the medical consumables sector</li>
+                    </ul>
+                    <p>For specific data-driven analysis, please utilize the dedicated sections on this platform or upload relevant documents. Alternatively, you can ask me for a "Comprehensive Analysis" for a holistic overview.</p>
+                    <p>How can I further assist you today regarding Saudi Mais Co.'s specific situation, its market for medical consumables, or strategies for growth and recovery?</p>
+                </div>
+            `;
+        }
+
+        // --- Arabic Simulated Responses (NEW - More Detailed) ---
         function generateAdvancedAnalysisResponseAr(data) {
             return `
                 <h1>تحليل الأعمال المتقدم لشركة ميس السعودية</h1>
-                ${data ? `<div class="analysis-result-card"><p><strong>رؤية من البيانات:</strong> يتضمن التحليل نقاط بيانات من الملف المرفوع الخاص بشركة ميس السعودية.</p></div>` : '<div class="analysis-result-card"><p><strong>رؤية من البيانات:</strong> تحليل مبني على المعرفة العامة بشركة ميس السعودية.</p></div>'}
+                ${data ? `<div class="analysis-result-card"><p><strong>رؤية من البيانات:</strong> يتضمن التحليل نقاط بيانات من الملف المرفوع الخاص بشركة ميس السعودية.</p></div>` : '<div class="analysis-result-card"><p><strong>رؤية من البيانات:</strong> تحليل مبني على المعرفة العامة بشركة ميس السعودية وسوق الأجهزة الطبية.</p></div>'}
+                
                 <div class="analysis-result-card">
-                    <h2>1. لمحة عن سوق المستهلكات الطبية</h2>
-                    <p>من المتوقع أن يشهد سوق الأجهزة الطبية السعودي، وخاصة المستهلكات ذات الاستخدام الواحد، توسعًا كبيرًا، متأثرًا بشكل كبير بتطوير البنية التحتية للرعاية الصحية ضمن رؤية 2030. تكمن الفرص الرئيسية لشركة ميس السعودية في المنتجات المعقمة المتخصصة والمواد المصنعة محليًا والتي تتماشى مع أهداف برنامج اكتفاء (إجمالي القيمة المضافة في المملكة).</p>
+                    <h2>1. تحليل بيئة السوق</h2>
+                    <p>يشهد سوق المستهلكات الطبية في المملكة العربية السعودية نموًا قويًا، مدفوعًا بالإنفاق الحكومي على الرعاية الصحية ضمن رؤية 2030، وشيخوخة السكان، وزيادة الوعي الصحي. تشمل الاتجاهات الرئيسية التحول نحو التصنيع المحلي (برنامج اكتفاء)، والطلب على المنتجات المعقمة عالية الجودة ذات الاستخدام الواحد، والرقمنة في عمليات الشراء.</p>
+                    <p><strong>المشهد التنظيمي:</strong> يعد الالتزام الصارم بلوائح الهيئة العامة للغذاء والدواء (SFDA) والمعايير الدولية مثل ISO 13485 أمرًا بالغ الأهمية. يُعتبر امتثال شركة ميس السعودية الراسخ نقطة قوة.</p>
+                    <p><strong>المنافسة:</strong> يتميز السوق بوجود شركات متعددة الجنسيات (MNCs) ذات محافظ منتجات واسعة، ومصنعين محليين آخرين، ومستوردين دوليين. يعد التمايز من خلال الجودة والمنتجات المتخصصة والعلاقات المحلية القوية أمرًا حاسمًا لشركة ميس السعودية.</p>
                     <div class="metric-card">
-                        <div class="metric-label">نمو السوق المتوقع (CAGR - المستهلكات الطبية السعودية)</div>
-                        <div class="metric-value">9.2% <span class="quality-indicator quality-excellent">ممتاز</span></div>
+                        <div class="metric-label">نمو سوق المستهلكات الطبية المتوقع في المملكة (CAGR 2024-2028)</div>
+                        <div class="metric-value">8.5% <span class="quality-indicator quality-excellent">نمو قوي</span></div>
                     </div>
                 </div>
+
                 <div class="analysis-result-card">
-                    <h2>2. تقييم الصحة المالية لشركة ميس السعودية</h2>
-                    <p>البيانات المالية الحالية، والتي قد تكون مفصلة في المستندات المرفوعة، من المحتمل أن تشير إلى الحاجة إلى تحسين استراتيجي للتكاليف، وتحسين إدارة رأس المال العامل، وتنويع مصادر الإيرادات بخلاف المنتجات التقليدية. من الضروري الاهتمام بنسب السيولة وهوامش الربح الإجمالية على خطوط الإنتاج الأساسية.</p>
-                    <div class="warning-box">
-                        <h4>التركيز على السيولة والربحية</h4>
-                        <p>إذا أشارت البيانات، يجب مقارنة نسبة السيولة السريعة وهامش الربح الصافي بمتوسطات الصناعة لمصنعي الأجهزة الطبية السعوديين. يعد تحسين التدفق النقدي من خلال تحسين دوران المخزون للمستهلكات توصية رئيسية.</p>
-                    </div>
-                </div>
-                <div class="analysis-result-card">
-                    <h2>3. الضرورات الاستراتيجية لشركة ميس السعودية</h2>
+                    <h2>2. تقييم متعمق للصحة المالية</h2>
+                    <p>بناءً على المعرفة العامة بالصناعة (أو بيانات محددة إذا تم توفيرها)، من المحتمل أن تواجه شركة ميس السعودية ضغوطًا على هوامش الربح بسبب المنافسة وتقلبات تكاليف المواد الخام. مجالات التقييم الرئيسية:</p>
                     <ul>
-                        <li>تعزيز قدرات التصنيع المحلي لمجموعة أوسع من الأجهزة الطبية ذات الاستخدام الواحد لزيادة مساهمة اكتفاء وتقليل الاعتماد على الاستيراد.</li>
-                        <li>الاستثمار في نظام رقمي قوي لإدارة الجودة ونظام تخطيط موارد المؤسسات لتحسين التتبع والامتثال (ISO 13485 ، SFDA) والكفاءة التشغيلية.</li>
-                        <li>استكشاف شراكات استراتيجية مع مجموعات المستشفيات الكبرى ووكالات شراء الرعاية الصحية الحكومية.</li>
-                        <li>تطوير أو توفير مستهلكات طبية مبتكرة وفعالة من حيث التكلفة مصممة خصيصًا للاحتياجات الإقليمية.</li>
+                        <li><strong>الربحية:</strong> يجب قياس هامش الربح الإجمالي على خطوط الإنتاج الرئيسية (مثل القفازات الجراحية، القساطر، مجموعات الضمادات). يجب أن يدعم هامش الربح الصافي إعادة الاستثمار والنمو.</li>
+                        <li><strong>السيولة:</strong> تشير نسبة التداول الحالية ونسبة السيولة السريعة إلى القدرة على الوفاء بالالتزامات قصيرة الأجل. الإدارة الفعالة للمستحقات والمخزون أمر حيوي.</li>
+                        <li><strong>الملاءة المالية:</strong> يجب مراقبة نسبة الدين إلى حقوق الملكية لضمان الاستقرار المالي على المدى الطويل.</li>
+                        <li><strong>الكفاءة:</strong> يؤثر معدل دوران المخزون ومتوسط فترة التحصيل (DSO) على رأس المال العامل.</li>
+                    </ul>
+                    ${data ? `<p><em>النسب المالية المحددة من البيانات المرفوعة (مثال: نسبة التداول: 1.8، هامش الربح الإجمالي: 35%) ستوفر تقييمًا أكثر دقة.</em></p>` : `<div class="warning-box"><h4>الحاجة إلى بيانات مالية</h4><p>إن تحميل البيانات المالية التفصيلية سيمكن من إجراء تحليل أكثر تفصيلاً للصحة المالية لشركة ميس السعودية، بما في ذلك حسابات نسب محددة.</p></div>`}
+                </div>
+
+                <div class="analysis-result-card">
+                    <h2>3. مراجعة الأداء التشغيلي</h2>
+                    <p>إن التزام شركة ميس السعودية "بأعلى معايير الجودة العالمية" هو مبدأ تشغيلي أساسي.</p>
+                    <ul>
+                        <li><strong>التصنيع:</strong> التركيز على مبادئ التصنيع الخالي من الهدر لتحسين إنتاج الأجهزة ذات الاستخدام الواحد، وتقليل الفاقد، وتحسين الإنتاجية. يجب تقييم استخدام الطاقة الإنتاجية (مثال: حاليًا 75%، المستهدف 85%).</li>
+                        <li><strong>سلسلة التوريد:</strong> يمكن أن يؤدي تنويع موردي المواد الخام (خاصة للبوليمرات الحيوية والتعبئة والتغليف المعقم) إلى تخفيف المخاطر. لوجستيات فعالة للتوزيع في جميع أنحاء المملكة ودول مجلس التعاون الخليجي المحتملة. تقييم مهل التوريد وموثوقية الموردين.</li>
+                        <li><strong>مراقبة الجودة:</strong> نظام إدارة الجودة القوي (معتمد وفقًا لـ ISO 13485) ضروري. تتبع المقاييس مثل الإنتاجية من المرة الأولى (FPY)، ومعدلات العيوب (PPM)، وفعالية الإجراءات التصحيحية والوقائية (CAPA)، ونتائج التدقيق الداخلي/الخارجي.</li>
                     </ul>
                 </div>
+
+                <div class="analysis-result-card">
+                    <h2>4. توصيات النمو الاستراتيجي</h2>
+                    <ol>
+                        <li><strong>تعظيم مساهمة اكتفاء:</strong> السعي بنشاط للحصول على درجات أعلى في اكتفاء من خلال زيادة المحتوى المحلي في المنتجات وسلسلة التوريد للحصول على الأفضلية في المناقصات الحكومية والتوافق مع الأهداف الوطنية. استهداف فئات منتجات محددة مفضلة لدى اكتفاء.</li>
+                        <li><strong>تحسين وتطوير محفظة المنتجات:</strong> التركيز على المستهلكات ذات الاستخدام الواحد ذات الهامش المرتفع والطلب العالي. الاستثمار في البحث والتطوير أو الشراكات للقطاعات المتخصصة مثل العناية المتقدمة بالجروح، أو منتجات مكافحة العدوى المتخصصة، أو المواد البلاستيكية الطبية القابلة للتحلل.</li>
+                        <li><strong>التوسع الإقليمي (نهج مرحلي):</strong> استهداف أسواق مختارة في دول مجلس التعاون الخليجي (مثل الإمارات العربية المتحدة، الكويت) ومنطقة الشرق الأوسط وشمال أفريقيا حيث تتمتع المنتجات السعودية عالية الجودة بميزة تنافسية. البدء بشراكات مع الموزعين.</li>
+                        <li><strong>التحول الرقمي:</strong> تنفيذ/ترقية أنظمة تخطيط موارد المؤسسات (ERP) وإدارة سلسلة التوريد (SCM) لتحسين التخطيط والرؤية في الوقت الفعلي والكفاءة. استكشاف تكامل منصات الشراء الإلكتروني مع مجموعات المستشفيات الكبرى.</li>
+                        <li><strong>الشراكات والتحالفات الاستراتيجية:</strong> التعاون مع مجموعات المستشفيات الكبرى، ومنظمات الشراء الجماعي (GPOs)، وربما المؤسسات البحثية للتطوير المشترك أو التحقق السريري للمنتجات الجديدة.</li>
+                    </ol>
+                </div>
+
+                <div class="analysis-result-card">
+                    <h2>5. تقييم شامل للمخاطر واستراتيجيات التخفيف</h2>
+                    <p><strong>مخاطر السوق:</strong>
+                        <ul>
+                            <li>منافسة سعرية شديدة من الواردات منخفضة التكلفة. <em>التخفيف:</em> التركيز على تمايز القيمة (الجودة، الخدمة، الدعم المحلي)، تحسين التكاليف من خلال التميز التشغيلي.</li>
+                            <li>تغييرات في لوائح الهيئة العامة للغذاء والدواء أو سياسات السداد. <em>التخفيف:</em> المراقبة التنظيمية المستمرة، المشاركة الاستباقية مع السلطات، التكيف السريع لنظام إدارة الجودة.</li>
+                        </ul>
+                    </p>
+                    <p><strong>المخاطر التشغيلية:</strong>
+                        <ul>
+                            <li>اضطرابات سلسلة التوريد (جيوسياسية، فشل الموردين). <em>التخفيف:</em> تنويع الموردين، التخزين الاستراتيجي للمكونات الحيوية، عملية تخطيط مبيعات وعمليات قوية.</li>
+                            <li>عيوب التصنيع المؤدية إلى عمليات سحب المنتجات. <em>التخفيف:</em> نظام إدارة جودة صارم، صيانة وقائية، تدريب مستمر للموظفين، الاستثمار في تقنيات الفحص.</li>
+                        </ul>
+                    </p>
+                    <p><strong>المخاطر المالية:</strong>
+                        <ul>
+                            <li>نقص السيولة بسبب دورات الدفع الممتدة من العملاء. <em>التخفيف:</em> إدارة حكيمة للتدفقات النقدية، استكشاف خيارات التخصيم أو تمويل سلسلة التوريد.</li>
+                            <li>تقلبات أسعار العملات للمواد الخام المستوردة. <em>التخفيف:</em> استراتيجيات التحوط عند الاقتضاء، التفاوض على عقود طويلة الأجل بالعملة المحلية.</li>
+                        </ul>
+                    </p>
+                </div>
                 <div class="recommendation-box">
-                    <h4>التوصية الأساسية لشركة ميس السعودية</h4>
-                    <p>إعطاء الأولوية لتعزيز التميز في التصنيع المحلي وتحقيق هياكل تكلفة تنافسية للمنتجات الطبية الأساسية ذات الاستخدام الواحد. في الوقت نفسه، استكشاف المستهلكات المتخصصة ذات الهامش المرتفع والاستثمار في الأدوات الرقمية لتعزيز استجابة السوق والتحكم التشغيلي، مما يدعم بشكل مباشر التزام شركة ميس السعودية بالجودة والنمو في الشرق الأوسط.</p>
+                    <h4>الضرورة الاستراتيجية الرئيسية لشركة ميس السعودية</h4>
+                    <p>يجب على شركة ميس السعودية ترسيخ مكانتها كشركة رائدة في مجال المستهلكات الطبية عالية الجودة والمصنعة محليًا داخل المملكة من خلال الاستفادة من إمكانات برنامج اكتفاء وقوتها التشغيلية. وفي الوقت نفسه، فإن التوسع الإقليمي الحذر والمدروس، إلى جانب ابتكار المنتجات في المجالات المتخصصة، سيدفع النمو المستدام. يتطلب هذا تركيزًا مزدوجًا على التميز التشغيلي لإدارة التكاليف والابتكار لتلبية احتياجات الرعاية الصحية المتطورة، وكل ذلك مدعومًا بانضباط مالي قوي وإدارة استباقية للمخاطر.</p>
                 </div>
             `;
         }
+
         function generateQualityAnalysisResponseAr(data) {
              return `
                 <h1>مراجعة نظام إدارة الجودة لشركة ميس السعودية</h1>
-                ${data ? `<div class="analysis-result-card"><p><strong>رؤية من البيانات:</strong> كانت مقاييس الجودة من البيانات/المستندات المقدمة لشركة ميس السعودية محورية في هذا التقييم.</p></div>` : '<div class="analysis-result-card"><p><strong>رؤية من البيانات:</strong> تقييم مبني على مبادئ QMS العامة لمصنعي الأجهزة الطبية مثل شركة ميس السعودية.</p></div>'}
+                ${data ? `<div class="analysis-result-card"><p><strong>رؤية من البيانات:</strong> كانت مقاييس الجودة والوثائق من الملف المقدم لشركة ميس السعودية (مثل تقارير التدقيق، سجلات CAPA، معدلات العيوب) محورية في هذا التقييم.</p></div>` : '<div class="analysis-result-card"><p><strong>رؤية من البيانات:</strong> تقييم مبني على مبادئ QMS العامة لمصنعي الأجهزة الطبية مثل شركة ميس السعودية، مع الالتزام بـ ISO 13485 وإرشادات الهيئة العامة للغذاء والدواء.</p></div>'}
+                
                 <div class="analysis-result-card">
-                    <h2>الامتثال والفعالية العامة (ISO 13485 و SFDA)</h2>
-                    <p>تهدف شركة ميس السعودية إلى تحقيق أعلى معايير الجودة العالمية. تشير مراجعة نظام إدارة الجودة، بناءً على المعلومات المتاحة، إلى الالتزام الأساسي بـ ISO 13485. يجب أن تركز جهود التحسين المستمر على التوثيق الصارم لضوابط التصميم (إذا كانت قابلة للتطبيق على تطوير منتجاتهم)، وإدارة المخاطر (ISO 14971)، والمراقبة بعد التسويق لضمان التوافق الكامل مع متطلبات الهيئة العامة للغذاء والدواء السعودية للمستهلكات الطبية.</p>
+                    <h2>1. الفعالية الإجمالية لنظام إدارة الجودة وحالة الامتثال</h2>
+                    <p>يشكل نظام إدارة الجودة الخاص بشركة ميس السعودية، والذي يُفترض أنه معتمد وفقًا لمعيار ISO 13485، العمود الفقري لالتزامها بإنتاج مستهلكات طبية آمنة وفعالة ذات استخدام واحد. تُقيّم الفعالية بناءً على قدرته على تلبية توقعات العملاء والمتطلبات التنظيمية الصارمة باستمرار، لا سيما تلك التي وضعتها الهيئة العامة للغذاء والدواء السعودية (SFDA).</p>
+                    <p><strong>أبرز نقاط التحقق من الامتثال (ISO 13485:2016 و SFDA):</strong>
+                        <ul>
+                            <li><strong>مسؤولية الإدارة:</strong> التزام واضح من الإدارة العليا، سياسة وأهداف جودة محددة.</li>
+                            <li><strong>إدارة الموارد:</strong> بنية تحتية كافية، موظفون أكفاء، وبيئة عمل خاضعة للرقابة.</li>
+                            <li><strong>تحقيق المنتج:</strong> عمليات قوية للتصميم والتطوير (إذا انطبق)، ضوابط الشراء، توفير الإنتاج والخدمة (بما في ذلك التحقق من صحة التعقيم، التحقق من صحة العمليات الحرجة مثل الختم والقولبة).</li>
+                            <li><strong>القياس والتحليل والتحسين:</strong> أنظمة فعالة لرصد وقياس العمليات/المنتجات، التدقيق الداخلي، التحكم في المنتج غير المطابق، الإجراءات التصحيحية والوقائية (CAPA)، والمراقبة بعد التسويق.</li>
+                            <li><strong>متطلبات SFDA الخاصة:</strong> متطلبات إذن تسويق الأجهزة الطبية (MDMA)، تطبيق نظام التعريف الفريد للجهاز (UDI)، الإبلاغ عن الأحداث السلبية.</li>
+                        </ul>
+                    </p>
                     <div class="metric-card">
-                        <div class="metric-label">معدل عدم المطابقة في التدقيق الداخلي (المستهدف <1%)</div>
-                        <div class="metric-value">1.5% <span class="quality-indicator quality-warning">يحتاج لتحسين</span></div>
-                        <p style="font-size:0.8em; opacity:0.7;">(مثال على مقياس إذا تم تقديم البيانات)</p>
+                        <div class="metric-label">نتائج التدقيق الخارجي (SFDA/جهة معتمدة - حالات عدم مطابقة كبرى - آخر عامين)</div>
+                        <div class="metric-value">${data ? '0 (مثال)' : 'غير متوفر (يعتمد على البيانات)'} <span class="quality-indicator ${data ? 'quality-excellent' : 'quality-warning'}">${data ? 'ممتاز' : 'بانتظار البيانات'}</span></div>
+                        <p style="font-size:0.8em; opacity:0.7;">(مقياس توضيحي؛ سيتم استخدام نتائج التدقيق الفعلية)</p>
                     </div>
                 </div>
+
                 <div class="analysis-result-card">
-                    <h2>النتائج الرئيسية والإجراءات التصحيحية/الوقائية (CAPA)</h2>
+                    <h2>2. تحليل مفصل للعيوب واتجاهات عدم المطابقة</h2>
+                    <p>تُعد المراجعة المنهجية لبيانات العيوب الداخلية (مثل معدلات الخردة، نسب إعادة العمل، معدلات رفض المواد الواردة) والبيانات الخارجية (شكاوى العملاء، الإجراءات التصحيحية الميدانية) أمرًا ضروريًا.
+                    ${data ? `<em>ستسمح البيانات المقدمة (مثل مخططات باريتو للعيوب، سجلات الشكاوى) بتحديد اتجاهات محددة، مثل 'X% من العيوب المتعلقة بأختام التعبئة والتغليف للمنتج Y' أو 'عدم مطابقة متكررة في مكونات المورد Z'.</em>` : `<em>البيانات التفصيلية للعيوب وعدم المطابقة ضرورية لتحليل الاتجاهات بدقة وتحديد الأسباب الجذرية.</em>`}
+                    </p>
+                    <p><strong>مؤشرات الأداء الرئيسية (KPIs) للمراقبة:</strong>
+                        <ol>
+                            <li>الإنتاجية من المرة الأولى (FPY) لخطوات التصنيع الحرجة.</li>
+                            <li>معدل الخروج عن المواصفات (OOS) للمنتجات النهائية.</li>
+                            <li>عدد الإجراءات التصحيحية والوقائية المفتوحة ومتوسط دورة الإجراءات التصحيحية والوقائية.</li>
+                            <li>معدل عيوب الموردين (PPM).</li>
+                        </ol>
+                    </p>
+                </div>
+
+                <div class="analysis-result-card">
+                    <h2>3. تقييم التعامل مع شكاوى العملاء والمراقبة بعد التسويق</h2>
+                    <p>يُعد نظام معالجة الشكاوى الفعال (وفقًا لمتطلبات ISO 13485 و SFDA) أمرًا حيويًا لتحديد مشكلات المنتج وضمان سلامة المرضى ودفع التحسين المستمر. ويشمل ذلك الاستلام في الوقت المناسب، والتحقيق، وتحليل الأسباب الجذرية، والإبلاغ (إذا لزم الأمر)، وتنفيذ الإجراءات التصحيحية/الوقائية.</p>
+                    <p><strong>أنشطة المراقبة بعد التسويق (PMS) لشركة ميس السعودية:</strong>
+                        <ul>
+                            <li>جمع منهجي للملاحظات من المستخدمين والموزعين.</li>
+                            <li>مراقبة الأدبيات العلمية وعمليات سحب المنتجات المنافسة.</li>
+                            <li>تقارير تحديث السلامة الدورية (PSURs) إذا انطبق.</li>
+                            <li>تحليل استباقي لاتجاهات بيانات PMS للكشف عن إشارات الإنذار المبكر.</li>
+                        </ul>
+                    </p>
+                    <div class="critical-box">
+                        <h4>مجال التركيز: فعالية نظام CAPA</h4>
+                        <p>يجب ألا يعالج نظام CAPA الأعراض فحسب، بل يجب أن يزيل الأسباب الجذرية بفعالية لمنع تكرارها. تُعد عمليات التحقق المنتظمة من فعالية الإجراءات التصحيحية والوقائية المنفذة أمرًا بالغ الأهمية. إذا أظهرت البيانات معدلات تكرار عالية لمشكلات مماثلة، فإن نظام CAPA بحاجة إلى تعزيز.</p>
+                    </div>
+                </div>
+                
+                <div class="analysis-result-card">
+                    <h2>4. خطة تحسين جودة عملية وقابلة للتنفيذ لشركة ميس السعودية</h2>
+                    <p>بناءً على تقييم شامل لنظام إدارة الجودة، تُقترح التوصيات التالية ذات الأولوية:</p>
                     <ol>
-                        <li><strong>النتيجة (مثال):</strong> عدم اتساق التتبع في سجلات الدُفعات لخط إنتاج مستهلك معين. <strong>الإجراء:</strong> تطبيق تسجيل رقمي مُحسَّن للدُفعات مع إدخالات حقل إلزامية؛ إجراء إعادة تدريب مستهدف لموظفي الإنتاج في شركة ميس السعودية.</li>
-                        <li><strong>النتيجة (مثال):</strong> الالتزام بجدول تدقيق جودة الموردين أقل من المستهدف. <strong>الإجراء:</strong> مراجعة خطة تدقيق الموردين بناءً على المخاطر؛ تخصيص موارد مخصصة للتنفيذ في الوقت المناسب.</li>
-                        <li><strong>النتيجة (مثال):</strong> تجاوز أوقات حل شكاوى العملاء بشأن المستهلكات المعيبة لمؤشرات الأداء الرئيسية الداخلية. <strong>الإجراء:</strong> تبسيط عملية استقبال الشكاوى والتحقيق فيها؛ تطبيق جداول زمنية أكثر صرامة لـ CAPA.</li>
+                        <li><strong>تعزيز التفكير القائم على المخاطر (ISO 14971 و ISO 13485):</strong> ضمان دمج إدارة المخاطر بشكل كامل في جميع عمليات نظام إدارة الجودة، من التصميم واختيار الموردين إلى الإنتاج وأنشطة ما بعد التسويق لجميع المستهلكات الطبية. مراجعة وتحديث ملفات إدارة المخاطر بانتظام.</li>
+                        <li><strong>تحسين برنامج إدارة جودة الموردين:</strong> تطبيق تصنيف متدرج للموردين بناءً على المخاطر. إجراء عمليات تدقيق ميدانية أكثر صرامة للموردين الحرجين. وضع اتفاقيات جودة واضحة تحدد المواصفات ومراقبة التغيير.</li>
+                        <li><strong>الاستثمار في حلول نظام إدارة الجودة الرقمي (eQMS):</strong> الانتقال من الأنظمة الورقية أو المتباينة إلى نظام eQMS متكامل لتبسيط التحكم في المستندات، وإدارة التدريب، وتتبع CAPA، وجدولة التدقيق، وإدارة التغيير. هذا يحسن الكفاءة والتتبع وسلامة البيانات.</li>
+                        <li><strong>برنامج تدريب قائم على الكفاءة:</strong> تطوير وتنفيذ مصفوفة تدريب خاصة بكل دور وظيفي. ضمان تدريب تنشيطي منتظم على إجراءات نظام إدارة الجودة، والممارسات التوزيعية الجيدة (GDP)، والممارسات التصنيعية الجيدة (GMP)، والتحديثات التنظيمية (SFDA، ISO). قياس فعالية التدريب.</li>
+                        <li><strong>ثقافة الجودة الاستباقية:</strong> تعزيز ثقافة تكون فيها الجودة مسؤولية الجميع. تنفيذ دوائر الجودة أو فرق التحسين المستمر. تشجيع الإبلاغ عن المشكلات المحتملة دون خوف من العقاب.</li>
+                        <li><strong>تحليلات البيانات لاستخبارات الجودة:</strong> استخدام التحكم الإحصائي في العمليات (SPC) عند الاقتضاء. تنفيذ لوحات معلومات لمراقبة مؤشرات الأداء الرئيسية للجودة في الوقت الفعلي، مما يتيح اتخاذ قرارات تعتمد على البيانات لإجراء تحسينات استباقية.</li>
                     </ol>
                 </div>
                 <div class="recommendation-box">
-                    <h4>مبادرة تحسين الجودة لشركة ميس السعودية</h4>
-                    <p>إطلاق مبادرة "صفر عيوب" للمنتجات الطبية الحرجة ذات الاستخدام الواحد، مع التركيز على التخفيف الاستباقي للمخاطر في عمليات التصنيع. تعزيز برنامج ضمان جودة الموردين، وضمان توافق جودة المواد الخام والمكونات مع معايير شركة ميس السعودية العالية. الاستثمار في التدريب المتقدم لموظفي ضمان ومراقبة الجودة على أحدث التحديثات التنظيمية وأدوات الجودة.</p>
+                    <h4>فلسفة الجودة الأساسية لشركة ميس السعودية</h4>
+                    <p>يجب أن تسعى شركة ميس السعودية جاهدة لتبني فلسفة جودة "صحيح من المرة الأولى"، والانتقال من مجرد الامتثال إلى حالة من ضمان الجودة الاستباقي والتحسين المستمر. يتضمن ذلك تمكين الموظفين، والاستفادة من البيانات، ودمج إدارة المخاطر بشكل كامل في جميع العمليات لضمان التسليم المتسق لمستهلكات طبية آمنة وفعالة وعالية الجودة للأسواق السعودية والإقليمية.</p>
                 </div>
             `;
         }
+
         function generateDemandForecastResponseAr(data) {
             return `
                 <h1>توقعات الطلب وتحسين المخزون لشركة ميس السعودية</h1>
-                ${data ? `<div class="analysis-result-card"><p><strong>رؤية من البيانات:</strong> ساهمت بيانات المبيعات والمخزون التاريخية من الملف المقدم لشركة ميس السعودية في تشكيل هذه التوقعات لمستهلكاتها الطبية ذات الاستخدام الواحد.</p></div>` : '<div class="analysis-result-card"><p><strong>رؤية من البيانات:</strong> توقعات مبنية على اتجاهات السوق العامة للمستهلكات الطبية في الشرق الأوسط، مطبقة على شركة ميس السعودية.</p></div>'}
+                ${data ? `<div class="analysis-result-card"><p><strong>رؤية من البيانات:</strong> ساهمت بيانات المبيعات التاريخية ومستويات المخزون وبيانات السوق من الملف المقدم لمستهلكات شركة ميس السعودية الطبية ذات الاستخدام الواحد في تشكيل هذه التوقعات واستراتيجية المخزون.</p></div>` : '<div class="analysis-result-card"><p><strong>رؤية من البيانات:</strong> توقعات واستراتيجية مخزون مبنية على اتجاهات السوق العامة للمستهلكات الطبية في الشرق الأوسط، مطبقة على شركة ميس السعودية، مع مراعاة عوامل مثل توسع الرعاية الصحية ضمن رؤية 2030.</p></div>'}
+                
                 <div class="analysis-result-card">
-                    <h2>توقعات الطلب (للأشهر الـ 12 القادمة - مستهلكات شركة ميس السعودية)</h2>
-                    <p>من المتوقع حدوث ارتفاع موسمي لبعض المستهلكات المتعلقة بالجهاز التنفسي في الربع الرابع/الأول. يُظهر الطلب العام على المنتجات الجراحية ومنتجات مكافحة العدوى ذات الاستخدام الواحد التي تصنعها شركة ميس السعودية اتجاهًا تصاعديًا ثابتًا بنسبة 6-8٪، مدفوعًا بزيادة نشاط الرعاية الصحية والنمو السكاني في المنطقة.</p>
-                    <div class="metric-card">
-                        <div class="metric-label">دقة التوقعات (MAPE - السنة السابقة)</div>
-                        <div class="metric-value">18% <span class="quality-indicator quality-good">جيد (المستهدف <15%)</span></div>
-                         <p style="font-size:0.8em; opacity:0.7;">(مثال على مقياس إذا تم تقديم البيانات)</p>
-                    </div>
-                    <h4>مثال على توقعات فئة المنتج:</h4>
+                    <h2>1. تحليل شامل للطلب</h2>
+                    <p>يُعد تحليل بيانات المبيعات التاريخية (مثل آخر 3-5 سنوات) لخطوط إنتاج شركة ميس السعودية (مثل القفازات الجراحية، أطقم الحقن الوريدي، المحاقن، ضمادات الجروح) أمرًا بالغ الأهمية. يتضمن ذلك تحديد:</p>
+                    <ul>
+                        <li><strong>الطلب الأساسي:</strong> مستوى الطلب الأساسي لكل فئة منتج.</li>
+                        <li><strong>الاتجاهات:</strong> اتجاهات تصاعدية أو تنازلية أو مستقرة في الطلب.</li>
+                        <li><strong>الموسمية:</strong> التقلبات المتوقعة (مثل زيادة الطلب على منتجات الجهاز التنفسي خلال موسم الأنفلونزا).</li>
+                        <li><strong>الدورية:</strong> الدورات الاقتصادية أو السوقية طويلة الأجل.</li>
+                        <li><strong>تأثير العوامل الخارجية:</strong> تأثير مبادرات الصحة العامة (مثل حملات التطعيم)، افتتاح مستشفيات جديدة (مدفوعة برؤية 2030)، أنشطة المنافسين، والتغييرات التنظيمية.</li>
+                    </ul>
+                    ${data ? `<p><em>ستمكّن البيانات المقدمة من إجراء تحليل كمي، على سبيل المثال، تحديد اتجاه نمو سنوي بنسبة 10% للمنتج X، أو ذروة موسمية في الربع الرابع للمنتج Y.</em></p>` : `<p><em>البيانات التاريخية التفصيلية للمبيعات حسب وحدة حفظ المخزون/الفئة ضرورية لإجراء تحليل كمي دقيق.</em></p>`}
+                </div>
+
+                <div class="analysis-result-card">
+                    <h2>2. نتائج التوقعات (للأشهر الـ 12-18 القادمة)</h2>
+                    <p>بناءً على تحليل الطلب، يمكن للنماذج الإحصائية للتنبؤ (مثل ARIMA، التمهيد الأسي) جنبًا إلى جنب مع المدخلات النوعية (معلومات السوق، ملاحظات فريق المبيعات) أن تولد توقعات. فيما يلي توقعات توضيحية لفئات المنتجات الرئيسية:</p>
+                    <h4>توقعات طلب توضيحية لشركة ميس السعودية (وحدات)</h4>
                     <table>
-                        <thead><tr><th>فئة المنتج (شركة ميس السعودية)</th><th>الوحدات المتوقعة (12 شهرًا قادمة)</th><th>المحركات الرئيسية</th></tr></thead>
+                        <thead><tr><th>فئة المنتج</th><th>الـ 6 أشهر القادمة</th><th>الـ 12 شهرًا القادمة</th><th>الافتراضات الرئيسية</th></tr></thead>
                         <tbody>
-                            <tr><td>قفازات جراحية معقمة</td><td>5,000,000 زوج</td><td>زيادة العمليات الجراحية، طلب المستشفيات</td></tr>
-                            <tr><td>كمامات وجه للاستخدام مرة واحدة (النوع IIR)</td><td>10,000,000 وحدة</td><td>الوعي الصحي العام المستمر، الاستخدام المؤسسي</td></tr>
-                            <tr><td>قساطر وريدية</td><td>2,500,000 وحدة</td><td>حالات دخول المستشفيات، خدمات العيادات الخارجية</td></tr>
+                            <tr><td>قفازات جراحية معقمة (أزواج)</td><td>${data ? '2,800,000' : '2,500,000'}</td><td>${data ? '5,800,000' : '5,200,000'}</td><td>استمرار نشاط المستشفيات، نمو معتدل في الحصة السوقية.</td></tr>
+                            <tr><td>محاقن للاستخدام مرة واحدة (وحدات)</td><td>${data ? '12,000,000' : '10,000,000'}</td><td>${data ? '25,000,000' : '22,000,000'}</td><td>برامج الصحة العامة، طلب مؤسسي مستقر.</td></tr>
+                            <tr><td>ضمادات جروح متقدمة (وحدات)</td><td>${data ? '300,000' : '250,000'}</td><td>${data ? '650,000' : '550,000'}</td><td>زيادة الاعتماد، إطلاق منتجات جديدة من قبل شركة ميس.</td></tr>
                         </tbody>
                     </table>
-                </div>
-                <div class="analysis-result-card">
-                    <h2>توصيات المخزون لشركة ميس السعودية</h2>
-                    <p>تطبيق استراتيجية مخزون مجزأة لمجموعة متنوعة من المستهلكات الطبية لشركة ميس السعودية. بالنسبة للمواد ذات الحجم الكبير والطلب المتوقع (مثل القفازات القياسية والكمامات)، ضع في اعتبارك مناهج JIT أو المخزون الخالي من الهدر الأكثر جرأة. بالنسبة للمكونات/المنتجات المستوردة الحرجة والأقل قابلية للتنبؤ بها أو ذات المهلة الطويلة، حافظ على مستويات مخزون أمان أعلى. قم بمراجعة وتحديث نقاط إعادة الطلب و EOQ بانتظام بناءً على التوقعات المحدثة وموثوقية الموردين.</p>
-                    <div class="critical-box">
-                        <h4>تنبيه بمخاطر نفاد المخزون (مثال من البيانات)</h4>
-                        <p>إذا أظهرت البيانات: المخزون الحالي من 'طقم الخيوط الجراحية المتخصصة XYZ' يكفي لمدة 5 أيام، بينما تبلغ مهلة التوريد المعتادة 15 يومًا. من الضروري اتخاذ إجراء فوري لتسريع الطلب ومراجعة مخزون الأمان لهذا العنصر لمنع تعطيل عملاء شركة ميس السعودية.</p>
+                    <div class="metric-card">
+                        <div class="metric-label">دقة التوقعات الإجمالية (متوسط الخطأ المطلق المئوي المستهدف)</div>
+                        <div class="metric-value">&lt; 15% <span class="quality-indicator quality-good">هدف جيد</span></div>
+                        <p style="font-size:0.8em; opacity:0.7;">(تحقيق هذا يتطلب بيانات ونماذج قوية)</p>
                     </div>
+                </div>
+
+                <div class="analysis-result-card">
+                    <h2>3. استراتيجية تحسين المخزون</h2>
+                    <p>الهدف هو تحقيق التوازن بين تكاليف الاحتفاظ بالمخزون ومستويات الخدمة (تقليل حالات نفاد المخزون). توصيات لشركة ميس السعودية:</p>
+                    <ul>
+                        <li><strong>تحليل ABC:</strong> تصنيف مواد المخزون بناءً على القيمة/الحجم (مواد A: قيمة عالية، مواد B: متوسطة، مواد C: منخفضة). تطبيق رقابة أكثر صرامة ومراجعة أكثر تكرارًا لمواد A.</li>
+                        <li><strong>حساب مخزون الأمان:</strong> تحديد مستويات مخزون الأمان المناسبة لكل وحدة حفظ مخزون بناءً على تقلب الطلب، وتقلب مهلة التوريد من المورد، ومستوى الخدمة المطلوب (مثل 98% للمواد الحرجة).</li>
+                        <li><strong>نقطة إعادة الطلب (ROP) والكمية الاقتصادية للطلب (EOQ):</strong> حساب نقاط إعادة الطلب لتشغيل أوامر التجديد. استخدام نماذج EOQ (بحذر، مع مراعاة مدة الصلاحية للمنتجات المعقمة) لتحديد أحجام الطلبات المثلى.</li>
+                        <li><strong>مراقبة المخزون:</strong> تنفيذ جرد دوري منتظم وجرد كامل دوري لضمان دقة المخزون. تتبع مؤشرات الأداء الرئيسية مثل دوران المخزون، وأيام المخزون المتاح (DOH).</li>
+                        <li><strong>المخزون بطيء الحركة والمتقادم (SLOB):</strong> إنشاء عملية لتحديد وإدارة المخزون بطيء الحركة والمتقادم لتقليل عمليات الشطب.</li>
+                    </ul>
+                    ${data ? `<div class="warning-box"><h4>تحديد محتمل لمخزون بطيء الحركة (مثال من البيانات)</h4><p>إذا أظهرت البيانات أن المنتج Z لم يتم بيعه خلال 12 شهرًا ويوجد منه 5000 وحدة في المخزون، فإن خطة للتصرف (مثل الخصم، التبرع، التخلص) ضرورية.</p></div>` : ''}
+                </div>
+
+                <div class="analysis-result-card">
+                    <h2>4. خارطة طريق التنفيذ</h2>
+                    <ol>
+                        <li><strong>تنقية البيانات وتكامل الأنظمة (الأشهر 1-3):</strong> ضمان دقة بيانات المبيعات والمخزون التاريخية. دمج وحدة التنبؤ مع أنظمة تخطيط موارد المؤسسات/إدارة سلسلة التوريد.</li>
+                        <li><strong>اختيار النماذج وضبط المعلمات (الأشهر 2-4):</strong> اختيار نماذج التنبؤ المناسبة لقطاعات المنتجات المختلفة. تدريب فريق التخطيط على برامج التنبؤ.</li>
+                        <li><strong>البرنامج التجريبي (الأشهر 4-6):</strong> تنفيذ سياسات التنبؤ والمخزون الجديدة لمجموعة مختارة من المنتجات. مراقبة النتائج وتحسين العمليات.</li>
+                        <li><strong>التطبيق الكامل والتحسين المستمر (الأشهر 7+):</strong> توسيع العمليات الجديدة لتشمل جميع خطوط الإنتاج. إنشاء دورة تخطيط مبيعات وعمليات (S&OP) منتظمة لمراجعة التوقعات والمخزون والمواءمة مع أهداف العمل.</li>
+                    </ol>
+                </div>
+                <div class="recommendation-box">
+                    <h4>الإدارة الاستراتيجية للمخزون لشركة ميس السعودية</h4>
+                    <p>يجب أن تنتقل شركة ميس السعودية نحو نظام تنبؤ بالطلب وإدارة مخزون استباقي يعتمد على البيانات. لن يؤدي هذا إلى تقليل التكاليف المرتبطة بالتخزين المفرط أو نفاد المخزون فحسب، بل سيؤدي أيضًا إلى تحسين رضا العملاء والكفاءة التشغيلية، مما يهيئ الشركة للنمو القابل للتطوير في سوق المستهلكات الطبية الديناميكي.</p>
                 </div>
             `;
         }
+
         function generateCompetitorAnalysisResponseAr(data) {
             return `
                 <h1>تحليل المشهد التنافسي لشركة ميس السعودية</h1>
-                ${data ? `<div class="analysis-result-card"><p><strong>رؤية من البيانات:</strong> تم دمج معلومات المنافسين من الملف المقدم في هذا التحليل لوضع شركة ميس السعودية في السوق.</p></div>` : '<div class="analysis-result-card"><p><strong>رؤية من البيانات:</strong> تحليل مبني على المعرفة العامة بسوق المستهلكات الطبية في الشرق الأوسط ذات الصلة بشركة ميس السعودية.</p></div>'}
+                ${data ? `<div class="analysis-result-card"><p><strong>رؤية من البيانات:</strong> تم دمج معلومات المنافسين وتقارير السوق وبيانات التسعير من الملف المقدم في هذا التحليل لوضع شركة ميس السعودية في سوق المستهلكات الطبية ذات الاستخدام الواحد.</p></div>` : '<div class="analysis-result-card"><p><strong>رؤية من البيانات:</strong> تحليل مبني على المعرفة العامة بسوق المستهلكات الطبية في المملكة العربية السعودية والشرق الأوسط، مع التركيز على اللاعبين ذوي الصلة بشركة ميس السعودية.</p></div>'}
+                
                 <div class="analysis-result-card">
-                    <h2>التموضع السوقي لشركة ميس السعودية (المستهلكات الطبية ذات الاستخدام الواحد)</h2>
-                    <p>تُعد شركة ميس السعودية (تأسست عام 1994، الرياض) مُصنعًا محليًا راسخًا معروفًا بالجودة في مجال المستهلكات الطبية ذات الاستخدام الواحد. تنافس الشركة مع شركات كبرى متعددة الجنسيات (MNCs) ولاعبين إقليميين ناشئين. تشمل العوامل التنافسية الرئيسية جودة المنتج/الشهادات (ISO، SFDA)، والسعر، واتساع خط الإنتاج، وشبكة التوزيع، والعلاقات مع كبار مقدمي الرعاية الصحية (القطاعين العام والخاص).</p>
-                    <div class="metric-card">
-                        <div class="metric-label">الحصة السوقية التقديرية (السعودية - مستهلكات مختارة)</div>
-                        <div class="metric-value">12-15% <span class="quality-indicator quality-good">لاعب محلي قوي</span></div>
-                         <p style="font-size:0.8em; opacity:0.7;">(مقياس توضيحي)</p>
-                    </div>
+                    <h2>1. نظرة عامة مفصلة على المشهد السوقي (المملكة وأسواق دول مجلس التعاون الرئيسية)</h2>
+                    <p>تقدر قيمة سوق المستهلكات الطبية ذات الاستخدام الواحد في المملكة العربية السعودية بحوالي X.X مليار ريال سعودي (تقديرات 2023) ومن المتوقع أن ينمو بمعدل نمو سنوي مركب Y.Y% حتى عام 2028. تشمل القطاعات الرئيسية:
+                        <ul>
+                            <li>اللوازم العامة (القفازات، الكمامات، المحاقن، القساطر)</li>
+                            <li>منتجات العناية بالجروح</li>
+                            <li>منتجات مكافحة العدوى</li>
+                            <li>مستهلكات الحقن الوريدي وإيصال الأدوية</li>
+                        </ul>
+                    تشمل الدوافع استثمارات رؤية 2030 في الرعاية الصحية، وزيادة أحجام العمليات الجراحية، والتركيز المتزايد على الوقاية من العدوى. يفضل برنامج اكتفاء المصنعين المحليين مثل شركة ميس السعودية.
+                    </p>
                 </div>
+
                 <div class="analysis-result-card">
-                    <h2>ملخص تحليل SWOT (شركة ميس السعودية مقابل المنافسين الرئيسيين)</h2>
-                    <p><strong>نقاط القوة:</strong> وجود تصنيع محلي (إمكانية الاستفادة من برنامج اكتفاء، توريد أسرع لبعض المواد)، سمعة راسخة بالجودة، فهم للاحتياجات الإقليمية.</p>
-                    <p><strong>نقاط الضعف:</strong> هيكل تكلفة أعلى محتمل مقارنة ببعض الشركات الكبرى متعددة الجنسيات أو المستوردين منخفضي التكلفة، خط أنابيب بحث وتطوير أضيق للمنتجات المبتكرة للغاية، الاعتماد على بعض المواد الخام المستوردة.</p>
-                    <p><strong>الفرص:</strong> سوق رعاية صحية متنامي (رؤية 2030)، زيادة الطلب على المحتوى المحلي، إمكانية التصدير إلى دول مجلس التعاون الخليجي/الشرق الأوسط وشمال أفريقيا الأخرى، توسيع خط الإنتاج ليشمل فئات مستهلكات مجاورة.</p>
-                    <p><strong>التهديدات:</strong> منافسة سعرية شديدة، خاصة في المشتريات القائمة على المناقصات؛ التطورات التكنولوجية السريعة من قبل اللاعبين العالميين؛ نقاط ضعف سلسلة التوريد للمكونات المستوردة.</p>
+                    <h2>2. تقييم تنافسي متعمق</h2>
+                    <p>تنافس شركة ميس السعودية (تأسست عام 1994، الرياض) ضد مزيج من اللاعبين:</p>
+                    <h4>ملفات تعريف المنافسين الرئيسيين (توضيحي):</h4>
+                    <ol>
+                        <li>
+                            <strong>شركة جلوبال ميد (شركة متعددة الجنسيات):</strong>
+                            <ul>
+                                <li><strong>نقاط القوة:</strong> محفظة منتجات واسعة، بحث وتطوير قوي، اعتراف عالمي بالعلامة التجارية، توزيع راسخ.</li>
+                                <li><strong>نقاط الضعف:</strong> نقاط سعر أعلى محتملة، مرونة أقل في الاستجابة لاحتياجات السوق المحلية مقارنة باللاعبين المحليين.</li>
+                                <li><strong>الاستراتيجية:</strong> التركيز على القطاعات المتميزة، الابتكار، والعقود المؤسسية الكبيرة.</li>
+                            </ul>
+                        </li>
+                        <li>
+                            <strong>شركة الحلول الصحية العربية (موزع/مستورد إقليمي كبير):</strong>
+                            <ul>
+                                <li><strong>نقاط القوة:</strong> شبكة توزيع واسعة، مصادر منتجات متنوعة (بما في ذلك خيارات منخفضة التكلفة)، علاقات قوية مع القطاع الخاص.</li>
+                                <li><strong>نقاط الضعف:</strong> الاعتماد على لوجستيات الاستيراد، تصور جودة متغير لبعض المنتجات المستوردة.</li>
+                                <li><strong>الاستراتيجية:</strong> القدرة التنافسية السعرية، متجر شامل لمجموعة واسعة من المستهلكات.</li>
+                            </ul>
+                        </li>
+                        <li>
+                            <strong>شركة فيوتشرتك الطبية السعودية (مصنع محلي ناشئ):</strong>
+                            <ul>
+                                <li><strong>نقاط القوة:</strong> التركيز على مستهلكات معينة ذات حجم كبير، فوائد محتملة من برنامج اكتفاء، عمليات مرنة.</li>
+                                <li><strong>نقاط الضعف:</strong> نطاق منتجات محدود، علامة تجارية أحدث، نطاق أصغر مقارنة بشركة ميس.</li>
+                                <li><strong>الاستراتيجية:</strong> التركيز على سوق متخصص، إنتاج محلي فعال من حيث التكلفة.</li>
+                            </ul>
+                        </li>
+                    </ol>
+                    ${data ? `<p><em>بيانات المنافسين المحددة من الملف المرفوع (مثل تقديرات حصصهم السوقية، أسعار المنتجات المماثلة) ستعمل على تحسين هذه الملفات التعريفية.</em></p>` : ''}
                 </div>
-                <h4>المنافسون الرئيسيون (توضيحي):</h4>
-                 <ul><li>جلوبال ميد للأجهزة (شركة متعددة الجنسيات - محفظة واسعة، بحث وتطوير قوي)</li><li>آرابيان هيلث تك (موزع/مستورد إقليمي - تسعير قوي)</li><li>المصنعون المحليون الناشئون (التركيز على مواد معينة ذات حجم كبير)</li></ul>
+
+                <div class="analysis-result-card">
+                    <h2>3. تحليل مقارن: شركة ميس السعودية مقابل المنافسين</h2>
+                    <table>
+                        <thead><tr><th>العامل</th><th>شركة ميس السعودية</th><th>شركة جلوبال ميد</th><th>الحلول الصحية العربية</th><th>فيوتشرتك الطبية</th></tr></thead>
+                        <tbody>
+                            <tr><td><strong>جودة المنتج (ISO 13485)</strong></td><td>عالية</td><td>عالية جدًا</td><td>متغيرة</td><td>متوسطة-عالية</td></tr>
+                            <tr><td><strong>نقطة السعر</strong></td><td>متوسطة المدى</td><td>متميزة</td><td>منخفضة-متوسطة</td><td>تنافسية</td></tr>
+                            <tr><td><strong>التصنيع المحلي (اكتفاء)</strong></td><td>قوي</td><td>محدود/لا يوجد</td><td>لا يوجد</td><td>قوي</td></tr>
+                            <tr><td><strong>نطاق المنتج</strong></td><td>متوسط</td><td>واسع</td><td>واسع جدًا</td><td>ضيق</td></tr>
+                            <tr><td><strong>شبكة التوزيع (السعودية)</strong></td><td>جيدة</td><td>قوية</td><td>قوية جدًا</td><td>قيد التطوير</td></tr>
+                            <tr><td><strong>الابتكار/البحث والتطوير</strong></td><td>قيد التطوير</td><td>عالي</td><td>منخفض (توفير مصادر)</td><td>منخفض-متوسط</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="analysis-result-card">
+                    <h2>4. تحديد الفرص والتهديدات لشركة ميس السعودية</h2>
+                    <p><strong>الفرص:</strong>
+                        <ul>
+                            <li>الاستفادة من برنامج اكتفاء للوصول التفضيلي إلى المناقصات الحكومية.</li>
+                            <li>التوسع في قطاعات المستهلكات المتخصصة غير المخدومة بشكل كافٍ.</li>
+                            <li>تطوير أسواق التصدير في دول مجلس التعاون الخليجي/الشرق الأوسط وشمال أفريقيا.</li>
+                            <li>تشكيل تحالفات استراتيجية مع مقدمي الرعاية الصحية المحليين لعقود طويلة الأجل.</li>
+                            <li>الابتكار في المستهلكات الطبية الصديقة للبيئة/المستدامة.</li>
+                        </ul>
+                    </p>
+                    <p><strong>التهديدات:</strong>
+                        <ul>
+                            <li>منافسة سعرية شديدة، خاصة من مستوردي المنتجات الآسيوية منخفضة التكلفة.</li>
+                            <li>التطورات التكنولوجية السريعة من قبل الشركات متعددة الجنسيات التي تتطلب استثمارًا مستمرًا.</li>
+                            <li>التغييرات في لوائح الهيئة العامة للغذاء والدواء التي تؤثر على تسجيل المنتجات أو تكاليف الامتثال.</li>
+                            <li>اندماج مقدمي الرعاية الصحية مما يزيد من قوتهم التفاوضية.</li>
+                        </ul>
+                    </p>
+                </div>
+
+                <div class="analysis-result-card">
+                    <h2>5. توصيات استراتيجية لشركة ميس السعودية</h2>
+                    <ol>
+                        <li><strong>تعزيز عرض القيمة:</strong> التأكيد على "الجودة السعودية الموثوقة، والموثوقية، والاستجابة". تطوير رسائل واضحة حول فوائد برنامج اكتفاء للعملاء.</li>
+                        <li><strong>نهج سوقي مجزأ:</strong>
+                            <ul>
+                                <li>للمنتجات ذات الحجم الكبير والموحدة: التركيز على تحسين التكاليف والتسعير التنافسي مع الحفاظ على الجودة.</li>
+                                <li>للمنتجات المتخصصة/الفريدة: التركيز على التمايز، والفوائد السريرية، والخدمات ذات القيمة المضافة.</li>
+                            </ul>
+                        </li>
+                        <li><strong>تحسين المبيعات والتسويق:</strong> الاستثمار في فريق مبيعات ماهر يتمتع بمعرفة سريرية قوية. تطوير استراتيجيات تسويق رقمي للوصول إلى جمهور أوسع. المشاركة في المعارض الصحية الإقليمية الرئيسية.</li>
+                        <li><strong>مراقبة المعلومات التنافسية:</strong> إنشاء نظام لتتبع أنشطة المنافسين بانتظام، وإطلاق المنتجات الجديدة، وتغييرات الأسعار، واتجاهات السوق.</li>
+                        <li><strong>بناء ولاء العملاء:</strong> تنفيذ برامج للحسابات الرئيسية، وتقديم دعم ممتاز لما بعد البيع، وجمع ملاحظات العملاء للتحسين المستمر.</li>
+                    </ol>
+                </div>
                 <div class="recommendation-box">
-                    <h4>الاستراتيجية التنافسية لشركة ميس السعودية</h4>
-                    <p>يجب على شركة ميس السعودية الاستفادة من نقاط قوتها في التصنيع المحلي وضمان الجودة. التركيز على استراتيجية هجينة:
-                    1.  <strong>قيادة التكلفة للمنتجات الأساسية:</strong> تحسين التصنيع للمستهلكات ذات الحجم الكبير للتنافس بفعالية على السعر مع الحفاظ على الجودة.
-                    2.  <strong>التمييز للمنتجات المتخصصة:</strong> تطوير أو توفير مستهلكات متخصصة حيث يمكن للجودة والموثوقية والدعم المحلي أن تبرر سعرًا أعلى.
-                    3.  <strong>تعزيز العلاقات:</strong> تعزيز الشراكات مع المؤسسات الصحية الحكومية والخاصة الرئيسية، مع التأكيد على الموثوقية والاستجابة.
-                    4.  <strong>استكشاف الصادرات المتخصصة:</strong> استهداف أسواق معينة في دول مجلس التعاون الخليجي/الشرق الأوسط وشمال أفريقيا حيث تتمتع المنتجات السعودية عالية الجودة بميزة.</p>
+                    <h4>الميزة التنافسية لشركة ميس السعودية</h4>
+                    <p>يكمن طريق شركة ميس السعودية نحو ميزة تنافسية مستدامة في ثلاثية: 1) الالتزام الثابت بالجودة المتوافقة مع الهيئة العامة للغذاء والدواء والتميز في التصنيع المحلي (اكتفاء). 2) الاستجابة السريعة للاحتياجات المحددة لأسواق الرعاية الصحية السعودية والإقليمية. 3) إدارة استراتيجية لمحفظة المنتجات توازن بين الحجم والقيمة. من خلال التركيز على هذه الركائز، يمكن لشركة ميس أن تنافس بفعالية ضد كل من الشركات العالمية العملاقة واللاعبين المحليين المرنين.</p>
                 </div>
             `;
         }
+
         function generateComprehensiveAnalysisResponseAr() {
             return `
                 <h1>تحليل استراتيجي شامل: شركة ميس السعودية للمنتجات الطبية</h1>
                 <div class="analysis-result-card">
                     <h2>1. ملخص تنفيذي</h2>
-                    <p>تُعتبر شركة ميس السعودية للمنتجات الطبية، وهي شركة مصنعة للمستهلكات الطبية ذات الاستخدام الواحد مقرها الرياض منذ عام 1994، لاعبًا محليًا رئيسيًا ملتزمًا بمعايير الجودة العالمية العالية. ورغم امتلاكها أساسًا متينًا، تواجه الشركة تحديات كبيرة في الأعمال والجوانب المالية تستلزم اتخاذ إجراءات استراتيجية فورية وحاسمة. يوضح هذا التحليل المجالات الحيوية للتحول لضمان النمو المستدام وتعزيز الريادة في السوق في المشهد الصحي المتطور في السعودية والشرق الأوسط.</p>
+                    <p>تُعتبر شركة ميس السعودية للمنتجات الطبية، وهي شركة مصنعة للمستهلكات الطبية ذات الاستخدام الواحد مقرها الرياض منذ عام 1994، كيانًا محليًا هامًا ملتزمًا بمعايير الجودة العالمية العالية (ISO 13485، الامتثال لمتطلبات الهيئة العامة للغذاء والدواء). تعمل الشركة ضمن سوق رعاية صحية سعودي وشرق أوسطي ديناميكي ومتنامٍ، يتشكل بفعل رؤية 2030، وبرنامج اكتفاء، والضغوط التنافسية المتطورة. ورغم امتلاكها أساسًا متينًا في التصنيع المحلي والجودة، تواجه شركة ميس السعودية تحديات تتعلق بالأداء المالي، والكفاءة التشغيلية، والتموضع الاستراتيجي. يقدم هذا التحليل خارطة طريق شاملة لمواجهة هذه التحديات، والاستفادة من الفرص، وضمان النمو المستدام وتعزيز الريادة في السوق.</p>
                 </div>
+
                 <div class="analysis-result-card">
-                    <h2>2. الوضع المالي واستراتيجيات التعافي</h2>
-                    <p>من المرجح أن الشركة تعاني من ضغوط على السيولة والربحية. يجب أن تركز خطة التعافي القوية على:
+                    <h2>2. الوضع المالي الحالي واستراتيجيات التعافي الممكنة</h2>
+                    <p>من المرجح أن الشركة تعاني من ضغوط على الربحية بسبب ارتفاع تكاليف المدخلات والمنافسة السعرية، وقيود سيولة محتملة بسبب عدم كفاءة رأس المال العامل. يجب أن تركز خطة التعافي القوية على:</p>
                     <ul>
-                        <li><strong>إدارة صارمة للتكاليف:</strong> تطبيق مبادئ التصنيع الخالي من الهدر لتقليل الفاقد وتحسين الكفاءة في إنتاج المستهلكات الطبية. استهداف خفض التكاليف التشغيلية بنسبة 10-15٪ على مدى 18 شهرًا.</li>
-                        <li><strong>تحسين رأس المال العامل:</strong> تحسين دوران المخزون لمنتجاتها ذات الاستخدام الواحد، وإعادة التفاوض على شروط الدفع مع الموردين، وتبسيط تحصيل المستحقات.</li>
-                        <li><strong>إعادة هيكلة الديون (إن وجدت):</strong> استكشاف خيارات لإدارة التزامات الديون الحالية بشكل أكثر فعالية.</li>
-                        <li><strong>تعزيز الإيرادات:</strong> تحديد مجالات منتجات جديدة ذات هامش ربح أعلى ضمن المستهلكات الطبية أو استكشاف خدمات ذات قيمة مضافة.</li>
-                    </ul></p>
+                        <li><strong>تحسين التكاليف بشكل صارم:</strong> تطبيق مبادئ التصنيع الخالي من الهدر عبر جميع خطوط إنتاج المستهلكات الطبية. استهداف خفض تكلفة البضائع المباعة (COGS) بنسبة 10-15٪ على مدى 18-24 شهرًا من خلال تقليل الفاقد، وتحسين العمليات، وكفاءة الطاقة. التدقيق في المصروفات البيعية والإدارية والعامة.</li>
+                        <li><strong>إدارة رأس المال العامل:</strong>
+                            <ul>
+                                <li><strong>المخزون:</strong> خفض أيام المخزون المتاح (DOH) بنسبة 15-20٪ من خلال تحسين توقعات الطلب ومبادئ الإنتاج في الوقت المناسب (JIT) للمواد غير الحرجة. تنفيذ برنامج لخفض المخزون بطيء الحركة والمتقادم (SLOB).</li>
+                                <li><strong>الذمم المدينة:</strong> خفض متوسط فترة التحصيل (DSO) من خلال تشديد سياسات الائتمان (حيثما أمكن) وتحسين جهود التحصيل. استهداف متوسط فترة تحصيل أقل من 60 يومًا.</li>
+                                <li><strong>الذمم الدائنة:</strong> التفاوض على شروط دفع مواتية مع الموردين الرئيسيين دون تعريض العلاقات للخطر.</li>
+                            </ul>
+                        </li>
+                        <li><strong>تعزيز الربحية:</strong> مراجعة استراتيجية التسعير لخطوط الإنتاج الرئيسية. التركيز على المستهلكات ذات الهامش الأعلى. استكشاف خدمات ذات قيمة مضافة (مثل الأطقم المخصصة، إدارة المخزون للمستشفيات).</li>
+                        <li><strong>إعادة هيكلة الديون (إن وجدت):</strong> إذا كانت مستويات الديون مرتفعة، استكشاف خيارات لإعادة التمويل بشروط أفضل أو التفاوض مع المقرضين لجداول سداد أكثر مرونة.</li>
+                    </ul>
                     <div class="critical-box">
-                        <h4>إجراء عاجل: تعزيز التدفق النقدي</h4>
-                        <p>تنفيذ تدابير فورية لتحسين دورة تحويل النقد. ويشمل ذلك مراجعة صارمة لتكاليف الاحتفاظ بالمخزون لجميع المنتجات الطبية ذات الاستخدام الواحد والإدارة الاستباقية للذمم التجارية المدينة والدائنة.</p>
+                        <h4>إجراء عاجل: تعزيز التدفق النقدي ودفع الربحية</h4>
+                        <p>تنفيذ تدابير فورية لتحسين دورة تحويل النقد. إجراء تحليل ربحية شامل حسب وحدة حفظ المخزون وشريحة العملاء. إيقاف أو إعادة تسعير المنتجات/الخدمات غير المربحة. إنشاء نظام شهري لتوقعات ومراقبة التدفق النقدي.</p>
                     </div>
                 </div>
+
                 <div class="analysis-result-card">
-                    <h2>3. المركز السوقي وديناميكيات المنافسة (المستهلكات الطبية)</h2>
-                    <p>تستفيد شركة ميس السعودية من قاعدتها التصنيعية المحلية والتزامها بالجودة (مثل ISO 13485). ومع ذلك، تواجه منافسة من الشركات متعددة الجنسيات واللاعبين الإقليميين الآخرين في سوق الأجهزة الطبية ذات الاستخدام الواحد. تمثل مبادرات توسيع الرعاية الصحية ضمن رؤية 2030 ومبادرات المحتوى المحلي (اكتفاء) فرصًا كبيرة.
-                    يجب أن تشمل الاستراتيجيات:
+                    <h2>3. المركز السوقي والمشهد التنافسي (المستهلكات الطبية)</h2>
+                    <p>تستفيد شركة ميس السعودية من وضعها "صنع في السعودية"، وسمعتها في الجودة، ووجودها الراسخ. ومع ذلك، تواجه منافسة شديدة.
                     <ul>
-                        <li>تعزيز مكانة العلامة التجارية حول "الجودة السعودية الصنع".</li>
-                        <li>التركيز على فئات المنتجات التي يوفر فيها التصنيع المحلي ميزة واضحة (مثل الاستجابة، التخصيص للاحتياجات الإقليمية).</li>
-                        <li>تطوير علاقات أعمق مع هيئات الشراء الصحي الحكومية والخاصة الرئيسية.</li>
-                    </ul></p>
+                        <li><strong>نقاط القوة:</strong> التصنيع المحلي (ميزة اكتفاء)، الامتثال لـ ISO 13485/SFDA، فهم الاحتياجات الإقليمية، علاقات راسخة.</li>
+                        <li><strong>نقاط الضعف:</strong> هيكل تكلفة أعلى محتمل من بعض المستوردين، بحث وتطوير محدود للابتكارات الخارقة، تحديات وضوح العلامة التجارية مقابل الشركات متعددة الجنسيات.</li>
+                        <li><strong>الفرص:</strong> توسع الرعاية الصحية ضمن رؤية 2030، زيادة الطلب على المحتوى المحلي، إمكانات التصدير إلى دول مجلس التعاون الخليجي/الشرق الأوسط وشمال أفريقيا، قطاعات المنتجات المتخصصة.</li>
+                        <li><strong>التهديدات:</strong> حروب الأسعار، التغيرات التكنولوجية السريعة، الداخلون الجدد (محليون/دوليون)، التحولات التنظيمية.</li>
+                    </ul>
+                    تشمل الاستراتيجيات الرئيسية تعزيز مكانة العلامة التجارية حول "الجودة والموثوقية السعودية الموثوقة"، والتركيز على فئات المنتجات التي يوفر فيها التصنيع المحلي مزايا واضحة (مثل الاستجابة، التخصيص)، وتطوير شراكات استراتيجية أعمق مع هيئات شراء الرعاية الصحية العامة (نوبكو) والخاصة الرئيسية.
+                    </p>
                     <div class="metric-card">
-                        <div class="metric-label">معدل الاحتفاظ بالعملاء (المستهدف >85%)</div>
-                        <div class="metric-value">78% <span class="quality-indicator quality-warning">يحتاج لاهتمام</span></div>
-                        <p style="font-size:0.8em; opacity:0.7;">(توضيحي)</p>
+                        <div class="metric-label">الحصة السوقية المستهدفة في المملكة (مستهلكات مختارة - السنوات الثلاث القادمة)</div>
+                        <div class="metric-value">18-20% <span class="quality-indicator quality-good">طموح ولكنه قابل للتحقيق</span></div>
                     </div>
                 </div>
+
                 <div class="analysis-result-card">
-                    <h2>4. التقييم والتحسين التشغيلي</h2>
-                    <p>يُعد التزام شركة ميس السعودية "بأعلى معايير الجودة العالمية" رصيدًا أساسيًا. يجب أن تركز التحسينات التشغيلية على:
+                    <h2>4. تقييم الكفاءة التشغيلية وخطة التحسين</h2>
+                    <p>يجب أن يُستكمل التزام شركة ميس السعودية "بأعلى معايير الجودة العالمية" بالتميز التشغيلي.</p>
                     <ul>
-                        <li><strong>رقمنة نظام إدارة الجودة:</strong> تطبيق أدوات رقمية لتحسين مراقبة الجودة والتتبع وتقارير الامتثال (الهيئة العامة للغذاء والدواء، ISO).</li>
-                        <li><strong>مرونة سلسلة التوريد:</strong> تنويع قاعدة الموردين للمواد الخام الحرجة للمستهلكات الطبية وتحسين الخدمات اللوجستية.</li>
-                        <li><strong>كفاءة التصنيع:</strong> الاستثمار في الأتمتة حيثما كان ذلك ممكنًا وبرامج التحسين المستمر للعمليات.</li>
-                    </ul></p>
-                </div>
-                <div class="analysis-result-card">
-                    <h2>5. فرص النمو الاستراتيجية لشركة ميس السعودية</h2>
-                    <ul>
-                        <li><strong>التوافق مع برنامج اكتفاء:</strong> تعظيم المحتوى المحلي في منتجاتها الطبية ذات الاستخدام الواحد للحصول على الأفضلية في المناقصات الحكومية.</li>
-                        <li><strong>توسيع خط الإنتاج:</strong> التوسع بحذر في فئات المستهلكات الطبية المجاورة ذات الطلب المرتفع.</li>
-                        <li><strong>تنمية الصادرات الإقليمية:</strong> استهداف أسواق معينة في دول مجلس التعاون الخليجي والشرق الأوسط وشمال أفريقيا بمنتجاتها المعتمدة بالجودة وبأسعار تنافسية.</li>
-                        <li><strong>تكامل الصحة الرقمية (على المدى الطويل):</strong> استكشاف كيف يمكن لمستهلكاتها أن تتكامل مع حلول الصحة الرقمية أو تدعمها.</li>
+                        <li><strong>رقمنة وتعزيز نظام إدارة الجودة:</strong> تنفيذ/ترقية إلى نظام إدارة جودة إلكتروني (eQMS) لتحسين الكفاءة في التحكم في المستندات، والإجراءات التصحيحية والوقائية، والتدقيق، والتدريب، وإدارة التغيير. التركيز على تحليلات البيانات من نظام إدارة الجودة لإجراء تحسينات استباقية.</li>
+                        <li><strong>مرونة وتحسين سلسلة التوريد:</strong> تنويع قاعدة الموردين للمواد الخام الحيوية. تنفيذ عملية تخطيط مبيعات وعمليات قوية. تحسين الخدمات اللوجستية والتخزين لخفض التكاليف وتحسين أوقات التسليم.</li>
+                        <li><strong>التميز في التصنيع:</strong> مواصلة مبادرات التصنيع الخالي من الهدر. الاستثمار في الأتمتة للمهام المتكررة حيث يكون عائد الاستثمار واضحًا. تنفيذ برنامج صيانة إنتاجية شاملة (TPM). التركيز على تقليل أوقات الدورات وتحسين الإنتاجية من المرة الأولى.</li>
+                        <li><strong>تنمية رأس المال البشري:</strong> الاستثمار في تدريب وتطوير الموظفين في مجالات مثل التصنيع الخالي من الهدر، وتقنيات الجودة المتقدمة، والتقنيات الجديدة. تعزيز ثقافة التحسين المستمر.</li>
                     </ul>
                 </div>
+
+                <div class="analysis-result-card">
+                    <h2>5. فرص النمو الاستراتيجية لشركة ميس السعودية</h2>
+                    <ol>
+                        <li><strong>تعظيم اكتفاء والمحتوى المحلي:</strong> مواءمة تطوير المنتجات وتوفير المصادر بشكل استراتيجي لتعظيم درجات اكتفاء، مما يعزز القدرة التنافسية في المناقصات الحكومية.</li>
+                        <li><strong>توسيع خط الإنتاج بشكل مستهدف:</strong> التوسع بحذر في فئات المستهلكات الطبية المجاورة ذات الطلب المرتفع حيث يمكن لشركة ميس الاستفادة من القدرات الحالية (مثل الأطقم المعقمة المتخصصة، حلول مكافحة العدوى المتقدمة). إجراء أبحاث سوق شاملة قبل إطلاق منتجات جديدة.</li>
+                        <li><strong>تنمية الصادرات الإقليمية المرحلية:</strong>
+                            <ul>
+                                <li><strong>المرحلة الأولى (1-2 سنوات):</strong> استهداف الإمارات العربية المتحدة والكويت وعمان بالمنتجات الأساسية عبر موزعين محليين أقوياء.</li>
+                                <li><strong>المرحلة الثانية (3-5 سنوات):</strong> التوسع إلى أسواق واعدة أخرى في الشرق الأوسط وشمال أفريقيا (مثل مصر والأردن) والنظر في إنشاء مكاتب مبيعات إقليمية.</li>
+                            </ul>
+                        </li>
+                        <li><strong>تكامل الصحة الرقمية (على المدى الطويل):</strong> استكشاف كيف يمكن لمستهلكات شركة ميس السعودية أن تتكامل مع حلول الصحة الرقمية الناشئة أو تدعمها (مثل التعبئة والتغليف الذكي، المستهلكات لأجهزة مراقبة المرضى عن بعد).</li>
+                        <li><strong>التحالفات الاستراتيجية والمشاريع المشتركة:</strong> النظر في شراكات مع شركات تكنولوجيا طبية دولية لنقل التكنولوجيا أو التصنيع المشترك لمستهلكات أكثر تقدمًا في المملكة.</li>
+                    </ol>
+                </div>
+                
+                <div class="analysis-result-card">
+                    <h2>6. خارطة طريق استراتيجية مفصلة ومؤشرات الأداء الرئيسية (KPIs)</h2>
+                    <p><strong>المرحلة الأولى (0-12 شهرًا): الاستقرار وبناء الأساس</strong>
+                        <ul>
+                            <li><strong>التركيز:</strong> تحسين التدفق النقدي، خفض التكاليف، تعزيز نظام إدارة الجودة، تقوية المركز في السوق السعودي الأساسي.</li>
+                            <li><strong>مؤشرات الأداء الرئيسية:</strong> تدفق نقدي تشغيلي إيجابي، خفض تكلفة البضائع المباعة بنسبة 10%، متوسط فترة تحصيل أقل من 75 يومًا، زيادة مبيعات المنتجات الأساسية في المملكة بنسبة 5%.</li>
+                        </ul>
+                    </p>
+                    <p><strong>المرحلة الثانية (12-36 شهرًا): النمو والتحسين</strong>
+                        <ul>
+                            <li><strong>التركيز:</strong> نمو مربح في المملكة، نجاح تصدير أولي، تحسين محفظة المنتجات، مكاسب كفاءة تشغيلية.</li>
+                            <li><strong>مؤشرات الأداء الرئيسية:</strong> هامش ربح صافي > 8%، إطلاق ناجح لخطين إنتاج جديدين، مساهمة الصادرات بنسبة 10% من الإيرادات، تحسين درجة اكتفاء بمقدار X نقطة.</li>
+                        </ul>
+                    </p>
+                    <p><strong>المرحلة الثالثة (36+ شهرًا): الريادة في السوق والتنويع</strong>
+                        <ul>
+                            <li><strong>التركيز:</strong> تأسيس وجود إقليمي في السوق، استكشاف مشاريع مشتركة/تحالفات استراتيجية، الاستثمار في البحث والتطوير للجيل القادم من المستهلكات.</li>
+                            <li><strong>مؤشرات الأداء الرئيسية:</strong> ضمن أفضل 3 لاعبين في المملكة لفئات المستهلكات الرئيسية، مساهمة الصادرات بأكثر من 20% من الإيرادات، مشروع مشترك ناجح أو استحواذ على تكنولوجيا.</li>
+                        </ul>
+                    </p>
+                </div>
+
                 <div class="recommendation-box">
-                    <h4>خارطة طريق استراتيجية شاملة لشركة ميس السعودية</h4>
-                    <p><strong>المرحلة الأولى (0-12 شهرًا): الاستقرار المالي والتميز التشغيلي.</strong> التركيز على خفض التكاليف، وتحسين التدفق النقدي، وتعزيز كفاءة نظام إدارة الجودة للمستهلكات الطبية الأساسية.</p>
-                    <p><strong>المرحلة الثانية (12-24 شهرًا): تعزيز السوق وتحسين المنتج.</strong> تعميق اختراق السوق في المملكة العربية السعودية، وتحسين محفظة المنتجات بناءً على الربحية، وبدء مبادرات تصدير مستهدفة لأجهزتها ذات الاستخدام الواحد.</p>
-                    <p><strong>المرحلة الثالثة (24+ شهرًا): النمو المستدام والتنويع.</strong> توسيع نطاق خطوط الإنتاج الناجحة، وتوسيع البصمة الإقليمية، واستكشاف التحالفات الاستراتيجية أو اعتماد التكنولوجيا الجديدة ذات الصلة بتصنيع المستهلكات الطبية.</p>
+                    <h4>الرؤية الاستراتيجية الشاملة لشركة ميس السعودية</h4>
+                    <p>أن تصبح شركة ميس السعودية الشركة المصنعة السعودية الرائدة والمورد الإقليمي للمستهلكات الطبية عالية الجودة والمبتكرة ذات الاستخدام الواحد، معترف بها لتميزها التشغيلي، وتركيزها على العملاء، ومساهمتها الكبيرة في أهداف الرعاية الصحية لرؤية السعودية 2030 والشرق الأوسط الأوسع. تتطلب هذه الرؤية قيادة حاسمة، والتزامًا بالتحسين المستمر، واستثمارات استراتيجية في الأفراد والعمليات والتكنولوجيا.</p>
                 </div>
             `;
         }
+
         function generateDefaultResponseAr(query) {
             return `
                 <div class="analysis-result-card">
-                    <h2>بخصوص استفسارك لشركة ميس السعودية: "${query.substring(0,50)}..."</h2>
-                    <p>بصفتي يزيد AI، مستشارك لشركة ميس السعودية (شركة مصنعة للمستهلكات الطبية ذات الاستخدام الواحد مقرها الرياض منذ عام 1994، ملتزمة بالجودة العالية وتواجه حاليًا تحديات في الأعمال)، سأقدم رؤى بناءً على هذا السياق.</p>
-                    <p>تتأثر عمليات شركة ميس السعودية بشكل كبير بتحول الرعاية الصحية ضمن رؤية السعودية 2030، ومعايير الجودة الصارمة (ISO 13485، الهيئة العامة للغذاء والدواء)، وسوق الأجهزة الطبية التنافسي، والتوجه نحو المحتوى المحلي (اكتفاء). لتحليل محدد يعتمد على البيانات، يرجى استخدام الأقسام المخصصة أو تحميل المستندات ذات الصلة. كيف يمكنني مساعدتك بشكل أكبر فيما يتعلق بوضع شركة ميس السعودية المحدد أو سوقها للمستهلكات الطبية؟</p>
+                    <h2>بخصوص استفسارك لشركة ميس السعودية: "${query.substring(0,100)}${query.length > 100 ? '...' : ''}"</h2>
+                    <p>بصفتي يزيد AI، مستشارك المخصص لشركة ميس السعودية (شركة مصنعة للمستهلكات الطبية ذات الاستخدام الواحد مقرها الرياض منذ عام 1994، ملتزمة بالجودة العالية وتواجه حاليًا تحديات في الأعمال)، أنا هنا للمساعدة.</p>
+                    <p>تتأثر عمليات شركة ميس السعودية بشكل كبير بتحول الرعاية الصحية ضمن رؤية السعودية 2030، ومعايير الجودة الصارمة (ISO 13485، متطلبات الهيئة العامة للغذاء والدواء)، وسوق الأجهزة الطبية التنافسي، والتوجه نحو المحتوى المحلي (برنامج اكتفاء). تشمل قدراتي تقديم تحليلات مفصلة حول:</p>
+                    <ul>
+                        <li>استراتيجية الأعمال المتقدمة</li>
+                        <li>أنظمة إدارة الجودة (ISO 13485، SFDA)</li>
+                        <li>توقعات الطلب وتحسين المخزون</li>
+                        <li>تحليل المنافسين في قطاع المستهلكات الطبية</li>
+                    </ul>
+                    <p>لتحليل محدد يعتمد على البيانات، يرجى استخدام الأقسام المخصصة في هذه المنصة أو تحميل المستندات ذات الصلة. بدلاً من ذلك، يمكنك أن تطلب مني "تحليل شامل" للحصول على نظرة عامة كلية.</p>
+                    <p>كيف يمكنني مساعدتك بشكل أكبر اليوم فيما يتعلق بوضع شركة ميس السعودية المحدد، أو سوقها للمستهلكات الطبية، أو استراتيجيات النمو والتعافي؟</p>
                 </div>
             `;
         }
+
 
         function exportResults(section, format) {
             const contentElement = document.getElementById(`${section}AnalysisContent`);
@@ -2545,19 +3072,81 @@
 
         function convertToMarkdown(htmlContent) {
             let md = htmlContent;
-            md = md.replace(/<h1>(.*?)<\/h1>/gi, "# $1\n")
-                   .replace(/<h2>(.*?)<\/h2>/gi, "## $1\n")
-                   .replace(/<h3>(.*?)<\/h3>/gi, "### $1\n")
-                   .replace(/<h4>(.*?)<\/h4>/gi, "#### $1\n")
-                   .replace(/<p>(.*?)<\/p>/gi, "$1\n\n")
-                   .replace(/<ul>/gi, "").replace(/<\/ul>/gi, "")
+            // Convert headings
+            md = md.replace(/<h1>(.*?)<\/h1>/gi, "# $1\n\n")
+                   .replace(/<h2>(.*?)<\/h2>/gi, "## $1\n\n")
+                   .replace(/<h3>(.*?)<\/h3>/gi, "### $1\n\n")
+                   .replace(/<h4>(.*?)<\/h4>/gi, "#### $1\n\n");
+
+            // Convert paragraphs
+            md = md.replace(/<p>(.*?)<\/p>/gi, "$1\n\n");
+
+            // Convert lists (basic)
+            md = md.replace(/<ul>/gi, "").replace(/<\/ul>/gi, "")
                    .replace(/<ol>/gi, "").replace(/<\/ol>/gi, "")
-                   .replace(/<li>(.*?)<\/li>/gi, "- $1\n")
-                   .replace(/<strong>(.*?)<\/strong>/gi, "**$1**")
-                   .replace(/<em>(.*?)<\/em>/gi, "*$1*")
-                   .replace(/<br\s*\/?>/gi, "\n")
-                   .replace(/<[^>]+>/g, '') 
-                   .replace(/\n{3,}/g, '\n\n'); 
+                   .replace(/<li>(.*?)<\/li>/gi, (match, p1) => {
+                       // Check if it's inside an OL by looking at the original structure (this is a heuristic)
+                       // A more robust solution would parse the DOM structure.
+                       // For now, we assume if the content starts with a number and dot, it's an ordered list item.
+                       if (/^\s*\d+\.\s*/.test(p1.trim())) {
+                           return p1.trim() + "\n"; // Keep the number if it's already there
+                       }
+                       return "- " + p1.trim() + "\n";
+                   });
+            
+            // Convert bold and italic
+            md = md.replace(/<strong>(.*?)<\/strong>/gi, "**$1**")
+                   .replace(/<em>(.*?)<\/em>/gi, "*$1*");
+
+            // Convert tables (very basic, assumes simple structure)
+            md = md.replace(/<table>/gi, "\n").replace(/<\/table>/gi, "\n")
+                   .replace(/<thead>/gi, "").replace(/<\/thead>/gi, "")
+                   .replace(/<tbody>/gi, "").replace(/<\/tbody>/gi, "")
+                   .replace(/<tr>/gi, "").replace(/<\/tr>/gi, "\n")
+                   .replace(/<th>(.*?)<\/th>/gi, (match, p1) => `| ${p1.trim()} `)
+                   .replace(/<td>(.*?)<\/td>/gi, (match, p1) => `| ${p1.trim()} `)
+                   .replace(/(\n\|.*?)\n/g, (match, p1) => { // Add table header separator
+                       const columns = (p1.match(/\|/g) || []).length -1;
+                       if (columns > 0 && !match.includes('| --- |')) { // crude check if it's a header row
+                           let separator = "\n";
+                           for(let i=0; i<columns; i++) separator += "| --- ";
+                           separator += "|\n";
+                           return p1 + separator;
+                       }
+                       return p1 + "\n";
+                   });
+            
+            // Convert divs with specific classes (like metric-card, recommendation-box) to blockquotes or styled sections
+            md = md.replace(/<div class="metric-card">([\s\S]*?)<\/div>/gi, (match, content) => {
+                const label = (content.match(/<div class="metric-label">([\s\S]*?)<\/div>/) || ["",""])[1].trim();
+                const value = (content.match(/<div class="metric-value">([\s\S]*?)<\/div>/) || ["",""])[1].replace(/<span.*?>.*?<\/span>/gi, '').trim();
+                return `> **${label}:** ${value}\n\n`;
+            });
+             md = md.replace(/<div class="recommendation-box">([\s\S]*?)<\/div>/gi, (match, content) => {
+                const title = (content.match(/<h4>(.*?)<\/h4>/) || ["","Recommendation"])[1].trim();
+                const text = content.replace(/<h4>.*?<\/h4>/, '').replace(/<[^>]+>/g, ' ').trim();
+                return `> **${title}**\n> ${text}\n\n`;
+            });
+            md = md.replace(/<div class="warning-box">([\s\S]*?)<\/div>/gi, (match, content) => {
+                const title = (content.match(/<h4>(.*?)<\/h4>/) || ["","Warning"])[1].trim();
+                const text = content.replace(/<h4>.*?<\/h4>/, '').replace(/<[^>]+>/g, ' ').trim();
+                return `> **⚠️ ${title}**\n> ${text}\n\n`;
+            });
+            md = md.replace(/<div class="critical-box">([\s\S]*?)<\/div>/gi, (match, content) => {
+                const title = (content.match(/<h4>(.*?)<\/h4>/) || ["","Critical"])[1].trim();
+                const text = content.replace(/<h4>.*?<\/h4>/, '').replace(/<[^>]+>/g, ' ').trim();
+                return `> **‼️ ${title}**\n> ${text}\n\n`;
+            });
+
+
+            // Clean up remaining HTML tags
+            md = md.replace(/<br\s*\/?>/gi, "\n")
+                   .replace(/<[^>]+>/g, '') // Remove any other tags
+                   .replace(/&lt;/g, '<').replace(/&gt;/g, '>') // Restore < and >
+                   .replace(/&amp;/g, '&'); // Restore &
+
+            // Normalize newlines and spacing
+            md = md.replace(/\n{3,}/g, '\n\n').trim();
             
             md = `# ${translations[currentLanguage].pageTitle}\n## ${translations[currentLanguage].companyNameHeader}\n\n${md}`;
             md += `\n\n---\n*${translations[currentLanguage].generatedOn || 'Generated on'} ${new Date().toLocaleString(currentLanguage === 'ar' ? 'ar-SA' : 'en-US')}*`;
@@ -2567,13 +3156,14 @@
 
         function exportToPDF(htmlContent, filename) {
             alert(translations[currentLanguage].alertPdfExport);
-            const section = filename.split('_')[0];
+            // Fallback to text export
+            const section = filename.split('_')[0]; // Extract section name
             const textContent = new DOMParser().parseFromString(htmlContent, "text/html").documentElement.textContent;
             const blob = new Blob([textContent], { type: 'text/plain;charset=utf-8' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = `${section}_analysis_SaudiMaisCo_fallback.txt`;
+            a.download = `${section}_analysis_SaudiMaisCo_fallback.txt`; // Ensure fallback has .txt
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
@@ -2586,13 +3176,19 @@
             
             const focusInputEl = document.getElementById(`${sectionName}FocusInput`);
             const focusInputFileEl = document.getElementById(`${sectionName}FocusInputFile`);
-            const focusInput = (focusInputEl && focusInputEl.value) ? focusInputEl.value : (focusInputFileEl ? focusInputFileEl.value : '');
+            // Determine which focus input is active or has content
+            let focusInput = '';
+            if (document.getElementById(`${sectionName}-text`)?.classList.contains('active')) {
+                focusInput = focusInputEl ? focusInputEl.value : '';
+            } else if (document.getElementById(`${sectionName}-file`)?.classList.contains('active')) {
+                focusInput = focusInputFileEl ? focusInputFileEl.value : '';
+            }
             
             const fileDataContent = fileContents[sectionName] || ""; 
             const resultsContainer = document.getElementById(`${sectionName}Results`);
             const contentContainer = document.getElementById(`${sectionName}AnalysisContent`);
 
-            if (!textInput && !fileDataContent && sectionName !== 'ai-chat') {
+            if (!textInput && !fileDataContent && sectionName !== 'ai-chat') { // ai-chat doesn't require initial data
                 alert(translations[currentLanguage].alertNoData);
                 return;
             }
@@ -2611,7 +3207,7 @@
             if (resultsContainer) resultsContainer.style.display = 'block';
             if (contentContainer) contentContainer.innerHTML = `<div class="loading-enhanced" style="margin: 20px auto; width: fit-content;"><div class="loading-dots"><div class="loading-dot"></div><div class="loading-dot"></div><div class="loading-dot"></div></div>${translations[currentLanguage].loadingAnalysisText}</div>`;
             
-            const primaryDataForAnalysis = fileDataContent || textInput;
+            const primaryDataForAnalysis = fileDataContent || textInput; // Prefer file content if available
             const prompt = promptBuilder(primaryDataForAnalysis, focusInput, currentLanguage); 
             
             try {
@@ -2637,153 +3233,155 @@
                         ${companyContextAr}
                         ${fileInfoAr}
                         قم بإجراء تحليل أعمال متقدم وشامل.
-                        يجب أن تشمل الاعتبارات الرئيسية اتجاهات السوق الحالية، والأداء المالي للشركة، والكفاءة التشغيلية، وفرص النمو الاستراتيجية، لا سيما في سياق خطط تطوير الرعاية الصحية ضمن رؤية السعودية 2030 وتخصص الشركة في الأجهزة الطبية ذات الاستخدام الواحد.
+                        يجب أن تشمل الاعتبارات الرئيسية اتجاهات السوق الحالية، والأداء المالي للشركة، والكفاءة التشغيلية، وفرص النمو الاستراتيجية، لا سيما في سياق خطط تطوير الرعاية الصحية ضمن رؤية السعودية 2030، وتخصص الشركة في الأجهزة الطبية ذات الاستخدام الواحد، وبرنامج اكتفاء لتعزيز المحتوى المحلي.
                         ${focus ? `يجب إيلاء تركيز خاص على: ${focus}\n` : ''}
                         يرجى تقديم تقرير مفصل منظم بالأقسام التالية:
-                        1.  تحليل بيئة السوق (بما في ذلك الاتجاهات والمنافسة والمشهد التنظيمي المتعلق بالمستهلكات الطبية).
-                        2.  تقييم متعمق للصحة المالية (تقييم الربحية والسيولة والملاءة والكفاءة).
-                        3.  مراجعة الأداء التشغيلي (التصنيع، سلسلة التوريد، روابط مراقبة الجودة).
-                        4.  توصيات نمو استراتيجية (قابلة للتنفيذ، ذات أولوية، ومرتبطة برؤية 2030).
-                        5.  تقييم شامل للمخاطر واستراتيجيات التخفيف.
-                        تأكد من أن التحليل قابل للتنفيذ ومصمم خصيصًا لشركة مصنعة للمنتجات الطبية مثل شركة ميس السعودية.
+                        1.  تحليل بيئة السوق (بما في ذلك الاتجاهات، المنافسة، المشهد التنظيمي المتعلق بالمستهلكات الطبية، وتأثير رؤية 2030).
+                        2.  تقييم متعمق للصحة المالية (تقييم الربحية، السيولة، الملاءة، الكفاءة، مع الإشارة إلى النسب الرئيسية إذا أمكن).
+                        3.  مراجعة الأداء التشغيلي (التصنيع، سلسلة التوريد، أنظمة مراقبة الجودة ISO 13485، كفاءة الإنتاج).
+                        4.  توصيات نمو استراتيجية (قابلة للتنفيذ، ذات أولوية، ومرتبطة برؤية 2030 وبرنامج اكتفاء، بما في ذلك تحسين محفظة المنتجات والتوسع الإقليمي المحتمل).
+                        5.  تقييم شامل للمخاطر (السوقية، التشغيلية، المالية، التنظيمية) واستراتيجيات التخفيف منها.
+                        تأكد من أن التحليل قابل للتنفيذ ومصمم خصيصًا لشركة مصنعة للمنتجات الطبية مثل شركة ميس السعودية، مع التركيز على الاستدامة والنمو طويل الأجل.
                     `;
                 }
                 return `
                     ${companyContextEn}
                     ${fileInfoEn}
                     Conduct a comprehensive advanced business analysis.
-                    Key considerations should include current market trends, the company's financial performance, operational efficiency, and strategic growth opportunities, particularly within the context of Saudi Vision 2030's healthcare development plans and the company's specialization in single-use medical devices.
+                    Key considerations should include current market trends, the company's financial performance, operational efficiency, and strategic growth opportunities, particularly within the context of Saudi Vision 2030's healthcare development plans, the company's specialization in single-use medical devices, and the IKTVA program for local content enhancement.
                     ${focus ? `Specific focus should be given to: ${focus}\n` : ''}
                     Please provide a detailed report structured with the following sections:
-                    1.  Market Environment Analysis (including trends, competition, and regulatory landscape relevant to medical consumables).
-                    2.  In-depth Financial Health Assessment (evaluating profitability, liquidity, solvency, and efficiency).
-                    3.  Operational Performance Review (manufacturing, supply chain, quality control links).
-                    4.  Strategic Growth Recommendations (actionable, prioritized, and linked to Vision 2030).
-                    5.  Comprehensive Risk Assessment and Mitigation Strategies.
-                    Ensure the analysis is actionable and tailored to a medical products manufacturer like Saudi Mais Co.
+                    1.  Market Environment Analysis (including trends, competition, regulatory landscape for medical consumables, and Vision 2030 impact).
+                    2.  In-depth Financial Health Assessment (evaluating profitability, liquidity, solvency, efficiency, referencing key ratios if possible).
+                    3.  Operational Performance Review (manufacturing, supply chain, ISO 13485 quality control systems, production efficiency).
+                    4.  Strategic Growth Recommendations (actionable, prioritized, linked to Vision 2030 and IKTVA, including product portfolio optimization and potential regional expansion).
+                    5.  Comprehensive Risk Assessment (market, operational, financial, regulatory) and Mitigation Strategies.
+                    Ensure the analysis is actionable and tailored to a medical products manufacturer like Saudi Mais Co., focusing on sustainability and long-term growth.
                 `;
             });
         }
 
         function startQualityAnalysis() {
              startAnalysis('quality', (data, focus, lang) => {
-                const companyContextEn = "As a specialized quality assurance consultant for Saudi Mais Co. for Medical Products (a leading manufacturer of single-use medical consumables in the Middle East, founded in 1994 in Riyadh, committed to highest international quality standards and adhering to standards like ISO 13485):";
-                const companyContextAr = "بصفتك استشاري ضمان جودة متخصص لشركة ميس السعودية للمنتجات الطبية (شركة رائدة في تصنيع المستهلكات الطبية ذات الاستخدام الواحد في الشرق الأوسط، تأسست عام 1994 في الرياض، وملتزمة بأعلى معايير الجودة العالمية وتطبيق معايير مثل ISO 13485):";
+                const companyContextEn = "As a specialized quality assurance consultant for Saudi Mais Co. for Medical Products (a leading manufacturer of single-use medical consumables in the Middle East, founded in 1994 in Riyadh, committed to highest international quality standards and adhering to standards like ISO 13485 and SFDA regulations):";
+                const companyContextAr = "بصفتك استشاري ضمان جودة متخصص لشركة ميس السعودية للمنتجات الطبية (شركة رائدة في تصنيع المستهلكات الطبية ذات الاستخدام الواحد في الشرق الأوسط، تأسست عام 1994 في الرياض، وملتزمة بأعلى معايير الجودة العالمية وتطبيق معايير مثل ISO 13485 ولوائح الهيئة العامة للغذاء والدواء):";
 
-                const fileInfoEn = data ? "Based *primarily* on the provided quality data/documentation for Saudi Mais Co., and supplementing with your expertise:" : "Based on your expertise in medical device quality management systems and general knowledge of Saudi Mais Co.:";
-                const fileInfoAr = data ? "بالاعتماد *بشكل أساسي* على بيانات/وثائق الجودة المقدمة الخاصة بشركة ميس السعودية، مع الاستعانة بخبرتك:" : "بناءً على خبرتك في أنظمة إدارة جودة الأجهزة الطبية ومعرفتك العامة بشركة ميس السعودية:";
+                const fileInfoEn = data ? "Based *primarily* on the provided quality data/documentation for Saudi Mais Co. (e.g., audit reports, CAPA logs, defect rates), and supplementing with your expertise:" : "Based on your expertise in medical device quality management systems (QMS) and general knowledge of Saudi Mais Co.:";
+                const fileInfoAr = data ? "بالاعتماد *بشكل أساسي* على بيانات/وثائق الجودة المقدمة الخاصة بشركة ميس السعودية (مثل تقارير التدقيق، سجلات الإجراءات التصحيحية والوقائية، معدلات العيوب)، مع الاستعانة بخبرتك:" : "بناءً على خبرتك في أنظمة إدارة جودة الأجهزة الطبية (QMS) ومعرفتك العامة بشركة ميس السعودية:";
                 
                 if (lang === 'ar') {
                     return `
                         ${companyContextAr}
                         ${fileInfoAr}
                         قم بإجراء تحليل شامل لنظام إدارة الجودة (QMS) بالشركة.
-                        قيّم فعاليته وامتثاله، خاصةً لمعيار ISO 13485، ولوائح الهيئة العامة للغذاء والدواء السعودية ذات الصلة، والمعايير الدولية الأخرى المطبقة على الأجهزة الطبية.
-                        يجب أن يركز التحليل على معدلات العيوب، واتجاهات عدم المطابقة، وتحليل الأسباب الجذرية لمشكلات الجودة، وملاحظات العملاء, وإدارة جودة الموردين.
+                        قيّم فعاليته وامتثاله، خاصةً لمعيار ISO 13485، ولوائح الهيئة العامة للغذاء والدواء السعودية (SFDA) ذات الصلة، والمعايير الدولية الأخرى المطبقة على الأجهزة الطبية ذات الاستخدام الواحد.
+                        يجب أن يركز التحليل على: معدلات العيوب الداخلية والخارجية، اتجاهات عدم المطابقة، فعالية نظام الإجراءات التصحيحية والوقائية (CAPA)، تحليل الأسباب الجذرية لمشكلات الجودة، إدارة شكاوى العملاء، إدارة جودة الموردين، وعمليات التدقيق الداخلي والخارجي.
                         ${focus ? `يجب إيلاء تركيز خاص على: ${focus}\n` : ''}
                         يرجى تقديم تقرير شامل يتضمن:
-                        1.  الفعالية الإجمالية لنظام إدارة الجودة وحالة الامتثال.
-                        2.  تحليل مفصل للعيوب واتجاهات عدم المطابقة.
-                        3.  تقييم الالتزام بمتطلبات ISO 13485 والهيئة العامة للغذاء والدواء.
-                        4.  تقييم التعامل مع شكاوى العملاء ومقاييس الرضا.
-                        5.  خطة تحسين جودة قوية وقابلة للتنفيذ مع توصيات ذات أولوية.
-                        الهدف هو تعزيز جودة المنتج والامتثال التنظيمي لشركة ميس السعودية.
+                        1.  الفعالية الإجمالية لنظام إدارة الجودة وحالة الامتثال (ISO 13485, SFDA).
+                        2.  تحليل مفصل للعيوب واتجاهات عدم المطابقة (إذا توفرت بيانات، استخدم أمثلة).
+                        3.  تقييم قوة نظام CAPA وفعالية تحليل الأسباب الجذرية.
+                        4.  تقييم التعامل مع شكاوى العملاء ومقاييس الرضا (إذا توفرت).
+                        5.  مراجعة برنامج إدارة جودة الموردين.
+                        6.  خطة تحسين جودة قوية وقابلة للتنفيذ مع توصيات ذات أولوية (مثل تعزيز إدارة المخاطر ISO 14971، الاستثمار في أدوات الجودة الرقمية، برامج التدريب المتقدمة).
+                        الهدف هو تعزيز جودة المنتج والامتثال التنظيمي لشركة ميس السعودية، وضمان سلامة المرضى.
                     `;
                 }
                 return `
                     ${companyContextEn}
                     ${fileInfoEn}
                     Conduct a thorough analysis of the company's Quality Management System (QMS).
-                    Evaluate its effectiveness and compliance, particularly against ISO 13485, relevant Saudi Food and Drug Authority (SFDA) regulations, and other applicable international standards for medical devices.
-                    The analysis should emphasize defect rates, non-conformance trends, root cause analysis of quality issues, customer feedback, and supplier quality management.
+                    Evaluate its effectiveness and compliance, particularly against ISO 13485, relevant Saudi Food and Drug Authority (SFDA) regulations, and other applicable international standards for single-use medical devices.
+                    The analysis should emphasize: internal and external defect rates, non-conformance trends, CAPA system effectiveness, root cause analysis of quality issues, customer complaint management, supplier quality management, and internal/external audit processes.
                     ${focus ? `Specific focus should be given to: ${focus}\n` : ''}
                     Please deliver a comprehensive report including:
-                    1.  Overall QMS Effectiveness and Compliance Status.
-                    2.  Detailed Defect Analysis and Non-Conformance Trends.
-                    3.  Assessment of Adherence to ISO 13485 and SFDA Requirements.
-                    4.  Evaluation of Customer Complaint Handling and Satisfaction Metrics.
-                    5.  A robust, actionable Quality Improvement Plan with prioritized recommendations.
-                    The aim is to enhance product quality and regulatory compliance for Saudi Mais Co.
+                    1.  Overall QMS Effectiveness and Compliance Status (ISO 13485, SFDA).
+                    2.  Detailed Defect Analysis and Non-Conformance Trends (if data available, use examples).
+                    3.  Assessment of CAPA System robustness and Root Cause Analysis effectiveness.
+                    4.  Evaluation of Customer Complaint Handling and Satisfaction Metrics (if available).
+                    5.  Review of Supplier Quality Management program.
+                    6.  A robust, actionable Quality Improvement Plan with prioritized recommendations (e.g., strengthening ISO 14971 risk management, investing in digital quality tools, advanced training programs).
+                    The aim is to enhance product quality, regulatory compliance for Saudi Mais Co., and ensure patient safety.
                 `;
             });
         }
 
         function startDemandForecasting() {
             startAnalysis('demand', (data, focus, lang) => {
-                const companyContextEn = "As an expert demand planner and inventory strategist for Saudi Mais Co. for Medical Products (a leading manufacturer of single-use medical consumables in the Middle East, founded in 1994 in Riyadh, aiming to meet increasing regional demand):";
-                const companyContextAr = "بصفتك خبير تخطيط طلب واستراتيجي مخزون لشركة ميس السعودية للمنتجات الطبية (شركة رائدة في تصنيع المستهلكات الطبية ذات الاستخدام الواحد في الشرق الأوسط، تأسست عام 1994 في الرياض، وتهدف إلى تلبية الطلب الإقليمي المتزايد):";
+                const companyContextEn = "As an expert demand planner and inventory strategist for Saudi Mais Co. for Medical Products (a leading manufacturer of single-use medical consumables in the Middle East, founded in 1994 in Riyadh, aiming to meet increasing regional demand efficiently):";
+                const companyContextAr = "بصفتك خبير تخطيط طلب واستراتيجي مخزون لشركة ميس السعودية للمنتجات الطبية (شركة رائدة في تصنيع المستهلكات الطبية ذات الاستخدام الواحد في الشرق الأوسط، تأسست عام 1994 في الرياض، وتهدف إلى تلبية الطلب الإقليمي المتزايد بكفاءة):";
 
-                const fileInfoEn = data ? "Based *primarily* on the provided historical sales, inventory, and market data for Saudi Mais Co.:" : "Using your analytical expertise and general knowledge of demand patterns for medical consumables in the Middle East, specifically for Saudi Mais Co.:";
-                const fileInfoAr = data ? "بالاعتماد *بشكل أساسي* على بيانات المبيعات والمخزون والسوق التاريخية المقدمة لشركة ميس السعودية:" : "باستخدام خبرتك التحليلية ومعرفتك العامة بأنماط الطلب على المستهلكات الطبية في الشرق الأوسط، وتحديداً لشركة ميس السعودية:";
+                const fileInfoEn = data ? "Based *primarily* on the provided historical sales, inventory, and market data for Saudi Mais Co.'s single-use medical consumables:" : "Using your analytical expertise and general knowledge of demand patterns for medical consumables in the Middle East, specifically for Saudi Mais Co., considering factors like Vision 2030 healthcare expansion:";
+                const fileInfoAr = data ? "بالاعتماد *بشكل أساسي* على بيانات المبيعات والمخزون والسوق التاريخية المقدمة لمستهلكات شركة ميس السعودية الطبية ذات الاستخدام الواحد:" : "باستخدام خبرتك التحليلية ومعرفتك العامة بأنماط الطلب على المستهلكات الطبية في الشرق الأوسط، وتحديداً لشركة ميس السعودية، مع مراعاة عوامل مثل توسع الرعاية الصحية ضمن رؤية 2030:";
 
                 if (lang === 'ar') {
                     return `
                         ${companyContextAr}
                         ${fileInfoAr}
                         قم بإجراء تحليل مفصل لتوقعات الطلب ووضع استراتيجية لتحسين المخزون.
-                        حلل البيانات التاريخية لتحديد الأنماط الموسمية، واتجاهات النمو، وتأثير عوامل مثل مبادرات توسيع الرعاية الصحية (مثل رؤية 2030)، والأحداث الصحية العامة، وإطلاق منتجات جديدة للأجهزة الطبية ذات الاستخدام الواحد.
+                        حلل البيانات التاريخية (إذا توفرت، مثل بيانات المبيعات لآخر 3-5 سنوات حسب فئة المنتج/وحدة حفظ المخزون) لتحديد الأنماط الموسمية، واتجاهات النمو، وتأثير عوامل مثل مبادرات توسيع الرعاية الصحية (مثل رؤية 2030)، والأحداث الصحية العامة، وإطلاق منتجات جديدة للأجهزة الطبية ذات الاستخدام الواحد.
                         ${focus ? `يجب إيلاء تركيز خاص على: ${focus}\n` : ''}
                         يجب أن يتضمن تقريرك ما يلي:
-                        1.  تحليل شامل للطلب: مراجعة اتجاهات المبيعات التاريخية ومحركات الطلب الرئيسية.
-                        2.  نتائج التوقعات: توقعات طلب لمدة 12 شهرًا حسب فئة المنتج (إن أمكن)، مع فترات ثقة.
-                        3.  استراتيجية تحسين المخزون: توصيات لمستويات المخزون المثلى، ونقاط إعادة الطلب، وحسابات مخزون الأمان، وتقنيات التحكم في المخزون (مثل تحليل ABC، اعتبارات JIT) للمستهلكات الطبية.
-                        4.  خارطة طريق للتنفيذ: الخطوات الرئيسية لشركة ميس السعودية لتنفيذ استراتيجيات التنبؤ والمخزون المقترحة.
-                        الهدف هو تحسين دقة التوقعات، وتحسين مستويات المخزون، وتقليل تكاليف الاحتفاظ، وتقليل حالات نفاد المخزون.
+                        1.  تحليل شامل للطلب: مراجعة اتجاهات المبيعات التاريخية، تحديد محركات الطلب الرئيسية (مثل العقود الحكومية، طلبات المستشفيات الخاصة)، تحليل الموسمية.
+                        2.  نتائج التوقعات: توقعات طلب كمية لمدة 12-18 شهرًا (إذا أمكن، حسب فئة المنتج الرئيسية)، مع ذكر النماذج المستخدمة (مثل ARIMA، التمهيد الأسي) ومستوى الثقة المتوقع (MAPE المستهدف). قدم مثالاً لجدول توقعات.
+                        3.  استراتيجية تحسين المخزون: توصيات لمستويات المخزون المثلى (باستخدام تحليل ABC)، حسابات مخزون الأمان ونقاط إعادة الطلب، وتقنيات التحكم في المخزون (مثل JIT للمواد المناسبة، إدارة المخزون بطيء الحركة والمتقادم SLOB).
+                        4.  خارطة طريق للتنفيذ: الخطوات الرئيسية لشركة ميس السعودية لتنفيذ استراتيجيات التنبؤ والمخزون المقترحة، بما في ذلك تكامل الأنظمة (ERP/SCM) وتدريب الفريق.
+                        الهدف هو تحسين دقة التوقعات، وتحسين مستويات المخزون (تقليل التكاليف وزيادة معدل الدوران)، وتقليل حالات نفاد المخزون، وتحسين خدمة العملاء.
                     `;
                 }
                 return `
                     ${companyContextEn}
                     ${fileInfoEn}
                     Conduct a detailed demand forecasting analysis and develop an inventory optimization strategy.
-                    Analyze historical data to identify seasonal patterns, growth trends, and the impact of factors such as healthcare expansion initiatives (e.g., Vision 2030), public health events, and new product introductions for single-use medical devices.
+                    Analyze historical data (if available, e.g., last 3-5 years sales data by product category/SKU) to identify seasonal patterns, growth trends, and the impact of factors such as healthcare expansion initiatives (e.g., Vision 2030), public health events, and new product introductions for single-use medical devices.
                     ${focus ? `Specific focus should be given to: ${focus}\n` : ''}
                     Your report should include:
-                    1.  Comprehensive Demand Analysis: Review of historical sales trends and key demand drivers.
-                    2.  Forecasting Results: A 12-month demand projection by product category (if possible), with confidence intervals.
-                    3.  Inventory Optimization Strategy: Recommendations for optimal inventory levels, reorder points, safety stock calculations, and inventory control techniques (e.g., ABC analysis, JIT considerations) for medical consumables.
-                    4.  Implementation Roadmap: Key steps for Saudi Mais Co. to implement the proposed forecasting and inventory strategies.
-                    The goal is to improve forecast accuracy, optimize stock levels, reduce holding costs, and minimize stockouts.
+                    1.  Comprehensive Demand Analysis: Review of historical sales trends, identification of key demand drivers (e.g., government tenders, private hospital orders), seasonality analysis.
+                    2.  Forecasting Results: A quantitative 12-18 month demand projection (if possible, by major product category), mentioning models used (e.g., ARIMA, Exponential Smoothing) and expected confidence level (target MAPE). Provide an example forecast table.
+                    3.  Inventory Optimization Strategy: Recommendations for optimal inventory levels (using ABC analysis), safety stock calculations, reorder points, and inventory control techniques (e.g., JIT for suitable items, SLOB management).
+                    4.  Implementation Roadmap: Key steps for Saudi Mais Co. to implement the proposed forecasting and inventory strategies, including system integration (ERP/SCM) and team training.
+                    The goal is to improve forecast accuracy, optimize stock levels (reducing costs and increasing turnover), minimize stockouts, and enhance customer service.
                 `;
             });
         }
 
         function startCompetitorAnalysis() {
              startAnalysis('competitor', (data, focus, lang) => {
-                const companyContextEn = "As a market intelligence analyst specializing in the medical device sector for Saudi Mais Co. for Medical Products (a leading manufacturer of single-use medical consumables in the Middle East, founded in 1994 in Riyadh, operating in a competitive market):";
-                const companyContextAr = "بصفتك محلل معلومات سوق متخصص في قطاع الأجهزة الطبية لشركة ميس السعودية للمنتجات الطبية (شركة رائدة في تصنيع المستهلكات الطبية ذات الاستخدام الواحد في الشرق الأوسط، تأسست عام 1994 في الرياض، وتعمل في سوق تنافسي):";
+                const companyContextEn = "As a market intelligence analyst specializing in the medical device sector for Saudi Mais Co. for Medical Products (a leading manufacturer of single-use medical consumables in the Middle East, founded in 1994 in Riyadh, operating in a competitive Saudi and regional market):";
+                const companyContextAr = "بصفتك محلل معلومات سوق متخصص في قطاع الأجهزة الطبية لشركة ميس السعودية للمنتجات الطبية (شركة رائدة في تصنيع المستهلكات الطبية ذات الاستخدام الواحد في الشرق الأوسط، تأسست عام 1994 في الرياض، وتعمل في سوق سعودي وإقليمي تنافسي):";
 
-                const fileInfoEn = data ? "Based *primarily* on the provided competitor data and market intelligence for Saudi Mais Co.:" : "Leveraging your market research skills and knowledge of the competitive landscape for medical device manufacturers in Saudi Arabia and the Middle East, with a focus on Saudi Mais Co.:";
-                const fileInfoAr = data ? "بالاعتماد *بشكل أساسي* على بيانات المنافسين ومعلومات السوق المقدمة الخاصة بشركة ميس السعودية:" : "بالاستفادة من مهاراتك في أبحاث السوق ومعرفتك بالمشهد التنافسي لمصنعي الأجهزة الطبية في المملكة العربية السعودية والشرق الأوسط، مع التركيز على شركة ميس السعودية:";
+                const fileInfoEn = data ? "Based *primarily* on the provided competitor data, market reports, and pricing information for Saudi Mais Co.'s single-use medical consumables market:" : "Leveraging your market research skills and knowledge of the competitive landscape for medical device manufacturers in Saudi Arabia and the Middle East, with a focus on Saudi Mais Co.:";
+                const fileInfoAr = data ? "بالاعتماد *بشكل أساسي* على بيانات المنافسين وتقارير السوق ومعلومات التسعير المقدمة لسوق مستهلكات شركة ميس السعودية الطبية ذات الاستخدام الواحد:" : "بالاستفادة من مهاراتك في أبحاث السوق ومعرفتك بالمشهد التنافسي لمصنعي الأجهزة الطبية في المملكة العربية السعودية والشرق الأوسط، مع التركيز على شركة ميس السعودية:";
 
                 if (lang === 'ar') {
                     return `
                         ${companyContextAr}
                         ${fileInfoAr}
-                        قم بإجراء تحليل تنافسي شامل يركز على أسواق المملكة العربية السعودية والشرق الأوسط الأوسع للأجهزة الطبية ذات الاستخدام الواحد.
-                        حدد المنافسين الرئيسيين (المحليين والدوليين)، وحلل حصصهم السوقية، ومحافظ منتجاتهم، واستراتيجيات التسعير، وقنوات التوزيع، ونقاط القوة والضعف، والتكتيكات التسويقية.
+                        قم بإجراء تحليل تنافسي شامل يركز على أسواق المملكة العربية السعودية والأسواق الرئيسية في دول مجلس التعاون الخليجي للأجهزة الطبية ذات الاستخدام الواحد.
+                        حدد المنافسين الرئيسيين (المحليين، الإقليميين، والدوليين)، وحلل حصصهم السوقية التقديرية، ومحافظ منتجاتهم، واستراتيجيات التسعير، وقنوات التوزيع، ونقاط القوة والضعف (SWOT من منظور شركة ميس)، والتكتيكات التسويقية.
                         ${focus ? `يجب إيلاء تركيز خاص على: ${focus}\n` : ''}
                         يرجى تنظيم تحليلك ليشمل:
-                        1.  نظرة عامة مفصلة على المشهد السوقي: الحجم، النمو، القطاعات الرئيسية للمستهلكات الطبية.
-                        2.  تقييم تنافسي متعمق: ملفات تعريفية لـ 3-5 منافسين رئيسيين، بما في ذلك تحليل SWOT الخاص بهم من منظور شركة ميس السعودية.
-                        3.  تحليل مقارن: مقارنة شركة ميس السعودية بالمنافسين على العوامل الرئيسية (جودة المنتج، السعر، الابتكار، الخدمة).
-                        4.  تحديد الفرص والتهديدات: بناءً على الديناميكيات التنافسية واتجاهات السوق.
-                        5.  توصيات استراتيجية: استراتيجيات قابلة للتنفيذ لشركة ميس السعودية لتعزيز مركزها التنافسي، وتمييز عروضها، والاستفادة من فرص السوق المحددة.
-                        يجب أن يوفر التحليل لشركة ميس السعودية رؤى واضحة لإرشاد استراتيجيتها التنافسية.
+                        1.  نظرة عامة مفصلة على المشهد السوقي: الحجم، النمو، القطاعات الرئيسية للمستهلكات الطبية، وديناميكيات الشراء (مثل المناقصات الحكومية، مشتريات القطاع الخاص).
+                        2.  تقييم تنافسي متعمق: ملفات تعريفية لـ 3-5 منافسين رئيسيين، بما في ذلك تحليل SWOT الخاص بهم، استراتيجياتهم، ووجودهم في السوق.
+                        3.  تحليل مقارن (Benchmarking): مقارنة شركة ميس السعودية بالمنافسين على العوامل الرئيسية (جودة المنتج وامتثاله للمعايير، السعر، نطاق المنتج، قوة التوزيع، الابتكار، السمعة، الاستفادة من برنامج اكتفاء). قدم جدول مقارنة.
+                        4.  تحديد الفرص والتهديدات التنافسية: بناءً على الديناميكيات التنافسية واتجاهات السوق (مثل ظهور منافسين جدد، تغيير تفضيلات العملاء).
+                        5.  توصيات استراتيجية تنافسية: استراتيجيات قابلة للتنفيذ لشركة ميس السعودية لتعزيز مركزها التنافسي، وتمييز عروضها، والاستفادة من فرص السوق المحددة، ومواجهة التهديدات التنافسية.
+                        يجب أن يوفر التحليل لشركة ميس السعودية رؤى واضحة لإرشاد استراتيجيتها التنافسية وتخصيص الموارد.
                     `;
                 }
                 return `
                     ${companyContextEn}
                     ${fileInfoEn}
-                    Conduct a comprehensive competitor analysis focusing on the Saudi Arabian and broader Middle Eastern markets for single-use medical devices.
-                    Identify key competitors (local and international), analyze their market share, product portfolios, pricing strategies, distribution channels, strengths, weaknesses, and marketing tactics.
+                    Conduct a comprehensive competitor analysis focusing on the Saudi Arabian and key GCC markets for single-use medical devices.
+                    Identify key competitors (local, regional, and international), analyze their estimated market shares, product portfolios, pricing strategies, distribution channels, strengths, weaknesses (SWOT from Mais Co.'s perspective), and marketing tactics.
                     ${focus ? `Specific focus should be given to: ${focus}\n` : ''}
                     Please structure your analysis to include:
-                    1.  Detailed Market Landscape Overview: Size, growth, key segments for medical consumables.
-                    2.  In-depth Competitive Assessment: Profiles of 3-5 key competitors, including their SWOT analysis from Saudi Mais Co.'s perspective.
-                    3.  Comparative Analysis: Benchmarking Saudi Mais Co. against competitors on key factors (product quality, price, innovation, service).
-                    4.  Opportunity and Threat Identification: Based on competitive dynamics and market trends.
-                    5.  Strategic Recommendations: Actionable strategies for Saudi Mais Co. to enhance its competitive positioning, differentiate its offerings, and capitalize on identified market opportunities.
-                    The analysis should provide Saudi Mais Co. with clear insights to inform its competitive strategy.
+                    1.  Detailed Market Landscape Overview: Size, growth, key segments for medical consumables, and purchasing dynamics (e.g., government tenders, private sector procurement).
+                    2.  In-depth Competitive Assessment: Profiles of 3-5 key competitors, including their SWOT analysis, strategies, and market presence.
+                    3.  Comparative Analysis (Benchmarking): Benchmarking Saudi Mais Co. against competitors on key factors (product quality & compliance, price, product range, distribution strength, innovation, reputation, IKTVA leverage). Provide a comparison table.
+                    4.  Identification of Competitive Opportunities and Threats: Based on competitive dynamics and market trends (e.g., emergence of new competitors, changing customer preferences).
+                    5.  Strategic Competitive Recommendations: Actionable strategies for Saudi Mais Co. to enhance its competitive positioning, differentiate its offerings, capitalize on identified market opportunities, and counter competitive threats.
+                    The analysis should provide Saudi Mais Co. with clear insights to inform its competitive strategy and resource allocation.
                 `;
             });
         }
@@ -2800,7 +3398,7 @@
             chatMessagesContainer.scrollTop = chatMessagesContainer.scrollHeight;
 
             const prompt = promptBuilder(message, currentLanguage);
-            const response = await callGeminiAPI(prompt); // No dataContent passed here as it's for general chat or a full comprehensive analysis request
+            const response = await callGeminiAPI(prompt); 
             
             aiThinkingPara.innerHTML = ''; 
             aiThinkingPara.appendChild(aiStrong); 
@@ -2831,13 +3429,13 @@
                     return `
                         بصفتك يزيد AI، مستشارك الذكي المخصص لشركة ميس السعودية للمنتجات الطبية (شركة رائدة في تصنيع المستهلكات الطبية ذات الاستخدام الواحد في الشرق الأوسط منذ عام 1994، مقرها الرياض، تركز على الإنتاج عالي الجودة وتواجه حاليًا تحديات في الأعمال):
                         يرجى معالجة استفسار المستخدم التالي بعناية: "${query}".
-                        يجب أن يستند ردك إلى ملف الشركة، وديناميكيات أسواق الرعاية الصحية السعودية والشرق أوسطية، وأهداف رؤية السعودية 2030، والاتجاهات الحالية في المعدات والمستهلكات الطبية. قدم رؤى قابلة للتنفيذ أو تفسيرات واضحة حيثما أمكن.
+                        يجب أن يستند ردك إلى ملف الشركة، وديناميكيات أسواق الرعاية الصحية السعودية والشرق أوسطية، وأهداف رؤية السعودية 2030، والاتجاهات الحالية في المعدات والمستهلكات الطبية، وبرنامج اكتفاء. قدم رؤى قابلة للتنفيذ أو تفسيرات واضحة حيثما أمكن، مع الحفاظ على سياق شركة ميس السعودية.
                     `;
                 }
                 return `
                     As Yazeed AI, your dedicated AI consultant for Saudi Mais Co. for Medical Products (a leading manufacturer of single-use medical consumables in the Middle East since 1994, based in Riyadh, focused on high-quality production and currently navigating business challenges):
                     Please address the following user query thoughtfully: "${query}".
-                    Your response should be informed by the company's profile, the dynamics of the Saudi and Middle Eastern healthcare markets, the objectives of Saudi Vision 2030, and current trends in medical equipment and consumables. Provide actionable insights or clear explanations where possible.
+                    Your response should be informed by the company's profile, the dynamics of the Saudi and Middle Eastern healthcare markets, the objectives of Saudi Vision 2030, current trends in medical equipment and consumables, and the IKTVA program. Provide actionable insights or clear explanations where possible, maintaining the context of Saudi Mais Co.
                 `;
             });
         }
@@ -2854,29 +3452,29 @@
             await sendMessageToAI("", 'loadingComprehensiveAnalysisText', (queryIgnored, lang) => {
                 if (lang === 'ar') {
                      return `
-                        بصفتك يزيد AI، قدم تحليل أعمال استراتيجي شامل لشركة ميس السعودية للمنتجات الطبية.
-                        ملف الشركة: شركة رائدة في تصنيع المستهلكات الطبية ذات الاستخدام الواحد في الشرق الأوسط، تأسست عام 1994، ومقرها الرياض، المملكة العربية السعودية. تؤكد الشركة على الالتزام بأعلى معايير الجودة العالمية في إنتاجها وتواجه حاليًا تحديات كبيرة في الأعمال والجوانب المالية.
-                        يجب أن يكون تحليلك منظمًا ومفصلاً، ويغطي المجالات الحيوية التالية:
-                        1.  الوضع المالي الحالي واستراتيجيات التعافي الممكنة: تقييم السيولة والربحية والديون، واقتراح خطوات عملية لتحقيق الاستقرار المالي والتحول.
-                        2.  المركز السوقي والمشهد التنافسي: تقييم الحصة السوقية، وتصور العلامة التجارية، والمنافسين الرئيسيين في قطاع الأجهزة الطبية ذات الاستخدام الواحد، وتأثير مبادرات الرعاية الصحية ضمن رؤية 2030.
-                        3.  تقييم الكفاءة التشغيلية: مراجعة عمليات التصنيع، وإدارة سلسلة التوريد، وأنظمة مراقبة الجودة (مع مراعاة التزامهم بمعايير الجودة العالية)، وفرص تحسين التكاليف وزيادة الكفاءة.
-                        4.  فرص النمو الاستراتيجية: تحديد مجالات النمو المحتملة، مثل تطوير منتجات جديدة (في إطار المستهلكات الطبية)، والتوسع في السوق (إقليميًا)، والاستفادة من مبادرات المحتوى المحلي (مثل برنامج اكتفاء).
-                        5.  خارطة طريق استراتيجية مفصلة: ضع خطة مرحلية (قصيرة، متوسطة، طويلة الأجل) بأهداف ومعالم واضحة.
-                        6.  تحليل المخاطر والتخفيف منها: تحديد المخاطر الرئيسية (المالية، التشغيلية، السوقية، التنظيمية) واقتراح استراتيجيات للتخفيف منها.
-                        ضع تحليلك في سياق رؤية السعودية 2030، والتوجه نحو المحتوى المحلي (اكتفاء)، وإمكانات التوسع الإقليمي في الشرق الأوسط. يجب أن يكون الناتج احترافيًا وثاقبًا ويقدم توصيات واضحة وقابلة للتنفيذ لقيادة شركة ميس السعودية.
+                        بصفتك يزيد AI، قدم تحليل أعمال استراتيجي شامل ومفصل لشركة ميس السعودية للمنتجات الطبية.
+                        ملف الشركة: شركة رائدة في تصنيع المستهلكات الطبية ذات الاستخدام الواحد في الشرق الأوسط، تأسست عام 1994، ومقرها الرياض، المملكة العربية السعودية. تؤكد الشركة على الالتزام بأعلى معايير الجودة العالمية (ISO 13485، متطلبات الهيئة العامة للغذاء والدواء) في إنتاجها وتواجه حاليًا تحديات كبيرة في الأعمال والجوانب المالية.
+                        يجب أن يكون تحليلك منظمًا ومفصلاً، ويغطي المجالات الحيوية التالية بعمق:
+                        1.  الوضع المالي الحالي واستراتيجيات التعافي الممكنة: تقييم شامل للسيولة، الربحية (تحليل هوامش الربح حسب المنتج/القطاع)، هيكل التكاليف، والديون. اقتراح خطوات عملية ومحددة لتحقيق الاستقرار المالي والتحول الإيجابي، بما في ذلك تحسين رأس المال العامل.
+                        2.  المركز السوقي والمشهد التنافسي: تقييم دقيق للحصة السوقية، وتصور العلامة التجارية، والمنافسين الرئيسيين (محليين ودوليين) في قطاع الأجهزة الطبية ذات الاستخدام الواحد. تحليل تأثير مبادرات الرعاية الصحية ضمن رؤية 2030 وبرنامج اكتفاء على وضع الشركة.
+                        3.  تقييم الكفاءة التشغيلية: مراجعة تفصيلية لعمليات التصنيع (الكفاءة، الفاقد، استخدام الطاقة الإنتاجية)، إدارة سلسلة التوريد (الموردين، اللوجستيات، المخاطر)، أنظمة مراقبة الجودة (فعالية ISO 13485، معدلات العيوب، CAPA)، وفرص تحسين التكاليف وزيادة الكفاءة بشكل ملموس.
+                        4.  فرص النمو الاستراتيجية: تحديد مجالات نمو محتملة ذات أولوية، مثل تطوير منتجات جديدة مبتكرة (في إطار المستهلكات الطبية المتخصصة أو الصديقة للبيئة)، والتوسع المدروس في السوق (إقليميًا مع خطة دخول واضحة)، والاستفادة القصوى من مبادرات المحتوى المحلي (مثل برنامج اكتفاء) من خلال استراتيجيات محددة.
+                        5.  خارطة طريق استراتيجية مفصلة: ضع خطة مرحلية (قصيرة 0-1 سنة، متوسطة 1-3 سنوات، طويلة 3-5 سنوات) بأهداف واضحة وقابلة للقياس (SMART)، ومؤشرات أداء رئيسية (KPIs) لكل مرحلة، ومسؤوليات مقترحة.
+                        6.  تحليل المخاطر الشامل والتخفيف منها: تحديد المخاطر الرئيسية (المالية، التشغيلية، السوقية، التنظيمية، الجيوسياسية) وتقييم احتمالية وتأثير كل منها. اقتراح استراتيجيات تخفيف محددة وقابلة للتطبيق.
+                        ضع تحليلك في سياق رؤية السعودية 2030، والتوجه نحو المحتوى المحلي (اكتفاء)، وإمكانات التوسع الإقليمي في الشرق الأوسط، والتطورات التكنولوجية في قطاع الأجهزة الطبية. يجب أن يكون الناتج احترافيًا، ثاقبًا، ويقدم توصيات واضحة، عملية، وقابلة للتنفيذ لقيادة شركة ميس السعودية نحو التعافي والنمو المستدام.
                     `;
                 }
                 return `
-                    As Yazeed AI, provide a comprehensive strategic business analysis for Saudi Mais Co. for Medical Products.
-                    Company Profile: A leading manufacturer of single-use medical consumables in the Middle East, founded in 1994, located in Riyadh, Saudi Arabia. The company emphasizes adherence to the highest international quality standards in its production and is currently addressing significant business and financial challenges.
-                    Your analysis should be structured and detailed, covering the following critical areas:
-                    1.  Current Financial Situation & Viable Recovery Strategies: Assess liquidity, profitability, debt, and propose actionable steps for financial stabilization and turnaround.
-                    2.  Market Position & Competitive Landscape: Evaluate market share, brand perception, key competitors in the single-use medical device sector, and impact of Vision 2030 healthcare initiatives.
-                    3.  Operational Efficiency Assessment: Review manufacturing processes, supply chain management, quality control systems (considering their commitment to high standards), and opportunities for cost optimization and efficiency gains.
-                    4.  Strategic Growth Opportunities: Identify potential areas for growth, such as new product development (within medical consumables), market expansion (regional), and leveraging local content initiatives (e.g., IKTVA).
-                    5.  Detailed Strategic Roadmap: Outline a phased plan (short, medium, long-term) with clear objectives and milestones.
-                    6.  Risk Analysis and Mitigation: Identify key risks (financial, operational, market, regulatory) and propose mitigation strategies.
-                    Contextualize your analysis within the framework of Saudi Vision 2030, the drive for local content (IKTVA), and potential for regional expansion in the Middle East. The output should be professional, insightful, and provide clear, actionable recommendations for Saudi Mais Co.'s leadership.
+                    As Yazeed AI, provide a comprehensive and detailed strategic business analysis for Saudi Mais Co. for Medical Products.
+                    Company Profile: A leading manufacturer of single-use medical consumables in the Middle East, founded in 1994, located in Riyadh, Saudi Arabia. The company emphasizes adherence to the highest international quality standards (ISO 13485, SFDA compliance) in its production and is currently addressing significant business and financial challenges.
+                    Your analysis should be structured and detailed, covering the following critical areas in depth:
+                    1.  Current Financial Situation & Viable Recovery Strategies: Comprehensive assessment of liquidity, profitability (margin analysis by product/segment), cost structure, and debt. Propose specific, actionable steps for financial stabilization and turnaround, including working capital optimization.
+                    2.  Market Position & Competitive Landscape: Accurate evaluation of market share, brand perception, and key competitors (local and international) in the single-use medical device sector. Analyze the impact of Vision 2030 healthcare initiatives and the IKTVA program on the company's standing.
+                    3.  Operational Efficiency Assessment: Detailed review of manufacturing processes (efficiency, waste, capacity utilization), supply chain management (suppliers, logistics, risks), quality control systems (ISO 13485 effectiveness, defect rates, CAPA), and tangible opportunities for cost optimization and efficiency gains.
+                    4.  Strategic Growth Opportunities: Identification of prioritized potential growth areas, such as innovative new product development (within specialized or eco-friendly medical consumables), carefully planned market expansion (regional with clear entry strategy), and maximizing local content initiatives (e.g., IKTVA program) through specific strategies.
+                    5.  Detailed Strategic Roadmap: Outline a phased plan (short-term 0-1 year, medium-term 1-3 years, long-term 3-5 years) with clear, measurable (SMART) objectives, Key Performance Indicators (KPIs) for each phase, and suggested responsibilities.
+                    6.  Comprehensive Risk Analysis and Mitigation: Identify key risks (financial, operational, market, regulatory, geopolitical) and assess the likelihood and impact of each. Propose specific and applicable mitigation strategies.
+                    Contextualize your analysis within the framework of Saudi Vision 2030, the drive for local content (IKTVA), potential for regional expansion in the Middle East, and technological advancements in the medical device sector. The output should be professional, insightful, and provide clear, practical, and actionable recommendations for Saudi Mais Co.'s leadership to navigate towards recovery and sustainable growth.
                 `;
             });
         }
@@ -2933,18 +3531,16 @@
                 const saved = localStorage.getItem('maisAnalysisHistory');
                 if (saved) {
                     const loadedHistory = JSON.parse(saved);
-                    // Basic version check, can be expanded
-                    if (loadedHistory && (loadedHistory.version === '2.1' || loadedHistory.version === '2.2')) {
+                    if (loadedHistory && (loadedHistory.version === '2.1' || loadedHistory.version === '2.2')) { // Basic version check
                          analysisHistory = loadedHistory;
                     } else {
-                        // Clear old history if version mismatch or invalid
-                        analysisHistory = {};
+                        analysisHistory = {}; // Clear old history if version mismatch or invalid
                         localStorage.removeItem('maisAnalysisHistory');
                     }
                 }
             } catch (error) {
                 console.warn('Failed to load analysis history:', error);
-                analysisHistory = {};
+                analysisHistory = {}; // Reset on error
             }
         }
 
