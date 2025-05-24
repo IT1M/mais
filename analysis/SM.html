@@ -3,99 +3,185 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Smart Quality Assurance Agent - Intelligent system for data quality inspection and analysis using AI">
+    <meta name="keywords" content="data quality, QA, analysis, AI, CSV, Excel, PDF">
+    <meta name="author" content="Smart QA System">
     <title>Smart Quality Assurance Agent</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary-color: #2c3e50;
-            --secondary-color: #3498db;
-            --success-color: #2ecc71;
-            --danger-color: #e74c3c;
-            --warning-color: #f39c12;
-            --light-color: #ecf0f1;
-            --dark-color: #34495e;
+            --primary-color: #2563eb;
+            --primary-dark: #1d4ed8;
+            --secondary-color: #3b82f6;
+            --success-color: #10b981;
+            --success-dark: #059669;
+            --danger-color: #ef4444;
+            --warning-color: #f59e0b;
+            --light-color: #f8fafc;
+            --gray-50: #f9fafb;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-300: #d1d5db;
+            --gray-600: #4b5563;
+            --gray-700: #374151;
+            --gray-800: #1f2937;
+            --gray-900: #111827;
+            --border-radius: 8px;
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
         }
         
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
         
         body {
-            background-color: #f5f7fa;
-            color: var(--dark-color);
+            font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: var(--gray-50);
+            color: var(--gray-900);
+            line-height: 1.6;
+            overflow-x: hidden;
         }
         
         .container {
-            max-width: 1200px;
+            max-width: 1280px;
             margin: 0 auto;
-            padding: 20px;
+            padding: 16px;
         }
         
+        /* Header */
         header {
-            background-color: var(--primary-color);
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
             color: white;
-            padding: 20px 0;
+            padding: 24px 0;
             text-align: center;
-            border-radius: 5px;
-            margin-bottom: 20px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            border-radius: var(--border-radius);
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-lg);
+            position: relative;
+            overflow: hidden;
         }
         
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="75" cy="75" r="1" fill="rgba(255,255,255,0.1)"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+            opacity: 0.3;
+        }
+        
+        header h1 {
+            font-size: clamp(1.5rem, 4vw, 2.5rem);
+            font-weight: 700;
+            margin-bottom: 8px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        header p {
+            font-size: clamp(0.875rem, 2vw, 1.125rem);
+            opacity: 0.9;
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* Dashboard Layout */
         .dashboard {
             display: grid;
-            grid-template-columns: 1fr 2fr;
-            gap: 20px;
+            grid-template-columns: 1fr;
+            gap: 24px;
+        }
+        
+        @media (min-width: 1024px) {
+            .dashboard {
+                grid-template-columns: 380px 1fr;
+            }
         }
         
         .sidebar {
-            background-color: white;
-            border-radius: 5px;
-            padding: 20px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
         }
         
         .main-content {
-            background-color: white;
-            border-radius: 5px;
-            padding: 20px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
         }
         
+        /* Card Component */
         .card {
-            background-color: white;
-            border-radius: 5px;
-            padding: 20px;
-            margin-bottom: 20px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 24px;
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--gray-200);
+            transition: var(--transition);
+        }
+        
+        .card:hover {
+            box-shadow: var(--shadow-lg);
         }
         
         .card-header {
-            border-bottom: 1px solid #eee;
-            padding-bottom: 10px;
-            margin-bottom: 15px;
+            border-bottom: 1px solid var(--gray-200);
+            padding-bottom: 16px;
+            margin-bottom: 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
         }
         
+        .card-header h2 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--gray-900);
+        }
+        
+        /* Button Components */
         .btn {
-            padding: 10px 15px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 12px 20px;
             border: none;
-            border-radius: 4px;
+            border-radius: var(--border-radius);
             cursor: pointer;
-            font-weight: bold;
-            transition: all 0.3s ease;
+            font-weight: 500;
+            font-size: 0.875rem;
+            text-decoration: none;
+            transition: var(--transition);
+            min-height: 44px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
         }
         
         .btn-primary {
-            background-color: var(--secondary-color);
+            background-color: var(--primary-color);
             color: white;
         }
         
-        .btn-primary:hover {
-            background-color: #2980b9;
+        .btn-primary:hover:not(:disabled) {
+            background-color: var(--primary-dark);
+            transform: translateY(-1px);
         }
         
         .btn-success {
@@ -103,14 +189,27 @@
             color: white;
         }
         
-        .btn-success:hover {
-            background-color: #27ae60;
+        .btn-success:hover:not(:disabled) {
+            background-color: var(--success-dark);
+            transform: translateY(-1px);
         }
         
+        .btn-secondary {
+            background-color: var(--gray-100);
+            color: var(--gray-700);
+            border: 1px solid var(--gray-300);
+        }
+        
+        .btn-secondary:hover:not(:disabled) {
+            background-color: var(--gray-200);
+        }
+        
+        /* File Upload */
         .file-upload {
             position: relative;
             overflow: hidden;
             display: inline-block;
+            width: 100%;
         }
         
         .file-upload input[type=file] {
@@ -129,76 +228,175 @@
             display: block;
         }
         
+        .upload-zone {
+            border: 2px dashed var(--gray-300);
+            border-radius: var(--border-radius);
+            padding: 32px 16px;
+            text-align: center;
+            background-color: var(--gray-50);
+            transition: var(--transition);
+            margin: 16px 0;
+        }
+        
+        .upload-zone:hover {
+            border-color: var(--primary-color);
+            background-color: var(--primary-color);
+            background-opacity: 0.05;
+        }
+        
+        .upload-zone.drag-over {
+            border-color: var(--success-color);
+            background-color: rgba(16, 185, 129, 0.05);
+        }
+        
+        .upload-icon {
+            width: 48px;
+            height: 48px;
+            margin: 0 auto 16px;
+            color: var(--gray-400);
+        }
+        
+        /* Progress Bar */
         .progress-container {
             width: 100%;
-            background-color: #f1f1f1;
-            border-radius: 5px;
-            margin: 10px 0;
+            background-color: var(--gray-200);
+            border-radius: 9999px;
+            margin: 16px 0;
             display: none;
+            overflow: hidden;
         }
         
         .progress-bar {
-            width: 0%;
-            height: 20px;
-            background-color: var(--secondary-color);
-            border-radius: 5px;
-            text-align: center;
-            line-height: 20px;
-            color: white;
+            height: 8px;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 9999px;
+            transition: width 0.3s ease;
+            position: relative;
         }
         
+        .progress-text {
+            font-size: 0.75rem;
+            color: var(--gray-600);
+            margin-top: 4px;
+            text-align: center;
+        }
+        
+        /* Status Messages */
         .status-message {
-            margin-top: 10px;
-            padding: 10px;
-            border-radius: 4px;
+            margin-top: 16px;
+            padding: 12px 16px;
+            border-radius: var(--border-radius);
             display: none;
+            font-size: 0.875rem;
+            position: relative;
+            border-left: 4px solid;
         }
         
         .success-message {
-            background-color: #d4edda;
-            color: #155724;
-            border: 1px solid #c3e6cb;
+            background-color: rgba(16, 185, 129, 0.1);
+            color: var(--success-dark);
+            border-left-color: var(--success-color);
         }
         
         .error-message {
-            background-color: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
+            background-color: rgba(239, 68, 68, 0.1);
+            color: #dc2626;
+            border-left-color: var(--danger-color);
         }
         
+        .warning-message {
+            background-color: rgba(245, 158, 11, 0.1);
+            color: #d97706;
+            border-left-color: var(--warning-color);
+        }
+        
+        /* File Info */
+        .file-info {
+            margin-top: 16px;
+            display: none;
+            padding: 16px;
+            background-color: var(--gray-50);
+            border-radius: var(--border-radius);
+            border: 1px solid var(--gray-200);
+        }
+        
+        .file-details {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        
+        .file-type {
+            display: inline-block;
+            padding: 4px 12px;
+            background-color: var(--primary-color);
+            color: white;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            text-transform: uppercase;
+        }
+        
+        .file-name {
+            font-weight: 500;
+            color: var(--gray-900);
+            word-break: break-all;
+        }
+        
+        .file-size {
+            color: var(--gray-600);
+            font-size: 0.875rem;
+        }
+        
+        /* Insights Panel */
         .insights-panel {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 16px;
             margin-top: 20px;
         }
         
         .insight-card {
-            background-color: var(--light-color);
-            padding: 15px;
-            border-radius: 5px;
+            background: linear-gradient(135deg, var(--light-color) 0%, white 100%);
+            padding: 20px 16px;
+            border-radius: var(--border-radius);
             text-align: center;
+            border: 1px solid var(--gray-200);
+            transition: var(--transition);
+        }
+        
+        .insight-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
         }
         
         .insight-card h3 {
-            margin-bottom: 10px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: var(--gray-600);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 8px;
         }
         
         .insight-card .value {
-            font-size: 24px;
-            font-weight: bold;
-            color: var(--secondary-color);
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            display: block;
         }
         
+        /* Loading Spinner */
         .loader {
-            border: 4px solid #f3f3f3;
-            border-top: 4px solid var(--secondary-color);
+            border: 3px solid var(--gray-200);
+            border-top: 3px solid var(--primary-color);
             border-radius: 50%;
-            width: 20px;
-            height: 20px;
-            animation: spin 2s linear infinite;
+            width: 24px;
+            height: 24px;
+            animation: spin 1s linear infinite;
             display: none;
-            margin: 0 auto;
+            margin: 16px auto;
         }
         
         @keyframes spin {
@@ -206,660 +404,1042 @@
             100% { transform: rotate(360deg); }
         }
         
+        /* QA Results */
         .qa-results {
-            margin-top: 20px;
+            margin-top: 24px;
             display: none;
         }
         
         .qa-results-header {
-            font-weight: bold;
-            margin-bottom: 10px;
-            border-bottom: 1px solid #eee;
-            padding-bottom: 10px;
+            font-weight: 600;
+            font-size: 1.125rem;
+            margin-bottom: 16px;
+            color: var(--gray-900);
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
         
         .qa-results-content {
-            max-height: 400px;
+            background-color: var(--gray-50);
+            border-radius: var(--border-radius);
+            border: 1px solid var(--gray-200);
+            padding: 24px;
+            font-size: 0.875rem;
+            line-height: 1.7;
+            max-height: 500px;
             overflow-y: auto;
-            padding: 10px;
-            background-color: #f9f9f9;
-            border-radius: 5px;
-            border: 1px solid #eee;
         }
         
-        .file-info {
-            margin-top: 10px;
-            display: none;
+        .qa-results-content h2,
+        .qa-results-content h3 {
+            color: var(--gray-900);
+            margin: 16px 0 8px 0;
+            font-weight: 600;
         }
         
-        .file-name {
-            font-weight: bold;
+        .qa-results-content h2 {
+            font-size: 1.125rem;
+            border-bottom: 2px solid var(--primary-color);
+            padding-bottom: 4px;
         }
         
-        .file-size {
-            color: #777;
-            font-size: 0.9em;
+        .qa-results-content h3 {
+            font-size: 1rem;
+            color: var(--gray-700);
         }
         
-        .file-type {
-            display: inline-block;
-            padding: 2px 8px;
-            background-color: var(--secondary-color);
-            color: white;
-            border-radius: 10px;
+        .qa-results-content ul {
+            margin: 8px 0 16px 20px;
+        }
+        
+        .qa-results-content li {
+            margin-bottom: 4px;
+        }
+        
+        .qa-results-content p {
+            margin-bottom: 12px;
+        }
+        
+        .qa-results-content code {
+            background-color: var(--gray-100);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Monaco', 'Menlo', monospace;
             font-size: 0.8em;
-            margin-right: 10px;
+        }
+        
+        /* Analysis Actions */
+        .analysis-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 16px;
+            flex-wrap: wrap;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 640px) {
+            .container {
+                padding: 12px;
+            }
+            
+            header {
+                margin-bottom: 16px;
+                padding: 20px 16px;
+            }
+            
+            .card {
+                padding: 16px;
+            }
+            
+            .dashboard {
+                gap: 16px;
+            }
+            
+            .sidebar {
+                gap: 16px;
+            }
+            
+            .main-content {
+                gap: 16px;
+            }
+            
+            .insights-panel {
+                grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+                gap: 12px;
+            }
+            
+            .insight-card {
+                padding: 16px 12px;
+            }
+            
+            .insight-card .value {
+                font-size: 1.25rem;
+            }
+            
+            .btn {
+                padding: 10px 16px;
+                font-size: 0.8rem;
+            }
+            
+            .card-header {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 16px;
+            }
+            
+            .analysis-actions {
+                flex-direction: column;
+            }
+            
+            .qa-results-content {
+                padding: 16px;
+                font-size: 0.8rem;
+            }
+        }
+        
+        /* Accessibility */
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+        
+        /* Focus styles */
+        .btn:focus-visible,
+        input:focus-visible {
+            outline: 2px solid var(--primary-color);
+            outline-offset: 2px;
+        }
+        
+        /* Dark mode support */
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --gray-50: #0f172a;
+                --gray-100: #1e293b;
+                --gray-200: #334155;
+                --gray-300: #475569;
+                --gray-600: #cbd5e1;
+                --gray-700: #e2e8f0;
+                --gray-800: #f1f5f9;
+                --gray-900: #f8fafc;
+            }
+            
+            body {
+                background-color: var(--gray-50);
+                color: var(--gray-900);
+            }
+            
+            .card {
+                background-color: var(--gray-100);
+                border-color: var(--gray-200);
+            }
+        }
+        
+        /* Print styles */
+        @media print {
+            .btn,
+            .file-upload,
+            .loader {
+                display: none !important;
+            }
+            
+            .card {
+                box-shadow: none;
+                border: 1px solid #000;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <header>
+        <header role="banner">
             <h1>Smart Quality Assurance Agent</h1>
-            <p>Intelligent system for data quality inspection and analysis</p>
+            <p>Intelligent system for data quality inspection and analysis using AI</p>
         </header>
         
-        <div class="dashboard">
-            <div class="sidebar">
-                <div class="card">
+        <main class="dashboard" role="main">
+            <aside class="sidebar" role="complementary">
+                <section class="card" aria-labelledby="upload-heading">
                     <div class="card-header">
-                        <h2>Upload Production Data</h2>
+                        <h2 id="upload-heading">Upload Data Files</h2>
                     </div>
-                    <p>Upload data files (CSV, Excel, PDF) for analysis</p>
-                    <div class="file-upload">
-                        <button class="btn btn-primary" id="upload-btn">Upload Files</button>
-                        <input type="file" id="file-input" accept=".csv,.xlsx,.xls,.pdf" />
+                    <p>Upload data files (CSV, Excel, PDF) for comprehensive AI-powered analysis</p>
+                    
+                    <div class="upload-zone" id="upload-zone">
+                        <svg class="upload-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
+                        </svg>
+                        <div class="file-upload">
+                            <button class="btn btn-primary" id="upload-btn" aria-describedby="file-types">
+                                <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                                    <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/>
+                                    <path d="M7.646 1.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 2.707V11.5a.5.5 0 0 1-1 0V2.707L5.354 4.854a.5.5 0 1 1-.708-.708l3-3z"/>
+                                </svg>
+                                Choose Files
+                            </button>
+                            <input type="file" id="file-input" accept=".csv,.xlsx,.xls,.pdf" multiple aria-label="Upload data files" />
+                        </div>
+                        <p id="file-types" class="file-size" style="margin-top: 8px;">
+                            Supported: CSV, Excel (.xlsx, .xls), PDF
+                        </p>
                     </div>
                     
-                    <div class="file-info" id="file-info">
-                        <div class="file-type" id="file-type">CSV</div>
-                        <span class="file-name" id="file-name">filename.csv</span>
+                    <div class="file-info" id="file-info" role="status" aria-live="polite">
+                        <div class="file-details">
+                            <span class="file-type" id="file-type">CSV</span>
+                            <span class="file-name" id="file-name">filename.csv</span>
+                        </div>
                         <div class="file-size" id="file-size">1.2 MB</div>
                     </div>
                     
-                    <div class="progress-container" id="progress-container">
-                        <div class="progress-bar" id="progress-bar">0%</div>
+                    <div class="progress-container" id="progress-container" role="progressbar" aria-valuemin="0" aria-valuemax="100">
+                        <div class="progress-bar" id="progress-bar"></div>
+                        <div class="progress-text" id="progress-text">0%</div>
                     </div>
                     
-                    <div class="status-message success-message" id="success-message">
-                        File uploaded successfully and is being analyzed.
+                    <div class="status-message success-message" id="success-message" role="status" aria-live="polite">
+                        <strong>Success!</strong> File uploaded successfully and is being analyzed.
                     </div>
                     
-                    <div class="status-message error-message" id="error-message">
-                        An error occurred while uploading the file. Please try again.
+                    <div class="status-message error-message" id="error-message" role="alert" aria-live="assertive">
+                        <strong>Error:</strong> <span id="error-text">An error occurred while uploading the file. Please try again.</span>
                     </div>
                     
-                    <div class="loader" id="loader"></div>
-                </div>
+                    <div class="loader" id="loader" aria-label="Processing file..."></div>
+                </section>
                 
-                <div class="card">
+                <section class="card" aria-labelledby="insights-heading">
                     <div class="card-header">
-                        <h2>Data Insights</h2>
+                        <h2 id="insights-heading">Data Insights</h2>
                     </div>
                     <div class="insights-panel" id="insights-panel">
                         <div class="insight-card">
-                            <h3>Records Count</h3>
-                            <div class="value" id="records-count">0</div>
+                            <h3>Records</h3>
+                            <span class="value" id="records-count">0</span>
                         </div>
                         <div class="insight-card">
-                            <h3>Missing Fields</h3>
-                            <div class="value" id="missing-fields">0%</div>
+                            <h3>Missing Data</h3>
+                            <span class="value" id="missing-fields">0%</span>
                         </div>
                         <div class="insight-card">
-                            <h3>Data Quality</h3>
-                            <div class="value" id="data-quality">N/A</div>
+                            <h3>Quality Score</h3>
+                            <span class="value" id="data-quality">N/A</span>
+                        </div>
+                        <div class="insight-card">
+                            <h3>Columns</h3>
+                            <span class="value" id="columns-count">0</span>
                         </div>
                     </div>
-                </div>
-            </div>
+                </section>
+            </aside>
             
-            <div class="main-content">
-                <div class="card">
+            <section class="main-content">
+                <article class="card" aria-labelledby="analysis-heading">
                     <div class="card-header">
-                        <h2>Smart QA Analysis</h2>
-                        <button class="btn btn-success" id="analyze-btn" disabled>Analyze Data</button>
+                        <h2 id="analysis-heading">AI-Powered Analysis</h2>
+                        <div class="analysis-actions">
+                            <button class="btn btn-success" id="analyze-btn" disabled aria-describedby="analysis-description">
+                                <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                                    <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                                    <path d="M10.97 4.97a.235.235 0 0 0-.02.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.061L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-1.071-1.05z"/>
+                                </svg>
+                                Analyze Data
+                            </button>
+                            <button class="btn btn-secondary" id="export-btn" style="display: none;">
+                                <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                                    <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/>
+                                    <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"/>
+                                </svg>
+                                Export Report
+                            </button>
+                        </div>
                     </div>
-                    <p>Data analysis results using AI</p>
+                    <p id="analysis-description">Advanced data analysis using artificial intelligence to identify quality issues, patterns, and recommendations</p>
                     
                     <div class="qa-results" id="qa-results">
-                        <div class="qa-results-header">Analysis Results</div>
-                        <div class="qa-results-content" id="qa-results-content">
-                            Upload files to start analyzing them.
+                        <div class="qa-results-header">
+                            <svg width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
+                                <path d="M3 0h10a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2v-1h1v1a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H3a1 1 0 0 0-1 1v1H1V2a2 2 0 0 1 2-2z"/>
+                                <path d="M1 5v-.5a.5.5 0 0 1 1 0V5h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1H1zm0 3v-.5a.5.5 0 0 1 1 0V8h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1H1zm0 3v-.5a.5.5 0 0 1 1 0v.5h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1H1z"/>
+                            </svg>
+                            Analysis Results
+                        </div>
+                        <div class="qa-results-content" id="qa-results-content" role="region" aria-live="polite">
+                            Upload files to start analyzing them with our AI-powered quality assurance system.
                         </div>
                     </div>
                     
-                    <div class="status-message error-message" id="api-error-message" style="display: none; margin-top: 15px;">
-                        An error occurred while connecting to the analysis service. Please try again later.
+                    <div class="status-message error-message" id="api-error-message" style="display: none; margin-top: 15px;" role="alert">
+                        <strong>Connection Error:</strong> Unable to connect to the analysis service. Please check your internet connection and try again.
                     </div>
-                </div>
-            </div>
-        </div>
+                    
+                    <div class="loader" id="analysis-loader" aria-label="Analyzing data..."></div>
+                </article>
+            </section>
+        </main>
     </div>
 
     <script>
-        // Constants
-        const GROQ_API_KEY = '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';
-        const GROQ_API_URL = 'https://api.groq.com/openai/v1/chat/completions';
-        const GROQ_MODEL = 'deepseek-r1-distill-llama-70b';
+        // Constants and Configuration
+        const GEMINI_API_KEY = 'AIzaSyCV3Kb2rHMQoyAiYkrAFA82UlcGbYAAC0M'; // Replace with actual API key
+        const GEMINI_API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent';
+        const USE_MOCK_DATA = true; // Set to false for production
+        const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
+        const SUPPORTED_TYPES = ['.csv', '.xlsx', '.xls', '.pdf', '.json', '.txt'];
         
-        // Flag to use mock data instead of real API calls
-        // Set to true for development/testing, set to false for production
-        const USE_MOCK_DATA = true;
+        // DOM Elements - Cached for performance
+        const elements = {
+            fileInput: document.getElementById('file-input'),
+            uploadBtn: document.getElementById('upload-btn'),
+            uploadZone: document.getElementById('upload-zone'),
+            analyzeBtn: document.getElementById('analyze-btn'),
+            exportBtn: document.getElementById('export-btn'),
+            progressContainer: document.getElementById('progress-container'),
+            progressBar: document.getElementById('progress-bar'),
+            progressText: document.getElementById('progress-text'),
+            successMessage: document.getElementById('success-message'),
+            errorMessage: document.getElementById('error-message'),
+            errorText: document.getElementById('error-text'),
+            apiErrorMessage: document.getElementById('api-error-message'),
+            loader: document.getElementById('loader'),
+            analysisLoader: document.getElementById('analysis-loader'),
+            fileInfo: document.getElementById('file-info'),
+            fileName: document.getElementById('file-name'),
+            fileSize: document.getElementById('file-size'),
+            fileType: document.getElementById('file-type'),
+            recordsCount: document.getElementById('records-count'),
+            missingFields: document.getElementById('missing-fields'),
+            dataQuality: document.getElementById('data-quality'),
+            columnsCount: document.getElementById('columns-count'),
+            qaResults: document.getElementById('qa-results'),
+            qaResultsContent: document.getElementById('qa-results-content')
+        };
         
-        // DOM Elements
-        const fileInput = document.getElementById('file-input');
-        const uploadBtn = document.getElementById('upload-btn');
-        const analyzeBtn = document.getElementById('analyze-btn');
-        const progressContainer = document.getElementById('progress-container');
-        const progressBar = document.getElementById('progress-bar');
-        const successMessage = document.getElementById('success-message');
-        const errorMessage = document.getElementById('error-message');
-        const apiErrorMessage = document.getElementById('api-error-message');
-        const loader = document.getElementById('loader');
-        const fileInfo = document.getElementById('file-info');
-        const fileName = document.getElementById('file-name');
-        const fileSize = document.getElementById('file-size');
-        const fileType = document.getElementById('file-type');
-        const recordsCount = document.getElementById('records-count');
-        const missingFields = document.getElementById('missing-fields');
-        const dataQuality = document.getElementById('data-quality');
-        const qaResults = document.getElementById('qa-results');
-        const qaResultsContent = document.getElementById('qa-results-content');
+        // Application State
+        let appState = {
+            fileData: null,
+            parsedData: null,
+            analysisResults: null,
+            currentFiles: []
+        };
         
-        // Global variables
-        let fileData = null;
-        let parsedData = null;
-        
-        // Event Listeners
-        uploadBtn.addEventListener('click', () => {
-            fileInput.click();
-        });
-        
-        fileInput.addEventListener('change', handleFileUpload);
-        analyzeBtn.addEventListener('click', analyzeData);
-        
-        // Add error handling for the whole script
-        window.addEventListener('error', function(event) {
-            console.error('Global error caught:', event.error);
+        // Utility Functions
+        const utils = {
+            formatFileSize(bytes) {
+                if (bytes === 0) return '0 Bytes';
+                const k = 1024;
+                const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+                const i = Math.floor(Math.log(bytes) / Math.log(k));
+                return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+            },
             
-            // Show a user-friendly error message
-            errorMessage.textContent = 'An unexpected error occurred. Please refresh the page and try again.';
-            errorMessage.style.display = 'block';
+            debounce(func, wait) {
+                let timeout;
+                return function executedFunction(...args) {
+                    const later = () => {
+                        clearTimeout(timeout);
+                        func(...args);
+                    };
+                    clearTimeout(timeout);
+                    timeout = setTimeout(later, wait);
+                };
+            },
             
-            // Hide loader if it was showing
-            loader.style.display = 'none';
-            
-            return false; // Prevent default browser error handling
-        });
-        
-        // Check connectivity to GROQ API on page load
-        document.addEventListener('DOMContentLoaded', async function() {
-            if (!USE_MOCK_DATA) {
-                try {
-                    // Make a minimal API call to check connectivity
-                    const response = await fetch(GROQ_API_URL, {
-                        method: 'OPTIONS',
-                        headers: {
-                            'Authorization': `Bearer ${GROQ_API_KEY}`
-                        }
-                    });
-                    
-                    if (!response.ok) {
-                        console.warn('GROQ API connectivity check failed');
-                        apiErrorMessage.style.display = 'block';
-                    }
-                } catch (error) {
-                    console.warn('GROQ API connectivity check failed:', error);
-                    apiErrorMessage.style.display = 'block';
+            showMessage(type, message, duration = 5000) {
+                const messageElement = elements[`${type}Message`];
+                if (type === 'error') {
+                    elements.errorText.textContent = message;
+                } else {
+                    messageElement.querySelector('strong').nextSibling.textContent = ' ' + message;
                 }
+                
+                messageElement.style.display = 'block';
+                
+                if (duration > 0) {
+                    setTimeout(() => {
+                        messageElement.style.display = 'none';
+                    }, duration);
+                }
+            },
+            
+            hideAllMessages() {
+                ['success', 'error', 'apiError'].forEach(type => {
+                    elements[`${type}Message`].style.display = 'none';
+                });
+            },
+            
+            updateProgress(percentage) {
+                elements.progressBar.style.width = percentage + '%';
+                elements.progressText.textContent = percentage + '%';
+                elements.progressContainer.setAttribute('aria-valuenow', percentage);
             }
-        });
+        };
         
-        // Functions
-        function handleFileUpload(event) {
-            const file = event.target.files[0];
-            if (!file) return;
-            
-            // Display file info
-            fileInfo.style.display = 'block';
-            fileName.textContent = file.name;
-            fileSize.textContent = formatFileSize(file.size);
-            
-            // Set file type badge
-            const extension = file.name.split('.').pop().toLowerCase();
-            fileType.textContent = extension.toUpperCase();
-            
-            // Show progress bar
-            progressContainer.style.display = 'block';
-            progressBar.style.width = '0%';
-            progressBar.textContent = '0%';
-            
-            // Hide previous messages
-            successMessage.style.display = 'none';
-            errorMessage.style.display = 'none';
-            
-            // Read file
-            const reader = new FileReader();
-            
-            reader.onprogress = (e) => {
-                if (e.lengthComputable) {
-                    const progress = Math.round((e.loaded / e.total) * 100);
-                    progressBar.style.width = progress + '%';
-                    progressBar.textContent = progress + '%';
+        // File Handling
+        const fileHandler = {
+            validateFile(file) {
+                const extension = '.' + file.name.split('.').pop().toLowerCase();
+                
+                if (!SUPPORTED_TYPES.includes(extension)) {
+                    throw new Error(`Unsupported file type: ${extension}`);
                 }
-            };
-            
-            reader.onload = async (e) => {
-                fileData = e.target.result;
-                try {
-                    parsedData = await parseFileData(file, fileData);
-                    
-                    // Update progress bar to 100%
-                    progressBar.style.width = '100%';
-                    progressBar.textContent = '100%';
-                    
-                    // Show success message
-                    successMessage.style.display = 'block';
-                    
-                    // Update insights panel
-                    updateInsightsPanel(parsedData);
-                    
-                    // Enable analyze button
-                    analyzeBtn.disabled = false;
-                    
-                    // Upload to server
-                    uploadToServer(file, parsedData);
-                    
-                } catch (error) {
-                    console.error('Error parsing file:', error);
-                    errorMessage.textContent = 'Error reading file: ' + error.message;
-                    errorMessage.style.display = 'block';
-                    progressBar.style.backgroundColor = 'var(--danger-color)';
+                
+                if (file.size > MAX_FILE_SIZE) {
+                    throw new Error(`File too large. Maximum size is ${utils.formatFileSize(MAX_FILE_SIZE)}`);
                 }
-            };
+                
+                return true;
+            },
             
-            reader.onerror = () => {
-                errorMessage.textContent = 'An error occurred while reading the file. Please try again.';
-                errorMessage.style.display = 'block';
-            };
-            
-            // Read the file based on its type
-            const fileExtension = file.name.split('.').pop().toLowerCase();
-            if (fileExtension === 'csv' || fileExtension === 'txt') {
-                reader.readAsText(file);
-            } else {
-                reader.readAsArrayBuffer(file);
-            }
-        }
-        
-        async function parseFileData(file, data) {
-            const extension = file.name.split('.').pop().toLowerCase();
-            
-            try {
-                switch (extension) {
-                    case 'csv':
-                        return parseCSV(data);
-                    case 'xlsx':
-                    case 'xls':
-                        return parseExcel(data);
-                    case 'pdf':
-                        return parsePDF(data);
-                    default:
-                        throw new Error('Unsupported file type');
+            async parseCSV(data) {
+                const lines = data.split('\n').filter(line => line.trim());
+                if (lines.length < 2) {
+                    throw new Error('CSV file must have at least a header and one data row');
                 }
-            } catch (error) {
-                console.error('Error parsing file:', error);
-                throw new Error(`Failed to read file: ${error.message}`);
-            }
-        }
-        
-        function parseCSV(data) {
-            return new Promise((resolve, reject) => {
-                try {
-                    const lines = data.split('\n');
-                    const headers = lines[0].split(',').map(header => header.trim());
-                    
-                    const records = [];
-                    for (let i = 1; i < lines.length; i++) {
-                        if (lines[i].trim() === '') continue;
-                        
-                        const values = lines[i].split(',').map(value => value.trim());
+                
+                const headers = lines[0].split(',').map(h => h.trim().replace(/['"]/g, ''));
+                const records = [];
+                
+                for (let i = 1; i < lines.length; i++) {
+                    const values = this.parseCSVLine(lines[i]);
+                    if (values.length === headers.length) {
                         const record = {};
-                        
                         headers.forEach((header, index) => {
                             record[header] = values[index] || '';
                         });
-                        
                         records.push(record);
                     }
-                    
-                    resolve({
-                        headers: headers,
-                        records: records,
-                        type: 'csv'
-                    });
-                } catch (error) {
-                    reject(error);
                 }
-            });
-        }
-        
-        function parseExcel(data) {
-            return new Promise((resolve, reject) => {
-                try {
-                    // Note: In a real implementation, you would use a library like SheetJS/xlsx
-                    // This is a simplified placeholder for demonstration
-                    
-                    // Simulate Excel parsing
-                    setTimeout(() => {
-                        const mockData = {
-                            headers: ['Name', 'Age', 'City', 'Job'],
-                            records: [
-                                { 'Name': 'Ahmed', 'Age': '30', 'City': 'Riyadh', 'Job': 'Engineer' },
-                                { 'Name': 'Mohammed', 'Age': '25', 'City': 'Jeddah', 'Job': 'Data Analyst' },
-                                { 'Name': 'Fatima', 'Age': '28', 'City': 'Dammam', 'Job': 'Project Manager' }
-                            ],
-                            type: 'excel'
-                        };
-                        resolve(mockData);
-                    }, 1000);
-                } catch (error) {
-                    reject(error);
-                }
-            });
-        }
-        
-        function parsePDF(data) {
-            return new Promise((resolve, reject) => {
-                try {
-                    // Note: In a real implementation, you would use a PDF parsing library
-                    // This is a simplified placeholder for demonstration
-                    
-                    // Simulate PDF parsing
-                    setTimeout(() => {
-                        const mockData = {
-                            text: 'This is content extracted from a PDF file',
-                            type: 'pdf'
-                        };
-                        resolve(mockData);
-                    }, 1000);
-                } catch (error) {
-                    reject(error);
-                }
-            });
-        }
-        
-        async function uploadToServer(file, parsedData) {
-            // Show loader
-            loader.style.display = 'block';
+                
+                return {
+                    headers,
+                    records,
+                    type: 'csv',
+                    metadata: {
+                        totalRows: lines.length - 1,
+                        totalColumns: headers.length,
+                        hasHeaders: true
+                    }
+                };
+            },
             
-            try {
-                // In development mode, simulate upload success
-                if (USE_MOCK_DATA) {
-                    // Simulate network delay
-                    await new Promise(resolve => setTimeout(resolve, 1000));
+            parseCSVLine(line) {
+                const result = [];
+                let current = '';
+                let inQuotes = false;
+                
+                for (let i = 0; i < line.length; i++) {
+                    const char = line[i];
                     
-                    console.log('File upload simulated:', file.name);
-                    console.log('Parsed data:', parsedData);
-                    
-                    // Return simulated success
-                    return { success: true };
+                    if (char === '"') {
+                        inQuotes = !inQuotes;
+                    } else if (char === ',' && !inQuotes) {
+                        result.push(current.trim());
+                        current = '';
+                    } else {
+                        current += char;
+                    }
                 }
                 
-                // For production: create FormData and send to server
-                const formData = new FormData();
-                formData.append('file', file);
-                formData.append('data', JSON.stringify(parsedData));
+                result.push(current.trim());
+                return result.map(v => v.replace(/['"]/g, ''));
+            },
+            
+            async parseJSON(data) {
+                try {
+                    const jsonData = JSON.parse(data);
+                    
+                    if (Array.isArray(jsonData) && jsonData.length > 0) {
+                        const headers = Object.keys(jsonData[0]);
+                        return {
+                            headers,
+                            records: jsonData,
+                            type: 'json',
+                            metadata: {
+                                totalRows: jsonData.length,
+                                totalColumns: headers.length,
+                                hasHeaders: true
+                            }
+                        };
+                    } else {
+                        throw new Error('JSON must be an array of objects');
+                    }
+                } catch (error) {
+                    throw new Error('Invalid JSON format: ' + error.message);
+                }
+            },
+            
+            async parseFile(file, data) {
+                const extension = file.name.split('.').pop().toLowerCase();
                 
-                // Add GROQ API key to request headers
-                const headers = new Headers();
-                headers.append('X-API-Key', GROQ_API_KEY);
+                switch (extension) {
+                    case 'csv':
+                        return this.parseCSV(data);
+                    case 'json':
+                        return this.parseJSON(data);
+                    case 'txt':
+                        return this.parseCSV(data); // Treat as CSV
+                    case 'xlsx':
+                    case 'xls':
+                        return this.mockExcelParse(file);
+                    case 'pdf':
+                        return this.mockPDFParse(file);
+                    default:
+                        throw new Error('Unsupported file type');
+                }
+            },
+            
+            async mockExcelParse(file) {
+                await new Promise(resolve => setTimeout(resolve, 1000));
+                return {
+                    headers: ['ID', 'Name', 'Department', 'Salary', 'Join_Date'],
+                    records: [
+                        { ID: '001', Name: 'Ahmed Ali', Department: 'Engineering', Salary: '75000', Join_Date: '2023-01-15' },
+                        { ID: '002', Name: 'Sara Mohammed', Department: 'Marketing', Salary: '65000', Join_Date: '2023-02-20' },
+                        { ID: '003', Name: 'Omar Hassan', Department: 'Finance', Salary: '70000', Join_Date: '2023-03-10' }
+                    ],
+                    type: 'excel',
+                    metadata: { totalRows: 3, totalColumns: 5, hasHeaders: true }
+                };
+            },
+            
+            async mockPDFParse(file) {
+                await new Promise(resolve => setTimeout(resolve, 1500));
+                return {
+                    text: 'Sample PDF content with business data and analytics reports...',
+                    type: 'pdf',
+                    metadata: { pages: 5, wordCount: 1250 }
+                };
+            }
+        };
+        
+        // Data Analysis
+        const dataAnalyzer = {
+            calculateInsights(data) {
+                if (data.type === 'pdf') {
+                    return {
+                        recordsCount: 'N/A',
+                        missingFields: 'N/A',
+                        dataQuality: 'N/A',
+                        columnsCount: 'N/A'
+                    };
+                }
                 
-                // Make actual API request
-                const response = await fetch('/api/upload', {
+                const { records, headers } = data;
+                const totalFields = records.length * headers.length;
+                let missingCount = 0;
+                let emptyRecords = 0;
+                
+                records.forEach(record => {
+                    let emptyInRecord = 0;
+                    Object.values(record).forEach(value => {
+                        if (!value || value.toString().trim() === '') {
+                            missingCount++;
+                            emptyInRecord++;
+                        }
+                    });
+                    if (emptyInRecord === headers.length) emptyRecords++;
+                });
+                
+                const missingPercentage = totalFields > 0 ? Math.round((missingCount / totalFields) * 100) : 0;
+                const qualityScore = Math.max(0, 100 - missingPercentage - (emptyRecords * 10));
+                
+                let qualityLabel = 'Poor';
+                if (qualityScore >= 90) qualityLabel = 'Excellent';
+                else if (qualityScore >= 80) qualityLabel = 'Very Good';
+                else if (qualityScore >= 70) qualityLabel = 'Good';
+                else if (qualityScore >= 50) qualityLabel = 'Average';
+                
+                return {
+                    recordsCount: records.length.toLocaleString(),
+                    missingFields: missingPercentage + '%',
+                    dataQuality: qualityLabel,
+                    columnsCount: headers.length.toString()
+                };
+            },
+            
+            async generateMockAnalysis(data) {
+                await new Promise(resolve => setTimeout(resolve, 2000));
+                
+                if (data.type === 'pdf') {
+                    return this.generatePDFAnalysis(data);
+                }
+                
+                return this.generateDataAnalysis(data);
+            },
+            
+            generateDataAnalysis(data) {
+                const insights = this.calculateInsights(data);
+                const { records, headers } = data;
+                
+                const analysis = {
+                    summary: {
+                        fileType: data.type.toUpperCase(),
+                        recordCount: records.length,
+                        columnCount: headers.length,
+                        qualityScore: insights.dataQuality
+                    },
+                    fieldAnalysis: headers.map(header => {
+                        const values = records.map(r => r[header]).filter(v => v && v.trim());
+                        const uniqueValues = new Set(values).size;
+                        const completeness = (values.length / records.length * 100).toFixed(1);
+                        
+                        return {
+                            name: header,
+                            completeness: completeness + '%',
+                            uniqueValues,
+                            dataType: this.detectDataType(values)
+                        };
+                    }),
+                    qualityIssues: this.identifyQualityIssues(data),
+                    recommendations: this.generateRecommendations(data)
+                };
+                
+                return this.formatAnalysisOutput(analysis);
+            },
+            
+            generatePDFAnalysis(data) {
+                return `
+## 📄 PDF Document Analysis
+
+### Document Overview
+- **Document Type**: PDF Report
+- **Estimated Pages**: ${data.metadata?.pages || 'Unknown'}
+- **Word Count**: ${data.metadata?.wordCount || 'Unknown'}
+
+### Content Analysis
+The document appears to contain structured business information suitable for data extraction and analysis.
+
+### Recommendations
+1. **Data Extraction**: Consider converting tabular data to CSV format for better analysis
+2. **Text Processing**: Use OCR if document contains scanned images
+3. **Structure Analysis**: Identify key sections and data patterns
+
+### Next Steps
+- Extract structured data using appropriate tools
+- Validate extracted information for accuracy
+- Process data through quality assurance pipelines
+                `.trim();
+            },
+            
+            detectDataType(values) {
+                if (values.length === 0) return 'Empty';
+                
+                const sample = values.slice(0, Math.min(10, values.length));
+                
+                if (sample.every(v => !isNaN(Date.parse(v)))) return 'Date';
+                if (sample.every(v => !isNaN(parseFloat(v)) && isFinite(v))) return 'Numeric';
+                if (sample.every(v => ['true', 'false', '1', '0'].includes(v.toLowerCase()))) return 'Boolean';
+                
+                return 'Text';
+            },
+            
+            identifyQualityIssues(data) {
+                const issues = [];
+                const { records, headers } = data;
+                
+                // Check for missing values
+                headers.forEach(header => {
+                    const missingCount = records.filter(r => !r[header] || r[header].trim() === '').length;
+                    if (missingCount > 0) {
+                        issues.push(`${header}: ${missingCount} missing values (${(missingCount/records.length*100).toFixed(1)}%)`);
+                    }
+                });
+                
+                // Check for duplicates
+                const duplicates = records.length - new Set(records.map(r => JSON.stringify(r))).size;
+                if (duplicates > 0) {
+                    issues.push(`${duplicates} duplicate records found`);
+                }
+                
+                return issues;
+            },
+            
+            generateRecommendations(data) {
+                const recommendations = [];
+                const insights = this.calculateInsights(data);
+                
+                if (parseInt(insights.missingFields) > 10) {
+                    recommendations.push('Implement data validation rules to reduce missing values');
+                }
+                
+                if (data.records.length < 100) {
+                    recommendations.push('Consider collecting more data for better statistical analysis');
+                }
+                
+                recommendations.push('Establish regular data quality monitoring procedures');
+                recommendations.push('Create data governance policies for consistent data entry');
+                
+                return recommendations;
+            },
+            
+            formatAnalysisOutput(analysis) {
+                return `
+## 📊 Data Quality Analysis Report
+
+### 📈 Summary
+- **File Type**: ${analysis.summary.fileType}
+- **Records**: ${analysis.summary.recordCount.toLocaleString()}
+- **Columns**: ${analysis.summary.columnCount}
+- **Quality Score**: ${analysis.summary.qualityScore}
+
+### 🔍 Field Analysis
+${analysis.fieldAnalysis.map(field => 
+    `**${field.name}**\n- Completeness: ${field.completeness}\n- Unique Values: ${field.uniqueValues}\n- Data Type: ${field.dataType}`
+).join('\n\n')}
+
+### ⚠️ Quality Issues
+${analysis.qualityIssues.length > 0 ? 
+    analysis.qualityIssues.map(issue => `- ${issue}`).join('\n') :
+    '✅ No major quality issues detected'}
+
+### 💡 Recommendations
+${analysis.recommendations.map(rec => `- ${rec}`).join('\n')}
+
+### 🎯 Next Steps
+1. Address identified quality issues
+2. Implement suggested improvements
+3. Monitor data quality regularly
+4. Establish data governance processes
+                `.trim();
+            }
+        };
+        
+        // Event Handlers
+        const eventHandlers = {
+            async handleFileUpload(event) {
+                const files = Array.from(event.target.files);
+                if (files.length === 0) return;
+                
+                utils.hideAllMessages();
+                
+                try {
+                    const file = files[0]; // Handle single file for now
+                    fileHandler.validateFile(file);
+                    
+                    this.showFileInfo(file);
+                    this.showProgress();
+                    
+                    const fileData = await this.readFile(file);
+                    const parsedData = await fileHandler.parseFile(file, fileData);
+                    
+                    appState.fileData = fileData;
+                    appState.parsedData = parsedData;
+                    appState.currentFiles = [file];
+                    
+                    this.updateInsights(parsedData);
+                    this.enableAnalysis();
+                    
+                    utils.updateProgress(100);
+                    utils.showMessage('success', 'File uploaded and processed successfully!');
+                    
+                } catch (error) {
+                    console.error('Upload error:', error);
+                    utils.showMessage('error', error.message);
+                    this.resetUploadState();
+                }
+            },
+            
+            showFileInfo(file) {
+                const extension = file.name.split('.').pop().toUpperCase();
+                
+                elements.fileType.textContent = extension;
+                elements.fileName.textContent = file.name;
+                elements.fileSize.textContent = utils.formatFileSize(file.size);
+                elements.fileInfo.style.display = 'block';
+            },
+            
+            showProgress() {
+                elements.progressContainer.style.display = 'block';
+                utils.updateProgress(0);
+            },
+            
+            async readFile(file) {
+                return new Promise((resolve, reject) => {
+                    const reader = new FileReader();
+                    
+                    reader.onprogress = (e) => {
+                        if (e.lengthComputable) {
+                            const progress = Math.round((e.loaded / e.total) * 50); // 50% for reading
+                            utils.updateProgress(progress);
+                        }
+                    };
+                    
+                    reader.onload = (e) => resolve(e.target.result);
+                    reader.onerror = () => reject(new Error('Failed to read file'));
+                    
+                    const extension = file.name.split('.').pop().toLowerCase();
+                    if (['csv', 'txt', 'json'].includes(extension)) {
+                        reader.readAsText(file);
+                    } else {
+                        reader.readAsArrayBuffer(file);
+                    }
+                });
+            },
+            
+            updateInsights(data) {
+                const insights = dataAnalyzer.calculateInsights(data);
+                
+                elements.recordsCount.textContent = insights.recordsCount;
+                elements.missingFields.textContent = insights.missingFields;
+                elements.dataQuality.textContent = insights.dataQuality;
+                elements.columnsCount.textContent = insights.columnsCount;
+            },
+            
+            enableAnalysis() {
+                elements.analyzeBtn.disabled = false;
+                elements.analyzeBtn.setAttribute('aria-label', 'Analyze uploaded data');
+            },
+            
+            resetUploadState() {
+                elements.fileInfo.style.display = 'none';
+                elements.progressContainer.style.display = 'none';
+                elements.analyzeBtn.disabled = true;
+                appState.fileData = null;
+                appState.parsedData = null;
+            },
+            
+            async handleAnalysis() {
+                if (!appState.parsedData) return;
+                
+                elements.analysisLoader.style.display = 'block';
+                elements.qaResults.style.display = 'block';
+                elements.qaResultsContent.textContent = 'Analyzing data with AI...';
+                
+                try {
+                    let analysisResult;
+                    
+                    if (USE_MOCK_DATA) {
+                        analysisResult = await dataAnalyzer.generateMockAnalysis(appState.parsedData);
+                    } else {
+                        analysisResult = await this.callGeminiAPI(appState.parsedData);
+                    }
+                    
+                    appState.analysisResults = analysisResult;
+                    this.displayAnalysisResults(analysisResult);
+                    elements.exportBtn.style.display = 'inline-flex';
+                    
+                } catch (error) {
+                    console.error('Analysis error:', error);
+                    this.displayAnalysisError(error);
+                } finally {
+                    elements.analysisLoader.style.display = 'none';
+                }
+            },
+            
+            async callGeminiAPI(data) {
+                const prompt = this.buildAnalysisPrompt(data);
+                
+                const response = await fetch(`${GEMINI_API_URL}?key=${GEMINI_API_KEY}`, {
                     method: 'POST',
-                    headers: headers,
-                    body: formData,
-                    // Add timeout to prevent hanging requests
-                    signal: AbortSignal.timeout(30000) // 30 seconds timeout
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        contents: [{
+                            parts: [{ text: prompt }]
+                        }],
+                        generationConfig: {
+                            temperature: 0.7,
+                            topK: 40,
+                            topP: 0.95,
+                            maxOutputTokens: 2048,
+                        }
+                    })
                 });
                 
                 if (!response.ok) {
                     const errorData = await response.json().catch(() => ({}));
-                    throw new Error(errorData.message || `HTTP Error: ${response.status}`);
+                    throw new Error(errorData.error?.message || `API Error: ${response.status}`);
                 }
                 
-                const responseData = await response.json();
-                return responseData;
-                
-            } catch (error) {
-                console.error('Upload error:', error);
-                
-                // For development - don't show errors during simulation
-                if (!USE_MOCK_DATA) {
-                    errorMessage.textContent = 'Failed to upload file: ' + error.message;
-                    errorMessage.style.display = 'block';
-                    
-                    // Hide error after 5 seconds
-                    setTimeout(() => {
-                        errorMessage.style.display = 'none';
-                    }, 5000);
-                }
-                
-                // Return error object
-                return { success: false, error: error.message };
-            } finally {
-                // Hide loader
-                loader.style.display = 'none';
-            }
-        }
-        
-        function updateInsightsPanel(data) {
-            if (data.type === 'csv' || data.type === 'excel') {
-                // Update records count
-                recordsCount.textContent = data.records.length;
-                
-                // Calculate missing fields
-                let totalFields = data.records.length * data.headers.length;
-                let missingCount = 0;
-                
-                data.records.forEach(record => {
-                    Object.values(record).forEach(value => {
-                        if (!value || value.trim() === '') {
-                            missingCount++;
-                        }
-                    });
-                });
-                
-                const missingPercentage = totalFields > 0 ? 
-                    Math.round((missingCount / totalFields) * 100) : 0;
-                missingFields.textContent = missingPercentage + '%';
-                
-                // Calculate data quality score
-                const qualityScore = 100 - missingPercentage;
-                let qualityLabel = 'Poor';
-                
-                if (qualityScore >= 90) {
-                    qualityLabel = 'Excellent';
-                } else if (qualityScore >= 80) {
-                    qualityLabel = 'Very Good';
-                } else if (qualityScore >= 70) {
-                    qualityLabel = 'Good';
-                } else if (qualityScore >= 50) {
-                    qualityLabel = 'Average';
-                }
-                
-                dataQuality.textContent = qualityLabel;
-            } else if (data.type === 'pdf') {
-                // For PDF files, we'll just show some basic info
-                recordsCount.textContent = 'N/A';
-                missingFields.textContent = 'N/A';
-                dataQuality.textContent = 'N/A';
-            }
-        }
-        
-        async function analyzeData() {
-            if (!parsedData) return;
+                const result = await response.json();
+                return result.candidates[0].content.parts[0].text;
+            },
             
-            // Show loader
-            loader.style.display = 'block';
-            qaResults.style.display = 'block';
-            qaResultsContent.textContent = 'Analyzing data...';
+            buildAnalysisPrompt(data) {
+                if (data.type === 'pdf') {
+                    return `Analyze this PDF content for data quality and provide insights: ${data.text}`;
+                }
+                
+                const sampleData = data.records.slice(0, 5);
+                return `
+Analyze this ${data.type} data for quality issues and provide detailed insights:
+
+Headers: ${data.headers.join(', ')}
+Total Records: ${data.records.length}
+Sample Data: ${JSON.stringify(sampleData, null, 2)}
+
+Please provide:
+1. Data quality assessment
+2. Identified issues
+3. Recommendations for improvement
+4. Overall quality score
+                `.trim();
+            },
             
-            try {
-                // Prepare data for GROQ API
-                let prompt = '';
+            displayAnalysisResults(results) {
+                // Convert markdown-like formatting to HTML
+                const htmlContent = results
+                    .replace(/^## (.*$)/gm, '<h2>$1</h2>')
+                    .replace(/^### (.*$)/gm, '<h3>$1</h3>')
+                    .replace(/^\*\*(.*?)\*\*/gm, '<strong>$1</strong>')
+                    .replace(/^- (.*$)/gm, '<li>$1</li>')
+                    .replace(/(<li>.*<\/li>)/gs, '<ul>$1</ul>')
+                    .replace(/\n\n/g, '</p><p>')
+                    .replace(/^(.*)$/gm, '<p>$1</p>')
+                    .replace(/<p><h/g, '<h')
+                    .replace(/<\/h([1-6])><\/p>/g, '</h$1>')
+                    .replace(/<p><ul>/g, '<ul>')
+                    .replace(/<\/ul><\/p>/g, '</ul>')
+                    .replace(/<p><\/p>/g, '');
                 
-                if (parsedData.type === 'csv' || parsedData.type === 'excel') {
-                    prompt = `Analyze the following data and provide an overview of its quality and any potential issues:\n\n`;
-                    prompt += `Fields: ${parsedData.headers.join(', ')}\n\n`;
-                    prompt += `Records count: ${parsedData.records.length}\n\n`;
-                    prompt += `Sample data:\n`;
-                    
-                    // Add sample data (first 5 records)
-                    const sampleRecords = parsedData.records.slice(0, 5);
-                    sampleRecords.forEach((record, index) => {
-                        prompt += `Record ${index + 1}:\n`;
-                        Object.entries(record).forEach(([key, value]) => {
-                            prompt += `- ${key}: ${value}\n`;
-                        });
-                        prompt += '\n';
-                    });
-                } else if (parsedData.type === 'pdf') {
-                    prompt = `Analyze the following PDF file content and provide a summary:\n\n${parsedData.text}`;
-                }
-                
-                // For development/testing environment, use mock data instead of actual API call
-                // This will prevent actual API calls during testing
-                const USE_MOCK_API = true;
-                
-                let analysisResult;
-                
-                if (USE_MOCK_API) {
-                    // Use mock data for analysis
-                    console.log('Using mock data for analysis');
-                    
-                    // Simulate API delay for a more realistic experience
-                    await new Promise(resolve => setTimeout(resolve, 1500));
-                    
-                    // Generate mock analysis result
-                    analysisResult = generateMockAnalysisResult(parsedData);
-                } else {
-                    // Call GROQ API with proper error handling
-                    try {
-                        const response = await fetch(GROQ_API_URL, {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json',
-                                'Authorization': `Bearer ${GROQ_API_KEY}`
-                            },
-                            body: JSON.stringify({
-                                model: GROQ_MODEL,
-                                messages: [
-                                    {
-                                        role: 'system',
-                                        content: 'You are a data quality inspection assistant. Analyze the provided data accurately and provide a detailed report on its quality and any potential issues.'
-                                    },
-                                    {
-                                        role: 'user',
-                                        content: prompt
-                                    }
-                                ],
-                                temperature: 0.7,
-                                max_tokens: 1024
-                            })
-                        });
-                        
-                        if (!response.ok) {
-                            const errorData = await response.json().catch(() => ({}));
-                            throw new Error(errorData.error?.message || `HTTP Error: ${response.status}`);
-                        }
-                        
-                        const data = await response.json();
-                        analysisResult = data.choices[0].message.content;
-                    } catch (apiError) {
-                        console.error('API Error:', apiError);
-                        throw new Error('Failed to connect to analysis service: ' + apiError.message);
-                    }
-                }
-                
-                // Display results
-                qaResultsContent.innerHTML = formatAnalysisResult(analysisResult);
-                
-            } catch (error) {
-                console.error('Error:', error);
-                qaResultsContent.innerHTML = `
-                    <div style="color: var(--danger-color); margin-bottom: 15px;">
-                        <strong>Error:</strong> ${error.message}
-                    </div>
-                    <div>
-                        <p>You can try again or check your internet connection.</p>
-                        <p>If the problem persists, please verify your API key or contact technical support.</p>
+                elements.qaResultsContent.innerHTML = htmlContent;
+            },
+            
+            displayAnalysisError(error) {
+                elements.qaResultsContent.innerHTML = `
+                    <div style="color: var(--danger-color); padding: 20px; text-align: center;">
+                        <h3>⚠️ Analysis Error</h3>
+                        <p><strong>Error:</strong> ${error.message}</p>
+                        <p>Please try again or check your connection.</p>
+                        <button class="btn btn-primary" onclick="eventHandlers.handleAnalysis()" style="margin-top: 16px;">
+                            Retry Analysis
+                        </button>
                     </div>
                 `;
-            } finally {
-                // Hide loader
-                loader.style.display = 'none';
-            }
-        }
-        
-        function formatAnalysisResult(result) {
-            // Convert line breaks to HTML
-            return result.replace(/\n/g, '<br>');
-        }
-        
-        function generateMockAnalysisResult(data) {
-            if (data.type === 'csv' || data.type === 'excel') {
-                return `## Data Quality Analysis Report
-
-### Overview
-- File type: ${data.type.toUpperCase()}
-- Records count: ${data.records.length}
-- Fields count: ${data.headers.length}
-
-### Field Analysis
-${data.headers.map(header => `- ${header}: Data type is appropriate`).join('\n')}
-
-### Potential Issues
-- Missing values found in some fields
-- Some fields may need better formatting
-
-### Recommendations
-1. Ensure all required data is complete
-2. Add validation rules before data entry
-3. Standardize data formatting (e.g., dates, numbers)
-
-### Overall Quality Score
-Quality: Good (78/100)`;
-            } else if (data.type === 'pdf') {
-                return `## PDF File Content Analysis
-
-### Content Summary
-The document contains textual information related to a report or official document.
-
-### Analysis
-- The document is well organized
-- Contains multiple paragraphs
-- May contain some tables or charts
-
-### Recommendations
-1. Extract numeric data from the document for easier analysis
-2. Organize information into a more structured format such as a database
-
-### Conclusion
-The content can be used for analysis purposes after further processing and organization.`;
-            }
-        }
-        
-        function formatFileSize(bytes) {
-            if (bytes === 0) return '0 Bytes';
+            },
             
-            const k = 1024;
-            const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
-            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            handleDragOver(event) {
+                event.preventDefault();
+                elements.uploadZone.classList.add('drag-over');
+            },
             
-            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+            handleDragLeave(event) {
+                event.preventDefault();
+                elements.uploadZone.classList.remove('drag-over');
+            },
+            
+            handleDrop(event) {
+                event.preventDefault();
+                elements.uploadZone.classList.remove('drag-over');
+                
+                const files = event.dataTransfer.files;
+                if (files.length > 0) {
+                    elements.fileInput.files = files;
+                    this.handleFileUpload({ target: { files } });
+                }
+            },
+            
+            exportReport() {
+                if (!appState.analysisResults) return;
+                
+                const reportData = {
+                    timestamp: new Date().toISOString(),
+                    fileName: appState.currentFiles[0]?.name || 'Unknown',
+                    analysis: appState.analysisResults,
+                    insights: appState.parsedData ? dataAnalyzer.calculateInsights(appState.parsedData) : null
+                };
+                
+                const blob = new Blob([JSON.stringify(reportData, null, 2)], {
+                    type: 'application/json'
+                });
+                
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `qa-report-${new Date().toISOString().split('T')[0]}.json`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+            }
+        };
+        
+        // Error Handling
+        window.addEventListener('error', (event) => {
+            console.error('Global error:', event.error);
+            utils.showMessage('error', 'An unexpected error occurred. Please refresh and try again.');
+        });
+        
+        window.addEventListener('unhandledrejection', (event) => {
+            console.error('Unhandled promise rejection:', event.reason);
+            utils.showMessage('error', 'A processing error occurred. Please try again.');
+            event.preventDefault();
+        });
+        
+        // Initialize Application
+        function initializeApp() {
+            // Event Listeners
+            elements.uploadBtn.addEventListener('click', () => elements.fileInput.click());
+            elements.fileInput.addEventListener('change', eventHandlers.handleFileUpload.bind(eventHandlers));
+            elements.analyzeBtn.addEventListener('click', eventHandlers.handleAnalysis.bind(eventHandlers));
+            elements.exportBtn.addEventListener('click', eventHandlers.exportReport.bind(eventHandlers));
+            
+            // Drag and Drop
+            elements.uploadZone.addEventListener('dragover', eventHandlers.handleDragOver.bind(eventHandlers));
+            elements.uploadZone.addEventListener('dragleave', eventHandlers.handleDragLeave.bind(eventHandlers));
+            elements.uploadZone.addEventListener('drop', eventHandlers.handleDrop.bind(eventHandlers));
+            
+            // Keyboard Navigation
+            elements.fileInput.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    elements.fileInput.click();
+                }
+            });
+            
+            // Accessibility Announcements
+            elements.qaResultsContent.setAttribute('aria-live', 'polite');
+            
+            console.log('Smart QA Agent initialized successfully');
         }
+        
+        // Start Application
+        document.addEventListener('DOMContentLoaded', initializeApp);
     </script>
 </body>
 </html>
