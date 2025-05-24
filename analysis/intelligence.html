@@ -139,6 +139,49 @@
             color: #667eea;
         }
 
+        /* Marketing Section Navigation */
+        .marketing-nav {
+            display: flex;
+            flex-wrap: wrap;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            margin-bottom: 30px;
+            gap: 5px;
+        }
+
+        .marketing-nav-btn {
+            flex: 1;
+            min-width: 140px;
+            padding: 8px 12px;
+            border: none;
+            background: transparent;
+            color: #666;
+            cursor: pointer;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .marketing-nav-btn.active {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .marketing-nav-btn:hover:not(.active) {
+            background: rgba(102, 126, 234, 0.1);
+            color: #667eea;
+        }
+
         /* Section Styling */
         .section {
             background: rgba(255, 255, 255, 0.95);
@@ -566,6 +609,14 @@
             .tools-grid {
                 grid-template-columns: 1fr;
             }
+
+            .marketing-nav {
+                flex-direction: column;
+            }
+
+            .marketing-nav-btn {
+                min-width: auto;
+            }
         }
 
         @media (max-width: 768px) {
@@ -840,52 +891,254 @@
                 </section>
             </div>
 
-            <!-- Smart Marketing & CRM Section -->
+            <!-- Enhanced Smart Marketing & CRM Section -->
             <section id="marketing-section" class="section">
-                <h2 class="section-title" data-en="Smart Marketing & CRM" data-ar="التسويق الذكي والعملاء">Smart Marketing & CRM</h2>
-                <p class="section-subtitle" data-en="Marketing insights and CRM assistant powered by AI" data-ar="رؤى التسويق ومساعد إدارة العملاء بالذكاء الاصطناعي">Marketing insights and CRM assistant powered by AI</p>
+                <h2 class="section-title" data-en="🚀 Smart Marketing & CRM Suite" data-ar="🚀 مجموعة التسويق الذكي والعملاء">🚀 Smart Marketing & CRM Suite</h2>
+                <p class="section-subtitle" data-en="Complete AI-powered marketing ecosystem for Saudi market and global business" data-ar="نظام تسويقي متكامل بالذكاء الاصطناعي للسوق السعودي والأعمال العالمية">Complete AI-powered marketing ecosystem for Saudi market and global business</p>
                 
-                <!-- Features -->
-                <div class="features">
-                    <h4 data-en="Features:" data-ar="الميزات:">Features:</h4>
-                    <div class="feature-list">
-                        <span class="feature-tag" data-en="Campaign Suggestions" data-ar="اقتراحات الحملات">Campaign Suggestions</span>
-                        <span class="feature-tag" data-en="Sentiment Analysis" data-ar="تحليل المشاعر">Sentiment Analysis</span>
-                        <span class="feature-tag" data-en="CRM Content Helper" data-ar="مساعد محتوى العملاء">CRM Content Helper</span>
+                <!-- Marketing Navigation -->
+                <div class="marketing-nav">
+                    <button class="marketing-nav-btn active" onclick="switchMarketingTab('customer-analysis')" data-en="👥 Customer Analysis" data-ar="👥 تحليل العملاء">
+                        👥 Customer Analysis
+                    </button>
+                    <button class="marketing-nav-btn" onclick="switchMarketingTab('content-marketing')" data-en="✍️ Content Marketing" data-ar="✍️ تسويق المحتوى">
+                        ✍️ Content Marketing
+                    </button>
+                    <button class="marketing-nav-btn" onclick="switchMarketingTab('advertising-campaigns')" data-en="📢 Advertising" data-ar="📢 الإعلانات">
+                        📢 Advertising
+                    </button>
+                    <button class="marketing-nav-btn" onclick="switchMarketingTab('email-marketing')" data-en="📧 Email Marketing" data-ar="📧 التسويق بالبريد">
+                        📧 Email Marketing
+                    </button>
+                    <button class="marketing-nav-btn" onclick="switchMarketingTab('consulting-marketing')" data-en="🏢 B2B Marketing" data-ar="🏢 التسويق للشركات">
+                        🏢 B2B Marketing
+                    </button>
+                    <button class="marketing-nav-btn" onclick="switchMarketingTab('social-media')" data-en="📱 Social Media" data-ar="📱 وسائل التواصل">
+                        📱 Social Media
+                    </button>
+                    <button class="marketing-nav-btn" onclick="switchMarketingTab('saudi-marketing')" data-en="🇸🇦 Saudi Market" data-ar="🇸🇦 السوق السعودي">
+                        🇸🇦 Saudi Market
+                    </button>
+                </div>
+
+                <!-- Customer Analysis Tab -->
+                <div id="customer-analysis-tab" class="tab-content active">
+                    <h3 class="section-title" data-en="👥 Customer & Market Analysis Tools" data-ar="👥 أدوات تحليل العملاء والسوق">👥 Customer & Market Analysis Tools</h3>
+                    
+                    <div class="tools-grid">
+                        <div class="tool-card" onclick="selectMarketingTool('customer-persona')">
+                            <div class="tool-title">🎯 Customer Persona Generator</div>
+                            <div class="tool-description">Create detailed ideal customer profiles with demographics, behavior patterns, and preferences</div>
+                        </div>
+                        <div class="tool-card" onclick="selectMarketingTool('competitor-analysis')">
+                            <div class="tool-title">🔍 Competitor Behavior Analyzer</div>
+                            <div class="tool-description">Analyze competitor strategies, pricing, positioning, and market opportunities</div>
+                        </div>
+                        <div class="tool-card" onclick="selectMarketingTool('customer-journey')">
+                            <div class="tool-title">🗺️ Customer Journey Mapping</div>
+                            <div class="tool-description">Map complete customer journey from awareness to retention with touchpoint analysis</div>
+                        </div>
+                        <div class="tool-card" onclick="selectMarketingTool('market-opportunity')">
+                            <div class="tool-title">💎 Market Opportunity Assessor</div>
+                            <div class="tool-description">Identify and evaluate market opportunities with risk-reward analysis</div>
+                        </div>
+                        <div class="tool-card" onclick="selectMarketingTool('saudi-trends')">
+                            <div class="tool-title">📊 Saudi Market Trends Analyzer</div>
+                            <div class="tool-description">Analyze current trends and consumer behavior specifically in Saudi market</div>
+                        </div>
+                        <div class="tool-card" onclick="selectMarketingTool('sentiment-reviews')">
+                            <div class="tool-title">💬 Customer Sentiment from Reviews</div>
+                            <div class="tool-description">Analyze customer sentiment and feedback from reviews and social mentions</div>
+                        </div>
                     </div>
                 </div>
 
-                <!-- Input Form -->
+                <!-- Content Marketing Tab -->
+                <div id="content-marketing-tab" class="tab-content">
+                    <h3 class="section-title" data-en="✍️ Content Marketing Creation Tools" data-ar="✍️ أدوات إنشاء المحتوى التسويقي">✍️ Content Marketing Creation Tools</h3>
+                    
+                    <div class="tools-grid">
+                        <div class="tool-card" onclick="selectMarketingTool('arabic-content')">
+                            <div class="tool-title">🇸🇦 Arabic Marketing Content Generator</div>
+                            <div class="tool-description">Create compelling marketing content in Arabic optimized for Saudi culture and market</div>
+                        </div>
+                        <div class="tool-card" onclick="selectMarketingTool('persuasive-ads')">
+                            <div class="tool-title">🎯 Persuasive Ad Copy Writer</div>
+                            <div class="tool-description">Write high-converting ad copy and persuasive marketing messages</div>
+                        </div>
+                        <div class="tool-card" onclick="selectMarketingTool('social-content')">
+                            <div class="tool-title">📱 Social Media Content Generator</div>
+                            <div class="tool-description">Generate engaging content for all social media platforms with optimal timing</div>
+                        </div>
+                        <div class="tool-card" onclick="selectMarketingTool('storytelling')">
+                            <div class="tool-title">📖 Marketing Storytelling Creator</div>
+                            <div class="tool-description">Craft compelling brand stories and narrative-driven marketing content</div>
+                        </div>
+                        <div class="tool-card" onclick="selectMarketingTool('headline-generator')">
+                            <div class="tool-title">⚡ Catchy Headlines Generator</div>
+                            <div class="tool-description">Generate attention-grabbing headlines and titles for maximum engagement</div>
+                        </div>
+                        <div class="tool-card" onclick="selectMarketingTool('seo-content')">
+                            <div class="tool-title">🔍 SEO Content Optimizer</div>
+                            <div class="tool-description">Optimize content for search engines with keyword research and SEO recommendations</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Advertising Campaigns Tab -->
+                <div id="advertising-campaigns-tab" class="tab-content">
+                    <h3 class="section-title" data-en="📢 Advertising Campaign Tools" data-ar="📢 أدوات الحملات الإعلانية">📢 Advertising Campaign Tools</h3>
+                    
+                    <div class="tools-grid">
+                        <div class="tool-card" onclick="selectMarketingTool('google-ads')">
+                            <div class="tool-title">🎯 Google Ads Campaign Generator</div>
+                            <div class="tool-description">Create optimized Google Ads campaigns with keywords, ad copy, and targeting strategies</div>
+                        </div>
+                        <div class="tool-card" onclick="selectMarketingTool('social-ads')">
+                            <div class="tool-title">📱 Social Media Ad Designer</div>
+                            <div class="tool-description">Design and optimize ads for Facebook, Instagram, Twitter, and LinkedIn platforms</div>
+                        </div>
+                        <div class="tool-card" onclick="selectMarketingTool('campaign-performance')">
+                            <div class="tool-title">📊 Campaign Performance Analyzer</div>
+                            <div class="tool-description">Analyze campaign performance metrics and optimization recommendations</div>
+                        </div>
+                        <div class="tool-card" onclick="selectMarketingTool('ab-testing')">
+                            <div class="tool-title">🧪 A/B Testing Tool for Ads</div>
+                            <div class="tool-description">Design and analyze A/B tests for advertisements to maximize conversion rates</div>
+                        </div>
+                        <div class="tool-card" onclick="selectMarketingTool('digital-strategy')">
+                            <div class="tool-title">🌐 Digital Marketing Strategy Generator</div>
+                            <div class="tool-description">Create comprehensive digital marketing strategies across all channels</div>
+                        </div>
+                        <div class="tool-card" onclick="selectMarketingTool('roi-calculator')">
+                            <div class="tool-title">💰 ROI Calculator & Forecaster</div>
+                            <div class="tool-description">Calculate return on investment and forecast campaign performance</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Email Marketing Tab -->
+                <div id="email-marketing-tab" class="tab-content">
+                    <h3 class="section-title" data-en="📧 Email Marketing Automation Tools" data-ar="📧 أدوات التسويق الآلي بالبريد الإلكتروني">📧 Email Marketing Automation Tools</h3>
+                    
+                    <div class="tools-grid">
+                        <div class="tool-card" onclick="selectMarketingTool('personalized-emails')">
+                            <div class="tool-title">💌 Personalized Email Campaign Generator</div>
+                            <div class="tool-description">Create personalized email campaigns with dynamic content and segmentation</div>
+                        </div>
+                        <div class="tool-card" onclick="selectMarketingTool('customer-segmentation')">
+                            <div class="tool-title">🎯 Customer List Segmentation Tool</div>
+                            <div class="tool-description">Segment customer lists based on behavior, demographics, and purchase history</div>
+                        </div>
+                        <div class="tool-card" onclick="selectMarketingTool('email-subjects')">
+                            <div class="tool-title">✨ Compelling Email Subject Generator</div>
+                            <div class="tool-description">Generate high-open-rate email subject lines that avoid spam filters</div>
+                        </div>
+                        <div class="tool-card" onclick="selectMarketingTool('email-analytics')">
+                            <div class="tool-title">📈 Email Performance Analyzer</div>
+                            <div class="tool-description">Analyze email open rates, click-through rates, and engagement metrics</div>
+                        </div>
+                        <div class="tool-card" onclick="selectMarketingTool('email-automation')">
+                            <div class="tool-title">🤖 Automated Follow-up Sequences</div>
+                            <div class="tool-description">Create automated email sequences for nurturing leads and customer retention</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- B2B/Consulting Marketing Tab -->
+                <div id="consulting-marketing-tab" class="tab-content">
+                    <h3 class="section-title" data-en="🏢 B2B & Consulting Marketing Tools" data-ar="🏢 أدوات التسويق للشركات والاستشارات">🏢 B2B & Consulting Marketing Tools</h3>
+                    
+                    <div class="tools-grid">
+                        <div class="tool-card" onclick="selectMarketingTool('case-studies')">
+                            <div class="tool-title">📋 Marketing Case Study Generator</div>
+                            <div class="tool-description">Create compelling case studies showcasing your business success stories</div>
+                        </div>
+                        <div class="tool-card" onclick="selectMarketingTool('marketing-presentations')">
+                            <div class="tool-title">📊 Marketing Presentation Creator</div>
+                            <div class="tool-description">Generate professional marketing presentations and pitch decks</div>
+                        </div>
+                        <div class="tool-card" onclick="selectMarketingTool('technical-content')">
+                            <div class="tool-title">🔧 Simplified Technical Content Creator</div>
+                            <div class="tool-description">Convert complex technical information into easy-to-understand marketing content</div>
+                        </div>
+                        <div class="tool-card" onclick="selectMarketingTool('b2b-needs')">
+                            <div class="tool-title">🎯 B2B Customer Needs Analyzer</div>
+                            <div class="tool-description">Analyze and understand enterprise customer needs and pain points</div>
+                        </div>
+                        <div class="tool-card" onclick="selectMarketingTool('strategic-marketing')">
+                            <div class="tool-title">🗺️ Strategic Marketing Plan Generator</div>
+                            <div class="tool-description">Create comprehensive strategic marketing plans for business growth</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Social Media Tab -->
+                <div id="social-media-tab" class="tab-content">
+                    <h3 class="section-title" data-en="📱 Social Media Marketing Analytics" data-ar="📱 تحليلات التسويق عبر وسائل التواصل">📱 Social Media Marketing Analytics</h3>
+                    
+                    <div class="tools-grid">
+                        <div class="tool-card" onclick="selectMarketingTool('audience-analysis')">
+                            <div class="tool-title">👥 Social Media Audience Analyzer</div>
+                            <div class="tool-description">Analyze social media audience demographics, interests, and engagement patterns</div>
+                        </div>
+                        <div class="tool-card" onclick="selectMarketingTool('influencer-finder')">
+                            <div class="tool-title">⭐ Suitable Influencer Finder</div>
+                            <div class="tool-description">Find and evaluate influencers that match your brand and target audience</div>
+                        </div>
+                        <div class="tool-card" onclick="selectMarketingTool('posting-schedule')">
+                            <div class="tool-title">📅 Optimized Posting Schedule Generator</div>
+                            <div class="tool-description">Generate optimal posting schedules based on audience activity and engagement</div>
+                        </div>
+                        <div class="tool-card" onclick="selectMarketingTool('hashtag-tracker')">
+                            <div class="tool-title"># Trending Hashtag Tracker</div>
+                            <div class="tool-description">Track and analyze trending hashtags relevant to your industry and audience</div>
+                        </div>
+                        <div class="tool-card" onclick="selectMarketingTool('brand-monitoring')">
+                            <div class="tool-title">🔍 Brand Conversation Monitor</div>
+                            <div class="tool-description">Monitor and analyze conversations about your brand across social platforms</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Saudi Market Tab -->
+                <div id="saudi-marketing-tab" class="tab-content">
+                    <h3 class="section-title" data-en="🇸🇦 Saudi Market Specialized Tools" data-ar="🇸🇦 أدوات متخصصة للسوق السعودي">🇸🇦 Saudi Market Specialized Tools</h3>
+                    
+                    <div class="tools-grid">
+                        <div class="tool-card" onclick="selectMarketingTool('arabic-keywords')">
+                            <div class="tool-title">🔍 Arabic Keywords Analyzer</div>
+                            <div class="tool-description">Analyze and research Arabic keywords for Saudi market SEO and advertising</div>
+                        </div>
+                        <div class="tool-card" onclick="selectMarketingTool('saudi-culture-content')">
+                            <div class="tool-title">🕌 Saudi Culture-Appropriate Content</div>
+                            <div class="tool-description">Generate marketing content that aligns with Saudi culture and values</div>
+                        </div>
+                        <div class="tool-card" onclick="selectMarketingTool('seasonal-marketing')">
+                            <div class="tool-title">🌙 Seasonal & Holiday Marketing Analyzer</div>
+                            <div class="tool-description">Analyze marketing opportunities for Ramadan, Eid, National Day, and other events</div>
+                        </div>
+                        <div class="tool-card" onclick="selectMarketingTool('saudi-search-trends')">
+                            <div class="tool-title">📈 Saudi Search Trends Analyzer</div>
+                            <div class="tool-description">Analyze search trends and behavior patterns specific to Saudi Arabia</div>
+                        </div>
+                        <div class="tool-card" onclick="selectMarketingTool('local-marketing')">
+                            <div class="tool-title">📍 Local Marketing Optimizer</div>
+                            <div class="tool-description">Optimize marketing strategies for local Saudi markets and regions</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Universal Marketing Form -->
                 <form id="marketing-form" onsubmit="handleMarketingSubmit(event)">
-                    <div class="input-group">
-                        <label for="marketing-task" data-en="Marketing Task:" data-ar="مهمة التسويق:">Marketing Task:</label>
-                        <select id="marketing-task" onchange="updateMarketingForm()">
-                            <option value="campaign" data-en="Generate Campaign Ideas" data-ar="توليد أفكار الحملات">Generate Campaign Ideas</option>
-                            <option value="sentiment" data-en="Analyze Customer Sentiment" data-ar="تحليل مشاعر العملاء">Analyze Customer Sentiment</option>
-                            <option value="crm-content" data-en="Create CRM Content" data-ar="إنشاء محتوى إدارة العملاء">Create CRM Content</option>
-                            <option value="market-analysis" data-en="Market Analysis" data-ar="تحليل السوق">Market Analysis</option>
-                        </select>
+                    <div id="marketing-form-content">
+                        <!-- Dynamic form content will be inserted here -->
                     </div>
-
-                    <div class="input-group">
-                        <label for="marketing-industry" data-en="Industry/Product:" data-ar="الصناعة/المنتج:">Industry/Product:</label>
-                        <input type="text" id="marketing-industry" placeholder="e.g., Tech startup, Fashion brand, etc." data-placeholder-en="e.g., Tech startup, Fashion brand, etc." data-placeholder-ar="مثل: شركة تقنية ناشئة، علامة أزياء، إلخ">
-                    </div>
-
-                    <div class="input-group">
-                        <label for="marketing-audience" data-en="Target Audience:" data-ar="الجمهور المستهدف:">Target Audience:</label>
-                        <input type="text" id="marketing-audience" placeholder="e.g., Young adults 18-30, Business professionals, etc." data-placeholder-en="e.g., Young adults 18-30, Business professionals, etc." data-placeholder-ar="مثل: الشباب 18-30، المهنيين، إلخ">
-                    </div>
-
-                    <div class="input-group" id="marketing-content-group">
-                        <label for="marketing-content" data-en="Additional Context:" data-ar="السياق الإضافي:">Additional Context:</label>
-                        <textarea id="marketing-content" placeholder="Provide any additional details, customer feedback, or specific requirements..." data-placeholder-en="Provide any additional details, customer feedback, or specific requirements..." data-placeholder-ar="قدم أي تفاصيل إضافية أو ملاحظات العملاء أو متطلبات محددة..."></textarea>
-                    </div>
-
+                    <input type="hidden" id="selected-marketing-tool" value="customer-persona">
                     <button type="submit" class="btn" data-en="Generate Marketing Insights" data-ar="توليد رؤى التسويق">Generate Marketing Insights</button>
                 </form>
 
-                <!-- Output Area -->
+                <!-- Marketing Output Area -->
                 <div id="marketing-output" class="output-area">
                     <div id="marketing-loading" class="loading hidden">
                         <div class="spinner"></div>
@@ -906,6 +1159,8 @@
         let currentLanguage = 'en';
         let selectedResearchTool = 'paper-search';
         let selectedDevelopmentTool = 'idea-generator';
+        let selectedMarketingTool = 'customer-persona';
+        let currentMarketingTab = 'customer-analysis';
         
         // Language Management
         function setLanguage(lang) {
@@ -947,6 +1202,31 @@
             console.log(`Switched to ${tabName} tab`);
         }
 
+        // Marketing tab switching
+        function switchMarketingTab(tabName) {
+            currentMarketingTab = tabName;
+            
+            // Update nav buttons
+            document.querySelectorAll('.marketing-nav-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            // Hide all marketing tab contents
+            document.querySelectorAll('#marketing-section .tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            
+            // Show selected marketing tab
+            document.getElementById(tabName + '-tab').classList.add('active');
+            
+            // Update form based on first tool in the tab
+            const firstTool = document.querySelector(`#${tabName}-tab .tool-card`);
+            if (firstTool) {
+                firstTool.click();
+            }
+            
+            console.log(`Switched to ${tabName} marketing tab`);
+        }
+
         // Research tool selection
         function selectResearchTool(tool) {
             // Update active tool card
@@ -973,6 +1253,231 @@
             document.getElementById('selected-development-tool').value = tool;
             
             console.log(`Selected development tool: ${tool}`);
+        }
+
+        // Marketing tool selection
+        function selectMarketingTool(tool) {
+            // Update active tool card within current tab
+            document.querySelectorAll(`#${currentMarketingTab}-tab .tool-card`).forEach(card => {
+                card.classList.remove('active');
+            });
+            event.currentTarget.classList.add('active');
+            
+            selectedMarketingTool = tool;
+            document.getElementById('selected-marketing-tool').value = tool;
+            
+            // Update form based on selected tool
+            updateMarketingForm(tool);
+            
+            console.log(`Selected marketing tool: ${tool}`);
+        }
+
+        // Update marketing form based on selected tool
+        function updateMarketingForm(tool) {
+            const formContent = document.getElementById('marketing-form-content');
+            let formHTML = '';
+
+            // Common fields that most tools use
+            const commonFields = {
+                industry: `
+                    <div class="input-group">
+                        <label for="marketing-industry" data-en="Industry/Business Type:" data-ar="الصناعة/نوع العمل:">Industry/Business Type:</label>
+                        <input type="text" id="marketing-industry" placeholder="e.g., Tech startup, Fashion brand, Restaurant, etc." data-placeholder-en="e.g., Tech startup, Fashion brand, Restaurant, etc." data-placeholder-ar="مثل: شركة تقنية ناشئة، علامة أزياء، مطعم، إلخ">
+                    </div>
+                `,
+                audience: `
+                    <div class="input-group">
+                        <label for="marketing-audience" data-en="Target Audience:" data-ar="الجمهور المستهدف:">Target Audience:</label>
+                        <input type="text" id="marketing-audience" placeholder="e.g., Young adults 18-30, Business professionals, etc." data-placeholder-en="e.g., Young adults 18-30, Business professionals, etc." data-placeholder-ar="مثل: الشباب 18-30، المهنيين، إلخ">
+                    </div>
+                `,
+                budget: `
+                    <div class="input-group">
+                        <label for="marketing-budget" data-en="Marketing Budget (Optional):" data-ar="ميزانية التسويق (اختياري):">Marketing Budget (Optional):</label>
+                        <select id="marketing-budget">
+                            <option value="">Select Budget Range</option>
+                            <option value="under-1k">Under $1,000</option>
+                            <option value="1k-5k">$1,000 - $5,000</option>
+                            <option value="5k-15k">$5,000 - $15,000</option>
+                            <option value="15k-50k">$15,000 - $50,000</option>
+                            <option value="50k-100k">$50,000 - $100,000</option>
+                            <option value="over-100k">Over $100,000</option>
+                        </select>
+                    </div>
+                `,
+                goals: `
+                    <div class="input-group">
+                        <label for="marketing-goals" data-en="Marketing Goals:" data-ar="أهداف التسويق:">Marketing Goals:</label>
+                        <select id="marketing-goals">
+                            <option value="brand-awareness">Brand Awareness</option>
+                            <option value="lead-generation">Lead Generation</option>
+                            <option value="sales-conversion">Sales Conversion</option>
+                            <option value="customer-retention">Customer Retention</option>
+                            <option value="market-expansion">Market Expansion</option>
+                            <option value="product-launch">Product Launch</option>
+                        </select>
+                    </div>
+                `
+            };
+
+            // Tool-specific form configurations
+            switch(tool) {
+                case 'customer-persona':
+                    formHTML = commonFields.industry + commonFields.audience + `
+                        <div class="input-group">
+                            <label for="marketing-context" data-en="Business Context:" data-ar="سياق العمل:">Business Context:</label>
+                            <textarea id="marketing-context" placeholder="Describe your business, products/services, and current customer base..." data-placeholder-en="Describe your business, products/services, and current customer base..." data-placeholder-ar="اوصف عملك والمنتجات/الخدمات وقاعدة العملاء الحالية..."></textarea>
+                        </div>
+                    `;
+                    break;
+
+                case 'competitor-analysis':
+                    formHTML = commonFields.industry + `
+                        <div class="input-group">
+                            <label for="marketing-competitors" data-en="Competitor Names/URLs:" data-ar="أسماء/روابط المنافسين:">Competitor Names/URLs:</label>
+                            <textarea id="marketing-competitors" placeholder="List your main competitors (names, websites, or describe their business model)..." data-placeholder-en="List your main competitors (names, websites, or describe their business model)..." data-placeholder-ar="اذكر منافسيك الرئيسيين (الأسماء، المواقع، أو اوصف نموذج أعمالهم)..."></textarea>
+                        </div>
+                        <div class="input-group">
+                            <label for="marketing-context" data-en="Analysis Focus:" data-ar="تركيز التحليل:">Analysis Focus:</label>
+                            <select id="marketing-focus">
+                                <option value="pricing">Pricing Strategy</option>
+                                <option value="marketing">Marketing Approach</option>
+                                <option value="products">Product/Service Offering</option>
+                                <option value="positioning">Market Positioning</option>
+                                <option value="strengths-weaknesses">Strengths & Weaknesses</option>
+                                <option value="comprehensive">Comprehensive Analysis</option>
+                            </select>
+                        </div>
+                    `;
+                    break;
+
+                case 'customer-journey':
+                    formHTML = commonFields.industry + commonFields.audience + `
+                        <div class="input-group">
+                            <label for="marketing-product" data-en="Product/Service:" data-ar="المنتج/الخدمة:">Product/Service:</label>
+                            <input type="text" id="marketing-product" placeholder="Describe your main product or service">
+                        </div>
+                        <div class="input-group">
+                            <label for="marketing-context" data-en="Customer Touchpoints:" data-ar="نقاط التفاعل مع العملاء:">Customer Touchpoints:</label>
+                            <textarea id="marketing-context" placeholder="Describe how customers currently discover and interact with your business..." data-placeholder-en="Describe how customers currently discover and interact with your business..." data-placeholder-ar="اوصف كيف يكتشف العملاء ويتفاعلون مع عملك حالياً..."></textarea>
+                        </div>
+                    `;
+                    break;
+
+                case 'market-opportunity':
+                    formHTML = commonFields.industry + `
+                        <div class="input-group">
+                            <label for="marketing-location" data-en="Target Market/Location:" data-ar="السوق المستهدف/الموقع:">Target Market/Location:</label>
+                            <select id="marketing-location">
+                                <option value="saudi-arabia">Saudi Arabia</option>
+                                <option value="gcc">GCC Countries</option>
+                                <option value="mena">MENA Region</option>
+                                <option value="global">Global Market</option>
+                                <option value="local">Local/City</option>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <label for="marketing-context" data-en="Business Idea/Opportunity:" data-ar="فكرة العمل/الفرصة:">Business Idea/Opportunity:</label>
+                            <textarea id="marketing-context" placeholder="Describe the business opportunity or market gap you want to explore..." data-placeholder-en="Describe the business opportunity or market gap you want to explore..." data-placeholder-ar="اوصف فرصة العمل أو الفجوة السوقية التي تريد استكشافها..."></textarea>
+                        </div>
+                    `;
+                    break;
+
+                case 'arabic-content':
+                    formHTML = commonFields.industry + commonFields.audience + `
+                        <div class="input-group">
+                            <label for="marketing-content-type" data-en="Content Type:" data-ar="نوع المحتوى:">Content Type:</label>
+                            <select id="marketing-content-type">
+                                <option value="social-media">Social Media Posts</option>
+                                <option value="blog-articles">Blog Articles</option>
+                                <option value="product-descriptions">Product Descriptions</option>
+                                <option value="email-campaigns">Email Campaigns</option>
+                                <option value="website-copy">Website Copy</option>
+                                <option value="press-releases">Press Releases</option>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <label for="marketing-context" data-en="Content Topic/Message:" data-ar="موضوع/رسالة المحتوى:">Content Topic/Message:</label>
+                            <textarea id="marketing-context" placeholder="Describe what you want to communicate and any specific requirements..." data-placeholder-en="Describe what you want to communicate and any specific requirements..." data-placeholder-ar="اوصف ما تريد توصيله وأي متطلبات محددة..."></textarea>
+                        </div>
+                    `;
+                    break;
+
+                case 'google-ads':
+                    formHTML = commonFields.industry + commonFields.audience + commonFields.budget + `
+                        <div class="input-group">
+                            <label for="marketing-keywords" data-en="Target Keywords:" data-ar="الكلمات المفتاحية المستهدفة:">Target Keywords:</label>
+                            <input type="text" id="marketing-keywords" placeholder="e.g., digital marketing, web design, consulting services">
+                        </div>
+                        <div class="input-group">
+                            <label for="marketing-context" data-en="Campaign Objective:" data-ar="هدف الحملة:">Campaign Objective:</label>
+                            <select id="marketing-objective">
+                                <option value="website-traffic">Drive Website Traffic</option>
+                                <option value="lead-generation">Generate Leads</option>
+                                <option value="sales">Increase Sales</option>
+                                <option value="brand-awareness">Build Brand Awareness</option>
+                                <option value="app-downloads">App Downloads</option>
+                            </select>
+                        </div>
+                    `;
+                    break;
+
+                case 'personalized-emails':
+                    formHTML = commonFields.industry + commonFields.audience + `
+                        <div class="input-group">
+                            <label for="marketing-email-type" data-en="Email Campaign Type:" data-ar="نوع حملة البريد الإلكتروني:">Email Campaign Type:</label>
+                            <select id="marketing-email-type">
+                                <option value="welcome">Welcome Series</option>
+                                <option value="nurture">Lead Nurturing</option>
+                                <option value="promotional">Promotional Campaign</option>
+                                <option value="retention">Customer Retention</option>
+                                <option value="reactivation">Win-back Campaign</option>
+                                <option value="newsletter">Newsletter</option>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <label for="marketing-context" data-en="Email Content/Offer:" data-ar="محتوى/عرض البريد الإلكتروني:">Email Content/Offer:</label>
+                            <textarea id="marketing-context" placeholder="Describe what you want to promote or communicate in your email..." data-placeholder-en="Describe what you want to promote or communicate in your email..." data-placeholder-ar="اوصف ما تريد الترويج له أو توصيله في بريدك الإلكتروني..."></textarea>
+                        </div>
+                    `;
+                    break;
+
+                case 'saudi-culture-content':
+                    formHTML = commonFields.industry + `
+                        <div class="input-group">
+                            <label for="marketing-occasion" data-en="Cultural Context/Occasion:" data-ar="السياق الثقافي/المناسبة:">Cultural Context/Occasion:</label>
+                            <select id="marketing-occasion">
+                                <option value="ramadan">Ramadan</option>
+                                <option value="eid">Eid Celebrations</option>
+                                <option value="national-day">Saudi National Day</option>
+                                <option value="vision2030">Vision 2030</option>
+                                <option value="general">General Saudi Culture</option>
+                                <option value="business">Saudi Business Culture</option>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <label for="marketing-context" data-en="Message/Campaign Goal:" data-ar="الرسالة/هدف الحملة:">Message/Campaign Goal:</label>
+                            <textarea id="marketing-context" placeholder="Describe your marketing message and how you want to connect with Saudi culture..." data-placeholder-en="Describe your marketing message and how you want to connect with Saudi culture..." data-placeholder-ar="اوصف رسالتك التسويقية وكيف تريد التواصل مع الثقافة السعودية..."></textarea>
+                        </div>
+                    `;
+                    break;
+
+                default:
+                    // Default form for other tools
+                    formHTML = commonFields.industry + commonFields.audience + `
+                        <div class="input-group">
+                            <label for="marketing-context" data-en="Additional Context:" data-ar="السياق الإضافي:">Additional Context:</label>
+                            <textarea id="marketing-context" placeholder="Provide any additional details, requirements, or specific information..." data-placeholder-en="Provide any additional details, requirements, or specific information..." data-placeholder-ar="قدم أي تفاصيل إضافية أو متطلبات أو معلومات محددة..."></textarea>
+                        </div>
+                    `;
+            }
+
+            formContent.innerHTML = formHTML;
+            
+            // Update placeholders and labels for current language
+            if (currentLanguage === 'ar') {
+                setLanguage('ar');
+            }
         }
 
         // File Upload Handler
@@ -1075,7 +1580,248 @@
             }
         }
 
-        // Generate research prompts based on selected tool
+        // Enhanced Marketing Section Handler
+        async function handleMarketingSubmit(event) {
+            event.preventDefault();
+            
+            const tool = selectedMarketingTool;
+            const formData = getMarketingFormData();
+            
+            // Validate required fields
+            if (!formData.industry && !formData.context) {
+                alert(currentLanguage === 'en' ? 'Please fill in the required fields.' : 'يرجى ملء الحقول المطلوبة.');
+                return;
+            }
+            
+            showLoading('marketing');
+            
+            const prompt = generateMarketingPrompt(tool, formData);
+            
+            console.log('Marketing Request:', {
+                tool: tool,
+                tab: currentMarketingTab,
+                formData: formData
+            });
+            
+            try {
+                const result = await callGeminiAPI(prompt, 'marketing');
+                displayEnhancedResult('marketing', result, tool);
+            } catch (error) {
+                console.error('Marketing API Error:', error);
+                displayError('marketing', error.message);
+            }
+        }
+
+        // Get marketing form data
+        function getMarketingFormData() {
+            return {
+                industry: document.getElementById('marketing-industry')?.value || '',
+                audience: document.getElementById('marketing-audience')?.value || '',
+                context: document.getElementById('marketing-context')?.value || '',
+                budget: document.getElementById('marketing-budget')?.value || '',
+                goals: document.getElementById('marketing-goals')?.value || '',
+                competitors: document.getElementById('marketing-competitors')?.value || '',
+                focus: document.getElementById('marketing-focus')?.value || '',
+                product: document.getElementById('marketing-product')?.value || '',
+                location: document.getElementById('marketing-location')?.value || '',
+                contentType: document.getElementById('marketing-content-type')?.value || '',
+                keywords: document.getElementById('marketing-keywords')?.value || '',
+                objective: document.getElementById('marketing-objective')?.value || '',
+                emailType: document.getElementById('marketing-email-type')?.value || '',
+                occasion: document.getElementById('marketing-occasion')?.value || ''
+            };
+        }
+
+        // Generate marketing prompts based on selected tool
+        function generateMarketingPrompt(tool, data) {
+            const baseContext = `
+            Industry: ${data.industry}
+            Target Audience: ${data.audience}
+            Budget: ${data.budget}
+            Location: ${data.location}
+            Context: ${data.context}
+            `;
+
+            switch(tool) {
+                case 'customer-persona':
+                    return `As an expert customer research analyst and persona development specialist, create comprehensive customer personas.
+
+${baseContext}
+
+Generate:
+1. 3 Detailed Customer Personas (Primary, Secondary, Tertiary)
+2. Demographics and Psychographics for each persona
+3. Pain Points and Challenges
+4. Goals and Motivations
+5. Preferred Communication Channels
+6. Buying Behavior and Decision Factors
+7. Content Preferences and Media Consumption
+8. Objections and Concerns
+9. Messaging Strategies for each persona
+
+Provide actionable insights for targeting and engagement strategies.`;
+
+                case 'competitor-analysis':
+                    return `As a competitive intelligence analyst, conduct comprehensive competitor analysis.
+
+${baseContext}
+Competitors: ${data.competitors}
+Analysis Focus: ${data.focus}
+
+Analyze and provide:
+1. Competitor Strengths and Weaknesses Analysis
+2. Pricing Strategy Comparison
+3. Marketing and Positioning Analysis
+4. Product/Service Differentiation
+5. Target Audience Overlap Assessment
+6. Digital Presence and Social Media Analysis
+7. Market Share and Positioning Map
+8. Opportunities and Threats Assessment
+9. Competitive Advantage Recommendations
+
+Include specific actionable strategies to outperform competitors.`;
+
+                case 'customer-journey':
+                    return `As a customer experience specialist, map comprehensive customer journey.
+
+${baseContext}
+Product/Service: ${data.product}
+
+Create:
+1. Customer Journey Stages (Awareness to Advocacy)
+2. Touchpoints and Interactions at each stage
+3. Customer Emotions and Mindset
+4. Pain Points and Friction Areas
+5. Opportunities for Improvement
+6. Recommended Actions and Optimizations
+7. Key Performance Indicators (KPIs)
+8. Channel Strategy for each stage
+9. Personalization Opportunities
+
+Provide actionable journey optimization recommendations.`;
+
+                case 'market-opportunity':
+                    return `As a market research analyst, assess market opportunities and potential.
+
+${baseContext}
+
+Evaluate:
+1. Market Size and Growth Potential
+2. Market Entry Strategy and Barriers
+3. Target Segments and Niches
+4. Competitive Landscape Assessment
+5. Revenue Potential and Business Model
+6. Risk Assessment and Mitigation
+7. Investment Requirements and ROI
+8. Success Factors and KPIs
+9. Implementation Timeline and Milestones
+
+Provide detailed market opportunity assessment with quantitative insights.`;
+
+                case 'arabic-content':
+                    return `As an expert Arabic content creator and cultural marketing specialist, create compelling Arabic marketing content.
+
+${baseContext}
+Content Type: ${data.contentType}
+
+Create:
+1. Culturally Appropriate Arabic Content (5-10 pieces)
+2. Headlines and Call-to-Action in Arabic
+3. Cultural Sensitivity and Values Alignment
+4. Local Market Adaptations
+5. Emotional Appeals and Storytelling
+6. SEO-Optimized Arabic Keywords
+7. Social Media Adaptation Suggestions
+8. Performance Optimization Tips
+
+Ensure content resonates with Arab culture and Saudi market preferences.`;
+
+                case 'google-ads':
+                    return `As a Google Ads specialist and PPC expert, create optimized campaign strategy.
+
+${baseContext}
+Keywords: ${data.keywords}
+Objective: ${data.objective}
+
+Develop:
+1. Campaign Structure and Ad Groups
+2. High-Converting Ad Copy (5-8 variations)
+3. Keyword Research and Expansion
+4. Negative Keywords Strategy
+5. Bidding Strategy and Budget Allocation
+6. Landing Page Recommendations
+7. Targeting and Audience Segmentation
+8. Performance Tracking and KPIs
+9. Optimization and Testing Plan
+
+Provide complete Google Ads campaign blueprint with expected performance metrics.`;
+
+                case 'personalized-emails':
+                    return `As an email marketing specialist, create personalized email campaigns.
+
+${baseContext}
+Email Type: ${data.emailType}
+
+Create:
+1. Email Campaign Strategy and Flow
+2. Personalized Email Templates (5-7 emails)
+3. Subject Line Variations (A/B testing)
+4. Segmentation Strategy
+5. Dynamic Content Recommendations
+6. Call-to-Action Optimization
+7. Performance Metrics and KPIs
+8. Automation and Trigger Setup
+9. Re-engagement and Follow-up Sequences
+
+Provide complete email marketing campaign with high engagement potential.`;
+
+                case 'saudi-culture-content':
+                    return `As a Saudi culture and marketing expert, create culturally appropriate content.
+
+${baseContext}
+Cultural Context: ${data.occasion}
+
+Develop:
+1. Culturally Sensitive Marketing Messages
+2. Religious and Cultural Values Integration
+3. Local Language and Dialect Considerations
+4. Visual and Design Recommendations
+5. Timing and Seasonal Strategies
+6. Community Engagement Approaches
+7. Influencer and Partnership Opportunities
+8. Compliance and Cultural Guidelines
+9. Performance Measurement in Saudi Context
+
+Ensure content aligns with Saudi values and cultural norms.`;
+
+                case 'sentiment-reviews':
+                    return `As a customer sentiment analyst, analyze customer sentiment from reviews and feedback.
+
+${baseContext}
+
+Analyze and provide:
+1. Overall Sentiment Score and Trends
+2. Key Sentiment Drivers (Positive/Negative)
+3. Common Themes and Topics
+4. Customer Satisfaction Insights
+5. Product/Service Improvement Areas
+6. Competitive Sentiment Comparison
+7. Customer Emotion Mapping
+8. Response Strategies for Negative Feedback
+9. Reputation Management Recommendations
+
+Include actionable insights for improving customer satisfaction.`;
+
+                default:
+                    return `As a marketing expert, analyze the following marketing requirements and provide comprehensive insights:
+
+${baseContext}
+
+Provide detailed analysis and actionable recommendations for effective marketing strategy implementation.`;
+            }
+        }
+
+        // Generate research prompts (unchanged from original)
         function generateResearchPrompt(tool, query, field) {
             const baseContext = `Research Field: ${field}\nQuery: ${query}`;
             
@@ -1180,7 +1926,7 @@ Provide formatted citations and comprehensive referencing guide.`;
             }
         }
 
-        // Generate development prompts based on selected tool
+        // Generate development prompts (unchanged from original)
         function generateDevelopmentPrompt(tool, context, industry, budget, timeline) {
             const baseContext = `Project Context: ${context}\nIndustry: ${industry}\nBudget: ${budget}\nTimeline: ${timeline}`;
             
@@ -1288,131 +2034,6 @@ Provide detailed risk management and opportunity optimization plan.`;
 
                 default:
                     return `Analyze the following development context and provide comprehensive insights: ${baseContext}`;
-            }
-        }
-
-        // Marketing Section Handler (unchanged)
-        async function handleMarketingSubmit(event) {
-            event.preventDefault();
-            
-            const task = document.getElementById('marketing-task').value;
-            const industry = document.getElementById('marketing-industry').value;
-            const audience = document.getElementById('marketing-audience').value;
-            const content = document.getElementById('marketing-content').value;
-            
-            if (!industry || !audience) {
-                alert(currentLanguage === 'en' ? 'Please fill in industry and target audience.' : 'يرجى ملء الصناعة والجمهور المستهدف.');
-                return;
-            }
-            
-            showLoading('marketing');
-            
-            let prompt = '';
-            switch(task) {
-                case 'campaign':
-                    prompt = `As a senior marketing strategist, create a comprehensive campaign strategy for ${industry} targeting ${audience}.
-
-Include:
-1. 3 Creative Campaign Concepts with unique positioning
-2. Multi-channel Marketing Strategy (digital, social, traditional)
-3. Content Calendar and Key Messages
-4. Budget Allocation Recommendations
-5. Success Metrics and KPIs
-6. Timeline and Implementation Plan
-
-Additional Context: ${content}
-
-Provide actionable, data-driven campaign strategies with clear ROI expectations.`;
-                    break;
-                case 'sentiment':
-                    prompt = `As a customer insights analyst, perform comprehensive sentiment analysis for ${industry} targeting ${audience}.
-
-Analyze and provide:
-1. Overall Sentiment Score and Classification
-2. Key Sentiment Drivers (positive/negative factors)
-3. Emotional Response Patterns
-4. Customer Journey Sentiment Mapping
-5. Actionable Recommendations for Improvement
-6. Competitive Sentiment Comparison
-
-Customer Data: ${content}
-
-Include statistical insights and predictive sentiment trends.`;
-                    break;
-                case 'crm-content':
-                    prompt = `As a CRM content specialist, create comprehensive customer communication strategy for ${industry} targeting ${audience}.
-
-Develop:
-1. Personalized Email Sequences (Welcome, Nurture, Retention)
-2. SMS/Push Notification Templates
-3. Customer Segmentation Strategies
-4. Automated Response Systems
-5. Customer Lifecycle Communications
-6. Performance Optimization Guidelines
-
-Context: ${content}
-
-Provide ready-to-use templates with personalization variables and A/B testing suggestions.`;
-                    break;
-                case 'market-analysis':
-                    prompt = `As a market research analyst, conduct comprehensive market analysis for ${industry} targeting ${audience}.
-
-Provide:
-1. Market Size and Growth Projections
-2. Competitive Landscape Analysis
-3. Customer Behavior Insights
-4. Market Entry Strategies
-5. Pricing Strategy Recommendations
-6. Risk Assessment and Mitigation
-7. Market Opportunity Mapping
-
-Additional Info: ${content}
-
-Include quantitative insights, market trends, and strategic recommendations.`;
-                    break;
-            }
-            
-            try {
-                const result = await callGeminiAPI(prompt, 'marketing');
-                displayEnhancedResult('marketing', result, task);
-            } catch (error) {
-                console.error('Marketing API Error:', error);
-                displayError('marketing', error.message);
-            }
-        }
-
-        // Update marketing form based on selected task
-        function updateMarketingForm() {
-            const task = document.getElementById('marketing-task').value;
-            const contentGroup = document.getElementById('marketing-content-group');
-            const contentLabel = contentGroup.querySelector('label');
-            const contentTextarea = document.getElementById('marketing-content');
-            
-            switch(task) {
-                case 'campaign':
-                    contentLabel.textContent = currentLanguage === 'en' ? 'Campaign Requirements:' : 'متطلبات الحملة:';
-                    contentTextarea.placeholder = currentLanguage === 'en' ? 
-                        'Describe your campaign goals, budget, timeline, or specific requirements...' :
-                        'اوصف أهداف الحملة والميزانية والجدول الزمني أو المتطلبات المحددة...';
-                    break;
-                case 'sentiment':
-                    contentLabel.textContent = currentLanguage === 'en' ? 'Customer Feedback:' : 'ملاحظات العملاء:';
-                    contentTextarea.placeholder = currentLanguage === 'en' ? 
-                        'Paste customer reviews, comments, or feedback to analyze...' :
-                        'الصق مراجعات العملاء أو التعليقات أو الملاحظات للتحليل...';
-                    break;
-                case 'crm-content':
-                    contentLabel.textContent = currentLanguage === 'en' ? 'Content Requirements:' : 'متطلبات المحتوى:';
-                    contentTextarea.placeholder = currentLanguage === 'en' ? 
-                        'Specify the type of CRM content needed (emails, SMS, notifications, etc.)...' :
-                        'حدد نوع محتوى إدارة العملاء المطلوب (رسائل بريد إلكتروني، رسائل نصية، إشعارات، إلخ)...';
-                    break;
-                case 'market-analysis':
-                    contentLabel.textContent = currentLanguage === 'en' ? 'Market Context:' : 'سياق السوق:';
-                    contentTextarea.placeholder = currentLanguage === 'en' ? 
-                        'Provide market conditions, competitors, or specific analysis requirements...' :
-                        'قدم ظروف السوق أو المنافسين أو متطلبات التحليل المحددة...';
-                    break;
             }
         }
 
@@ -1534,21 +2155,35 @@ Include quantitative insights, market trends, and strategic recommendations.`;
         function getSectionIcon(title, section) {
             const titleLower = title.toLowerCase();
             
+            // Research icons
             if (titleLower.includes('search') || titleLower.includes('paper')) return '🔍';
             if (titleLower.includes('literature') || titleLower.includes('review')) return '📚';
             if (titleLower.includes('trend') || titleLower.includes('analysis')) return '📈';
             if (titleLower.includes('survey') || titleLower.includes('question')) return '📊';
             if (titleLower.includes('plagiarism') || titleLower.includes('originality')) return '🛡️';
             if (titleLower.includes('bibliography') || titleLower.includes('citation')) return '📋';
+            
+            // Development icons
             if (titleLower.includes('idea') || titleLower.includes('creative')) return '💡';
             if (titleLower.includes('feasibility') || titleLower.includes('economic')) return '💰';
             if (titleLower.includes('brainstorm') || titleLower.includes('collaboration')) return '🧠';
             if (titleLower.includes('project') || titleLower.includes('tracker')) return '📋';
             if (titleLower.includes('plan') || titleLower.includes('strategy')) return '🗺️';
             if (titleLower.includes('risk') || titleLower.includes('opportunity')) return '⚖️';
-            if (titleLower.includes('market') || titleLower.includes('campaign')) return '📢';
-            if (titleLower.includes('sentiment') || titleLower.includes('customer')) return '❤️';
             
+            // Marketing icons
+            if (titleLower.includes('persona') || titleLower.includes('customer')) return '👥';
+            if (titleLower.includes('competitor') || titleLower.includes('competition')) return '🔍';
+            if (titleLower.includes('journey') || titleLower.includes('touchpoint')) return '🗺️';
+            if (titleLower.includes('market') || titleLower.includes('opportunity')) return '💎';
+            if (titleLower.includes('content') || titleLower.includes('copy')) return '✍️';
+            if (titleLower.includes('campaign') || titleLower.includes('ads')) return '📢';
+            if (titleLower.includes('email') || titleLower.includes('newsletter')) return '📧';
+            if (titleLower.includes('social') || titleLower.includes('media')) return '📱';
+            if (titleLower.includes('saudi') || titleLower.includes('arabic')) return '🇸🇦';
+            if (titleLower.includes('sentiment') || titleLower.includes('emotion')) return '❤️';
+            
+            // Default icons based on section
             return section === 'research' ? '🔬' : section === 'development' ? '💡' : '📊';
         }
 
@@ -1688,12 +2323,13 @@ Include quantitative insights, market trends, and strategic recommendations.`;
             // Set initial language
             setLanguage('en');
             
-            // Initialize forms
-            updateMarketingForm();
+            // Initialize marketing form with default tool
+            updateMarketingForm('customer-persona');
             
             // Set initial tool selections
             document.querySelector('#research-tab .tool-card').classList.add('active');
             document.querySelector('#development-tab .tool-card').classList.add('active');
+            document.querySelector('#customer-analysis-tab .tool-card').classList.add('active');
         });
     </script>
 </body>
