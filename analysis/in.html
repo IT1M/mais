@@ -1167,6 +1167,21 @@
             0%, 80%, 100% { opacity: 0.4; transform: scale(0.7); }
             40% { opacity: 1; transform: scale(1.1); } /* More pronounced scale */
         }
+
+        .input-guidance-note {
+            font-size: 0.9em;
+            color: #b0e0e6; /* Light cyan */
+            background-color: rgba(0, 198, 255, 0.08); 
+            padding: 10px 15px;
+            border-radius: 8px;
+            margin-top: 10px; 
+            margin-bottom: 20px; 
+            border: 1px solid rgba(0, 198, 255, 0.2);
+            line-height: 1.5;
+        }
+        html[dir="rtl"] .input-guidance-note {
+            text-align: right;
+        }
     </style>
 </head>
 <body>
@@ -1267,6 +1282,7 @@
                         <button class="option-btn active" onclick="toggleInputMode('advanced', 'text')" data-translate-key="textInputBtn">📝 Text Input</button>
                         <button class="option-btn" onclick="toggleInputMode('advanced', 'file')" data-translate-key="fileUploadBtn">📁 File Upload</button>
                     </div>
+                    <p class="input-guidance-note" data-translate-key="guidanceAdvancedAnalysis"></p>
                     
                     <div id="advanced-text" class="input-area active">
                         <textarea id="advancedTextInput" class="text-input" data-translate-key="advancedTextInputPlaceholder" placeholder="Enter company data for advanced analysis (financial data, sales, production, etc...)"></textarea>
@@ -1323,6 +1339,7 @@
                         <button class="option-btn active" onclick="toggleInputMode('quality', 'text')" data-translate-key="textInputBtn">📝 Text Input</button>
                         <button class="option-btn" onclick="toggleInputMode('quality', 'file')" data-translate-key="fileUploadBtn">📁 File Upload</button>
                     </div>
+                    <p class="input-guidance-note" data-translate-key="guidanceQualityManagement"></p>
                     
                     <div id="quality-text" class="input-area active">
                         <textarea id="qualityTextInput" class="text-input" data-translate-key="qualityTextInputPlaceholder" placeholder="Enter quality data (production defects, customer complaints, test results, etc...)"></textarea>
@@ -1379,6 +1396,7 @@
                         <button class="option-btn active" onclick="toggleInputMode('demand', 'text')" data-translate-key="textInputBtn">📝 Text Input</button>
                         <button class="option-btn" onclick="toggleInputMode('demand', 'file')" data-translate-key="fileUploadBtn">📁 File Upload</button>
                     </div>
+                    <p class="input-guidance-note" data-translate-key="guidanceDemandForecasting"></p>
                     
                     <div id="demand-text" class="input-area active">
                         <textarea id="demandTextInput" class="text-input" data-translate-key="demandTextInputPlaceholder" placeholder="Enter historical sales and inventory data (periods, quantities, seasons, etc...)"></textarea>
@@ -1435,6 +1453,7 @@
                         <button class="option-btn active" onclick="toggleInputMode('competitor', 'text')" data-translate-key="textInputBtn">📝 Text Input</button>
                         <button class="option-btn" onclick="toggleInputMode('competitor', 'file')" data-translate-key="fileUploadBtn">📁 File Upload</button>
                     </div>
+                    <p class="input-guidance-note" data-translate-key="guidanceCompetitorAnalysis"></p>
                     
                     <div id="competitor-text" class="input-area active">
                         <textarea id="competitorTextInput" class="text-input" data-translate-key="competitorTextInputPlaceholder" placeholder="Enter competitor data (company names, prices, services, strengths and weaknesses, etc...)"></textarea>
@@ -1535,6 +1554,7 @@
                 advancedAnalyticsSystemDesc: "Comprehensive analysis of market trends and operational performance with strategic recommendations for Saudi Mais Co.",
                 textInputBtn: "📝 Text Input",
                 fileUploadBtn: "📁 File Upload",
+                guidanceAdvancedAnalysis: "*For best results, provide specific financial statements, sales figures, production data, and market reports. Clearly state your primary analysis goals or questions in the 'focus areas' field.*",
                 advancedTextInputPlaceholder: "Enter company data for advanced analysis (financial data, sales, production, etc...) specific to Saudi Mais Co.",
                 advancedFocusInputPlaceholder: "Specific focus areas for Saudi Mais Co. (e.g., 'Analyze competitor impact in respiratory products sector', 'Evaluate new regulation effects on Saudi Mais Co.')",
                 dragFileHere: "📁 Drag file here or click to select",
@@ -1551,6 +1571,7 @@
                 exportPdfBtn: "📑 Export PDF",
                 qualityManagementSystemTitle: "Smart Quality Management System for Saudi Mais Co.",
                 qualityManagementSystemDesc: "Quality monitoring according to international standards (ISO 13485) and FDA requirements for Saudi Mais Co.",
+                guidanceQualityManagement: "*For optimal quality analysis, please include defect reports, customer complaint logs, audit findings (ISO 13485/SFDA), CAPA documentation, and relevant QMS procedures. Specify the quality standards or areas of concern in the 'focus areas'.*",
                 qualityTextInputPlaceholder: "Enter quality data for Saudi Mais Co. (production defects, customer complaints, test results, etc...)",
                 qualityFocusInputPlaceholder: "Quality focus areas for Saudi Mais Co. (e.g., 'ISO compliance assessment', 'Customer satisfaction analysis')",
                 dragQualityFile: "📁 Drag quality data file here for Saudi Mais Co.",
@@ -1564,6 +1585,7 @@
                 qualityAnalysisResultsTitle: "🏥 Quality Analysis Results for Saudi Mais Co.",
                 demandForecastingSystemTitle: "Demand Forecasting & Inventory System for Saudi Mais Co.",
                 demandForecastingSystemDesc: "Predict future demand and optimize inventory levels for Saudi Mais Co. using artificial intelligence",
+                guidanceDemandForecasting: "*To achieve accurate demand forecasts, provide detailed historical sales data (by SKU/product, period), inventory levels, promotional activity logs, and any known market events or seasonality factors. Clearly define the forecasting horizon and specific products in the 'focus areas'.*",
                 demandTextInputPlaceholder: "Enter historical sales and inventory data for Saudi Mais Co. (periods, quantities, seasons, etc...)",
                 demandFocusInputPlaceholder: "Forecasting focus for Saudi Mais Co. (e.g., 'Q4 seasonal trends', 'New product demand projection')",
                 dragDemandFile: "📁 Drag sales and inventory data file for Saudi Mais Co.",
@@ -1577,6 +1599,7 @@
                 demandForecastingResultsTitle: "📈 Demand Forecasting Results for Saudi Mais Co.",
                 competitorAnalysisSystemTitle: "Competitor Analysis System for Saudi Mais Co.",
                 competitorAnalysisSystemDesc: "Comprehensive competitive analysis in the medical equipment market for Saudi Mais Co. and strategic opportunity identification",
+                guidanceCompetitorAnalysis: "*For a comprehensive competitor analysis, list key competitors, their product offerings, pricing strategies (if known), market share estimates, and any available public reports or news. Specify the markets and product segments for comparison in the 'focus areas'.*",
                 competitorTextInputPlaceholder: "Enter competitor data relevant to Saudi Mais Co. (company names, prices, services, strengths and weaknesses, etc...)",
                 competitorFocusInputPlaceholder: "Competitive analysis focus for Saudi Mais Co. (e.g., 'Pricing strategy comparison', 'Market positioning analysis')",
                 dragCompetitorFile: "📁 Drag competitor data file for Saudi Mais Co. analysis",
@@ -1645,6 +1668,7 @@
                 advancedAnalyticsSystemDesc: "تحليل شامل لاتجاهات السوق والأداء التشغيلي مع توصيات استراتيجية لشركة ميس السعودية",
                 textInputBtn: "📝 إدخال نصي",
                 fileUploadBtn: "📁 رفع ملف",
+                guidanceAdvancedAnalysis: "*للحصول على أفضل النتائج، يرجى تقديم بيانات مالية محددة، أرقام مبيعات، بيانات إنتاج، وتقارير سوق. حدد بوضوح أهداف التحليل الرئيسية أو أسئلتك في حقل 'مجالات التركيز'.*",
                 advancedTextInputPlaceholder: "أدخل بيانات شركة ميس السعودية للتحليل المتقدم (بيانات مالية، مبيعات، إنتاج، إلخ...)",
                 advancedFocusInputPlaceholder: "مجالات تركيز لشركة ميس السعودية (مثال: 'تحليل تأثير المنافسين في قطاع منتجات الجهاز التنفسي'، 'تقييم آثار التنظيمات الجديدة على شركة ميس السعودية')",
                 dragFileHere: "📁 اسحب الملف هنا أو انقر للاختيار",
@@ -1661,6 +1685,7 @@
                 exportPdfBtn: "📑 تصدير PDF",
                 qualityManagementSystemTitle: "نظام إدارة الجودة الذكي لشركة ميس السعودية",
                 qualityManagementSystemDesc: "مراقبة الجودة وفقًا للمعايير الدولية (ISO 13485) ومتطلبات FDA لشركة ميس السعودية",
+                guidanceQualityManagement: "*لتحليل جودة مثالي، يرجى تضمين تقارير العيوب، سجلات شكاوى العملاء، نتائج التدقيق (ISO 13485/SFDA)، وثائق الإجراءات التصحيحية والوقائية (CAPA)، وإجراءات نظام إدارة الجودة ذات الصلة. حدد معايير الجودة أو مجالات الاهتمام في 'مجالات التركيز'.*",
                 qualityTextInputPlaceholder: "أدخل بيانات الجودة لشركة ميس السعودية (عيوب الإنتاج، شكاوى العملاء، نتائج الاختبارات، إلخ...)",
                 qualityFocusInputPlaceholder: "مجالات تركيز الجودة لشركة ميس السعودية (مثال: 'تقييم الامتثال لـ ISO'، 'تحليل رضا العملاء')",
                 dragQualityFile: "📁 اسحب ملف بيانات الجودة هنا لشركة ميس السعودية",
@@ -1674,6 +1699,7 @@
                 qualityAnalysisResultsTitle: "🏥 نتائج تحليل الجودة لشركة ميس السعودية",
                 demandForecastingSystemTitle: "نظام توقعات الطلب والمخزون لشركة ميس السعودية",
                 demandForecastingSystemDesc: "توقع الطلب المستقبلي وتحسين مستويات المخزون لشركة ميس السعودية باستخدام الذكاء الاصطناعي",
+                guidanceDemandForecasting: "*لتحقيق توقعات طلب دقيقة، يرجى تقديم بيانات مبيعات تاريخية مفصلة (حسب المنتج/وحدة حفظ المخزون، الفترة)، مستويات المخزون، سجلات الأنشطة الترويجية، وأي أحداث سوق معروفة أو عوامل موسمية. حدد بوضوح أفق التنبؤ والمنتجات المحددة في 'مجالات التركيز'.*",
                 demandTextInputPlaceholder: "أدخل بيانات المبيعات والمخزون التاريخية لشركة ميس السعودية (فترات، كميات، مواسم، إلخ...)",
                 demandFocusInputPlaceholder: "تركيز التوقعات لشركة ميس السعودية (مثال: 'اتجاهات موسمية للربع الرابع'، 'توقع الطلب على منتج جديد')",
                 dragDemandFile: "📁 اسحب ملف بيانات المبيعات والمخزون لشركة ميس السعودية",
@@ -1687,6 +1713,7 @@
                 demandForecastingResultsTitle: "📈 نتائج توقعات الطلب لشركة ميس السعودية",
                 competitorAnalysisSystemTitle: "نظام تحليل المنافسين لشركة ميس السعودية",
                 competitorAnalysisSystemDesc: "تحليل تنافسي شامل في سوق المعدات الطبية لشركة ميس السعودية وتحديد الفرص الاستراتيجية",
+                guidanceCompetitorAnalysis: "*لتحليل تنافسي شامل، يرجى ذكر المنافسين الرئيسيين، عروض منتجاتهم، استراتيجيات التسعير (إن وجدت)، تقديرات الحصة السوقية، وأي تقارير عامة أو أخبار متاحة. حدد الأسواق وقطاعات المنتجات للمقارنة في 'مجالات التركيز'.*",
                 competitorTextInputPlaceholder: "أدخل بيانات المنافسين ذات الصلة بشركة ميس السعودية (أسماء الشركات، الأسعار، الخدمات، نقاط القوة والضعف، إلخ...)",
                 competitorFocusInputPlaceholder: "تركيز التحليل التنافسي لشركة ميس السعودية (مثال: 'مقارنة استراتيجية التسعير'، 'تحليل تحديد الموقع في السوق')",
                 dragCompetitorFile: "📁 اسحب ملف بيانات المنافسين لتحليل شركة ميس السعودية",
@@ -3026,7 +3053,7 @@
             return `
                 <div class="analysis-result-card">
                     <h2>بخصوص استفسارك لشركة ميس السعودية: "${query.substring(0,100)}${query.length > 100 ? '...' : ''}"</h2>
-                    <p>بصفتي يزيد AI، مستشارك المخصص لشركة ميس السعودية (شركة مصنعة للمستهلكات الطبية ذات الاستخدام الواحد مقرها الرياض منذ عام 1994، ملتزمة بالجودة العالية وتواجه حاليًا تحديات في الأعمال)، أنا هنا للمساعدة.</p>
+                    <p>بصفتي يزيد AI، مستشارك الذكي المخصص لشركة ميس السعودية (شركة مصنعة للمستهلكات الطبية ذات الاستخدام الواحد مقرها الرياض منذ عام 1994، ملتزمة بالجودة العالية وتواجه حاليًا تحديات في الأعمال)، أنا هنا للمساعدة.</p>
                     <p>تتأثر عمليات شركة ميس السعودية بشكل كبير بتحول الرعاية الصحية ضمن رؤية السعودية 2030، ومعايير الجودة الصارمة (ISO 13485، متطلبات الهيئة العامة للغذاء والدواء)، وسوق الأجهزة الطبية التنافسي، والتوجه نحو المحتوى المحلي (برنامج اكتفاء). تشمل قدراتي تقديم تحليلات مفصلة حول:</p>
                     <ul>
                         <li>استراتيجية الأعمال المتقدمة</li>
