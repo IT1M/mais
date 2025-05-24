@@ -450,23 +450,24 @@
             100% { filter: brightness(1.2); }
         }
 
-        /* Mobile-optimized button container */
+        /* ENHANCED MOBILE-OPTIMIZED BUTTON CONTAINER */
         .button-container {
             position: fixed;
-            top: env(safe-area-inset-top, 1rem);
+            top: max(1rem, env(safe-area-inset-top, 0));
             right: 1rem;
-            z-index: 1000;
+            z-index: 9999; /* Increased z-index for better mobile visibility */
             display: flex;
             flex-direction: column;
             gap: 0.75rem;
+            pointer-events: auto; /* Ensure touch events work */
         }
 
-        /* Enhanced voice support button for mobile */
+        /* ENHANCED VOICE SUPPORT BUTTON FOR MOBILE */
         .voice-support-btn {
-            width: 56px;
-            height: 56px;
+            width: 64px; /* Increased for better touch targets */
+            height: 64px;
             background: var(--red-gradient);
-            border: 1px solid rgba(255, 65, 108, 0.3);
+            border: 2px solid rgba(255, 65, 108, 0.3);
             border-radius: 50%;
             backdrop-filter: blur(20px);
             cursor: pointer;
@@ -478,77 +479,94 @@
             position: relative;
             -webkit-tap-highlight-color: transparent;
             touch-action: manipulation;
+            /* Ensure visibility on all devices */
+            opacity: 1;
+            visibility: visible;
+            transform: translateZ(0); /* Force hardware acceleration */
+            will-change: transform;
+            /* Better mobile interaction */
+            user-select: none;
+            -webkit-user-select: none;
+            -webkit-touch-callout: none;
         }
 
+        /* Enhanced mobile states */
         .voice-support-btn:active {
-            transform: scale(0.95);
+            transform: scale(0.9) translateZ(0);
+            transition: transform 0.1s ease;
         }
 
         .voice-support-btn:hover {
-            transform: scale(1.05);
+            transform: scale(1.05) translateZ(0);
             box-shadow: var(--shadow-3d), 0 0 50px rgba(255, 65, 108, 0.6);
         }
 
+        /* Enhanced animation states */
         .voice-support-btn.recording {
             background: linear-gradient(135deg, rgba(255, 65, 108, 1) 0%, rgba(255, 71, 87, 1) 100%);
             animation: recordingPulse 1.5s infinite;
+            border-color: rgba(255, 65, 108, 0.6);
         }
 
         .voice-support-btn.loading {
-            background: linear-gradient(135deg, rgba(255, 193, 7, 0.8) 0%, rgba(255, 152, 0, 0.8) 100%);
+            background: linear-gradient(135deg, rgba(255, 193, 7, 0.9) 0%, rgba(255, 152, 0, 0.9) 100%);
             animation: loadingPulse 1s infinite;
+            border-color: rgba(255, 193, 7, 0.6);
         }
 
         .voice-support-btn.listening {
             background: linear-gradient(135deg, rgba(76, 175, 80, 0.9) 0%, rgba(67, 160, 71, 0.9) 100%);
             animation: listeningPulse 2s infinite;
+            border-color: rgba(76, 175, 80, 0.6);
         }
 
+        /* Enhanced animations for mobile */
         @keyframes recordingPulse {
             0%, 100% { 
-                box-shadow: var(--shadow-3d), 0 0 25px rgba(255, 65, 108, 0.7); 
-                transform: scale(1);
+                box-shadow: var(--shadow-3d), 0 0 30px rgba(255, 65, 108, 0.8); 
+                transform: scale(1) translateZ(0);
             }
             50% { 
-                box-shadow: var(--shadow-3d), 0 0 40px rgba(255, 65, 108, 1); 
-                transform: scale(1.05);
+                box-shadow: var(--shadow-3d), 0 0 50px rgba(255, 65, 108, 1); 
+                transform: scale(1.1) translateZ(0);
             }
         }
 
         @keyframes loadingPulse {
             0%, 100% { 
-                box-shadow: var(--shadow-3d), 0 0 25px rgba(255, 193, 7, 0.7); 
-                transform: scale(1) rotate(0deg);
+                box-shadow: var(--shadow-3d), 0 0 30px rgba(255, 193, 7, 0.8); 
+                transform: scale(1) rotate(0deg) translateZ(0);
             }
             50% { 
-                box-shadow: var(--shadow-3d), 0 0 40px rgba(255, 193, 7, 1); 
-                transform: scale(1.05) rotate(180deg);
+                box-shadow: var(--shadow-3d), 0 0 50px rgba(255, 193, 7, 1); 
+                transform: scale(1.1) rotate(180deg) translateZ(0);
             }
         }
 
         @keyframes listeningPulse {
             0%, 100% { 
-                box-shadow: var(--shadow-3d), 0 0 25px rgba(76, 175, 80, 0.7); 
-                transform: scale(1);
+                box-shadow: var(--shadow-3d), 0 0 30px rgba(76, 175, 80, 0.8); 
+                transform: scale(1) translateZ(0);
             }
             50% { 
-                box-shadow: var(--shadow-3d), 0 0 40px rgba(76, 175, 80, 1); 
-                transform: scale(1.1);
+                box-shadow: var(--shadow-3d), 0 0 50px rgba(76, 175, 80, 1); 
+                transform: scale(1.15) translateZ(0);
             }
         }
 
         .voice-support-btn svg {
-            width: 22px;
-            height: 22px;
+            width: 26px; /* Increased for better visibility */
+            height: 26px;
             fill: white;
+            pointer-events: none; /* Prevent SVG from blocking touch events */
         }
 
-        /* Help button optimized for mobile */
+        /* ENHANCED HELP BUTTON FOR MOBILE */
         .help-btn {
-            width: 56px;
-            height: 56px;
+            width: 64px; /* Increased for better touch targets */
+            height: 64px;
             background: var(--red-gradient);
-            border: 1px solid rgba(255, 65, 108, 0.3);
+            border: 2px solid rgba(255, 65, 108, 0.3);
             border-radius: 50%;
             backdrop-filter: blur(20px);
             cursor: pointer;
@@ -559,21 +577,32 @@
             box-shadow: var(--shadow-3d), var(--red-glow);
             -webkit-tap-highlight-color: transparent;
             touch-action: manipulation;
+            /* Ensure visibility on all devices */
+            opacity: 1;
+            visibility: visible;
+            transform: translateZ(0);
+            will-change: transform;
+            /* Better mobile interaction */
+            user-select: none;
+            -webkit-user-select: none;
+            -webkit-touch-callout: none;
         }
 
         .help-btn:active {
-            transform: scale(0.95);
+            transform: scale(0.9) translateZ(0);
+            transition: transform 0.1s ease;
         }
 
         .help-btn:hover {
-            transform: scale(1.05);
+            transform: scale(1.05) translateZ(0);
             box-shadow: var(--shadow-3d), 0 0 50px rgba(255, 65, 108, 0.6);
         }
 
         .help-btn svg {
-            width: 22px;
-            height: 22px;
+            width: 26px; /* Increased for better visibility */
+            height: 26px;
             fill: white;
+            pointer-events: none;
         }
 
         /* Main container optimized for mobile */
@@ -733,23 +762,26 @@
             fill: currentColor;
         }
 
-        /* Enhanced mobile voice modal */
+        /* ENHANCED MOBILE VOICE MODAL */
         .voice-modal {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.9);
-            backdrop-filter: blur(15px);
-            z-index: 2000;
+            background: rgba(0, 0, 0, 0.95); /* Darker background for better contrast */
+            backdrop-filter: blur(20px); /* Increased blur */
+            z-index: 10000; /* Higher z-index for mobile */
             display: flex;
             align-items: center;
             justify-content: center;
             opacity: 0;
             visibility: hidden;
-            transition: all 0.3s ease;
-            padding: env(safe-area-inset-top, 1rem) 1rem env(safe-area-inset-bottom, 1rem);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            padding: max(env(safe-area-inset-top, 1rem), 1rem) 1rem max(env(safe-area-inset-bottom, 1rem), 1rem);
+            /* Prevent scroll on iOS */
+            -webkit-overflow-scrolling: touch;
+            overscroll-behavior: contain;
         }
 
         .voice-modal.active {
@@ -759,108 +791,137 @@
 
         .voice-content {
             background: var(--glass-bg);
-            border: 1px solid var(--glass-border);
-            border-radius: 20px;
-            padding: 2rem 1.5rem;
+            border: 2px solid var(--glass-border); /* Thicker border for mobile */
+            border-radius: 24px; /* Increased border radius */
+            padding: 2.5rem 2rem;
             max-width: 100%;
             width: 100%;
-            max-height: 85vh;
-            backdrop-filter: blur(20px);
-            box-shadow: var(--shadow-3d);
-            transform: scale(0.9) translateY(30px);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            max-height: 90vh; /* Increased max height */
+            backdrop-filter: blur(25px); /* Increased blur */
+            box-shadow: var(--shadow-3d), 0 0 60px rgba(102, 126, 234, 0.4);
+            transform: scale(0.8) translateY(50px);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
             overflow-y: auto;
             -webkit-overflow-scrolling: touch;
+            /* Better mobile scrolling */
+            overscroll-behavior: contain;
         }
 
         .voice-modal.active .voice-content {
             transform: scale(1) translateY(0);
         }
 
+        /* ENHANCED VOICE MODAL CLOSE BUTTON */
         .voice-close {
             position: absolute;
-            top: 1rem;
-            right: 1rem;
-            width: 36px;
-            height: 36px;
+            top: 1.5rem;
+            right: 1.5rem;
+            width: 44px; /* Larger for better touch target */
+            height: 44px;
             border: none;
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.15);
             border-radius: 50%;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
             color: var(--text-primary);
-            font-size: 1.3rem;
-            transition: background 0.3s ease;
+            font-size: 1.5rem;
+            transition: all 0.3s ease;
             -webkit-tap-highlight-color: transparent;
             touch-action: manipulation;
+            z-index: 10;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
         }
 
         .voice-close:active {
-            transform: scale(0.95);
+            transform: scale(0.9);
+            background: rgba(255, 255, 255, 0.25);
         }
 
         .voice-close:hover {
-            background: rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.25);
+            transform: scale(1.05);
         }
 
         .voice-status {
-            margin-bottom: 2rem;
+            margin-bottom: 2.5rem;
             text-align: center;
-            padding-top: 1rem;
+            padding-top: 1.5rem;
         }
 
         .voice-status h3 {
-            font-size: 1.4rem;
-            margin-bottom: 1rem;
+            font-size: 1.6rem;
+            margin-bottom: 1.5rem;
             color: var(--text-primary);
+            font-weight: 700;
         }
 
         .voice-status p {
             color: var(--text-secondary);
-            margin-bottom: 1rem;
-            line-height: 1.5;
-            font-size: 0.95rem;
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+            font-size: 1rem;
         }
 
-        /* Enhanced mobile voice controls */
+        /* ENHANCED MOBILE VOICE CONTROLS */
         .voice-controls {
             display: flex;
             flex-direction: column;
-            gap: 1rem;
-            margin-bottom: 2rem;
+            gap: 1.5rem;
+            margin-bottom: 2.5rem;
         }
 
         .voice-btn {
-            padding: 1rem 1.5rem;
+            padding: 1.25rem 2rem;
             border: none;
-            border-radius: 12px;
+            border-radius: 16px;
             background: var(--primary-gradient);
             color: white;
-            font-weight: 600;
-            font-size: 1rem;
+            font-weight: 700;
+            font-size: 1.1rem;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             -webkit-tap-highlight-color: transparent;
             touch-action: manipulation;
-            min-height: 48px;
+            min-height: 56px; /* Larger touch target */
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .voice-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .voice-btn:hover::before {
+            left: 100%;
         }
 
         .voice-btn:active {
-            transform: scale(0.98);
+            transform: scale(0.96);
         }
 
         .voice-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(102, 126, 234, 0.5);
         }
 
         .voice-btn:disabled {
             opacity: 0.5;
             cursor: not-allowed;
             transform: none;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.2);
         }
 
         .voice-btn.recording {
@@ -869,83 +930,92 @@
         }
 
         .voice-btn.processing {
-            background: linear-gradient(135deg, rgba(255, 193, 7, 0.8) 0%, rgba(255, 152, 0, 0.8) 100%);
+            background: linear-gradient(135deg, rgba(255, 193, 7, 0.9) 0%, rgba(255, 152, 0, 0.9) 100%);
             animation: processingBtn 1s infinite;
         }
 
         @keyframes recordingBtn {
             0%, 100% { 
-                box-shadow: 0 0 20px rgba(255, 65, 108, 0.5);
+                box-shadow: 0 8px 25px rgba(255, 65, 108, 0.6);
                 opacity: 1;
+                transform: scale(1);
             }
             50% { 
-                box-shadow: 0 0 30px rgba(255, 65, 108, 0.8);
+                box-shadow: 0 12px 35px rgba(255, 65, 108, 0.9);
                 opacity: 0.9;
+                transform: scale(1.02);
             }
         }
 
         @keyframes processingBtn {
             0%, 100% { 
-                box-shadow: 0 0 20px rgba(255, 193, 7, 0.5);
+                box-shadow: 0 8px 25px rgba(255, 193, 7, 0.6);
                 opacity: 1;
+                transform: scale(1) rotate(0deg);
             }
             50% { 
-                box-shadow: 0 0 30px rgba(255, 193, 7, 0.8);
+                box-shadow: 0 12px 35px rgba(255, 193, 7, 0.9);
                 opacity: 0.9;
+                transform: scale(1.02) rotate(180deg);
             }
         }
 
         /* Enhanced voice response area */
         .voice-response {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 12px;
-            padding: 1.5rem;
-            margin-top: 1rem;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-top: 1.5rem;
             text-align: left;
-            max-height: 250px;
+            max-height: 300px;
             overflow-y: auto;
             -webkit-overflow-scrolling: touch;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.1);
         }
 
         .voice-response p {
             color: var(--text-primary);
-            line-height: 1.6;
+            line-height: 1.7;
+            font-size: 1rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .voice-transcription {
+            background: rgba(102, 126, 234, 0.15);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border-left: 4px solid rgba(102, 126, 234, 0.6);
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.1);
+        }
+
+        .voice-transcription p {
+            color: rgba(102, 126, 234, 0.95);
+            font-style: italic;
             font-size: 0.95rem;
             margin-bottom: 0.5rem;
         }
 
-        .voice-transcription {
-            background: rgba(102, 126, 234, 0.1);
-            border-radius: 8px;
-            padding: 1rem;
-            margin-bottom: 1rem;
-            border-left: 3px solid rgba(102, 126, 234, 0.5);
-        }
-
-        .voice-transcription p {
-            color: rgba(102, 126, 234, 0.9);
-            font-style: italic;
-            font-size: 0.9rem;
-        }
-
-        /* Help modal optimized for mobile */
+        /* ENHANCED HELP MODAL FOR MOBILE */
         .help-modal {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            backdrop-filter: blur(10px);
-            z-index: 2000;
+            background: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(15px);
+            z-index: 10000;
             display: flex;
             align-items: center;
             justify-content: center;
             opacity: 0;
             visibility: hidden;
-            transition: all 0.3s ease;
-            padding: env(safe-area-inset-top, 1rem) 1rem env(safe-area-inset-bottom, 1rem);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            padding: max(env(safe-area-inset-top, 1rem), 1rem) 1rem max(env(safe-area-inset-bottom, 1rem), 1rem);
+            -webkit-overflow-scrolling: touch;
+            overscroll-behavior: contain;
         }
 
         .help-modal.active {
@@ -955,19 +1025,20 @@
 
         .help-content {
             background: var(--glass-bg);
-            border: 1px solid var(--glass-border);
-            border-radius: 20px;
-            padding: 2rem 1.5rem;
+            border: 2px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 2.5rem 2rem;
             max-width: 100%;
             width: 100%;
-            max-height: 85vh;
-            backdrop-filter: blur(20px);
-            box-shadow: var(--shadow-3d);
-            transform: scale(0.9) translateY(30px);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            max-height: 90vh;
+            backdrop-filter: blur(25px);
+            box-shadow: var(--shadow-3d), 0 0 60px rgba(102, 126, 234, 0.4);
+            transform: scale(0.8) translateY(50px);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
             overflow-y: auto;
             -webkit-overflow-scrolling: touch;
+            overscroll-behavior: contain;
         }
 
         .help-modal.active .help-content {
@@ -976,59 +1047,64 @@
 
         .help-close {
             position: absolute;
-            top: 1rem;
-            right: 1rem;
-            width: 36px;
-            height: 36px;
+            top: 1.5rem;
+            right: 1.5rem;
+            width: 44px;
+            height: 44px;
             border: none;
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.15);
             border-radius: 50%;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
             color: var(--text-primary);
-            font-size: 1.3rem;
-            transition: background 0.3s ease;
+            font-size: 1.5rem;
+            transition: all 0.3s ease;
             -webkit-tap-highlight-color: transparent;
             touch-action: manipulation;
+            z-index: 10;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
         }
 
         .help-close:active {
-            transform: scale(0.95);
+            transform: scale(0.9);
+            background: rgba(255, 255, 255, 0.25);
         }
 
         .help-close:hover {
-            background: rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.25);
+            transform: scale(1.05);
         }
 
         .help-title {
-            font-size: 1.6rem;
+            font-size: 1.8rem;
             font-weight: 700;
-            margin-bottom: 2rem;
+            margin-bottom: 2.5rem;
             background: var(--primary-gradient);
             -webkit-background-clip: text;
             background-clip: text;
             -webkit-text-fill-color: transparent;
-            padding-top: 1rem;
+            padding-top: 1.5rem;
         }
 
         .help-section {
-            margin-bottom: 1.5rem;
+            margin-bottom: 2rem;
         }
 
         .help-section h3 {
-            font-size: 1.2rem;
+            font-size: 1.3rem;
             font-weight: 600;
-            margin-bottom: 0.75rem;
+            margin-bottom: 1rem;
             color: var(--text-primary);
         }
 
         .help-section p {
             color: var(--text-secondary);
-            line-height: 1.6;
-            margin-bottom: 0.75rem;
-            font-size: 0.95rem;
+            line-height: 1.7;
+            margin-bottom: 1rem;
+            font-size: 1rem;
         }
 
         .help-list {
@@ -1038,11 +1114,11 @@
 
         .help-list li {
             color: var(--text-secondary);
-            line-height: 1.6;
-            margin-bottom: 0.5rem;
-            padding-left: 1.25rem;
+            line-height: 1.7;
+            margin-bottom: 0.75rem;
+            padding-left: 1.5rem;
             position: relative;
-            font-size: 0.95rem;
+            font-size: 1rem;
         }
 
         .help-list li::before {
@@ -1050,34 +1126,36 @@
             color: rgba(102, 126, 234, 0.8);
             position: absolute;
             left: 0;
-            font-size: 1.1rem;
+            font-size: 1.2rem;
+            font-weight: bold;
         }
 
         /* Footer optimized for mobile */
         .footer {
             text-align: center;
-            padding: 2rem 1rem;
+            padding: 2.5rem 1rem;
             border-top: 1px solid rgba(255, 255, 255, 0.1);
             margin-top: 3rem;
         }
 
         .footer p {
             color: var(--text-secondary);
-            font-size: 0.85rem;
+            font-size: 0.9rem;
         }
 
-        /* Voice wave animation for active recording */
+        /* Enhanced voice wave animation */
         .voice-wave {
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            width: 80px;
-            height: 80px;
-            border: 2px solid rgba(255, 65, 108, 0.3);
+            width: 100px; /* Increased size */
+            height: 100px;
+            border: 3px solid rgba(255, 65, 108, 0.4);
             border-radius: 50%;
             animation: voiceWave 1.5s infinite;
             opacity: 0;
+            pointer-events: none;
         }
 
         .voice-support-btn.recording .voice-wave {
@@ -1090,36 +1168,39 @@
                 opacity: 1;
             }
             100% {
-                transform: translate(-50%, -50%) scale(1.5);
+                transform: translate(-50%, -50%) scale(1.8);
                 opacity: 0;
             }
         }
 
-        /* Language indicator */
+        /* Enhanced language indicator */
         .language-indicator {
             position: absolute;
-            bottom: -8px;
-            right: -8px;
-            width: 20px;
-            height: 20px;
+            bottom: -6px;
+            right: -6px;
+            width: 24px; /* Increased size */
+            height: 24px;
             background: var(--success-gradient);
             border-radius: 50%;
-            font-size: 10px;
+            font-size: 11px;
             color: white;
             display: flex;
             align-items: center;
             justify-content: center;
             font-weight: bold;
             opacity: 0;
-            transition: opacity 0.3s ease;
+            transition: all 0.3s ease;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            pointer-events: none;
         }
 
         .voice-support-btn.recording .language-indicator,
         .voice-support-btn.listening .language-indicator {
             opacity: 1;
+            transform: scale(1.1);
         }
 
-        /* Responsive breakpoints */
+        /* MOBILE-SPECIFIC RESPONSIVE BREAKPOINTS */
         @media (min-width: 768px) {
             .cards-grid {
                 grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -1132,10 +1213,10 @@
             
             .help-content,
             .voice-content {
-                padding: 3rem;
+                padding: 3.5rem;
                 margin: 2rem;
-                max-width: 600px;
-                border-radius: 24px;
+                max-width: 650px;
+                border-radius: 28px;
             }
             
             .button-container {
@@ -1145,13 +1226,14 @@
 
             .help-btn,
             .voice-support-btn {
-                width: 60px;
-                height: 60px;
+                width: 68px;
+                height: 68px;
             }
 
             .voice-controls {
                 flex-direction: row;
                 justify-content: center;
+                gap: 2rem;
             }
 
             .medical-geometry {
@@ -1159,6 +1241,7 @@
             }
         }
 
+        /* ENHANCED MOBILE BREAKPOINTS */
         @media (max-width: 480px) {
             .main-title {
                 font-size: clamp(1.8rem, 8vw, 2.5rem);
@@ -1169,20 +1252,66 @@
             }
             
             .service-card {
-                padding: 1.5rem 1rem;
+                padding: 1.75rem 1.25rem;
             }
             
             .card-title {
-                font-size: 1.2rem;
+                font-size: 1.3rem;
             }
             
             .card-description {
-                font-size: 0.9rem;
+                font-size: 0.95rem;
             }
             
             .other-uses-btn {
                 padding: 1rem 2rem;
-                font-size: 0.9rem;
+                font-size: 0.95rem;
+            }
+
+            .voice-support-btn,
+            .help-btn {
+                width: 60px;
+                height: 60px;
+            }
+
+            .voice-content,
+            .help-content {
+                padding: 2rem 1.5rem;
+                border-radius: 20px;
+            }
+
+            .voice-btn {
+                padding: 1rem 1.5rem;
+                font-size: 1rem;
+                min-height: 52px;
+            }
+        }
+
+        /* ULTRA MOBILE (smaller screens) */
+        @media (max-width: 360px) {
+            .button-container {
+                top: max(0.5rem, env(safe-area-inset-top, 0));
+                right: 0.5rem;
+            }
+
+            .voice-support-btn,
+            .help-btn {
+                width: 56px;
+                height: 56px;
+            }
+
+            .voice-support-btn svg,
+            .help-btn svg {
+                width: 22px;
+                height: 22px;
+            }
+
+            .main-container {
+                padding: 0.75rem;
+            }
+
+            .service-card {
+                padding: 1.5rem 1rem;
             }
         }
 
@@ -1197,16 +1326,74 @@
             }
         }
 
-        /* iOS specific fixes */
+        /* ENHANCED iOS SPECIFIC FIXES */
         @supports (-webkit-touch-callout: none) {
             .voice-modal,
             .help-modal {
-                padding-top: env(safe-area-inset-top);
-                padding-bottom: env(safe-area-inset-bottom);
+                padding-top: max(env(safe-area-inset-top, 1rem), 1rem);
+                padding-bottom: max(env(safe-area-inset-bottom, 1rem), 1rem);
             }
             
             .button-container {
-                top: calc(env(safe-area-inset-top) + 1rem);
+                top: calc(max(env(safe-area-inset-top, 1rem), 1rem));
+            }
+
+            /* Fix iOS viewport issues */
+            .voice-content,
+            .help-content {
+                max-height: calc(100vh - max(env(safe-area-inset-top, 2rem), 2rem) - max(env(safe-area-inset-bottom, 2rem), 2rem));
+            }
+
+            /* Fix iOS scrolling issues */
+            .voice-modal.active,
+            .help-modal.active {
+                position: fixed;
+                -webkit-overflow-scrolling: touch;
+            }
+        }
+
+        /* ANDROID SPECIFIC FIXES */
+        @media screen and (-webkit-min-device-pixel-ratio: 0) and (min-resolution: .001dpcm) {
+            .voice-support-btn,
+            .help-btn {
+                transform: translateZ(0);
+                backface-visibility: hidden;
+            }
+        }
+
+        /* ACCESSIBILITY IMPROVEMENTS */
+        @media (prefers-contrast: high) {
+            .voice-support-btn,
+            .help-btn {
+                border-width: 3px;
+                border-color: rgba(255, 255, 255, 0.8);
+            }
+
+            .voice-modal,
+            .help-modal {
+                background: rgba(0, 0, 0, 0.98);
+            }
+        }
+
+        /* TOUCH DEVICE OPTIMIZATIONS */
+        @media (hover: none) and (pointer: coarse) {
+            .voice-support-btn:hover,
+            .help-btn:hover {
+                transform: none;
+            }
+
+            .voice-support-btn:active,
+            .help-btn:active {
+                transform: scale(0.95);
+                transition: transform 0.1s ease;
+            }
+
+            .service-card:hover {
+                transform: none;
+            }
+
+            .service-card:active {
+                transform: scale(0.98);
             }
         }
     </style>
@@ -1258,23 +1445,23 @@
         </div>
     </div>
 
-    <!-- Button Container -->
+    <!-- Enhanced Button Container -->
     <div class="button-container">
-        <!-- Voice Support Button -->
-        <div class="voice-support-btn" onclick="toggleVoiceModal()" id="voiceSupportBtn">
-            <svg viewBox="0 0 24 24">
+        <!-- Enhanced Voice Support Button -->
+        <button class="voice-support-btn" id="voiceSupportBtn" type="button" aria-label="Voice Assistant">
+            <svg viewBox="0 0 24 24" role="img" aria-hidden="true">
                 <path d="M12 14c1.66 0 2.99-1.34 2.99-3L15 5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm5.3-3c0 3-2.54 5.1-5.3 5.1S6.7 14 6.7 11H5c0 3.41 2.72 6.23 6 6.72V21h2v-3.28c3.28-.48 6-3.3 6-6.72h-1.7z"/>
             </svg>
             <div class="voice-wave"></div>
             <div class="language-indicator" id="languageIndicator">EN</div>
-        </div>
+        </button>
 
-        <!-- Help Button -->
-        <div class="help-btn" onclick="toggleHelpModal()">
-            <svg viewBox="0 0 24 24">
+        <!-- Enhanced Help Button -->
+        <button class="help-btn" id="helpBtn" type="button" aria-label="Help">
+            <svg viewBox="0 0 24 24" role="img" aria-hidden="true">
                 <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17h-2v-2h2v2zm2.07-7.75l-.9.92C13.45 12.9 13 13.5 13 15h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H8c0-2.21 1.79-4 4-4s4 1.79 4 4c0 .88-.36 1.68-.93 2.25z"/>
             </svg>
-        </div>
+        </button>
     </div>
 
     <!-- Header -->
@@ -1352,11 +1539,11 @@
         <p>&copy; 2025 AI MAIS. All rights reserved. Developed by Yazeed</p>
     </footer>
 
-    <!-- Help Modal -->
-    <div class="help-modal" id="helpModal">
+    <!-- Enhanced Help Modal -->
+    <div class="help-modal" id="helpModal" role="dialog" aria-modal="true" aria-labelledby="helpTitle">
         <div class="help-content">
-            <button class="help-close" onclick="toggleHelpModal()">&times;</button>
-            <h2 class="help-title">How to Use AI MAIS</h2>
+            <button class="help-close" id="helpCloseBtn" type="button" aria-label="Close Help">&times;</button>
+            <h2 class="help-title" id="helpTitle">How to Use AI MAIS</h2>
             
             <div class="help-section">
                 <h3>Getting Started</h3>
@@ -1394,10 +1581,10 @@
         </div>
     </div>
 
-    <!-- Voice Support Modal -->
-    <div class="voice-modal" id="voiceModal">
+    <!-- Enhanced Voice Support Modal -->
+    <div class="voice-modal" id="voiceModal" role="dialog" aria-modal="true" aria-labelledby="voiceTitle">
         <div class="voice-content">
-            <button class="voice-close" onclick="toggleVoiceModal()">&times;</button>
+            <button class="voice-close" id="voiceCloseBtn" type="button" aria-label="Close Voice Assistant">&times;</button>
             
             <div class="voice-status">
                 <h3 id="voiceTitle">AI MAIS Voice Assistant</h3>
@@ -1405,10 +1592,10 @@
             </div>
 
             <div class="voice-controls">
-                <button class="voice-btn" id="startRecordingBtn" onclick="startRecording()">
+                <button class="voice-btn" id="startRecordingBtn" type="button">
                     🎤 Start Recording | بدء التسجيل
                 </button>
-                <button class="voice-btn" id="stopRecordingBtn" onclick="stopRecording()" disabled>
+                <button class="voice-btn" id="stopRecordingBtn" type="button" disabled>
                     ⏹️ Stop Recording | إيقاف التسجيل
                 </button>
             </div>
@@ -1430,14 +1617,56 @@
         let currentLanguage = 'en-US';
         let speechSynthesis = window.speechSynthesis;
         let lastTranscript = '';
+        let touchStartTime = 0;
+        let permissionGranted = false;
         
         const API_KEY = 'AIzaSyDsAfBjKrEGQWhacA6ttntVhgjCubDdifI';
 
-        // Mobile detection
+        // Enhanced mobile detection
         const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
         const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+        const isAndroid = /Android/i.test(navigator.userAgent);
+        const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
 
-        // Initialize Speech Recognition with mobile optimizations
+        // Utility functions for mobile optimization
+        function preventZoom() {
+            document.addEventListener('touchstart', (e) => {
+                if (e.touches.length > 1) {
+                    e.preventDefault();
+                }
+            });
+
+            let lastTouchEnd = 0;
+            document.addEventListener('touchend', (e) => {
+                const now = (new Date()).getTime();
+                if (now - lastTouchEnd <= 300) {
+                    e.preventDefault();
+                }
+                lastTouchEnd = now;
+            }, false);
+        }
+
+        function disableBodyScroll() {
+            document.body.style.overflow = 'hidden';
+            document.body.style.position = 'fixed';
+            document.body.style.width = '100%';
+            if (isIOS) {
+                document.body.style.top = `-${window.scrollY}px`;
+            }
+        }
+
+        function enableBodyScroll() {
+            const scrollY = document.body.style.top;
+            document.body.style.overflow = '';
+            document.body.style.position = '';
+            document.body.style.width = '';
+            document.body.style.top = '';
+            if (isIOS && scrollY) {
+                window.scrollTo(0, parseInt(scrollY || '0') * -1);
+            }
+        }
+
+        // Enhanced Speech Recognition initialization
         function initializeSpeechRecognition() {
             if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
                 recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
@@ -1448,14 +1677,28 @@
                 recognition.lang = currentLanguage;
                 recognition.maxAlternatives = 1;
                 
-                // For mobile, reduce timeout
+                // Enhanced mobile settings
                 if (isMobile) {
                     recognition.serviceURI = 'wss://www.google.com/speech-api/v2/recognize';
+                    // Reduce timeout for mobile battery optimization
+                    setTimeout(() => {
+                        if (isRecording && recognition) {
+                            try {
+                                recognition.stop();
+                            } catch (e) {
+                                console.log('Recognition already stopped');
+                            }
+                        }
+                    }, 15000);
                 }
                 
                 recognition.onstart = function() {
                     console.log('Voice recognition started');
+                    isRecording = true;
                     updateVoiceUI('listening');
+                    if (navigator.vibrate && isMobile) {
+                        navigator.vibrate(50); // Haptic feedback
+                    }
                 };
                 
                 recognition.onresult = function(event) {
@@ -1472,18 +1715,27 @@
                     if (isFinal && transcript.trim()) {
                         lastTranscript = transcript.trim();
                         processTranscription(lastTranscript);
+                        if (navigator.vibrate && isMobile) {
+                            navigator.vibrate([50, 100, 50]); // Success feedback
+                        }
                     } else if (transcript.trim()) {
                         // Show interim results
-                        document.getElementById('voiceStatusText').innerHTML = `
-                            Listening... | جاري الاستماع...<br>
-                            <small>"${transcript}"</small>
-                        `;
+                        const statusEl = document.getElementById('voiceStatusText');
+                        if (statusEl) {
+                            statusEl.innerHTML = `
+                                Listening... | جاري الاستماع...<br>
+                                <small style="opacity: 0.7;">"${transcript}"</small>
+                            `;
+                        }
                     }
                 };
                 
                 recognition.onerror = function(event) {
                     console.error('Speech recognition error:', event.error);
                     handleRecognitionError(event.error);
+                    if (navigator.vibrate && isMobile) {
+                        navigator.vibrate([200, 100, 200]); // Error feedback
+                    }
                 };
                 
                 recognition.onend = function() {
@@ -1491,7 +1743,7 @@
                     isRecording = false;
                     updateVoiceUI('idle');
                     
-                    // If no transcript was captured, try alternative approach
+                    // Enhanced mobile error handling
                     if (!lastTranscript && isMobile) {
                         setTimeout(() => {
                             if (!lastTranscript) {
@@ -1506,6 +1758,48 @@
             }
         }
 
+        // Enhanced microphone permission handling
+        async function requestMicrophonePermission() {
+            if (permissionGranted) return true;
+
+            try {
+                if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+                    const stream = await navigator.mediaDevices.getUserMedia({ 
+                        audio: {
+                            echoCancellation: true,
+                            noiseSuppression: true,
+                            autoGainControl: true
+                        } 
+                    });
+                    // Stop the stream immediately, we just needed permission
+                    stream.getTracks().forEach(track => track.stop());
+                    permissionGranted = true;
+                    return true;
+                }
+                return false;
+            } catch (error) {
+                console.error('Microphone permission error:', error);
+                
+                let errorMessage = 'يرجى السماح بالوصول للميكروفون لاستخدام المساعد الصوتي. | Please allow microphone access to use voice assistant.';
+                
+                if (error.name === 'NotAllowedError') {
+                    if (isMobile) {
+                        errorMessage += '\n\n';
+                        if (isIOS) {
+                            errorMessage += 'للآيفون: الإعدادات > سفاري > كاميرا ومايكروفون | For iPhone: Settings > Safari > Camera & Microphone';
+                        } else if (isAndroid) {
+                            errorMessage += 'للأندرويد: إعدادات التطبيق > الأذونات > المايكروفون | For Android: App Settings > Permissions > Microphone';
+                        }
+                    }
+                } else if (error.name === 'NotFoundError') {
+                    errorMessage = 'لم يتم العثور على مايكروفون. تحقق من الجهاز. | No microphone found. Check your device.';
+                }
+                
+                showError(errorMessage);
+                return false;
+            }
+        }
+
         // Enhanced error handling for mobile
         function handleRecognitionError(error) {
             console.error('Recognition error:', error);
@@ -1517,9 +1811,13 @@
                     break;
                 case 'not-allowed':
                     errorMessage = 'يرجى السماح بالوصول للميكروفون. | Please allow microphone access.';
-                    // For mobile, provide more guidance
                     if (isMobile) {
-                        errorMessage += '\n\nللهواتف: اذهب لإعدادات المتصفح > الأذونات > الميكروفون\nFor mobile: Go to browser settings > Permissions > Microphone';
+                        errorMessage += '\n\n';
+                        if (isIOS) {
+                            errorMessage += 'الإعدادات > سفاري > الكاميرا والمايكروفون\nSettings > Safari > Camera & Microphone';
+                        } else {
+                            errorMessage += 'إعدادات المتصفح > الأذونات > المايكروفون\nBrowser settings > Permissions > Microphone';
+                        }
                     }
                     break;
                 case 'no-speech':
@@ -1540,6 +1838,9 @@
                 case 'audio-capture':
                     errorMessage = 'مشكلة في تسجيل الصوت. تحقق من الميكروفون. | Audio capture problem. Check your microphone.';
                     break;
+                case 'service-not-allowed':
+                    errorMessage = 'خدمة التعرف على الصوت غير متاحة. | Speech recognition service not available.';
+                    break;
                 default:
                     errorMessage = 'حدث خطأ في التعرف على الصوت. يرجى المحاولة مرة أخرى. | Speech recognition error. Please try again.';
             }
@@ -1552,6 +1853,12 @@
             try {
                 lastTranscript = '';
                 
+                // Request permission first
+                const hasPermission = await requestMicrophonePermission();
+                if (!hasPermission) {
+                    return;
+                }
+                
                 if (!recognition) {
                     initializeSpeechRecognition();
                 }
@@ -1560,21 +1867,21 @@
                     throw new Error('Speech recognition not supported');
                 }
                 
-                // Request microphone permission explicitly on mobile
-                if (isMobile && navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-                    try {
-                        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-                        stream.getTracks().forEach(track => track.stop()); // Stop the stream, we just needed permission
-                    } catch (permissionError) {
-                        console.error('Microphone permission denied:', permissionError);
-                        showError('يرجى السماح بالوصول للميكروفون لاستخدام المساعد الصوتي. | Please allow microphone access to use voice assistant.');
-                        return;
-                    }
-                }
-                
                 // Stop any ongoing speech synthesis
                 if (speechSynthesis.speaking) {
                     speechSynthesis.cancel();
+                }
+                
+                // Enhanced mobile preparation
+                if (isMobile) {
+                    // Prevent screen lock during recording
+                    if ('wakeLock' in navigator) {
+                        try {
+                            await navigator.wakeLock.request('screen');
+                        } catch (e) {
+                            console.log('Wake lock not available');
+                        }
+                    }
                 }
                 
                 isRecording = true;
@@ -1582,15 +1889,18 @@
                 recognition.start();
                 
                 updateVoiceUI('recording');
-                document.getElementById('voiceStatusText').textContent = 'Recording... Speak your question | جاري التسجيل... تحدث بسؤالك';
+                const statusEl = document.getElementById('voiceStatusText');
+                if (statusEl) {
+                    statusEl.textContent = 'Recording... Speak your question | جاري التسجيل... تحدث بسؤالك';
+                }
                 
-                // Auto-stop after 10 seconds for mobile battery optimization
+                // Auto-stop with longer duration for mobile
                 if (isMobile) {
                     setTimeout(() => {
                         if (isRecording) {
                             stopRecording();
                         }
-                    }, 10000);
+                    }, 20000); // Increased to 20 seconds
                 }
                 
             } catch (error) {
@@ -1602,10 +1912,17 @@
 
         function stopRecording() {
             if (recognition && isRecording) {
-                recognition.stop();
+                try {
+                    recognition.stop();
+                } catch (e) {
+                    console.log('Recognition already stopped');
+                }
                 isRecording = false;
                 updateVoiceUI('processing');
-                document.getElementById('voiceStatusText').textContent = 'Processing your question... | جاري معالجة سؤالك...';
+                const statusEl = document.getElementById('voiceStatusText');
+                if (statusEl) {
+                    statusEl.textContent = 'Processing your question... | جاري معالجة سؤالك...';
+                }
             }
         }
 
@@ -1615,6 +1932,8 @@
             const startBtn = document.getElementById('startRecordingBtn');
             const stopBtn = document.getElementById('stopRecordingBtn');
             const indicator = document.getElementById('languageIndicator');
+            
+            if (!btn || !startBtn || !stopBtn || !indicator) return;
             
             // Reset all states
             btn.classList.remove('recording', 'loading', 'listening');
@@ -1662,13 +1981,18 @@
             const transcriptionArea = document.getElementById('transcriptionArea');
             const transcriptionText = document.getElementById('transcriptionText');
             
-            // Show transcription
-            transcriptionText.textContent = transcript;
-            transcriptionArea.style.display = 'block';
+            if (transcriptionArea && transcriptionText) {
+                // Show transcription
+                transcriptionText.textContent = transcript;
+                transcriptionArea.style.display = 'block';
+            }
             
-            document.getElementById('voiceStatusText').innerHTML = `
-                <strong>Processing your question... | جاري معالجة سؤالك...</strong>
-            `;
+            const statusEl = document.getElementById('voiceStatusText');
+            if (statusEl) {
+                statusEl.innerHTML = `
+                    <strong>Processing your question... | جاري معالجة سؤالك...</strong>
+                `;
+            }
             
             try {
                 await getGeminiResponse(transcript);
@@ -1706,6 +2030,10 @@ User's question: "${question}"
 Provide a helpful response in the same language:
 `;
 
+                // Enhanced fetch with mobile optimization
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 15000); // 15 second timeout for mobile
+
                 const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${API_KEY}`, {
                     method: 'POST',
                     headers: {
@@ -1721,10 +2049,13 @@ Provide a helpful response in the same language:
                             temperature: 0.7,
                             topK: 40,
                             topP: 0.95,
-                            maxOutputTokens: 300, // Reduced for mobile
+                            maxOutputTokens: 300,
                         }
-                    })
+                    }),
+                    signal: controller.signal
                 });
+
+                clearTimeout(timeoutId);
 
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
@@ -1744,7 +2075,9 @@ Provide a helpful response in the same language:
                 
                 let errorMessage = 'خطأ في الاتصال بالخدمة. يرجى المحاولة مرة أخرى. | Connection error. Please try again.';
                 
-                if (error.message.includes('403')) {
+                if (error.name === 'AbortError') {
+                    errorMessage = 'انتهت مهلة الطلب. يرجى المحاولة مرة أخرى. | Request timeout. Please try again.';
+                } else if (error.message.includes('403')) {
                     errorMessage = 'خطأ في أذونات الخدمة. | Service permission error.';
                 } else if (error.message.includes('400')) {
                     errorMessage = 'خطأ في تنسيق الطلب. | Request format error.';
@@ -1758,34 +2091,63 @@ Provide a helpful response in the same language:
 
         // Enhanced response display with mobile optimization
         function showResponse(question, response) {
-            document.getElementById('voiceStatusText').innerHTML = `
-                <strong>Response ready | الإجابة جاهزة</strong>
-            `;
+            const statusEl = document.getElementById('voiceStatusText');
+            const responseEl = document.getElementById('responseText');
+            const voiceResponseEl = document.getElementById('voiceResponse');
             
-            document.getElementById('responseText').textContent = response;
-            document.getElementById('voiceResponse').style.display = 'block';
+            if (statusEl) {
+                statusEl.innerHTML = `
+                    <strong>Response ready | الإجابة جاهزة</strong>
+                `;
+            }
+            
+            if (responseEl) {
+                responseEl.textContent = response;
+            }
+            
+            if (voiceResponseEl) {
+                voiceResponseEl.style.display = 'block';
+            }
             
             updateVoiceUI('idle');
             
             // Enhanced text-to-speech for mobile
             speakResponse(response);
             
-            // Scroll to response on mobile
+            // Scroll to response on mobile with better timing
             if (isMobile) {
                 setTimeout(() => {
-                    document.getElementById('voiceResponse').scrollIntoView({ 
-                        behavior: 'smooth', 
-                        block: 'center' 
-                    });
-                }, 300);
+                    if (voiceResponseEl) {
+                        voiceResponseEl.scrollIntoView({ 
+                            behavior: 'smooth', 
+                            block: 'center' 
+                        });
+                    }
+                }, 500);
             }
         }
 
         function showError(errorMessage) {
-            document.getElementById('voiceStatusText').textContent = 'خطأ في المعالجة | Processing Error';
-            document.getElementById('responseText').textContent = errorMessage;
-            document.getElementById('voiceResponse').style.display = 'block';
-            document.getElementById('transcriptionArea').style.display = 'none';
+            const statusEl = document.getElementById('voiceStatusText');
+            const responseEl = document.getElementById('responseText');
+            const voiceResponseEl = document.getElementById('voiceResponse');
+            const transcriptionArea = document.getElementById('transcriptionArea');
+            
+            if (statusEl) {
+                statusEl.textContent = 'خطأ في المعالجة | Processing Error';
+            }
+            
+            if (responseEl) {
+                responseEl.textContent = errorMessage;
+            }
+            
+            if (voiceResponseEl) {
+                voiceResponseEl.style.display = 'block';
+            }
+            
+            if (transcriptionArea) {
+                transcriptionArea.style.display = 'none';
+            }
             
             updateVoiceUI('idle');
         }
@@ -1797,7 +2159,7 @@ Provide a helpful response in the same language:
             // Stop any ongoing speech
             speechSynthesis.cancel();
             
-            // For mobile, reduce speech rate and improve compatibility
+            // Enhanced mobile compatibility
             setTimeout(() => {
                 const utterance = new SpeechSynthesisUtterance(text);
                 
@@ -1810,7 +2172,7 @@ Provide a helpful response in the same language:
                 utterance.pitch = 1;
                 utterance.volume = 0.8;
                 
-                // For mobile, break long text into chunks
+                // Enhanced mobile speech handling
                 if (isMobile && text.length > 200) {
                     const sentences = text.split(/[.!?]/).filter(s => s.trim());
                     let currentIndex = 0;
@@ -1827,7 +2189,13 @@ Provide a helpful response in the same language:
                                 
                                 sentenceUtterance.onend = () => {
                                     currentIndex++;
-                                    setTimeout(speakNext, 200);
+                                    setTimeout(speakNext, 300); // Longer pause between sentences
+                                };
+                                
+                                sentenceUtterance.onerror = (event) => {
+                                    console.error('Speech synthesis error:', event);
+                                    currentIndex++;
+                                    speakNext();
                                 };
                                 
                                 speechSynthesis.speak(sentenceUtterance);
@@ -1846,32 +2214,39 @@ Provide a helpful response in the same language:
                     
                     speechSynthesis.speak(utterance);
                 }
-            }, 100);
+            }, 200);
         }
 
         // Enhanced modal management
         function toggleVoiceModal() {
             const modal = document.getElementById('voiceModal');
-            modal.classList.toggle('active');
             
-            if (modal.classList.contains('active')) {
-                document.body.style.overflow = 'hidden';
-                // Reset modal state
+            if (!modal) return;
+            
+            const isActive = modal.classList.contains('active');
+            
+            if (!isActive) {
+                modal.classList.add('active');
+                disableBodyScroll();
                 resetVoiceModal();
                 
-                // For mobile, focus on modal content
+                // Enhanced mobile focus
                 if (isMobile) {
                     setTimeout(() => {
-                        document.querySelector('.voice-content').scrollTo(0, 0);
-                    }, 300);
+                        const content = document.querySelector('.voice-content');
+                        if (content) {
+                            content.scrollTo(0, 0);
+                        }
+                    }, 400);
                 }
             } else {
-                document.body.style.overflow = 'auto';
-                // Stop recording if active
+                modal.classList.remove('active');
+                enableBodyScroll();
+                
+                // Cleanup
                 if (isRecording) {
                     stopRecording();
                 }
-                // Stop any ongoing speech
                 if (speechSynthesis.speaking) {
                     speechSynthesis.cancel();
                 }
@@ -1879,73 +2254,158 @@ Provide a helpful response in the same language:
         }
 
         function resetVoiceModal() {
-            document.getElementById('voiceStatusText').innerHTML = 'مساعد ذكي يدعم العربية والإنجليزية<br>Smart assistant supporting Arabic and English';
-            document.getElementById('voiceResponse').style.display = 'none';
-            document.getElementById('transcriptionArea').style.display = 'none';
+            const statusEl = document.getElementById('voiceStatusText');
+            const responseEl = document.getElementById('voiceResponse');
+            const transcriptionArea = document.getElementById('transcriptionArea');
+            const indicator = document.getElementById('languageIndicator');
+            
+            if (statusEl) {
+                statusEl.innerHTML = 'مساعد ذكي يدعم العربية والإنجليزية<br>Smart assistant supporting Arabic and English';
+            }
+            
+            if (responseEl) {
+                responseEl.style.display = 'none';
+            }
+            
+            if (transcriptionArea) {
+                transcriptionArea.style.display = 'none';
+            }
+            
+            if (indicator) {
+                indicator.textContent = 'EN';
+            }
+            
             updateVoiceUI('idle');
             currentLanguage = 'en-US';
-            document.getElementById('languageIndicator').textContent = 'EN';
             lastTranscript = '';
         }
 
-        // Enhanced help modal
         function toggleHelpModal() {
             const modal = document.getElementById('helpModal');
-            modal.classList.toggle('active');
             
-            if (modal.classList.contains('active')) {
-                document.body.style.overflow = 'hidden';
+            if (!modal) return;
+            
+            const isActive = modal.classList.contains('active');
+            
+            if (!isActive) {
+                modal.classList.add('active');
+                disableBodyScroll();
                 
-                // For mobile, focus on modal content
+                // Enhanced mobile focus
                 if (isMobile) {
                     setTimeout(() => {
-                        document.querySelector('.help-content').scrollTo(0, 0);
-                    }, 300);
+                        const content = document.querySelector('.help-content');
+                        if (content) {
+                            content.scrollTo(0, 0);
+                        }
+                    }, 400);
                 }
             } else {
-                document.body.style.overflow = 'auto';
+                modal.classList.remove('active');
+                enableBodyScroll();
             }
         }
 
         // Enhanced event listeners for mobile
         function addMobileEventListeners() {
-            // Enhanced modal closing
-            document.getElementById('helpModal').addEventListener('click', (e) => {
-                if (e.target === e.currentTarget) {
-                    toggleHelpModal();
-                }
-            });
+            // Enhanced button event listeners with proper touch handling
+            const voiceBtn = document.getElementById('voiceSupportBtn');
+            const helpBtn = document.getElementById('helpBtn');
+            const startRecordingBtn = document.getElementById('startRecordingBtn');
+            const stopRecordingBtn = document.getElementById('stopRecordingBtn');
+            const voiceCloseBtn = document.getElementById('voiceCloseBtn');
+            const helpCloseBtn = document.getElementById('helpCloseBtn');
 
-            document.getElementById('voiceModal').addEventListener('click', (e) => {
-                if (e.target === e.currentTarget) {
+            // Voice support button
+            if (voiceBtn) {
+                voiceBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
                     toggleVoiceModal();
-                }
-            });
+                });
+
+                // Enhanced touch events
+                voiceBtn.addEventListener('touchstart', (e) => {
+                    e.preventDefault();
+                    touchStartTime = Date.now();
+                }, { passive: false });
+
+                voiceBtn.addEventListener('touchend', (e) => {
+                    e.preventDefault();
+                    const touchDuration = Date.now() - touchStartTime;
+                    if (touchDuration < 1000) { // Prevent accidental long taps
+                        toggleVoiceModal();
+                    }
+                }, { passive: false });
+            }
+
+            // Help button
+            if (helpBtn) {
+                helpBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    toggleHelpModal();
+                });
+
+                helpBtn.addEventListener('touchstart', (e) => {
+                    e.preventDefault();
+                }, { passive: false });
+
+                helpBtn.addEventListener('touchend', (e) => {
+                    e.preventDefault();
+                    toggleHelpModal();
+                }, { passive: false });
+            }
+
+            // Recording buttons
+            if (startRecordingBtn) {
+                startRecordingBtn.addEventListener('click', startRecording);
+            }
+
+            if (stopRecordingBtn) {
+                stopRecordingBtn.addEventListener('click', stopRecording);
+            }
+
+            // Close buttons
+            if (voiceCloseBtn) {
+                voiceCloseBtn.addEventListener('click', toggleVoiceModal);
+            }
+
+            if (helpCloseBtn) {
+                helpCloseBtn.addEventListener('click', toggleHelpModal);
+            }
+
+            // Enhanced modal closing
+            const helpModal = document.getElementById('helpModal');
+            const voiceModal = document.getElementById('voiceModal');
+
+            if (helpModal) {
+                helpModal.addEventListener('click', (e) => {
+                    if (e.target === helpModal) {
+                        toggleHelpModal();
+                    }
+                });
+            }
+
+            if (voiceModal) {
+                voiceModal.addEventListener('click', (e) => {
+                    if (e.target === voiceModal) {
+                        toggleVoiceModal();
+                    }
+                });
+            }
 
             // Enhanced keyboard support
             document.addEventListener('keydown', (e) => {
                 if (e.key === 'Escape') {
-                    const helpModal = document.getElementById('helpModal');
-                    const voiceModal = document.getElementById('voiceModal');
-                    
-                    if (helpModal.classList.contains('active')) {
+                    if (helpModal && helpModal.classList.contains('active')) {
                         toggleHelpModal();
                     }
-                    if (voiceModal.classList.contains('active')) {
+                    if (voiceModal && voiceModal.classList.contains('active')) {
                         toggleVoiceModal();
                     }
                 }
             });
-
-            // Prevent zoom on double tap for buttons
-            let lastTouchEnd = 0;
-            document.addEventListener('touchend', function (event) {
-                const now = (new Date()).getTime();
-                if (now - lastTouchEnd <= 300) {
-                    event.preventDefault();
-                }
-                lastTouchEnd = now;
-            }, false);
 
             // Handle orientation change
             window.addEventListener('orientationchange', () => {
@@ -1954,7 +2414,16 @@ Provide a helpful response in the same language:
                     document.querySelectorAll('.service-card').forEach(card => {
                         card.style.transform = '';
                     });
-                }, 100);
+                    
+                    // Recalculate modal positions
+                    const modals = document.querySelectorAll('.voice-modal.active, .help-modal.active');
+                    modals.forEach(modal => {
+                        const content = modal.querySelector('.voice-content, .help-content');
+                        if (content) {
+                            content.scrollTo(0, 0);
+                        }
+                    });
+                }, 200);
             });
 
             // Handle visibility change (for battery optimization)
@@ -1969,17 +2438,51 @@ Provide a helpful response in the same language:
                     }
                 }
             });
+
+            // Enhanced focus management for modals
+            document.addEventListener('focusin', (e) => {
+                const voiceModal = document.getElementById('voiceModal');
+                const helpModal = document.getElementById('helpModal');
+                
+                if (voiceModal && voiceModal.classList.contains('active')) {
+                    if (!voiceModal.contains(e.target)) {
+                        const firstFocusable = voiceModal.querySelector('button:not([disabled])');
+                        if (firstFocusable) {
+                            firstFocusable.focus();
+                        }
+                    }
+                }
+                
+                if (helpModal && helpModal.classList.contains('active')) {
+                    if (!helpModal.contains(e.target)) {
+                        const firstFocusable = helpModal.querySelector('button:not([disabled])');
+                        if (firstFocusable) {
+                            firstFocusable.focus();
+                        }
+                    }
+                }
+            });
         }
 
         // Enhanced initialization
         window.addEventListener('load', () => {
+            // Prevent zoom
+            preventZoom();
+            
+            // Initialize components
             initializeSpeechRecognition();
             addMobileEventListeners();
             
-            // Optimize for mobile performance
+            // Mobile-specific optimizations
             if (isMobile) {
-                // Reduce animation complexity for mobile
-                document.documentElement.style.setProperty('--reduced-motion', 'true');
+                // Add mobile class to body
+                document.body.classList.add('mobile-device');
+                
+                // Optimize viewport
+                const viewport = document.querySelector('meta[name=viewport]');
+                if (viewport) {
+                    viewport.setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover');
+                }
                 
                 // Preload critical resources
                 if ('serviceWorker' in navigator) {
@@ -1988,18 +2491,45 @@ Provide a helpful response in the same language:
             }
             
             // Add loading animation for cards
-            document.querySelectorAll('.service-card').forEach((card, index) => {
+            const cards = document.querySelectorAll('.service-card');
+            cards.forEach((card, index) => {
                 setTimeout(() => {
                     card.style.opacity = '0';
                     card.style.transform = 'translateY(30px)';
-                    card.style.transition = 'all 0.6s cubic-bezier(0.4, 0, 0.2, 1)';
+                    card.style.transition = 'all 0.8s cubic-bezier(0.4, 0, 0.2, 1)';
                     
                     setTimeout(() => {
                         card.style.opacity = '1';
                         card.style.transform = 'translateY(0)';
                     }, 100);
-                }, index * 150);
+                }, index * 200);
             });
+
+            // Enhanced button visibility check
+            setTimeout(() => {
+                const voiceBtn = document.getElementById('voiceSupportBtn');
+                const helpBtn = document.getElementById('helpBtn');
+                
+                if (voiceBtn) {
+                    const rect = voiceBtn.getBoundingClientRect();
+                    if (rect.width === 0 || rect.height === 0) {
+                        console.warn('Voice button not visible, attempting to fix...');
+                        voiceBtn.style.display = 'flex';
+                        voiceBtn.style.visibility = 'visible';
+                        voiceBtn.style.opacity = '1';
+                    }
+                }
+                
+                if (helpBtn) {
+                    const rect = helpBtn.getBoundingClientRect();
+                    if (rect.width === 0 || rect.height === 0) {
+                        console.warn('Help button not visible, attempting to fix...');
+                        helpBtn.style.display = 'flex';
+                        helpBtn.style.visibility = 'visible';
+                        helpBtn.style.opacity = '1';
+                    }
+                }
+            }, 1000);
         });
 
         // Enhanced touch and mouse tracking (mobile optimized)
@@ -2008,7 +2538,7 @@ Provide a helpful response in the same language:
             
             document.addEventListener('touchstart', () => {
                 isTouch = true;
-            });
+            }, { passive: true });
             
             document.addEventListener('mousemove', (e) => {
                 if (isTouch) return; // Skip mouse events on touch devices
@@ -2017,7 +2547,8 @@ Provide a helpful response in the same language:
                 const mouseY = (e.clientY / window.innerHeight) * 2 - 1;
 
                 // Reduced parallax for performance
-                document.querySelectorAll('.medical-geometry').forEach((elem, index) => {
+                const geometries = document.querySelectorAll('.medical-geometry');
+                geometries.forEach((elem, index) => {
                     const speed = (index + 1) * 0.01;
                     const x = mouseX * speed * 20;
                     const y = mouseY * speed * 20;
@@ -2025,22 +2556,22 @@ Provide a helpful response in the same language:
                 });
             });
             
-            // Enhanced touch support
+            // Enhanced touch support with minimal parallax
             document.addEventListener('touchmove', (e) => {
                 if (e.touches.length === 1) {
                     const touch = e.touches[0];
-                    // Minimal parallax effect for touch
                     const touchX = (touch.clientX / window.innerWidth) * 2 - 1;
                     const touchY = (touch.clientY / window.innerHeight) * 2 - 1;
                     
-                    document.querySelectorAll('.medical-geometry').forEach((elem, index) => {
-                        const speed = (index + 1) * 0.005; // Reduced for mobile
+                    const geometries = document.querySelectorAll('.medical-geometry');
+                    geometries.forEach((elem, index) => {
+                        const speed = (index + 1) * 0.003; // Much reduced for mobile
                         const x = touchX * speed * 10;
                         const y = touchY * speed * 10;
                         elem.style.transform = `translateX(${x}px) translateY(${y}px)`;
                     });
                 }
-            });
+            }, { passive: true });
         }
 
         // Initialize interaction tracking
@@ -2050,11 +2581,40 @@ Provide a helpful response in the same language:
         window.addEventListener('error', (e) => {
             console.error('Global error:', e);
             // Log error for debugging but don't break user experience
+            if (isMobile) {
+                // Show user-friendly error message on mobile
+                setTimeout(() => {
+                    if (document.getElementById('voiceModal').classList.contains('active')) {
+                        showError('حدث خطأ غير متوقع. يرجى إعادة تحميل الصفحة. | An unexpected error occurred. Please reload the page.');
+                    }
+                }, 1000);
+            }
         });
 
         window.addEventListener('unhandledrejection', (e) => {
             console.error('Unhandled promise rejection:', e);
             // Log error for debugging but don't break user experience
+        });
+
+        // Enhanced network status handling
+        window.addEventListener('online', () => {
+            console.log('Network connection restored');
+            if (isMobile) {
+                const statusEl = document.getElementById('voiceStatusText');
+                if (statusEl && statusEl.textContent.includes('No internet')) {
+                    statusEl.innerHTML = 'مساعد ذكي يدعم العربية والإنجليزية<br>Smart assistant supporting Arabic and English';
+                }
+            }
+        });
+
+        window.addEventListener('offline', () => {
+            console.log('Network connection lost');
+            if (isMobile) {
+                const statusEl = document.getElementById('voiceStatusText');
+                if (statusEl) {
+                    statusEl.textContent = 'لا يوجد اتصال بالإنترنت | No internet connection';
+                }
+            }
         });
     </script>
 </body>
