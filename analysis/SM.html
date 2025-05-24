@@ -10,6 +10,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
             --primary-color: #2563eb;
@@ -47,12 +48,69 @@
             color: var(--gray-900);
             line-height: 1.6;
             overflow-x: hidden;
+            transition: var(--transition);
+        }
+
+        [dir="rtl"] body {
+            font-family: 'Tajawal', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
         }
         
         .container {
             max-width: 1280px;
             margin: 0 auto;
             padding: 16px;
+        }
+
+        /* Language Switcher */
+        .language-switcher {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1000;
+            display: flex;
+            gap: 8px;
+            background: white;
+            padding: 8px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--gray-200);
+        }
+
+        [dir="rtl"] .language-switcher {
+            left: auto;
+            right: 20px;
+        }
+
+        .lang-btn {
+            padding: 8px 12px;
+            border: 1px solid var(--gray-300);
+            background: white;
+            color: var(--gray-700);
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.75rem;
+            font-weight: 500;
+            transition: var(--transition);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            min-width: 60px;
+            justify-content: center;
+        }
+
+        .lang-btn:hover {
+            background-color: var(--gray-50);
+        }
+
+        .lang-btn.active {
+            background-color: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+
+        .lang-flag {
+            font-size: 1rem;
         }
         
         /* Header */
@@ -66,6 +124,7 @@
             box-shadow: var(--shadow-lg);
             position: relative;
             overflow: hidden;
+            margin-top: 60px;
         }
         
         header::before {
@@ -104,6 +163,10 @@
         @media (min-width: 1024px) {
             .dashboard {
                 grid-template-columns: 380px 1fr;
+            }
+
+            [dir="rtl"] .dashboard {
+                grid-template-columns: 1fr 380px;
             }
         }
         
@@ -227,6 +290,12 @@
             cursor: pointer;
             display: block;
         }
+
+        [dir="rtl"] .file-upload input[type=file] {
+            right: auto;
+            left: 0;
+            text-align: left;
+        }
         
         .upload-zone {
             border: 2px dashed var(--gray-300);
@@ -273,6 +342,10 @@
             transition: width 0.3s ease;
             position: relative;
         }
+
+        [dir="rtl"] .progress-bar {
+            background: linear-gradient(-90deg, var(--primary-color), var(--secondary-color));
+        }
         
         .progress-text {
             font-size: 0.75rem;
@@ -291,11 +364,20 @@
             position: relative;
             border-left: 4px solid;
         }
+
+        [dir="rtl"] .status-message {
+            border-left: none;
+            border-right: 4px solid;
+        }
         
         .success-message {
             background-color: rgba(16, 185, 129, 0.1);
             color: var(--success-dark);
             border-left-color: var(--success-color);
+        }
+
+        [dir="rtl"] .success-message {
+            border-right-color: var(--success-color);
         }
         
         .error-message {
@@ -303,11 +385,19 @@
             color: #dc2626;
             border-left-color: var(--danger-color);
         }
+
+        [dir="rtl"] .error-message {
+            border-right-color: var(--danger-color);
+        }
         
         .warning-message {
             background-color: rgba(245, 158, 11, 0.1);
             color: #d97706;
             border-left-color: var(--warning-color);
+        }
+
+        [dir="rtl"] .warning-message {
+            border-right-color: var(--warning-color);
         }
         
         /* File Info */
@@ -452,6 +542,10 @@
         .qa-results-content ul {
             margin: 8px 0 16px 20px;
         }
+
+        [dir="rtl"] .qa-results-content ul {
+            margin: 8px 20px 16px 0;
+        }
         
         .qa-results-content li {
             margin-bottom: 4px;
@@ -482,8 +576,26 @@
             .container {
                 padding: 12px;
             }
-            
+
+            .language-switcher {
+                top: 10px;
+                left: 10px;
+                padding: 6px;
+            }
+
+            [dir="rtl"] .language-switcher {
+                left: auto;
+                right: 10px;
+            }
+
+            .lang-btn {
+                padding: 6px 8px;
+                font-size: 0.7rem;
+                min-width: 50px;
+            }
+
             header {
+                margin-top: 70px;
                 margin-bottom: 16px;
                 padding: 20px 16px;
             }
@@ -572,7 +684,7 @@
                 color: var(--gray-900);
             }
             
-            .card {
+            .card, .language-switcher {
                 background-color: var(--gray-100);
                 border-color: var(--gray-200);
             }
@@ -582,7 +694,8 @@
         @media print {
             .btn,
             .file-upload,
-            .loader {
+            .loader,
+            .language-switcher {
                 display: none !important;
             }
             
@@ -594,19 +707,31 @@
     </style>
 </head>
 <body>
+    <!-- Language Switcher -->
+    <div class="language-switcher">
+        <button class="lang-btn active" onclick="switchLanguage('en')" id="lang-en">
+            <span class="lang-flag">🇺🇸</span>
+            <span>EN</span>
+        </button>
+        <button class="lang-btn" onclick="switchLanguage('ar')" id="lang-ar">
+            <span class="lang-flag">🇸🇦</span>
+            <span>AR</span>
+        </button>
+    </div>
+
     <div class="container">
         <header role="banner">
-            <h1>Smart Quality Assurance Agent</h1>
-            <p>Intelligent system for data quality inspection and analysis using AI</p>
+            <h1 data-en="Smart Quality Assurance Agent" data-ar="نظام ضمان الجودة الذكي">Smart Quality Assurance Agent</h1>
+            <p data-en="Intelligent system for data quality inspection and analysis using AI" data-ar="نظام ذكي لفحص وتحليل جودة البيانات باستخدام الذكاء الاصطناعي">Intelligent system for data quality inspection and analysis using AI</p>
         </header>
         
         <main class="dashboard" role="main">
             <aside class="sidebar" role="complementary">
                 <section class="card" aria-labelledby="upload-heading">
                     <div class="card-header">
-                        <h2 id="upload-heading">Upload Data Files</h2>
+                        <h2 id="upload-heading" data-en="Upload Data Files" data-ar="رفع ملفات البيانات">Upload Data Files</h2>
                     </div>
-                    <p>Upload data files (CSV, Excel, PDF) for comprehensive AI-powered analysis</p>
+                    <p data-en="Upload data files (CSV, Excel, PDF) for comprehensive AI-powered analysis" data-ar="ارفع ملفات البيانات (CSV، Excel، PDF) للحصول على تحليل شامل مدعوم بالذكاء الاصطناعي">Upload data files (CSV, Excel, PDF) for comprehensive AI-powered analysis</p>
                     
                     <div class="upload-zone" id="upload-zone">
                         <svg class="upload-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -618,11 +743,11 @@
                                     <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/>
                                     <path d="M7.646 1.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 2.707V11.5a.5.5 0 0 1-1 0V2.707L5.354 4.854a.5.5 0 1 1-.708-.708l3-3z"/>
                                 </svg>
-                                Choose Files
+                                <span data-en="Choose Files" data-ar="اختر الملفات">Choose Files</span>
                             </button>
                             <input type="file" id="file-input" accept=".csv,.xlsx,.xls,.pdf" multiple aria-label="Upload data files" />
                         </div>
-                        <p id="file-types" class="file-size" style="margin-top: 8px;">
+                        <p id="file-types" class="file-size" style="margin-top: 8px;" data-en="Supported: CSV, Excel (.xlsx, .xls), PDF" data-ar="الأنواع المدعومة: CSV، Excel (.xlsx, .xls)، PDF">
                             Supported: CSV, Excel (.xlsx, .xls), PDF
                         </p>
                     </div>
@@ -641,11 +766,11 @@
                     </div>
                     
                     <div class="status-message success-message" id="success-message" role="status" aria-live="polite">
-                        <strong>Success!</strong> File uploaded successfully and is being analyzed.
+                        <strong data-en="Success!" data-ar="نجح!">Success!</strong> <span data-en="File uploaded successfully and is being analyzed." data-ar="تم رفع الملف بنجاح وجاري تحليله.">File uploaded successfully and is being analyzed.</span>
                     </div>
                     
                     <div class="status-message error-message" id="error-message" role="alert" aria-live="assertive">
-                        <strong>Error:</strong> <span id="error-text">An error occurred while uploading the file. Please try again.</span>
+                        <strong data-en="Error:" data-ar="خطأ:">Error:</strong> <span id="error-text" data-en="An error occurred while uploading the file. Please try again." data-ar="حدث خطأ أثناء رفع الملف. يرجى المحاولة مرة أخرى.">An error occurred while uploading the file. Please try again.</span>
                     </div>
                     
                     <div class="loader" id="loader" aria-label="Processing file..."></div>
@@ -653,23 +778,23 @@
                 
                 <section class="card" aria-labelledby="insights-heading">
                     <div class="card-header">
-                        <h2 id="insights-heading">Data Insights</h2>
+                        <h2 id="insights-heading" data-en="Data Insights" data-ar="رؤى البيانات">Data Insights</h2>
                     </div>
                     <div class="insights-panel" id="insights-panel">
                         <div class="insight-card">
-                            <h3>Records</h3>
+                            <h3 data-en="Records" data-ar="السجلات">Records</h3>
                             <span class="value" id="records-count">0</span>
                         </div>
                         <div class="insight-card">
-                            <h3>Missing Data</h3>
+                            <h3 data-en="Missing Data" data-ar="البيانات المفقودة">Missing Data</h3>
                             <span class="value" id="missing-fields">0%</span>
                         </div>
                         <div class="insight-card">
-                            <h3>Quality Score</h3>
+                            <h3 data-en="Quality Score" data-ar="نقاط الجودة">Quality Score</h3>
                             <span class="value" id="data-quality">N/A</span>
                         </div>
                         <div class="insight-card">
-                            <h3>Columns</h3>
+                            <h3 data-en="Columns" data-ar="الأعمدة">Columns</h3>
                             <span class="value" id="columns-count">0</span>
                         </div>
                     </div>
@@ -679,25 +804,25 @@
             <section class="main-content">
                 <article class="card" aria-labelledby="analysis-heading">
                     <div class="card-header">
-                        <h2 id="analysis-heading">AI-Powered Analysis</h2>
+                        <h2 id="analysis-heading" data-en="AI-Powered Analysis" data-ar="التحليل المدعوم بالذكاء الاصطناعي">AI-Powered Analysis</h2>
                         <div class="analysis-actions">
                             <button class="btn btn-success" id="analyze-btn" disabled aria-describedby="analysis-description">
                                 <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
                                     <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
                                     <path d="M10.97 4.97a.235.235 0 0 0-.02.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.061L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-1.071-1.05z"/>
                                 </svg>
-                                Analyze Data
+                                <span data-en="Analyze Data" data-ar="تحليل البيانات">Analyze Data</span>
                             </button>
                             <button class="btn btn-secondary" id="export-btn" style="display: none;">
                                 <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
                                     <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/>
                                     <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"/>
                                 </svg>
-                                Export Report
+                                <span data-en="Export Report" data-ar="تصدير التقرير">Export Report</span>
                             </button>
                         </div>
                     </div>
-                    <p id="analysis-description">Advanced data analysis using artificial intelligence to identify quality issues, patterns, and recommendations</p>
+                    <p id="analysis-description" data-en="Advanced data analysis using artificial intelligence to identify quality issues, patterns, and recommendations" data-ar="تحليل متقدم للبيانات باستخدام الذكاء الاصطناعي لتحديد مشاكل الجودة والأنماط والتوصيات">Advanced data analysis using artificial intelligence to identify quality issues, patterns, and recommendations</p>
                     
                     <div class="qa-results" id="qa-results">
                         <div class="qa-results-header">
@@ -705,15 +830,15 @@
                                 <path d="M3 0h10a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2v-1h1v1a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H3a1 1 0 0 0-1 1v1H1V2a2 2 0 0 1 2-2z"/>
                                 <path d="M1 5v-.5a.5.5 0 0 1 1 0V5h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1H1zm0 3v-.5a.5.5 0 0 1 1 0V8h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1H1zm0 3v-.5a.5.5 0 0 1 1 0v.5h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1H1z"/>
                             </svg>
-                            Analysis Results
+                            <span data-en="Analysis Results" data-ar="نتائج التحليل">Analysis Results</span>
                         </div>
-                        <div class="qa-results-content" id="qa-results-content" role="region" aria-live="polite">
+                        <div class="qa-results-content" id="qa-results-content" role="region" aria-live="polite" data-en="Upload files to start analyzing them with our AI-powered quality assurance system." data-ar="ارفع الملفات لبدء تحليلها باستخدام نظام ضمان الجودة المدعوم بالذكاء الاصطناعي.">
                             Upload files to start analyzing them with our AI-powered quality assurance system.
                         </div>
                     </div>
                     
                     <div class="status-message error-message" id="api-error-message" style="display: none; margin-top: 15px;" role="alert">
-                        <strong>Connection Error:</strong> Unable to connect to the analysis service. Please check your internet connection and try again.
+                        <strong data-en="Connection Error:" data-ar="خطأ في الاتصال:">Connection Error:</strong> <span data-en="Unable to connect to the analysis service. Please check your internet connection and try again." data-ar="تعذر الاتصال بخدمة التحليل. يرجى التحقق من اتصال الإنترنت والمحاولة مرة أخرى.">Unable to connect to the analysis service. Please check your internet connection and try again.</span>
                     </div>
                     
                     <div class="loader" id="analysis-loader" aria-label="Analyzing data..."></div>
@@ -723,6 +848,95 @@
     </div>
 
     <script>
+        // Language translations
+        const translations = {
+            en: {
+                headerTitle: "Smart Quality Assurance Agent",
+                headerSubtitle: "Intelligent system for data quality inspection and analysis using AI",
+                uploadTitle: "Upload Data Files",
+                uploadDescription: "Upload data files (CSV, Excel, PDF) for comprehensive AI-powered analysis",
+                chooseFiles: "Choose Files",
+                supportedFiles: "Supported: CSV, Excel (.xlsx, .xls), PDF",
+                successMessage: "Success!",
+                successText: "File uploaded successfully and is being analyzed.",
+                errorLabel: "Error:",
+                errorText: "An error occurred while uploading the file. Please try again.",
+                insightsTitle: "Data Insights",
+                records: "Records",
+                missingData: "Missing Data",
+                qualityScore: "Quality Score",
+                columns: "Columns",
+                analysisTitle: "AI-Powered Analysis",
+                analyzeData: "Analyze Data",
+                exportReport: "Export Report",
+                analysisDescription: "Advanced data analysis using artificial intelligence to identify quality issues, patterns, and recommendations",
+                analysisResults: "Analysis Results",
+                defaultAnalysisText: "Upload files to start analyzing them with our AI-powered quality assurance system.",
+                connectionError: "Connection Error:",
+                connectionErrorText: "Unable to connect to the analysis service. Please check your internet connection and try again."
+            },
+            ar: {
+                headerTitle: "نظام ضمان الجودة الذكي",
+                headerSubtitle: "نظام ذكي لفحص وتحليل جودة البيانات باستخدام الذكاء الاصطناعي",
+                uploadTitle: "رفع ملفات البيانات",
+                uploadDescription: "ارفع ملفات البيانات (CSV، Excel، PDF) للحصول على تحليل شامل مدعوم بالذكاء الاصطناعي",
+                chooseFiles: "اختر الملفات",
+                supportedFiles: "الأنواع المدعومة: CSV، Excel (.xlsx, .xls)، PDF",
+                successMessage: "نجح!",
+                successText: "تم رفع الملف بنجاح وجاري تحليله.",
+                errorLabel: "خطأ:",
+                errorText: "حدث خطأ أثناء رفع الملف. يرجى المحاولة مرة أخرى.",
+                insightsTitle: "رؤى البيانات",
+                records: "السجلات",
+                missingData: "البيانات المفقودة",
+                qualityScore: "نقاط الجودة",
+                columns: "الأعمدة",
+                analysisTitle: "التحليل المدعوم بالذكاء الاصطناعي",
+                analyzeData: "تحليل البيانات",
+                exportReport: "تصدير التقرير",
+                analysisDescription: "تحليل متقدم للبيانات باستخدام الذكاء الاصطناعي لتحديد مشاكل الجودة والأنماط والتوصيات",
+                analysisResults: "نتائج التحليل",
+                defaultAnalysisText: "ارفع الملفات لبدء تحليلها باستخدام نظام ضمان الجودة المدعوم بالذكاء الاصطناعي.",
+                connectionError: "خطأ في الاتصال:",
+                connectionErrorText: "تعذر الاتصال بخدمة التحليل. يرجى التحقق من اتصال الإنترنت والمحاولة مرة أخرى."
+            }
+        };
+
+        // Language switching function
+        function switchLanguage(lang) {
+            const html = document.documentElement;
+            const body = document.body;
+            
+            // Update language and direction
+            html.setAttribute('lang', lang);
+            html.setAttribute('dir', lang === 'ar' ? 'rtl' : 'ltr');
+            
+            // Update active language button
+            document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById(`lang-${lang}`).classList.add('active');
+            
+            // Update all translatable elements
+            document.querySelectorAll('[data-' + lang + ']').forEach(element => {
+                element.textContent = element.getAttribute('data-' + lang);
+            });
+            
+            // Store language preference
+            localStorage.setItem('preferred-language', lang);
+            
+            // Update current language global variable
+            window.currentLanguage = lang;
+        }
+
+        // Initialize language on load
+        function initializeLanguage() {
+            const savedLang = localStorage.getItem('preferred-language') || 'en';
+            const browserLang = navigator.language.startsWith('ar') ? 'ar' : 'en';
+            const defaultLang = savedLang !== 'en' ? savedLang : browserLang;
+            
+            window.currentLanguage = defaultLang;
+            switchLanguage(defaultLang);
+        }
+
         // Constants and Configuration
         const GEMINI_API_KEY = 'AIzaSyCV3Kb2rHMQoyAiYkrAFA82UlcGbYAAC0M'; // Replace with actual API key
         const GEMINI_API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent';
@@ -793,7 +1007,10 @@
                 if (type === 'error') {
                     elements.errorText.textContent = message;
                 } else {
-                    messageElement.querySelector('strong').nextSibling.textContent = ' ' + message;
+                    const textElement = messageElement.querySelector('span:last-child');
+                    if (textElement) {
+                        textElement.textContent = message;
+                    }
                 }
                 
                 messageElement.style.display = 'block';
@@ -824,11 +1041,17 @@
                 const extension = '.' + file.name.split('.').pop().toLowerCase();
                 
                 if (!SUPPORTED_TYPES.includes(extension)) {
-                    throw new Error(`Unsupported file type: ${extension}`);
+                    const errorMsg = window.currentLanguage === 'ar' 
+                        ? `نوع ملف غير مدعوم: ${extension}`
+                        : `Unsupported file type: ${extension}`;
+                    throw new Error(errorMsg);
                 }
                 
                 if (file.size > MAX_FILE_SIZE) {
-                    throw new Error(`File too large. Maximum size is ${utils.formatFileSize(MAX_FILE_SIZE)}`);
+                    const errorMsg = window.currentLanguage === 'ar'
+                        ? `الملف كبير جداً. الحد الأقصى هو ${utils.formatFileSize(MAX_FILE_SIZE)}`
+                        : `File too large. Maximum size is ${utils.formatFileSize(MAX_FILE_SIZE)}`;
+                    throw new Error(errorMsg);
                 }
                 
                 return true;
@@ -837,7 +1060,10 @@
             async parseCSV(data) {
                 const lines = data.split('\n').filter(line => line.trim());
                 if (lines.length < 2) {
-                    throw new Error('CSV file must have at least a header and one data row');
+                    const errorMsg = window.currentLanguage === 'ar'
+                        ? 'ملف CSV يجب أن يحتوي على رأس البيانات وصف واحد على الأقل'
+                        : 'CSV file must have at least a header and one data row';
+                    throw new Error(errorMsg);
                 }
                 
                 const headers = lines[0].split(',').map(h => h.trim().replace(/['"]/g, ''));
@@ -905,10 +1131,16 @@
                             }
                         };
                     } else {
-                        throw new Error('JSON must be an array of objects');
+                        const errorMsg = window.currentLanguage === 'ar'
+                            ? 'JSON يجب أن يكون مصفوفة من الكائنات'
+                            : 'JSON must be an array of objects';
+                        throw new Error(errorMsg);
                     }
                 } catch (error) {
-                    throw new Error('Invalid JSON format: ' + error.message);
+                    const errorMsg = window.currentLanguage === 'ar'
+                        ? 'تنسيق JSON غير صحيح: ' + error.message
+                        : 'Invalid JSON format: ' + error.message;
+                    throw new Error(errorMsg);
                 }
             },
             
@@ -928,7 +1160,10 @@
                     case 'pdf':
                         return this.mockPDFParse(file);
                     default:
-                        throw new Error('Unsupported file type');
+                        const errorMsg = window.currentLanguage === 'ar'
+                            ? 'نوع ملف غير مدعوم'
+                            : 'Unsupported file type';
+                        throw new Error(errorMsg);
                 }
             },
             
@@ -987,11 +1222,11 @@
                 const missingPercentage = totalFields > 0 ? Math.round((missingCount / totalFields) * 100) : 0;
                 const qualityScore = Math.max(0, 100 - missingPercentage - (emptyRecords * 10));
                 
-                let qualityLabel = 'Poor';
-                if (qualityScore >= 90) qualityLabel = 'Excellent';
-                else if (qualityScore >= 80) qualityLabel = 'Very Good';
-                else if (qualityScore >= 70) qualityLabel = 'Good';
-                else if (qualityScore >= 50) qualityLabel = 'Average';
+                let qualityLabel = window.currentLanguage === 'ar' ? 'ضعيف' : 'Poor';
+                if (qualityScore >= 90) qualityLabel = window.currentLanguage === 'ar' ? 'ممتاز' : 'Excellent';
+                else if (qualityScore >= 80) qualityLabel = window.currentLanguage === 'ar' ? 'جيد جداً' : 'Very Good';
+                else if (qualityScore >= 70) qualityLabel = window.currentLanguage === 'ar' ? 'جيد' : 'Good';
+                else if (qualityScore >= 50) qualityLabel = window.currentLanguage === 'ar' ? 'متوسط' : 'Average';
                 
                 return {
                     recordsCount: records.length.toLocaleString(),
@@ -1042,6 +1277,30 @@
             },
             
             generatePDFAnalysis(data) {
+                if (window.currentLanguage === 'ar') {
+                    return `
+## 📄 تحليل مستند PDF
+
+### نظرة عامة على المستند
+- **نوع المستند**: تقرير PDF
+- **الصفحات المقدرة**: ${data.metadata?.pages || 'غير معروف'}
+- **عدد الكلمات**: ${data.metadata?.wordCount || 'غير معروف'}
+
+### تحليل المحتوى
+يبدو أن المستند يحتوي على معلومات تجارية منظمة مناسبة لاستخراج البيانات والتحليل.
+
+### التوصيات
+1. **استخراج البيانات**: فكر في تحويل البيانات الجدولية إلى تنسيق CSV للتحليل الأفضل
+2. **معالجة النصوص**: استخدم OCR إذا كان المستند يحتوي على صور ممسوحة ضوئياً
+3. **تحليل الهيكل**: حدد الأقسام الرئيسية وأنماط البيانات
+
+### الخطوات التالية
+- استخراج البيانات المنظمة باستخدام الأدوات المناسبة
+- التحقق من صحة المعلومات المستخرجة
+- معالجة البيانات من خلال أنابيب ضمان الجودة
+                    `.trim();
+                }
+                
                 return `
 ## 📄 PDF Document Analysis
 
@@ -1066,15 +1325,23 @@ The document appears to contain structured business information suitable for dat
             },
             
             detectDataType(values) {
-                if (values.length === 0) return 'Empty';
+                if (values.length === 0) {
+                    return window.currentLanguage === 'ar' ? 'فارغ' : 'Empty';
+                }
                 
                 const sample = values.slice(0, Math.min(10, values.length));
                 
-                if (sample.every(v => !isNaN(Date.parse(v)))) return 'Date';
-                if (sample.every(v => !isNaN(parseFloat(v)) && isFinite(v))) return 'Numeric';
-                if (sample.every(v => ['true', 'false', '1', '0'].includes(v.toLowerCase()))) return 'Boolean';
+                if (sample.every(v => !isNaN(Date.parse(v)))) {
+                    return window.currentLanguage === 'ar' ? 'تاريخ' : 'Date';
+                }
+                if (sample.every(v => !isNaN(parseFloat(v)) && isFinite(v))) {
+                    return window.currentLanguage === 'ar' ? 'رقمي' : 'Numeric';
+                }
+                if (sample.every(v => ['true', 'false', '1', '0'].includes(v.toLowerCase()))) {
+                    return window.currentLanguage === 'ar' ? 'منطقي' : 'Boolean';
+                }
                 
-                return 'Text';
+                return window.currentLanguage === 'ar' ? 'نص' : 'Text';
             },
             
             identifyQualityIssues(data) {
@@ -1085,14 +1352,20 @@ The document appears to contain structured business information suitable for dat
                 headers.forEach(header => {
                     const missingCount = records.filter(r => !r[header] || r[header].trim() === '').length;
                     if (missingCount > 0) {
-                        issues.push(`${header}: ${missingCount} missing values (${(missingCount/records.length*100).toFixed(1)}%)`);
+                        const issueText = window.currentLanguage === 'ar'
+                            ? `${header}: ${missingCount} قيم مفقودة (${(missingCount/records.length*100).toFixed(1)}%)`
+                            : `${header}: ${missingCount} missing values (${(missingCount/records.length*100).toFixed(1)}%)`;
+                        issues.push(issueText);
                     }
                 });
                 
                 // Check for duplicates
                 const duplicates = records.length - new Set(records.map(r => JSON.stringify(r))).size;
                 if (duplicates > 0) {
-                    issues.push(`${duplicates} duplicate records found`);
+                    const duplicateText = window.currentLanguage === 'ar'
+                        ? `تم العثور على ${duplicates} سجل مكرر`
+                        : `${duplicates} duplicate records found`;
+                    issues.push(duplicateText);
                 }
                 
                 return issues;
@@ -1103,20 +1376,64 @@ The document appears to contain structured business information suitable for dat
                 const insights = this.calculateInsights(data);
                 
                 if (parseInt(insights.missingFields) > 10) {
-                    recommendations.push('Implement data validation rules to reduce missing values');
+                    const rec = window.currentLanguage === 'ar'
+                        ? 'تنفيذ قواعد التحقق من البيانات لتقليل القيم المفقودة'
+                        : 'Implement data validation rules to reduce missing values';
+                    recommendations.push(rec);
                 }
                 
                 if (data.records.length < 100) {
-                    recommendations.push('Consider collecting more data for better statistical analysis');
+                    const rec = window.currentLanguage === 'ar'
+                        ? 'فكر في جمع المزيد من البيانات للحصول على تحليل إحصائي أفضل'
+                        : 'Consider collecting more data for better statistical analysis';
+                    recommendations.push(rec);
                 }
                 
-                recommendations.push('Establish regular data quality monitoring procedures');
-                recommendations.push('Create data governance policies for consistent data entry');
+                const rec1 = window.currentLanguage === 'ar'
+                    ? 'إنشاء إجراءات مراقبة جودة البيانات بانتظام'
+                    : 'Establish regular data quality monitoring procedures';
+                recommendations.push(rec1);
+                
+                const rec2 = window.currentLanguage === 'ar'
+                    ? 'إنشاء سياسات حوكمة البيانات لإدخال البيانات المتسق'
+                    : 'Create data governance policies for consistent data entry';
+                recommendations.push(rec2);
                 
                 return recommendations;
             },
             
             formatAnalysisOutput(analysis) {
+                if (window.currentLanguage === 'ar') {
+                    return `
+## 📊 تقرير تحليل جودة البيانات
+
+### 📈 الملخص
+- **نوع الملف**: ${analysis.summary.fileType}
+- **السجلات**: ${analysis.summary.recordCount.toLocaleString()}
+- **الأعمدة**: ${analysis.summary.columnCount}
+- **نقاط الجودة**: ${analysis.summary.qualityScore}
+
+### 🔍 تحليل الحقول
+${analysis.fieldAnalysis.map(field => 
+    `**${field.name}**\n- الاكتمال: ${field.completeness}\n- القيم الفريدة: ${field.uniqueValues}\n- نوع البيانات: ${field.dataType}`
+).join('\n\n')}
+
+### ⚠️ مشاكل الجودة
+${analysis.qualityIssues.length > 0 ? 
+    analysis.qualityIssues.map(issue => `- ${issue}`).join('\n') :
+    '✅ لم يتم العثور على مشاكل جودة كبيرة'}
+
+### 💡 التوصيات
+${analysis.recommendations.map(rec => `- ${rec}`).join('\n')}
+
+### 🎯 الخطوات التالية
+1. معالجة مشاكل الجودة المحددة
+2. تنفيذ التحسينات المقترحة
+3. مراقبة جودة البيانات بانتظام
+4. إنشاء عمليات حوكمة البيانات
+                    `.trim();
+                }
+                
                 return `
 ## 📊 Data Quality Analysis Report
 
@@ -1174,7 +1491,10 @@ ${analysis.recommendations.map(rec => `- ${rec}`).join('\n')}
                     this.enableAnalysis();
                     
                     utils.updateProgress(100);
-                    utils.showMessage('success', 'File uploaded and processed successfully!');
+                    const successMsg = window.currentLanguage === 'ar' 
+                        ? 'تم رفع الملف ومعالجته بنجاح!'
+                        : 'File uploaded and processed successfully!';
+                    utils.showMessage('success', successMsg);
                     
                 } catch (error) {
                     console.error('Upload error:', error);
@@ -1209,7 +1529,12 @@ ${analysis.recommendations.map(rec => `- ${rec}`).join('\n')}
                     };
                     
                     reader.onload = (e) => resolve(e.target.result);
-                    reader.onerror = () => reject(new Error('Failed to read file'));
+                    reader.onerror = () => {
+                        const errorMsg = window.currentLanguage === 'ar'
+                            ? 'فشل في قراءة الملف'
+                            : 'Failed to read file';
+                        reject(new Error(errorMsg));
+                    };
                     
                     const extension = file.name.split('.').pop().toLowerCase();
                     if (['csv', 'txt', 'json'].includes(extension)) {
@@ -1231,7 +1556,10 @@ ${analysis.recommendations.map(rec => `- ${rec}`).join('\n')}
             
             enableAnalysis() {
                 elements.analyzeBtn.disabled = false;
-                elements.analyzeBtn.setAttribute('aria-label', 'Analyze uploaded data');
+                const ariaLabel = window.currentLanguage === 'ar' 
+                    ? 'تحليل البيانات المرفوعة' 
+                    : 'Analyze uploaded data';
+                elements.analyzeBtn.setAttribute('aria-label', ariaLabel);
             },
             
             resetUploadState() {
@@ -1247,7 +1575,11 @@ ${analysis.recommendations.map(rec => `- ${rec}`).join('\n')}
                 
                 elements.analysisLoader.style.display = 'block';
                 elements.qaResults.style.display = 'block';
-                elements.qaResultsContent.textContent = 'Analyzing data with AI...';
+                
+                const analyzingText = window.currentLanguage === 'ar' 
+                    ? 'جاري تحليل البيانات بالذكاء الاصطناعي...'
+                    : 'Analyzing data with AI...';
+                elements.qaResultsContent.textContent = analyzingText;
                 
                 try {
                     let analysisResult;
@@ -1302,10 +1634,29 @@ ${analysis.recommendations.map(rec => `- ${rec}`).join('\n')}
             
             buildAnalysisPrompt(data) {
                 if (data.type === 'pdf') {
+                    if (window.currentLanguage === 'ar') {
+                        return `حلل محتوى PDF هذا لجودة البيانات وقدم رؤى: ${data.text}`;
+                    }
                     return `Analyze this PDF content for data quality and provide insights: ${data.text}`;
                 }
                 
                 const sampleData = data.records.slice(0, 5);
+                if (window.currentLanguage === 'ar') {
+                    return `
+حلل بيانات ${data.type} هذه لمشاكل الجودة وقدم رؤى مفصلة:
+
+العناوين: ${data.headers.join(', ')}
+إجمالي السجلات: ${data.records.length}
+عينة البيانات: ${JSON.stringify(sampleData, null, 2)}
+
+يرجى تقديم:
+1. تقييم جودة البيانات
+2. المشاكل المحددة
+3. توصيات للتحسين
+4. نقاط الجودة الإجمالية
+                    `.trim();
+                }
+                
                 return `
 Analyze this ${data.type} data for quality issues and provide detailed insights:
 
@@ -1341,13 +1692,20 @@ Please provide:
             },
             
             displayAnalysisError(error) {
+                const errorTitle = window.currentLanguage === 'ar' ? '⚠️ خطأ في التحليل' : '⚠️ Analysis Error';
+                const errorLabel = window.currentLanguage === 'ar' ? 'خطأ:' : 'Error:';
+                const errorText = window.currentLanguage === 'ar' 
+                    ? 'يرجى المحاولة مرة أخرى أو التحقق من الاتصال.'
+                    : 'Please try again or check your connection.';
+                const retryText = window.currentLanguage === 'ar' ? 'إعادة المحاولة' : 'Retry Analysis';
+                
                 elements.qaResultsContent.innerHTML = `
                     <div style="color: var(--danger-color); padding: 20px; text-align: center;">
-                        <h3>⚠️ Analysis Error</h3>
-                        <p><strong>Error:</strong> ${error.message}</p>
-                        <p>Please try again or check your connection.</p>
+                        <h3>${errorTitle}</h3>
+                        <p><strong>${errorLabel}</strong> ${error.message}</p>
+                        <p>${errorText}</p>
                         <button class="btn btn-primary" onclick="eventHandlers.handleAnalysis()" style="margin-top: 16px;">
-                            Retry Analysis
+                            ${retryText}
                         </button>
                     </div>
                 `;
@@ -1381,7 +1739,8 @@ Please provide:
                     timestamp: new Date().toISOString(),
                     fileName: appState.currentFiles[0]?.name || 'Unknown',
                     analysis: appState.analysisResults,
-                    insights: appState.parsedData ? dataAnalyzer.calculateInsights(appState.parsedData) : null
+                    insights: appState.parsedData ? dataAnalyzer.calculateInsights(appState.parsedData) : null,
+                    language: window.currentLanguage
                 };
                 
                 const blob = new Blob([JSON.stringify(reportData, null, 2)], {
@@ -1402,17 +1761,26 @@ Please provide:
         // Error Handling
         window.addEventListener('error', (event) => {
             console.error('Global error:', event.error);
-            utils.showMessage('error', 'An unexpected error occurred. Please refresh and try again.');
+            const errorMsg = window.currentLanguage === 'ar'
+                ? 'حدث خطأ غير متوقع. يرجى تحديث الصفحة والمحاولة مرة أخرى.'
+                : 'An unexpected error occurred. Please refresh and try again.';
+            utils.showMessage('error', errorMsg);
         });
         
         window.addEventListener('unhandledrejection', (event) => {
             console.error('Unhandled promise rejection:', event.reason);
-            utils.showMessage('error', 'A processing error occurred. Please try again.');
+            const errorMsg = window.currentLanguage === 'ar'
+                ? 'حدث خطأ في المعالجة. يرجى المحاولة مرة أخرى.'
+                : 'A processing error occurred. Please try again.';
+            utils.showMessage('error', errorMsg);
             event.preventDefault();
         });
         
         // Initialize Application
         function initializeApp() {
+            // Initialize language first
+            initializeLanguage();
+            
             // Event Listeners
             elements.uploadBtn.addEventListener('click', () => elements.fileInput.click());
             elements.fileInput.addEventListener('change', eventHandlers.handleFileUpload.bind(eventHandlers));
