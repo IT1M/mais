@@ -19,6 +19,7 @@
             --warning-gradient: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
             --medical-gradient: linear-gradient(135deg, #00c9ff 0%, #92fe9d 100%);
             --red-gradient: linear-gradient(135deg, #ff416c 0%, #ff4757 100%);
+            --info-gradient: linear-gradient(135deg, #3ab5b0 0%, #3d99be 100%); /* New gradient for 4th card */
             --bg-color: #0f0f23;
             --card-bg: rgba(255, 255, 255, 0.1);
             --text-primary: #ffffff;
@@ -100,7 +101,7 @@
             opacity: 0.15;
             animation: medicalFloat 30s infinite ease-in-out;
             transform-style: preserve-3d;
-            will-change: transform;
+            will-change: transform, opacity; /* Updated */
         }
 
         /* Optimized DNA Helix for mobile */
@@ -504,6 +505,28 @@
             gap: 0.75rem;
             pointer-events: auto; /* Ensure touch events work */
         }
+        
+        #onlineStatus {
+            display:none;
+            align-items:center;
+            gap:4px;
+            margin-bottom:6px;
+            padding: 0.25rem 0.5rem;
+            background-color: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+        }
+        #onlineStatus svg {
+             vertical-align:middle;
+        }
+        #onlineStatus span {
+            color:#4ecdc4;
+            font-weight:700;
+            font-size:0.75rem; /* Adjusted for consistency */
+            text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+        }
+
 
         /* ENHANCED VOICE SUPPORT BUTTON FOR MOBILE */
         .voice-support-btn {
@@ -608,8 +631,9 @@
         .help-btn {
             width: 64px; /* Increased for better touch targets */
             height: 64px;
-            background: var(--red-gradient);
-            border: 2px solid rgba(255, 65, 108, 0.3);
+            background: var(--red-gradient); /* Should this be a different color? E.g. primary-gradient? Let's use primary for help. */
+            background: var(--primary-gradient); 
+            border: 2px solid rgba(102, 126, 234, 0.3);
             border-radius: 50%;
             backdrop-filter: blur(20px);
             cursor: pointer;
@@ -617,7 +641,7 @@
             align-items: center;
             justify-content: center;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: var(--shadow-3d), var(--red-glow);
+            box-shadow: var(--shadow-3d), var(--shadow-glow); /* Use primary glow */
             -webkit-tap-highlight-color: transparent;
             touch-action: manipulation;
             /* Ensure visibility on all devices */
@@ -638,7 +662,7 @@
 
         .help-btn:hover {
             transform: scale(1.05) translateZ(0);
-            box-shadow: var(--shadow-3d), 0 0 50px rgba(255, 65, 108, 0.6);
+            box-shadow: var(--shadow-3d), 0 0 50px rgba(102, 126, 234, 0.6); /* Primary glow hover */
         }
 
         .help-btn svg {
@@ -661,11 +685,17 @@
 
         .cards-grid {
             display: grid;
-            grid-template-columns: 1fr;
+            grid-template-columns: repeat(2, 1fr);
             gap: 1.5rem;
-            max-width: 100%;
+            max-width: 700px;
             width: 100%;
             margin-bottom: 1.5rem;
+        }
+        @media (max-width: 600px) {
+            .cards-grid {
+                grid-template-columns: 1fr;
+                max-width: 100%;
+            }
         }
 
         .service-card {
@@ -708,13 +738,19 @@
 
         .service-card:hover {
             transform: translateY(-8px);
-            box-shadow: var(--shadow-3d), 0 0 40px rgba(102, 126, 234, 0.4);
+            /* box-shadow below is more specific */
             border-color: rgba(102, 126, 234, 0.5);
         }
+        .service-card:hover .card-icon { /* Added icon animation on card hover */
+            transform: scale(1.08) rotateZ(3deg);
+        }
+
 
         .service-card:nth-child(1):hover { box-shadow: var(--shadow-3d), 0 0 40px rgba(102, 126, 234, 0.4); }
         .service-card:nth-child(2):hover { box-shadow: var(--shadow-3d), 0 0 40px rgba(76, 175, 80, 0.4); }
         .service-card:nth-child(3):hover { box-shadow: var(--shadow-3d), 0 0 40px rgba(245, 87, 108, 0.4); }
+        .service-card:nth-child(4):hover { box-shadow: var(--shadow-3d), 0 0 40px rgba(58, 181, 176, 0.5); } /* Glow for 4th card */
+
 
         .card-icon {
             width: 65px;
@@ -725,12 +761,14 @@
             justify-content: center;
             margin-bottom: 1.5rem;
             transform-style: preserve-3d;
-            transition: transform 0.3s ease;
+            transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1); /* Smoother transition */
         }
 
         .card-icon-1 { background: var(--primary-gradient); }
         .card-icon-2 { background: var(--success-gradient); }
         .card-icon-3 { background: var(--secondary-gradient); }
+        .card-icon-4 { background: var(--info-gradient); } /* Style for new card icon */
+
 
         .card-icon svg {
             width: 28px;
@@ -1189,36 +1227,27 @@
 
         .help-list {
             list-style: none;
-            padding-left: 0;
-             html[dir="rtl"] & { padding-right: 0; }
+            padding-inline-start: 0; /* Logical property for padding */
         }
 
         .help-list li {
             color: var(--text-secondary);
             line-height: 1.7;
             margin-bottom: 0.75rem;
-            padding-left: 1.5rem;
+            padding-inline-start: 1.5rem; /* Logical property */
             position: relative;
             font-size: 1rem;
-        }
-        html[dir="rtl"] .help-list li {
-            padding-left: 0;
-            padding-right: 1.5rem;
         }
 
         .help-list li::before {
             content: '•';
             color: rgba(102, 126, 234, 0.8);
             position: absolute;
-            left: 0;
+            inset-inline-start: 0; /* Logical property */
             font-size: 1.2rem;
             font-weight: bold;
         }
-        html[dir="rtl"] .help-list li::before {
-            left: auto;
-            right: 0;
-        }
-
+        
         /* Footer optimized for mobile */
         .footer {
             text-align: center;
@@ -1291,6 +1320,20 @@
         .voice-support-btn.listening .language-indicator {
             opacity: 1;
             transform: scale(1.1);
+        }
+
+        /* Improved Focus Visible Styles */
+        .service-card:focus-visible,
+        .other-uses-btn:focus-visible,
+        .lang-btn:focus-visible,
+        .voice-support-btn:focus-visible,
+        .help-btn:focus-visible,
+        .voice-btn:focus-visible,
+        .voice-close:focus-visible,
+        .help-close:focus-visible {
+            outline: 3px solid var(--primary-gradient);
+            outline-offset: 3px;
+            box-shadow: 0 0 0 3px var(--bg-color), 0 0 0 6px var(--primary-gradient); /* Adjusted for subtlety */
         }
 
         /* MOBILE-SPECIFIC RESPONSIVE BREAKPOINTS */
@@ -1392,6 +1435,12 @@
                 right: 0.5rem;
                 top: max(0.5rem, env(safe-area-inset-top, 0));
             }
+             #onlineStatus span {
+                font-size: 0.7rem;
+            }
+            #onlineStatus svg {
+                width: 18px; height: 18px;
+            }
 
         }
 
@@ -1433,6 +1482,7 @@
              .header {
                 margin-top: 4rem; 
             }
+            #onlineStatus { display: none !important; } /* Hide online status on very small screens to save space */
         }
 
         /* Performance optimizations */
@@ -1443,6 +1493,7 @@
                 animation-duration: 0.01ms !important;
                 animation-iteration-count: 1 !important;
                 transition-duration: 0.01ms !important;
+                animation-delay: 0ms !important;
             }
         }
 
@@ -1537,9 +1588,15 @@
             .service-card:hover {
                 transform: none;
             }
+            .service-card:hover .card-icon { /* Reset icon hover on touch */
+                transform: none;
+            }
 
             .service-card:active {
                 transform: scale(0.98);
+            }
+             .service-card:active .card-icon { /* Active state for icon on touch */
+                transform: scale(1.05) rotateZ(2deg);
             }
         }
     </style>
@@ -1606,13 +1663,13 @@
     <!-- Enhanced Button Container -->
     <div class="button-container">
         <!-- Online Status Icon -->
-        <span id="onlineStatus" style="display:none;align-items:center;gap:4px;margin-bottom:6px;">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" style="vertical-align:middle;">
+        <span id="onlineStatus">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
                 <circle cx="12" cy="12" r="10" fill="#4ecdc4" stroke="#fff" stroke-width="2"/>
                 <circle cx="12" cy="12" r="5" fill="#fff"/>
                 <circle cx="12" cy="12" r="3" fill="#4ecdc4"/>
             </svg>
-            <span style="color:#4ecdc4;font-weight:700;font-size:13px;">Online</span>
+            <span>Online</span>
         </span>
         <!-- Enhanced Voice Support Button -->
         <button class="voice-support-btn" id="voiceSupportBtn" type="button" data-translate-aria-label="voiceAssistantAriaLabel">
@@ -1646,7 +1703,7 @@
             <!-- Advanced Analysis Card -->
             <a href="analysis/in.html" class="service-card">
                 <div class="card-icon card-icon-1">
-                    <svg viewBox="0 0 24 24">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
                         <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
                     </svg>
                 </div>
@@ -1655,14 +1712,14 @@
                     Cutting-edge AI-powered analysis system that processes complex medical data with unprecedented accuracy and speed.
                 </p>
                 <span class="card-arrow" data-translate-key="card1Arrow">
-                    Explore System →
+                    Explore System <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" style="vertical-align: middle;"><path d="M12.293 5.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L17.586 13H4a1 1 0 110-2h13.586l-5.293-5.293a1 1 0 010-1.414z"/></svg>
                 </span>
             </a>
 
             <!-- Quality Assurance Card -->
             <a href="analysis/SM.html" class="service-card">
                 <div class="card-icon card-icon-2">
-                    <svg viewBox="0 0 24 24">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
                         <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
                     </svg>
                 </div>
@@ -1671,14 +1728,14 @@
                     Intelligent quality control systems that ensure data integrity and compliance with medical standards.
                 </p>
                 <span class="card-arrow" data-translate-key="card2Arrow">
-                    Access QA Tools →
+                    Access QA Tools <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" style="vertical-align: middle;"><path d="M12.293 5.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L17.586 13H4a1 1 0 110-2h13.586l-5.293-5.293a1 1 0 010-1.414z"/></svg>
                 </span>
             </a>
 
             <!-- Marketing & CRM Card -->
             <a href="analysis/intelligence.html" class="service-card">
                 <div class="card-icon card-icon-3">
-                    <svg viewBox="0 0 24 24">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
                         <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
                     </svg>
                 </div>
@@ -1687,14 +1744,30 @@
                     Advanced marketing intelligence and R&D analytics to drive strategic decisions and customer relationships.
                 </p>
                 <span class="card-arrow" data-translate-key="card3Arrow">
-                    Launch Platform →
+                    Launch Platform <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" style="vertical-align: middle;"><path d="M12.293 5.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L17.586 13H4a1 1 0 110-2h13.586l-5.293-5.293a1 1 0 010-1.414z"/></svg>
+                </span>
+            </a>
+            
+            <!-- NEW Visitor Registration & Log Card -->
+            <a href="Visitor-registration.html" class="service-card">
+                <div class="card-icon card-icon-4">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M16 2H8C6.9 2 6 2.9 6 4v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm-4 14c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3zm6-8H8V4h8v4zM4 10v10c0 .55.45 1 1 1s1-.45 1-1V10c0-.55-.45-1-1-1s-1 .45-1 1z"/>
+                    </svg>
+                </div>
+                <h3 class="card-title" data-translate-key="card4Title">Visitor Registration & Log</h3>
+                <p class="card-description" data-translate-key="card4Desc">
+                    Manage visitor entries, track visit purposes, and maintain a secure log for your facility.
+                </p>
+                <span class="card-arrow" data-translate-key="card4Arrow">
+                    Access Visitor System <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" style="vertical-align: middle;"><path d="M12.293 5.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L17.586 13H4a1 1 0 110-2h13.586l-5.293-5.293a1 1 0 010-1.414z"/></svg>
                 </span>
             </a>
         </div>
 
         <!-- Other Uses Button -->
         <a href="uses.html" class="other-uses-btn">
-            <svg viewBox="0 0 24 24">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
                 <path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
             </svg>
             <span data-translate-key="otherUsesBtn">Other Uses & Applications</span>
@@ -1714,7 +1787,7 @@
             
             <div class="help-section">
                 <h3 data-translate-key="helpSection1Title">Getting Started</h3>
-                <p data-translate-key="helpSection1Desc">AI MAIS is your comprehensive medical intelligence platform. Choose from our three main analysis tools:</p>
+                <p data-translate-key="helpSection1Desc">AI MAIS is your comprehensive medical intelligence platform. Choose from our main analysis tools:</p>
             </div>
 
             <div class="help-section">
@@ -1723,6 +1796,7 @@
                     <li data-translate-key="helpTool1"><strong>Advanced AI Analysis:</strong> Upload your medical data and get AI-powered insights with detailed reports and visualizations.</li>
                     <li data-translate-key="helpTool2"><strong>Smart Quality Assurance:</strong> Ensure your data meets medical standards with automated quality checks and validation.</li>
                     <li data-translate-key="helpTool3"><strong>Smart Marketing & CRM:</strong> Analyze market trends, customer data, and R&D intelligence for strategic planning.</li>
+                    <li data-translate-key="helpTool4"><strong>Visitor Registration & Log:</strong> Manage and track visitor entries securely.</li>
                 </ul>
             </div>
 
@@ -1732,6 +1806,7 @@
                     <li data-translate-key="helpTip1">Start with the Advanced AI Analysis for general medical data processing</li>
                     <li data-translate-key="helpTip2">Use Quality Assurance before submitting critical reports</li>
                     <li data-translate-key="helpTip3">Explore Marketing & CRM for business intelligence needs</li>
+                    <li data-translate-key="helpTip5">Utilize Visitor Log for facility access management</li> {/* New Tip */}
                     <li data-translate-key="helpTip4">Check "Other Uses" for additional specialized applications</li>
                 </ul>
             </div>
@@ -1760,16 +1835,16 @@
 
             <div class="voice-controls">
                 <button class="voice-btn" id="startRecordingBtn" type="button" data-translate-key="voiceStartRecording">
-                    🎤 Start Recording | بدء التسجيل
+                    🎤 Start Recording
                 </button>
                 <button class="voice-btn" id="stopRecordingBtn" type="button" disabled data-translate-key="voiceStopRecording">
-                    ⏹️ Stop Recording | إيقاف التسجيل
+                    ⏹️ Stop Recording
                 </button>
             </div>
 
             <div class="voice-response" id="voiceResponse" style="display: none;">
                 <div class="voice-transcription" id="transcriptionArea" style="display: none;">
-                    <p><strong data-translate-key="voiceYourQuestion">Your question | سؤالك:</strong></p>
+                    <p><strong data-translate-key="voiceYourQuestion">Your question:</strong></p>
                     <p id="transcriptionText"></p>
                 </div>
                 <p id="responseText"></p>
@@ -1791,27 +1866,32 @@
                 subtitle: "Medical Intelligence Platform",
                 card1Title: "Advanced AI Analysis",
                 card1Desc: "Cutting-edge AI-powered analysis system that processes complex medical data with unprecedented accuracy and speed.",
-                card1Arrow: "Explore System →",
+                card1Arrow: "Explore System <svg width='12' height='12' viewBox='0 0 24 24' fill='currentColor' style='vertical-align: middle; margin-left: 0.25em;'><path d='M12.293 5.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L17.586 13H4a1 1 0 110-2h13.586l-5.293-5.293a1 1 0 010-1.414z'/></svg>",
                 card2Title: "Smart Quality Assurance",
                 card2Desc: "Intelligent quality control systems that ensure data integrity and compliance with medical standards.",
-                card2Arrow: "Access QA Tools →",
+                card2Arrow: "Access QA Tools <svg width='12' height='12' viewBox='0 0 24 24' fill='currentColor' style='vertical-align: middle; margin-left: 0.25em;'><path d='M12.293 5.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L17.586 13H4a1 1 0 110-2h13.586l-5.293-5.293a1 1 0 010-1.414z'/></svg>",
                 card3Title: "Smart Marketing & CRM",
                 card3Desc: "Advanced marketing intelligence and R&D analytics to drive strategic decisions and customer relationships.",
-                card3Arrow: "Launch Platform →",
+                card3Arrow: "Launch Platform <svg width='12' height='12' viewBox='0 0 24 24' fill='currentColor' style='vertical-align: middle; margin-left: 0.25em;'><path d='M12.293 5.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L17.586 13H4a1 1 0 110-2h13.586l-5.293-5.293a1 1 0 010-1.414z'/></svg>",
+                card4Title: "Visitor Registration & Log",
+                card4Desc: "Manage visitor entries, track visit purposes, and maintain a secure log for your facility.",
+                card4Arrow: "Access Visitor System <svg width='12' height='12' viewBox='0 0 24 24' fill='currentColor' style='vertical-align: middle; margin-left: 0.25em;'><path d='M12.293 5.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L17.586 13H4a1 1 0 110-2h13.586l-5.293-5.293a1 1 0 010-1.414z'/></svg>",
                 otherUsesBtn: "Other Uses & Applications",
                 footerText: "&copy; 2025 AI MAIS. All rights reserved. Developed by Yazeed",
                 helpModalTitle: "How to Use AI MAIS",
                 helpSection1Title: "Getting Started",
-                helpSection1Desc: "AI MAIS is your comprehensive medical intelligence platform. Choose from our three main analysis tools:",
+                helpSection1Desc: "AI MAIS is your comprehensive medical intelligence platform. Choose from our main analysis tools:",
                 helpSection2Title: "Available Tools",
                 helpTool1: "<strong>Advanced AI Analysis:</strong> Upload your medical data and get AI-powered insights with detailed reports and visualizations.",
                 helpTool2: "<strong>Smart Quality Assurance:</strong> Ensure your data meets medical standards with automated quality checks and validation.",
                 helpTool3: "<strong>Smart Marketing & CRM:</strong> Analyze market trends, customer data, and R&D intelligence for strategic planning.",
+                helpTool4: "<strong>Visitor Registration & Log:</strong> Manage and track visitor entries securely.",
                 helpSection3Title: "Quick Tips",
-                helpTip1: "Start with the Advanced AI Analysis for general medical data processing",
-                helpTip2: "Use Quality Assurance before submitting critical reports",
-                helpTip3: "Explore Marketing & CRM for business intelligence needs",
-                helpTip4: "Check \"Other Uses\" for additional specialized applications",
+                helpTip1: "Start with the Advanced AI Analysis for general medical data processing.",
+                helpTip2: "Use Quality Assurance before submitting critical reports.",
+                helpTip3: "Explore Marketing & CRM for business intelligence needs.",
+                helpTip5: "Utilize Visitor Log for facility access management.",
+                helpTip4: "Check \"Other Uses\" for additional specialized applications.",
                 helpSection4Title: "Voice Assistant",
                 helpSection4Desc: "Use the voice assistant button to ask questions in English or Arabic. Simply tap the microphone icon and speak your question.",
                 helpSection5Title: "Support",
@@ -1856,27 +1936,32 @@
                 subtitle: "منصة الذكاء الطبي",
                 card1Title: "تحليل ذكاء اصطناعي متقدم",
                 card1Desc: "نظام تحليل متطور يعمل بالذكاء الاصطناعي يعالج البيانات الطبية المعقدة بدقة وسرعة غير مسبوقة.",
-                card1Arrow: "استكشف النظام ←",
+                card1Arrow: "<svg width='12' height='12' viewBox='0 0 24 24' fill='currentColor' style='vertical-align: middle; margin-right: 0.25em;'><path d='M11.707 18.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L6.414 11H20a1 1 0 110 2H6.414l5.293 5.293a1 1 0 010 1.414z'/></svg> استكشف النظام",
                 card2Title: "ضمان جودة ذكي",
                 card2Desc: "أنظمة ذكية لمراقبة الجودة تضمن سلامة البيانات والامتثال للمعايير الطبية.",
-                card2Arrow: "أدوات ضمان الجودة ←",
+                card2Arrow: "<svg width='12' height='12' viewBox='0 0 24 24' fill='currentColor' style='vertical-align: middle; margin-right: 0.25em;'><path d='M11.707 18.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L6.414 11H20a1 1 0 110 2H6.414l5.293 5.293a1 1 0 010 1.414z'/></svg> أدوات ضمان الجودة",
                 card3Title: "تسويق ذكي وإدارة علاقات العملاء",
                 card3Desc: "ذكاء تسويقي متقدم وتحليلات البحث والتطوير لدفع القرارات الاستراتيجية وعلاقات العملاء.",
-                card3Arrow: "شغل المنصة ←",
+                card3Arrow: "<svg width='12' height='12' viewBox='0 0 24 24' fill='currentColor' style='vertical-align: middle; margin-right: 0.25em;'><path d='M11.707 18.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L6.414 11H20a1 1 0 110 2H6.414l5.293 5.293a1 1 0 010 1.414z'/></svg> شغل المنصة",
+                card4Title: "تسجيل الزوار وسجل الدخول",
+                card4Desc: "إدارة إدخالات الزوار، وتتبع أغراض الزيارة، والحفاظ على سجل آمن لمنشأتك.",
+                card4Arrow: "<svg width='12' height='12' viewBox='0 0 24 24' fill='currentColor' style='vertical-align: middle; margin-right: 0.25em;'><path d='M11.707 18.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L6.414 11H20a1 1 0 110 2H6.414l5.293 5.293a1 1 0 010 1.414z'/></svg> الدخول إلى نظام الزوار",
                 otherUsesBtn: "استخدامات وتطبيقات أخرى",
                 footerText: "© 2025 AI MAIS. جميع الحقوق محفوظة. تطوير يزيد",
                 helpModalTitle: "كيفية استخدام AI MAIS",
                 helpSection1Title: "البدء",
-                helpSection1Desc: "AI MAIS هي منصتك الشاملة للذكاء الطبي. اختر من بين أدوات التحليل الرئيسية الثلاث:",
+                helpSection1Desc: "AI MAIS هي منصتك الشاملة للذكاء الطبي. اختر من بين أدوات التحليل الرئيسية:",
                 helpSection2Title: "الأدوات المتاحة",
                 helpTool1: "<strong>تحليل ذكاء اصطناعي متقدم:</strong> قم بتحميل بياناتك الطبية واحصل على رؤى مدعومة بالذكاء الاصطناعي مع تقارير وتصورات مفصلة.",
                 helpTool2: "<strong>ضمان جودة ذكي:</strong> تأكد من أن بياناتك تلبي المعايير الطبية من خلال فحوصات الجودة والتحقق الآلي.",
                 helpTool3: "<strong>تسويق ذكي وإدارة علاقات العملاء:</strong> قم بتحليل اتجاهات السوق وبيانات العملاء وذكاء البحث والتطوير للتخطيط الاستراتيجي.",
+                helpTool4: "<strong>تسجيل الزوار وسجل الدخول:</strong> إدارة وتتبع إدخالات الزوار بشكل آمن.",
                 helpSection3Title: "نصائح سريعة",
-                helpTip1: "ابدأ بتحليل الذكاء الاصطناعي المتقدم لمعالجة البيانات الطبية العامة",
-                helpTip2: "استخدم ضمان الجودة قبل تقديم التقارير الهامة",
-                helpTip3: "استكشف التسويق وإدارة علاقات العملاء لاحتياجات ذكاء الأعمال",
-                helpTip4: "راجع \"استخدامات أخرى\" للتطبيقات المتخصصة الإضافية",
+                helpTip1: "ابدأ بتحليل الذكاء الاصطناعي المتقدم لمعالجة البيانات الطبية العامة.",
+                helpTip2: "استخدم ضمان الجودة قبل تقديم التقارير الهامة.",
+                helpTip3: "استكشف التسويق وإدارة علاقات العملاء لاحتياجات ذكاء الأعمال.",
+                helpTip5: "استخدم سجل الزوار لإدارة الوصول إلى المنشأة.",
+                helpTip4: "راجع \"استخدامات أخرى\" للتطبيقات المتخصصة الإضافية.",
                 helpSection4Title: "المساعد الصوتي",
                 helpSection4Desc: "استخدم زر المساعد الصوتي لطرح الأسئلة باللغة الإنجليزية أو العربية. ما عليك سوى النقر على أيقونة الميكروفون والتحدث بسؤالك.",
                 helpSection5Title: "الدعم",
@@ -1950,7 +2035,19 @@
             document.querySelectorAll('[data-translate-key]').forEach(el => {
                 const key = el.dataset.translateKey;
                 if (translations[lang] && translations[lang][key]) {
-                    el.textContent = translations[lang][key];
+                    // For card arrows, we use innerHTML because SVG is part of the string now
+                    if (key.includes('Arrow') || key === 'otherUsesBtn') {
+                         el.innerHTML = translations[lang][key];
+                         if (key === 'otherUsesBtn' && lang === 'ar') { // Prepend SVG for RTL 'otherUsesBtn'
+                            const svgIcon = `<svg viewBox="0 0 24 24" aria-hidden="true" style="margin-left: 0.75rem; margin-right: 0;"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>`;
+                            el.innerHTML = svgIcon + translations[lang][key];
+                         } else if (key === 'otherUsesBtn' && lang === 'en') { // Append SVG for LTR 'otherUsesBtn'
+                            const svgIcon = `<svg viewBox="0 0 24 24" aria-hidden="true" style="margin-right: 0.75rem; margin-left: 0;"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>`;
+                            el.innerHTML = svgIcon + translations[lang][key];
+                         }
+                    } else {
+                        el.textContent = translations[lang][key];
+                    }
                 }
             });
             document.querySelectorAll('[data-translate-html-key]').forEach(el => {
@@ -1965,10 +2062,8 @@
                     el.setAttribute('aria-label', translations[lang][key]);
                 }
             });
-            document.querySelectorAll('[data-translate-aria-labelledby]').forEach(el => { // For modal titles
-                const key = el.dataset.translateAriaLabelledby; //This should be the ID of the title element
-                // The title element itself will be translated by its data-translate-key
-            });
+            // For modal titles, aria-labelledby points to an ID, the element with that ID gets its textContent updated
+            // No specific loop needed here as the title elements themselves have data-translate-key
 
 
             if (lang === 'ar') {
@@ -2012,10 +2107,13 @@
 
         function disableBodyScroll() {
             document.body.style.overflow = 'hidden';
-            document.body.style.position = 'fixed';
+            document.body.style.position = 'fixed'; // Can cause jumpiness
             document.body.style.width = '100%';
-            if (isIOS) {
-                document.body.style.top = `-${window.scrollY}px`;
+            if (isIOS) { // Only apply scrollY locking for iOS
+                const scrollY = window.scrollY;
+                document.body.style.top = `-${scrollY}px`;
+                // Add a class to html to target fixed elements if needed
+                document.documentElement.classList.add('no-scroll');
             }
         }
 
@@ -2028,6 +2126,7 @@
             if (isIOS && scrollY) {
                 window.scrollTo(0, parseInt(scrollY || '0') * -1);
             }
+            document.documentElement.classList.remove('no-scroll');
         }
 
         // Enhanced Speech Recognition initialization
@@ -2040,14 +2139,8 @@
                 recognition.lang = currentLanguage; // Will be updated by language switcher
                 recognition.maxAlternatives = 1;
                 
-                if (isMobile) {
-                    recognition.serviceURI = 'wss://www.google.com/speech-api/v2/recognize';
-                    setTimeout(() => {
-                        if (isRecording && recognition) {
-                            try { recognition.stop(); } catch (e) { console.log('Recognition already stopped'); }
-                        }
-                    }, 15000);
-                }
+                // Removed mobile-specific serviceURI and timeout as modern browsers handle this better.
+                // A general timeout might still be useful for very long silences.
                 
                 recognition.onstart = function() {
                     console.log('Voice recognition started');
@@ -2072,8 +2165,9 @@
                     } else if (transcript.trim()) {
                         const statusEl = document.getElementById('voiceStatusText');
                         if (statusEl) {
+                             const listeningText = translations[currentDisplayLanguage].interimListen || 'Listening...';
                             statusEl.innerHTML = `
-                                ${translations[currentDisplayLanguage].interimListen || 'Listening...'}<br>
+                                ${listeningText}<br>
                                 <small style="opacity: 0.7;">"${transcript}"</small>
                             `;
                         }
@@ -2089,11 +2183,16 @@
                 recognition.onend = function() {
                     console.log('Voice recognition ended');
                     isRecording = false;
-                    updateVoiceUI('idle');
+                    // Only update UI to idle if not already processing or showing response
+                    const statusText = document.getElementById('voiceStatusText')?.textContent || "";
+                    if (!statusText.includes(translations[currentDisplayLanguage].voiceStatusProcessing.split("...")[0]) &&
+                        !statusText.includes(translations[currentDisplayLanguage].voiceStatusResponseReady)) {
+                        updateVoiceUI('idle');
+                    }
                     
                     if (!lastTranscript && isMobile) {
                         setTimeout(() => {
-                            if (!lastTranscript) {
+                            if (!lastTranscript && !isRecording) { // Check isRecording again
                                 showError(translations[currentDisplayLanguage].noClearAudio);
                             }
                         }, 1000);
@@ -2116,13 +2215,13 @@
                     permissionGranted = true;
                     return true;
                 }
-                return false;
+                return false; // Should not happen if API exists
             } catch (error) {
                 console.error('Microphone permission error:', error);
                 let errorMessage = translations[currentDisplayLanguage].errorMicPermission;
-                if (error.name === 'NotAllowedError' && isMobile) {
+                if (error.name === 'NotAllowedError' || error.name === 'PermissionDeniedError') { // Added PermissionDeniedError
                     errorMessage += '\n\n' + (isIOS ? translations[currentDisplayLanguage].errorMicPermissionIOS : translations[currentDisplayLanguage].errorMicPermissionAndroid);
-                } else if (error.name === 'NotFoundError') {
+                } else if (error.name === 'NotFoundError' || error.name === 'DevicesNotFoundError') { // Added DevicesNotFoundError
                     errorMessage = translations[currentDisplayLanguage].errorNoMic;
                 }
                 showError(errorMessage);
@@ -2130,35 +2229,37 @@
             }
         }
 
-        function handleRecognitionError(error) {
-            console.error('Recognition error:', error);
+        function handleRecognitionError(errorType) { // Changed to errorType string
+            console.error('Recognition error:', errorType);
             let errorMessageKey = 'errorGenericRecognition';
             
-            switch(error) {
+            switch(errorType) {
                 case 'network': errorMessageKey = 'errorNetwork'; break;
-                case 'not-allowed':
+                case 'not-allowed': case 'permission-denied': // Added permission-denied
                     errorMessageKey = 'errorMicPermission';
                     if (isMobile) {
                         const platformSpecificError = isIOS ? translations[currentDisplayLanguage].errorMicPermissionIOS : translations[currentDisplayLanguage].errorMicPermissionAndroid;
                         showError(translations[currentDisplayLanguage][errorMessageKey] + "\n\n" + platformSpecificError);
-                        return;
+                        return; // Exit early as showError is called
                     }
                     break;
                 case 'no-speech':
-                    // Auto-switch language attempt if not already tried, or show error
-                    const otherLang = currentDisplayLanguage === 'en' ? 'ar' : 'en';
-                    if (document.getElementById('languageIndicator').textContent !== (otherLang === 'ar' ? 'AR' : 'EN')) { // Avoid infinite loop
-                        updatePageLanguage(otherLang); // This updates currentLanguage for recognition
-                        setTimeout(() => { if (recognition && !isRecording) startRecording(); }, 500);
-                        return;
-                    } else {
-                        errorMessageKey = 'errorNoSpeech';
-                    }
+                    errorMessageKey = 'errorNoSpeech';
+                    // Removed auto-switch language attempt as it can be confusing. User can switch manually.
                     break;
                 case 'audio-capture': errorMessageKey = 'errorAudioCapture'; break;
                 case 'service-not-allowed': errorMessageKey = 'errorServiceNotAllowed'; break;
+                // Add more specific errors if available from event.error
+                default:
+                    if (errorType.includes('aborted')) { // Generic catch for aborted
+                        console.log('Speech recognition aborted.');
+                        // Don't show an error for manual aborts or short timeouts
+                        updateVoiceUI('idle');
+                        return;
+                    }
             }
             showError(translations[currentDisplayLanguage][errorMessageKey]);
+            updateVoiceUI('idle'); // Ensure UI resets on error
         }
 
         async function startRecording() {
@@ -2167,13 +2268,22 @@
                 const hasPermission = await requestMicrophonePermission();
                 if (!hasPermission) return;
                 
-                if (!recognition) initializeSpeechRecognition();
-                if (!recognition) throw new Error('Speech recognition not supported');
+                if (!recognition) initializeSpeechRecognition(); // Ensure it's initialized
+                if (!recognition) { // Still not there? Show error.
+                     showError(translations[currentDisplayLanguage].errorGenericRecognition); return;
+                }
                 
                 if (speechSynthesis.speaking) speechSynthesis.cancel();
                 
+                // Screen wake lock for mobile
+                let wakeLock = null;
                 if (isMobile && 'wakeLock' in navigator) {
-                    try { await navigator.wakeLock.request('screen'); } catch (e) { console.log('Wake lock not available'); }
+                    try { 
+                        wakeLock = await navigator.wakeLock.request('screen'); 
+                        console.log('Wake Lock active');
+                    } catch (err) { 
+                        console.log('Wake Lock request failed:', err.name, err.message);
+                    }
                 }
                 
                 isRecording = true;
@@ -2184,9 +2294,14 @@
                 const statusEl = document.getElementById('voiceStatusText');
                 if (statusEl) statusEl.textContent = translations[currentDisplayLanguage].voiceStatusRecording;
                 
-                if (isMobile) {
-                    setTimeout(() => { if (isRecording) stopRecording(); }, 20000);
-                }
+                // Release wake lock when recognition ends or is stopped manually
+                const originalOnEnd = recognition.onend;
+                recognition.onend = () => {
+                    if (wakeLock) {
+                        wakeLock.release().then(() => { console.log('Wake Lock released'); wakeLock = null; });
+                    }
+                    if (originalOnEnd) originalOnEnd.call(recognition); // Call original onend
+                };
                 
             } catch (error) {
                 console.error('Error starting recording:', error);
@@ -2197,9 +2312,9 @@
 
         function stopRecording() {
             if (recognition && isRecording) {
-                try { recognition.stop(); } catch (e) { console.log('Recognition already stopped'); }
-                isRecording = false;
-                updateVoiceUI('processing');
+                try { recognition.stop(); } catch (e) { console.log('Recognition already stopped or stopping:', e); }
+                isRecording = false; // Set immediately
+                updateVoiceUI('processing'); // Update UI to show processing
                 const statusEl = document.getElementById('voiceStatusText');
                 if (statusEl) statusEl.textContent = translations[currentDisplayLanguage].voiceStatusProcessing;
             }
@@ -2219,8 +2334,8 @@
             stopBtn.disabled = true;
 
             // Always re-apply base translations for buttons
-            startBtn.textContent = translations[currentDisplayLanguage].voiceStartRecording;
-            stopBtn.textContent = translations[currentDisplayLanguage].voiceStopRecording;
+            startBtn.innerHTML = translations[currentDisplayLanguage].voiceStartRecording; // Use innerHTML for emoji
+            stopBtn.innerHTML = translations[currentDisplayLanguage].voiceStopRecording;
             
             switch(state) {
                 case 'recording':
@@ -2228,12 +2343,13 @@
                     startBtn.classList.add('recording');
                     startBtn.disabled = true;
                     stopBtn.disabled = false;
-                    startBtn.textContent = `🔴 ${translations[currentDisplayLanguage].voiceStatusRecording.split('...')[0]}...`;
+                    startBtn.innerHTML = `🔴 ${translations[currentDisplayLanguage].voiceStatusRecording.split('...')[0]}...`;
                     indicator.style.opacity = '1';
                     break;
-                case 'listening':
+                case 'listening': // This state is brief, mostly shown by onresult interim
                     btn.classList.add('listening');
-                    startBtn.textContent = `👂 ${translations[currentDisplayLanguage].voiceStatusListening.split('...')[0]}...`;
+                    // startBtn.innerHTML might be overwritten by interim results, so this is more a fallback
+                    startBtn.innerHTML = `👂 ${translations[currentDisplayLanguage].voiceStatusListening.split('...')[0]}...`;
                     startBtn.disabled = true;
                     stopBtn.disabled = false;
                     indicator.style.opacity = '1';
@@ -2241,27 +2357,31 @@
                 case 'processing':
                     btn.classList.add('loading');
                     startBtn.classList.add('processing');
-                    startBtn.textContent = `⚙️ ${translations[currentDisplayLanguage].voiceStatusProcessing.split('...')[0]}...`;
+                    startBtn.innerHTML = `⚙️ ${translations[currentDisplayLanguage].voiceStatusProcessing.split('...')[0]}...`;
                     startBtn.disabled = true;
                     stopBtn.disabled = true;
+                    indicator.style.opacity = '0'; // Hide indicator while processing
                     break;
                 case 'idle': default:
                     indicator.style.opacity = '0';
+                    const statusEl = document.getElementById('voiceStatusText');
+                    if (statusEl) statusEl.innerHTML = translations[currentDisplayLanguage].voiceModalInitialStatus;
                     break;
             }
         }
 
         async function processTranscription(transcript) {
             const transcriptionArea = document.getElementById('transcriptionArea');
-            const transcriptionText = document.getElementById('transcriptionText');
+            const transcriptionTextEl = document.getElementById('transcriptionText'); // Renamed to avoid conflict
             
-            if (transcriptionArea && transcriptionText) {
-                transcriptionText.textContent = transcript;
+            if (transcriptionArea && transcriptionTextEl) {
+                transcriptionTextEl.textContent = transcript;
                 transcriptionArea.style.display = 'block';
             }
             
             const statusEl = document.getElementById('voiceStatusText');
             if (statusEl) statusEl.innerHTML = `<strong>${translations[currentDisplayLanguage].voiceStatusProcessing}</strong>`;
+            updateVoiceUI('processing'); // Explicitly set UI to processing
             
             try {
                 await getGeminiResponse(transcript);
@@ -2280,60 +2400,66 @@ AI MAIS offers:
 1. Advanced AI Analysis: Cutting-edge AI-powered analysis system for medical data
 2. Smart Quality Assurance: Quality control systems for medical standards compliance  
 3. Smart Marketing & CRM: Marketing intelligence and R&D analytics
+4. Visitor Registration & Log: Securely manage and track visitor entries.
 Instructions:
 - Respond in the same language as the question (Arabic or English)
 - Be professional, helpful, and concise (especially for mobile users)
 - Provide practical information about AI MAIS services
-- Keep responses under 200 words for mobile optimization
+- Keep responses under 150 words ideally.
 - If uncertain, acknowledge it and suggest alternatives
 - Focus on how AI MAIS can help with medical intelligence
 User's question: "${question}"
 Provide a helpful response in the same language:`;
 
                 const controller = new AbortController();
-                const timeoutId = setTimeout(() => controller.abort(), 15000);
+                const timeoutId = setTimeout(() => controller.abort(), 20000); // Increased timeout
 
-                const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${API_KEY}`, { // Updated model
+                const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${API_KEY}`, { 
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
                         contents: [{ parts: [{ text: prompt }] }],
-                        generationConfig: { temperature: 0.7, topK: 40, topP: 0.95, maxOutputTokens: 300 }
+                        generationConfig: { temperature: 0.7, topK: 40, topP: 0.95, maxOutputTokens: 250 } // Adjusted tokens
                     }),
                     signal: controller.signal
                 });
                 clearTimeout(timeoutId);
 
-                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                if (!response.ok) {
+                    const errorBody = await response.text(); // Try to get more error info
+                    console.error('Gemini API HTTP error:', response.status, errorBody);
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
                 const data = await response.json();
                 
-                if (data.candidates && data.candidates[0] && data.candidates[0].content) {
+                if (data.candidates && data.candidates[0] && data.candidates[0].content && data.candidates[0].content.parts && data.candidates[0].content.parts[0]) {
                     showResponse(question, data.candidates[0].content.parts[0].text);
                 } else {
+                    console.log('Unexpected Gemini response structure:', data);
                     showError(translations[currentDisplayLanguage].errorGemini);
                 }
             } catch (error) {
                 console.error('Error calling Gemini API:', error);
                 let errorKey = 'errorGemini';
                 if (error.name === 'AbortError') errorKey = 'errorGeminiTimeout';
-                else if (error.message.includes('403')) errorKey = 'errorGeminiPermission';
-                else if (error.message.includes('400')) errorKey = 'errorGeminiFormat';
+                else if (error.message && error.message.includes('403')) errorKey = 'errorGeminiPermission';
+                else if (error.message && error.message.includes('400')) errorKey = 'errorGeminiFormat';
                 else if (!navigator.onLine) errorKey = 'errorNoInternet';
                 showError(translations[currentDisplayLanguage][errorKey]);
             }
         }
 
-        function showResponse(question, response) {
+        function showResponse(question, responseText) { // Renamed response to responseText
             const statusEl = document.getElementById('voiceStatusText');
             const responseEl = document.getElementById('responseText');
             const voiceResponseEl = document.getElementById('voiceResponse');
             
             if (statusEl) statusEl.innerHTML = `<strong>${translations[currentDisplayLanguage].voiceStatusResponseReady}</strong>`;
-            if (responseEl) responseEl.textContent = response;
+            if (responseEl) responseEl.textContent = responseText;
             if (voiceResponseEl) voiceResponseEl.style.display = 'block';
             
-            updateVoiceUI('idle');
-            speakResponse(response);
+            updateVoiceUI('idle'); // Reset UI after response is shown
+            speakResponse(responseText);
             
             if (isMobile) {
                 setTimeout(() => {
@@ -2351,44 +2477,35 @@ Provide a helpful response in the same language:`;
             if (statusEl) statusEl.textContent = translations[currentDisplayLanguage].voiceStatusError;
             if (responseEl) responseEl.textContent = errorMessage;
             if (voiceResponseEl) voiceResponseEl.style.display = 'block';
-            if (transcriptionArea) transcriptionArea.style.display = 'none';
+            if (transcriptionArea && !errorMessage.includes(translations[currentDisplayLanguage].errorMicPermission.substring(0,10))) { // Don't hide transcription for mic errors initially
+                 // transcriptionArea.style.display = 'none'; // Keep transcription for context unless it's a mic issue pre-recording
+            } else if (transcriptionArea) {
+                transcriptionArea.style.display = 'none';
+            }
             
             updateVoiceUI('idle');
         }
 
         function speakResponse(text) {
             if (!speechSynthesis) return;
-            speechSynthesis.cancel();
+            speechSynthesis.cancel(); // Cancel any ongoing speech
             
+            // Wait a bit for UI updates before speaking
             setTimeout(() => {
                 const utterance = new SpeechSynthesisUtterance(text);
                 const isArabicText = /[\u0600-\u06FF\u0750-\u077F]/.test(text);
-                utterance.lang = isArabicText ? 'ar-SA' : 'en-US';
-                utterance.rate = isMobile ? 0.8 : 0.9;
+                utterance.lang = isArabicText ? (currentLanguage.startsWith('ar') ? currentLanguage : 'ar-SA') : (currentLanguage.startsWith('en') ? currentLanguage : 'en-US');
+
+                utterance.rate = isMobile ? 0.9 : 1.0; // Slightly faster on mobile
                 utterance.pitch = 1;
-                utterance.volume = 0.8;
+                utterance.volume = 0.9; // Slightly louder
                 
-                if (isMobile && text.length > 200) {
-                    const sentences = text.split(/[.!?]/).filter(s => s.trim());
-                    let currentIndex = 0;
-                    function speakNext() {
-                        if (currentIndex < sentences.length) {
-                            const sentence = sentences[currentIndex].trim();
-                            if (sentence) {
-                                const sentenceUtterance = new SpeechSynthesisUtterance(sentence);
-                                Object.assign(sentenceUtterance, { lang: utterance.lang, rate: utterance.rate, pitch: utterance.pitch, volume: utterance.volume });
-                                sentenceUtterance.onend = () => { currentIndex++; setTimeout(speakNext, 300); };
-                                sentenceUtterance.onerror = (event) => { console.error('Speech synthesis error:', event); currentIndex++; speakNext(); };
-                                speechSynthesis.speak(sentenceUtterance);
-                            } else { currentIndex++; speakNext(); }
-                        }
-                    }
-                    speakNext();
-                } else {
-                    utterance.onerror = (event) => console.error('Speech synthesis error:', event);
-                    speechSynthesis.speak(utterance);
-                }
-            }, 200);
+                utterance.onstart = () => console.log('Speech synthesis started.');
+                utterance.onend = () => console.log('Speech synthesis finished.');
+                utterance.onerror = (event) => console.error('Speech synthesis error:', event.error);
+                
+                speechSynthesis.speak(utterance);
+            }, 300); // Increased delay
         }
 
         function toggleModal(modalId, shouldOpen) {
@@ -2401,14 +2518,25 @@ Provide a helpful response in the same language:`;
             if (openAction) {
                 modal.classList.add('active');
                 disableBodyScroll();
-                if (modalId === 'voiceModal') resetVoiceModal();
+                if (modalId === 'voiceModal') {
+                    resetVoiceModal();
+                    // Attempt to pre-request mic permission on modal open if not already granted
+                    if (!permissionGranted) {
+                        requestMicrophonePermission().then(granted => {
+                            if(granted) console.log("Mic permission granted on modal open.");
+                        });
+                    }
+                }
                 
-                if (isMobile) {
-                    setTimeout(() => {
+                // Focus first focusable element in modal
+                setTimeout(() => {
+                    const firstFocusable = modal.querySelector('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+                    if (firstFocusable) firstFocusable.focus();
+                    if (isMobile) { // Scroll content to top for mobile
                         const content = modal.querySelector('.voice-content, .help-content');
                         if (content) content.scrollTo(0, 0);
-                    }, 400);
-                }
+                    }
+                }, 400); // After animation
             } else {
                 modal.classList.remove('active');
                 enableBodyScroll();
@@ -2425,15 +2553,13 @@ Provide a helpful response in the same language:`;
 
         function resetVoiceModal() {
             const statusEl = document.getElementById('voiceStatusText');
-            const responseEl = document.getElementById('voiceResponse');
+            const voiceResponseEl = document.getElementById('voiceResponse'); // Corrected variable name
             const transcriptionArea = document.getElementById('transcriptionArea');
             
             if (statusEl) statusEl.innerHTML = translations[currentDisplayLanguage].voiceModalInitialStatus;
-            if (responseEl) responseEl.style.display = 'none';
+            if (voiceResponseEl) voiceResponseEl.style.display = 'none';
             if (transcriptionArea) transcriptionArea.style.display = 'none';
             
-            // Indicator text is already updated by updatePageLanguage
-            // currentLanguage (for speech recognition) is also updated by updatePageLanguage
             updateVoiceUI('idle');
             lastTranscript = '';
         }
@@ -2446,19 +2572,9 @@ Provide a helpful response in the same language:`;
             const voiceCloseBtn = document.getElementById('voiceCloseBtn');
             const helpCloseBtn = document.getElementById('helpCloseBtn');
 
-            if (voiceBtn) {
-                voiceBtn.addEventListener('click', (e) => { e.preventDefault(); e.stopPropagation(); toggleVoiceModal(); });
-                voiceBtn.addEventListener('touchstart', (e) => { e.preventDefault(); touchStartTime = Date.now(); }, { passive: false });
-                voiceBtn.addEventListener('touchend', (e) => {
-                    e.preventDefault();
-                    if (Date.now() - touchStartTime < 1000) toggleVoiceModal();
-                }, { passive: false });
-            }
-            if (helpBtn) {
-                helpBtn.addEventListener('click', (e) => { e.preventDefault(); e.stopPropagation(); toggleHelpModal(); });
-                helpBtn.addEventListener('touchstart', (e) => e.preventDefault(), { passive: false });
-                helpBtn.addEventListener('touchend', (e) => { e.preventDefault(); toggleHelpModal(); }, { passive: false });
-            }
+            if (voiceBtn) voiceBtn.addEventListener('click', toggleVoiceModal);
+            if (helpBtn) helpBtn.addEventListener('click', toggleHelpModal);
+            
             if (startRecordingBtn) startRecordingBtn.addEventListener('click', startRecording);
             if (stopRecordingBtn) stopRecordingBtn.addEventListener('click', stopRecording);
             if (voiceCloseBtn) voiceCloseBtn.addEventListener('click', toggleVoiceModal);
@@ -2472,13 +2588,13 @@ Provide a helpful response in the same language:`;
             document.addEventListener('keydown', (e) => {
                 if (e.key === 'Escape') {
                     if (helpModal && helpModal.classList.contains('active')) toggleHelpModal();
-                    if (voiceModal && voiceModal.classList.contains('active')) toggleVoiceModal();
+                    else if (voiceModal && voiceModal.classList.contains('active')) toggleVoiceModal();
                 }
             });
 
             window.addEventListener('orientationchange', () => {
                 setTimeout(() => {
-                    document.querySelectorAll('.service-card').forEach(card => card.style.transform = '');
+                    document.querySelectorAll('.service-card').forEach(card => card.style.transform = ''); // Reset any lingering transforms
                     document.querySelectorAll('.voice-modal.active, .help-modal.active').forEach(modal => {
                         const content = modal.querySelector('.voice-content, .help-content');
                         if (content) content.scrollTo(0, 0);
@@ -2488,109 +2604,160 @@ Provide a helpful response in the same language:`;
 
             document.addEventListener('visibilitychange', () => {
                 if (document.hidden) {
-                    if (isRecording) stopRecording();
+                    if (isRecording) stopRecording(); // Stop recording if page becomes hidden
                     if (speechSynthesis.speaking) speechSynthesis.cancel();
                 }
-            });
-
-            document.addEventListener('focusin', (e) => {
-                [voiceModal, helpModal].forEach(modal => {
-                    if (modal && modal.classList.contains('active') && !modal.contains(e.target)) {
-                        const firstFocusable = modal.querySelector('button:not([disabled])');
-                        if (firstFocusable) firstFocusable.focus();
-                    }
-                });
             });
         }
 
         window.addEventListener('load', () => {
-            preventZoom();
-            updatePageLanguage('en'); // Set initial language to English
-            initializeSpeechRecognition();
+            if (isMobile) preventZoom();
+            updatePageLanguage(localStorage.getItem('preferredLanguage') || 'en'); // Load saved lang or default to 'en'
+            initializeSpeechRecognition(); // Initialize early
             addMobileEventListeners();
             
             if (isMobile) {
                 document.body.classList.add('mobile-device');
                 const viewport = document.querySelector('meta[name=viewport]');
-                if (viewport) viewport.setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover');
+                // Viewport already set well, no need to change dynamically here
             }
             
+            // Staggered card animation
             const cards = document.querySelectorAll('.service-card');
             cards.forEach((card, index) => {
-                setTimeout(() => {
-                    card.style.opacity = '0'; card.style.transform = 'translateY(30px)';
-                    card.style.transition = 'all 0.8s cubic-bezier(0.4, 0, 0.2, 1)';
-                    setTimeout(() => { card.style.opacity = '1'; card.style.transform = 'translateY(0)'; }, 100);
-                }, index * 200);
+                card.style.opacity = '0'; 
+                card.style.transform = 'translateY(30px)';
+                card.style.transition = 'opacity 0.6s ease-out, transform 0.6s ease-out';
+                card.style.transitionDelay = `${index * 100}ms`;
+                setTimeout(() => { 
+                    card.style.opacity = '1'; 
+                    card.style.transform = 'translateY(0)'; 
+                }, 50 + (index * 100)); // Ensure timeout fires after style set
             });
 
+            // Check visibility of crucial buttons
             setTimeout(() => {
                 [document.getElementById('voiceSupportBtn'), document.getElementById('helpBtn')].forEach(btn => {
                     if (btn) {
                         const rect = btn.getBoundingClientRect();
-                        if (rect.width === 0 || rect.height === 0) {
-                            console.warn(`${btn.id} not visible, attempting to fix...`);
+                        if (rect.width === 0 || rect.height === 0 || getComputedStyle(btn).display === 'none') {
+                            console.warn(`${btn.id} not visible, attempting to force visibility...`);
                             Object.assign(btn.style, { display: 'flex', visibility: 'visible', opacity: '1' });
                         }
                     }
                 });
             }, 1000);
+            addInteractionTracking(); // For background parallax
         });
+        
+        window.addEventListener('beforeunload', () => {
+            localStorage.setItem('preferredLanguage', currentDisplayLanguage);
+        });
+
 
         function addInteractionTracking() {
             let isTouch = false;
-            document.addEventListener('touchstart', () => isTouch = true, { passive: true });
-            document.addEventListener('mousemove', (e) => {
-                if (isTouch) return;
-                const mouseX = (e.clientX / window.innerWidth) * 2 - 1;
-                const mouseY = (e.clientY / window.innerHeight) * 2 - 1;
+            document.addEventListener('touchstart', () => isTouch = true, { passive: true, once: true });
+            
+            const parallaxFactor = 0.005; // Reduced factor for subtlety
+
+            function handleMove(clientX, clientY) {
+                const mouseX = (clientX / window.innerWidth) * 2 - 1;
+                const mouseY = (clientY / window.innerHeight) * 2 - 1;
                 document.querySelectorAll('.medical-geometry').forEach((elem, index) => {
-                    const speed = (index + 1) * 0.01;
-                    elem.style.transform = `translateX(${mouseX * speed * 20}px) translateY(${mouseY * speed * 20}px)`;
+                    // Give each element a slightly different depth/speed
+                    const speed = (index % 3 + 1) * parallaxFactor; // Cycle through 3 speed levels
+                    const offsetX = mouseX * speed * window.innerWidth * 0.1; // Scale offset by viewport width slightly
+                    const offsetY = mouseY * speed * window.innerHeight * 0.1; // Scale offset by viewport height slightly
+                    
+                    // Combine with existing animation transform if needed, or just set directly
+                    // The `medicalFloat` animation already handles a base transform.
+                    // This adds an additional layer.
+                    // For performance, best to combine if possible, but direct set is simpler here.
+                    elem.style.setProperty('--parallax-x', `${offsetX}px`);
+                    elem.style.setProperty('--parallax-y', `${offsetY}px`);
+                    // Update the animation to use these CSS variables or apply directly.
+                    // Current medicalFloat does not use these. Let's adjust the base transform directly
+                    // but be mindful not to override the animation's transform completely.
+                    // A simpler approach for this demo: directly apply.
+                    // Note: This might conflict if medicalFloat also manipulates translateX/Y.
+                    // It's better if medicalFloat only does translateY and rotateZ.
+                    // The current medicalFloat does affect translateX/Y.
+                    // Let's modify medicalFloat to take into account parallax.
+                    // Or, wrap medical-geometry in another div for parallax.
+                    // For now, this will jitter with medicalFloat.
+                    // A better way: apply to .bg-canvas transform.
                 });
-            });
+                 // Apply to bg-canvas for a smoother overall effect.
+                const bgCanvas = document.querySelector('.bg-canvas');
+                if (bgCanvas) {
+                     bgCanvas.style.transform = `translateX(${mouseX * parallaxFactor * 50}px) translateY(${mouseY * parallaxFactor * 50}px)`;
+                }
+            }
+
+            if (!isTouch) { // Only add mousemove if not primarily a touch session
+                 document.addEventListener('mousemove', (e) => {
+                    handleMove(e.clientX, e.clientY);
+                }, { passive: true });
+            }
+           
             document.addEventListener('touchmove', (e) => {
                 if (e.touches.length === 1) {
                     const touch = e.touches[0];
-                    const touchX = (touch.clientX / window.innerWidth) * 2 - 1;
-                    const touchY = (touch.clientY / window.innerHeight) * 2 - 1;
-                    document.querySelectorAll('.medical-geometry').forEach((elem, index) => {
-                        const speed = (index + 1) * 0.003;
-                        elem.style.transform = `translateX(${touchX * speed * 10}px) translateY(${touchY * speed * 10}px)`;
-                    });
+                    handleMove(touch.clientX, touch.clientY);
                 }
             }, { passive: true });
         }
-        addInteractionTracking();
+        
 
         window.addEventListener('error', (e) => {
-            console.error('Global error:', e);
-            if (isMobile) {
+            console.error('Global error:', e.message, e.filename, e.lineno, e.colno, e.error);
+            if (isMobile && document.getElementById('voiceModal')?.classList.contains('active')) {
                 setTimeout(() => {
-                    if (document.getElementById('voiceModal').classList.contains('active')) {
-                        showError(translations[currentDisplayLanguage].errorUnhandled);
-                    }
+                     showError(translations[currentDisplayLanguage].errorUnhandled);
                 }, 1000);
             }
         });
-        window.addEventListener('unhandledrejection', (e) => console.error('Unhandled promise rejection:', e));
+        window.addEventListener('unhandledrejection', (e) => {
+            console.error('Unhandled promise rejection:', e.reason);
+             if (isMobile && document.getElementById('voiceModal')?.classList.contains('active')) {
+                setTimeout(() => {
+                     showError(translations[currentDisplayLanguage].errorUnhandled);
+                }, 1000);
+            }
+        });
 
         window.addEventListener('online', () => {
             console.log('Network connection restored');
+            const onlineStatusEl = document.getElementById('onlineStatus');
+            if (onlineStatusEl) onlineStatusEl.style.display = 'flex';
+            
             if (isMobile) {
                 const statusEl = document.getElementById('voiceStatusText');
-                if (statusEl && statusEl.textContent.includes(translations[currentDisplayLanguage].errorNoInternet.split(' ')[0])) { // Check first word
+                if (statusEl && statusEl.textContent.includes(translations[currentDisplayLanguage].errorNoInternet.split(' ')[0])) { 
                     statusEl.innerHTML = translations[currentDisplayLanguage].voiceModalInitialStatus;
                 }
             }
         });
         window.addEventListener('offline', () => {
             console.log('Network connection lost');
+            const onlineStatusEl = document.getElementById('onlineStatus');
+            // if (onlineStatusEl) onlineStatusEl.style.display = 'none'; // Or show an offline indicator
+
             if (isMobile) {
                 const statusEl = document.getElementById('voiceStatusText');
-                if (statusEl) statusEl.textContent = translations[currentDisplayLanguage].errorNoInternet;
+                if (statusEl && document.getElementById('voiceModal')?.classList.contains('active')) {
+                     statusEl.textContent = translations[currentDisplayLanguage].errorNoInternet;
+                }
             }
         });
+
+        // Initial check for online status
+        if (!navigator.onLine) {
+            const onlineStatusEl = document.getElementById('onlineStatus');
+            // if (onlineStatusEl) onlineStatusEl.style.display = 'none';
+        }
+
     </script>
 </body>
 </html>
