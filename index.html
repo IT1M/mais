@@ -1545,6 +1545,12 @@
     </style>
 </head>
 <body>
+    <script>
+        // Force login: redirect to login.html if not logged in
+        if (localStorage.getItem('isLoggedIn') !== 'true') {
+            window.location.href = 'login.html';
+        }
+    </script>
     <!-- Language Switcher -->
     <div class="language-switcher">
         <button class="lang-btn active" id="langEnBtn" type="button" aria-label="Switch to English">EN</button>
@@ -1599,6 +1605,15 @@
 
     <!-- Enhanced Button Container -->
     <div class="button-container">
+        <!-- Online Status Icon -->
+        <span id="onlineStatus" style="display:none;align-items:center;gap:4px;margin-bottom:6px;">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" style="vertical-align:middle;">
+                <circle cx="12" cy="12" r="10" fill="#4ecdc4" stroke="#fff" stroke-width="2"/>
+                <circle cx="12" cy="12" r="5" fill="#fff"/>
+                <circle cx="12" cy="12" r="3" fill="#4ecdc4"/>
+            </svg>
+            <span style="color:#4ecdc4;font-weight:700;font-size:13px;">Online</span>
+        </span>
         <!-- Enhanced Voice Support Button -->
         <button class="voice-support-btn" id="voiceSupportBtn" type="button" data-translate-aria-label="voiceAssistantAriaLabel">
             <svg viewBox="0 0 24 24" role="img" aria-hidden="true">
@@ -1763,6 +1778,11 @@
     </div>
 
     <script>
+        // Show online status if logged in
+        if (localStorage.getItem('isLoggedIn') === 'true') {
+            var onlineStatus = document.getElementById('onlineStatus');
+            if (onlineStatus) onlineStatus.style.display = 'flex';
+        }
         // --- START TRANSLATIONS ---
         const translations = {
             en: {
