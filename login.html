@@ -1,0 +1,788 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تسجيل الدخول - Mais for Projects Medical</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(15px);
+            border-radius: 25px;
+            box-shadow: 
+                0 25px 50px rgba(0, 0, 0, 0.15),
+                0 12px 25px rgba(0, 0, 0, 0.1),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3);
+            padding: 35px;
+            width: 100%;
+            max-width: 480px;
+            transform: translateY(0);
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, #00d4aa, #00a8cc, #667eea);
+            border-radius: 25px 25px 0 0;
+        }
+
+        .container:hover {
+            transform: translateY(-8px);
+            box-shadow: 
+                0 35px 70px rgba(0, 0, 0, 0.2),
+                0 18px 35px rgba(0, 0, 0, 0.15),
+                inset 0 1px 0 rgba(255, 255, 255, 0.4);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 35px;
+        }
+
+        .logo {
+            width: 85px;
+            height: 85px;
+            background: linear-gradient(135deg, #00d4aa, #00a8cc);
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 10px 25px rgba(0, 212, 170, 0.4);
+            transition: all 0.4s ease;
+            position: relative;
+        }
+
+        .logo:hover {
+            transform: rotateY(360deg) scale(1.1);
+            box-shadow: 0 15px 35px rgba(0, 212, 170, 0.5);
+        }
+
+        .logo::before {
+            content: '🏥';
+            font-size: 40px;
+            color: white;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .company-name {
+            color: #2c3e50;
+            font-size: 26px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+            letter-spacing: 1px;
+        }
+
+        .tagline {
+            color: #7f8c8d;
+            font-size: 15px;
+            margin-bottom: 25px;
+            font-weight: 500;
+        }
+
+        .language-toggle {
+            position: absolute;
+            top: 25px;
+            right: 25px;
+            background: rgba(255, 255, 255, 0.3);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 25px;
+            padding: 10px 18px;
+            cursor: pointer;
+            font-size: 13px;
+            color: #667eea;
+            font-weight: 700;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .language-toggle:hover {
+            background: rgba(255, 255, 255, 0.4);
+            transform: scale(1.05);
+            border-color: rgba(255, 255, 255, 0.4);
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+            position: relative;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 10px;
+            color: #2c3e50;
+            font-weight: 600;
+            font-size: 15px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 16px 22px;
+            border: 2px solid #e8f4f8;
+            border-radius: 15px;
+            font-size: 16px;
+            background: rgba(255, 255, 255, 0.9);
+            transition: all 0.3s ease;
+            outline: none;
+            color: #2c3e50;
+        }
+
+        .form-group input:focus {
+            border-color: #00d4aa;
+            background: white;
+            box-shadow: 
+                0 0 0 4px rgba(0, 212, 170, 0.1),
+                0 6px 15px rgba(0, 0, 0, 0.08);
+            transform: translateY(-3px);
+        }
+
+        .form-group input::placeholder {
+            color: #bdc3c7;
+            font-weight: 400;
+        }
+
+        /* نظام التحقق (Captcha) */
+        .captcha-container {
+            background: rgba(248, 249, 250, 0.8);
+            border: 2px solid #e9ecef;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 25px;
+            transition: all 0.3s ease;
+        }
+
+        .captcha-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+
+        .captcha-title {
+            color: #495057;
+            font-weight: 600;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .captcha-refresh {
+            background: #6c757d;
+            border: none;
+            border-radius: 50%;
+            width: 35px;
+            height: 35px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .captcha-refresh:hover {
+            background: #495057;
+            transform: rotate(180deg);
+        }
+
+        .captcha-challenge {
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            border: 2px dashed #ced4da;
+            border-radius: 12px;
+            padding: 15px;
+            text-align: center;
+            margin-bottom: 15px;
+            font-family: 'Courier New', monospace;
+            font-size: 20px;
+            font-weight: bold;
+            color: #495057;
+            letter-spacing: 3px;
+            user-select: none;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .captcha-challenge::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.5), transparent);
+            animation: shimmer 3s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
+        .captcha-input {
+            width: 100%;
+            padding: 12px 18px;
+            border: 2px solid #ced4da;
+            border-radius: 10px;
+            font-size: 16px;
+            text-align: center;
+            letter-spacing: 2px;
+            font-weight: 600;
+            background: white;
+            transition: all 0.3s ease;
+        }
+
+        .captcha-input:focus {
+            border-color: #00d4aa;
+            box-shadow: 0 0 0 3px rgba(0, 212, 170, 0.1);
+            outline: none;
+        }
+
+        .captcha-verification {
+            margin-top: 15px;
+            padding: 12px;
+            border-radius: 10px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            opacity: 0;
+            transform: translateY(-10px);
+        }
+
+        .captcha-verification.success {
+            background: rgba(40, 167, 69, 0.1);
+            color: #28a745;
+            border: 1px solid rgba(40, 167, 69, 0.3);
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .captcha-verification.error {
+            background: rgba(220, 53, 69, 0.1);
+            color: #dc3545;
+            border: 1px solid rgba(220, 53, 69, 0.3);
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(135deg, #00d4aa, #00a8cc);
+            color: white;
+            border: none;
+            border-radius: 15px;
+            font-size: 17px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            opacity: 0.5;
+            pointer-events: none;
+        }
+
+        .login-btn.enabled {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .login-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.6s ease;
+        }
+
+        .login-btn.enabled:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px rgba(0, 212, 170, 0.5);
+        }
+
+        .login-btn.enabled:hover::before {
+            left: 100%;
+        }
+
+        .login-btn:active {
+            transform: translateY(0);
+        }
+
+        .welcome-message {
+            text-align: center;
+            margin-top: 30px;
+            padding: 18px;
+            background: rgba(0, 212, 170, 0.1);
+            border: 2px solid rgba(0, 212, 170, 0.2);
+            border-radius: 15px;
+            color: #00a8cc;
+            font-weight: 600;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.4s ease;
+            display: none;
+        }
+
+        .welcome-message.show {
+            opacity: 1;
+            transform: translateY(0);
+            display: block;
+        }
+
+        /* تنسيق اللغة الإنجليزية */
+        [dir="ltr"] .language-toggle {
+            right: auto;
+            left: 25px;
+        }
+
+        /* التصميم المتجاوب للهواتف */
+        @media (max-width: 768px) {
+            body {
+                padding: 5px;
+            }
+
+            .container {
+                padding: 25px 20px;
+                border-radius: 20px;
+                max-width: 100%;
+                margin: 5px;
+            }
+
+            .company-name {
+                font-size: 22px;
+                line-height: 1.3;
+            }
+
+            .tagline {
+                font-size: 13px;
+            }
+
+            .logo {
+                width: 75px;
+                height: 75px;
+                margin-bottom: 15px;
+            }
+
+            .logo::before {
+                font-size: 35px;
+            }
+
+            .language-toggle {
+                top: 15px;
+                right: 15px;
+                padding: 8px 14px;
+                font-size: 12px;
+            }
+
+            [dir="ltr"] .language-toggle {
+                left: 15px;
+            }
+
+            .form-group {
+                margin-bottom: 20px;
+            }
+
+            .form-group input {
+                padding: 14px 18px;
+                font-size: 16px;
+                border-radius: 12px;
+            }
+
+            .captcha-container {
+                padding: 15px;
+                margin-bottom: 20px;
+            }
+
+            .captcha-challenge {
+                font-size: 18px;
+                padding: 12px;
+                letter-spacing: 2px;
+            }
+
+            .captcha-input {
+                padding: 10px 15px;
+                font-size: 15px;
+            }
+
+            .login-btn {
+                padding: 16px;
+                font-size: 16px;
+                border-radius: 12px;
+            }
+
+            .header {
+                margin-bottom: 25px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 20px 15px;
+                margin: 2px;
+            }
+
+            .company-name {
+                font-size: 20px;
+            }
+
+            .logo {
+                width: 70px;
+                height: 70px;
+            }
+
+            .logo::before {
+                font-size: 30px;
+            }
+
+            .form-group input {
+                padding: 12px 16px;
+                font-size: 15px;
+            }
+
+            .captcha-challenge {
+                font-size: 16px;
+                padding: 10px;
+            }
+
+            .login-btn {
+                padding: 14px;
+                font-size: 15px;
+            }
+        }
+
+        /* تأثيرات التحريك */
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-8px); }
+        }
+
+        .container {
+            animation: float 8s ease-in-out infinite;
+        }
+
+        .form-group, .captcha-container {
+            opacity: 0;
+            animation: slideUp 0.6s ease forwards;
+        }
+
+        .form-group:nth-child(1) { animation-delay: 0.1s; }
+        .form-group:nth-child(2) { animation-delay: 0.2s; }
+        .captcha-container { animation-delay: 0.3s; }
+        .login-btn { animation-delay: 0.4s; }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* تحسينات إضافية للمس على الهواتف */
+        @media (hover: none) and (pointer: coarse) {
+            .container:hover {
+                transform: translateY(0);
+            }
+            
+            .logo:hover {
+                transform: scale(1.05);
+            }
+            
+            .login-btn.enabled:hover {
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <button class="language-toggle" onclick="toggleLanguage()">English</button>
+        
+        <div class="header">
+            <div class="logo"></div>
+            <h1 class="company-name">Mais for Projects Medical</h1>
+            <p class="tagline" data-ar="نظام إدارة المشاريع الطبية المتقدم" data-en="Advanced Medical Projects Management System">نظام إدارة المشاريع الطبية المتقدم</p>
+        </div>
+
+        <form id="loginForm">
+            <div class="form-group">
+                <label for="email" data-ar="البريد الإلكتروني" data-en="Email Address">البريد الإلكتروني</label>
+                <input type="email" id="email" required 
+                       placeholder="doctor@example.com"
+                       data-placeholder-ar="doctor@example.com"
+                       data-placeholder-en="doctor@example.com">
+            </div>
+
+            <div class="form-group">
+                <label for="password" data-ar="كلمة المرور" data-en="Password">كلمة المرور</label>
+                <input type="password" id="password" required 
+                       placeholder="••••••••"
+                       data-placeholder-ar="••••••••"
+                       data-placeholder-en="••••••••">
+            </div>
+
+            <!-- نظام التحقق الأمني -->
+            <div class="captcha-container">
+                <div class="captcha-header">
+                    <div class="captcha-title">
+                        <span data-ar="🔒 التحقق الأمني" data-en="🔒 Security Verification">🔒 التحقق الأمني</span>
+                    </div>
+                    <button type="button" class="captcha-refresh" onclick="generateCaptcha()" title="تحديث">↻</button>
+                </div>
+                
+                <div class="captcha-challenge" id="captchaChallenge"></div>
+                
+                <input type="text" class="captcha-input" id="captchaInput" 
+                       placeholder="أدخل الرمز أعلاه" 
+                       data-placeholder-ar="أدخل الرمز أعلاه"
+                       data-placeholder-en="Enter the code above"
+                       maxlength="6">
+                
+                <div class="captcha-verification" id="captchaVerification"></div>
+            </div>
+
+            <button type="submit" class="login-btn" id="loginBtn"
+                    data-ar="تسجيل الدخول" 
+                    data-en="Sign In">تسجيل الدخول</button>
+        </form>
+
+        <div class="welcome-message" id="welcomeMessage">
+            <span data-ar="✅ مرحباً بك في نظام Mais الطبي! جاري تحويلك إلى لوحة التحكم..." 
+                  data-en="✅ Welcome to Mais Medical System! Redirecting to dashboard...">
+                ✅ مرحباً بك في نظام Mais الطبي! جاري تحويلك إلى لوحة التحكم...
+            </span>
+        </div>
+    </div>
+
+    <script>
+        let isArabic = true;
+        let currentCaptcha = '';
+        let isCaptchaVerified = false;
+
+        // توليد رمز التحقق
+        function generateCaptcha() {
+            const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+            let captcha = '';
+            for (let i = 0; i < 6; i++) {
+                captcha += characters.charAt(Math.floor(Math.random() * characters.length));
+            }
+            currentCaptcha = captcha;
+            document.getElementById('captchaChallenge').textContent = captcha;
+            
+            // إعادة تعيين حالة التحقق
+            isCaptchaVerified = false;
+            document.getElementById('captchaInput').value = '';
+            document.getElementById('captchaVerification').className = 'captcha-verification';
+            updateLoginButton();
+        }
+
+        // التحقق من رمز الأمان
+        function verifyCaptcha() {
+            const userInput = document.getElementById('captchaInput').value.toUpperCase();
+            const verification = document.getElementById('captchaVerification');
+            
+            if (userInput === currentCaptcha) {
+                isCaptchaVerified = true;
+                verification.className = 'captcha-verification success';
+                verification.textContent = isArabic ? 
+                    '✅ تم التحقق بنجاح!' : 
+                    '✅ Verification successful!';
+            } else if (userInput.length === 6) {
+                isCaptchaVerified = false;
+                verification.className = 'captcha-verification error';
+                verification.textContent = isArabic ? 
+                    '❌ رمز التحقق غير صحيح' : 
+                    '❌ Incorrect verification code';
+            } else {
+                isCaptchaVerified = false;
+                verification.className = 'captcha-verification';
+                verification.textContent = '';
+            }
+            
+            updateLoginButton();
+        }
+
+        // تحديث حالة زر تسجيل الدخول
+        function updateLoginButton() {
+            const loginBtn = document.getElementById('loginBtn');
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            
+            if (email && password && isCaptchaVerified) {
+                loginBtn.classList.add('enabled');
+            } else {
+                loginBtn.classList.remove('enabled');
+            }
+        }
+
+        // تبديل اللغة
+        function toggleLanguage() {
+            isArabic = !isArabic;
+            const html = document.documentElement;
+            const toggleBtn = document.querySelector('.language-toggle');
+            
+            if (isArabic) {
+                html.setAttribute('lang', 'ar');
+                html.setAttribute('dir', 'rtl');
+                toggleBtn.textContent = 'English';
+                document.title = 'تسجيل الدخول - Mais for Projects Medical';
+            } else {
+                html.setAttribute('lang', 'en');
+                html.setAttribute('dir', 'ltr');
+                toggleBtn.textContent = 'العربية';
+                document.title = 'Login - Mais for Projects Medical';
+            }
+
+            // تحديث النصوص
+            document.querySelectorAll('[data-ar]').forEach(element => {
+                const arText = element.getAttribute('data-ar');
+                const enText = element.getAttribute('data-en');
+                element.textContent = isArabic ? arText : enText;
+            });
+
+            // تحديث placeholder
+            document.querySelectorAll('[data-placeholder-ar]').forEach(input => {
+                const arPlaceholder = input.getAttribute('data-placeholder-ar');
+                const enPlaceholder = input.getAttribute('data-placeholder-en');
+                input.placeholder = isArabic ? arPlaceholder : enPlaceholder;
+            });
+
+            // تحديث رسالة التحقق إذا كانت موجودة
+            if (isCaptchaVerified) {
+                const verification = document.getElementById('captchaVerification');
+                verification.textContent = isArabic ? 
+                    '✅ تم التحقق بنجاح!' : 
+                    '✅ Verification successful!';
+            }
+        }
+
+        // معالجة الأحداث
+        document.addEventListener('DOMContentLoaded', function() {
+            generateCaptcha();
+            
+            // مراقبة تغيير رمز التحقق
+            document.getElementById('captchaInput').addEventListener('input', verifyCaptcha);
+            
+            // مراقبة تغيير حقول الإدخال
+            document.getElementById('email').addEventListener('input', updateLoginButton);
+            document.getElementById('password').addEventListener('input', updateLoginButton);
+            
+            // منع إرسال النموذج بـ Enter إذا لم يتم التحقق
+            document.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    const loginBtn = document.getElementById('loginBtn');
+                    if (!loginBtn.classList.contains('enabled')) {
+                        e.preventDefault();
+                    }
+                }
+            });
+        });
+
+        // معالجة تسجيل الدخول
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            if (!isCaptchaVerified) {
+                alert(isArabic ? 
+                    'يرجى التحقق من رمز الأمان أولاً' : 
+                    'Please verify the security code first');
+                return;
+            }
+            
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            
+            if (email && password) {
+                // إظهار رسالة الترحيب
+                const welcomeMessage = document.getElementById('welcomeMessage');
+                welcomeMessage.classList.add('show');
+                
+                // تعطيل النموذج
+                document.getElementById('loginForm').style.opacity = '0.6';
+                document.getElementById('loginForm').style.pointerEvents = 'none';
+                
+                // محاكاة عملية تسجيل الدخول
+                setTimeout(() => {
+                    alert(isArabic ? 
+                        '🎉 تم تسجيل الدخول بنجاح!\nمرحباً بك في نظام Mais الطبي المتقدم.' : 
+                        '🎉 Login successful!\nWelcome to Mais Advanced Medical System.');
+                    
+                    // إعادة تعيين النموذج (للتجربة)
+                    setTimeout(() => {
+                        location.reload();
+                    }, 2000);
+                }, 2500);
+            }
+        });
+
+        // تأثيرات تفاعلية محسنة للهواتف
+        document.querySelectorAll('input').forEach(input => {
+            input.addEventListener('focus', function() {
+                if (window.innerWidth > 768) {
+                    this.parentElement.style.transform = 'scale(1.02)';
+                }
+            });
+            
+            input.addEventListener('blur', function() {
+                this.parentElement.style.transform = 'scale(1)';
+            });
+        });
+
+        // تحريك الخلفية (فقط على الحاسوب)
+        if (window.innerWidth > 768) {
+            document.addEventListener('mousemove', function(e) {
+                const container = document.querySelector('.container');
+                const x = (e.clientX / window.innerWidth) * 5;
+                const y = (e.clientY / window.innerHeight) * 5;
+                
+                container.style.transform = `translate(${x}px, ${y}px) rotateX(${y * 0.5}deg) rotateY(${x * 0.5}deg)`;
+            });
+
+            document.addEventListener('mouseleave', function() {
+                const container = document.querySelector('.container');
+                container.style.transform = 'translate(0, 0) rotateX(0) rotateY(0)';
+            });
+        }
+
+        // تحسين الأداء على الهواتف
+        if ('ontouchstart' in window) {
+            // إزالة تأثيرات الحركة المعقدة على الهواتف
+            document.querySelector('.container').style.animation = 'none';
+        }
+    </script>
+</body>
+</html>
