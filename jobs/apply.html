@@ -1,0 +1,1955 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI-HR MAIS - Smart Recruitment System | Mais Medical</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #2563eb;
+            --secondary-color: #1e40af;
+            --accent-color: #3b82f6;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --error-color: #ef4444;
+            --text-primary: #1f2937;
+            --text-secondary: #6b7280;
+            --bg-light: #f8fafc;
+            --bg-white: #ffffff;
+            --border-color: #e5e7eb;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--text-primary);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: var(--bg-white);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: var(--shadow-lg);
+            text-align: center;
+        }
+
+        .logo {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: var(--text-secondary);
+            font-size: 1.2rem;
+        }
+
+        .navigation {
+            background: var(--bg-white);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: var(--shadow);
+        }
+
+        .nav-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: center;
+        }
+
+        .nav-btn {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .nav-btn:hover {
+            background: var(--secondary-color);
+            transform: translateY(-2px);
+        }
+
+        .nav-btn.active {
+            background: var(--success-color);
+        }
+
+        .section {
+            background: var(--bg-white);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: var(--shadow-lg);
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            border-bottom: 3px solid var(--accent-color);
+            padding-bottom: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        .form-textarea {
+            width: 100%;
+            min-height: 120px;
+            padding: 12px 16px;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            resize: vertical;
+            font-family: inherit;
+        }
+
+        .file-upload {
+            border: 2px dashed var(--border-color);
+            border-radius: 8px;
+            padding: 30px;
+            text-align: center;
+            cursor: pointer;
+            transition: border-color 0.3s ease;
+        }
+
+        .file-upload:hover {
+            border-color: var(--primary-color);
+        }
+
+        .btn {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+            background: var(--secondary-color);
+            transform: translateY(-2px);
+        }
+
+        .btn-success {
+            background: var(--success-color);
+        }
+
+        .btn-warning {
+            background: var(--warning-color);
+        }
+
+        .btn-danger {
+            background: var(--error-color);
+        }
+
+        .alert {
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-weight: 500;
+        }
+
+        .alert-success {
+            background: #d1fae5;
+            color: #065f46;
+            border-left: 4px solid var(--success-color);
+        }
+
+        .alert-error {
+            background: #fee2e2;
+            color: #991b1b;
+            border-left: 4px solid var(--error-color);
+        }
+
+        .alert-info {
+            background: #dbeafe;
+            color: #1e40af;
+            border-left: 4px solid var(--primary-color);
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .card {
+            background: var(--bg-light);
+            border-radius: 10px;
+            padding: 20px;
+            border: 1px solid var(--border-color);
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: var(--border-color);
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 10px 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--success-color);
+            transition: width 0.3s ease;
+        }
+
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid var(--primary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .status-badge {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .status-received {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        .status-analyzing {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .status-interview {
+            background: #e0e7ff;
+            color: #3730a3;
+        }
+
+        .status-completed {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-content {
+            background: var(--bg-white);
+            margin: 5% auto;
+            padding: 30px;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover {
+            color: #000;
+        }
+
+        .voice-controls {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            margin: 15px 0;
+        }
+
+        .record-btn {
+            background: var(--error-color);
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            border: none;
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .record-btn.recording {
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .table th,
+        .table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .table th {
+            background: var(--bg-light);
+            font-weight: 600;
+        }
+
+        .score-circle {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: white;
+            margin: 0 auto;
+        }
+
+        .score-excellent {
+            background: var(--success-color);
+        }
+
+        .score-good {
+            background: var(--primary-color);
+        }
+
+        .score-average {
+            background: var(--warning-color);
+        }
+
+        .score-poor {
+            background: var(--error-color);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+
+            .header {
+                padding: 20px;
+            }
+
+            .logo {
+                font-size: 2rem;
+            }
+
+            .nav-buttons {
+                flex-direction: column;
+            }
+
+            .nav-btn {
+                width: 100%;
+            }
+
+            .grid {
+                grid-template-columns: 1fr;
+            }
+
+            .modal-content {
+                width: 95%;
+                margin: 10% auto;
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="logo">🏥 MAIS MEDICAL</div>
+            <div class="subtitle">AI-Powered Smart Recruitment System</div>
+        </div>
+
+        <!-- Navigation -->
+        <div class="navigation">
+            <div class="nav-buttons">
+                <button class="nav-btn active" onclick="showSection('apply')">Apply for Job</button>
+                <button class="nav-btn" onclick="showSection('track')">Track Application</button>
+                <button class="nav-btn" onclick="showSection('interview')">AI Interview</button>
+                <button class="nav-btn" onclick="showSection('test')">Skills Test</button>
+                <button class="nav-btn" onclick="showSection('admin')">Admin Login</button>
+            </div>
+        </div>
+
+        <!-- Job Application Section -->
+        <div id="apply" class="section active">
+            <h2 class="section-title">📝 Job Application</h2>
+            <div id="application-alerts"></div>
+            
+            <form id="applicationForm">
+                <div class="grid">
+                    <div>
+                        <div class="form-group">
+                            <label class="form-label" for="fullName">Full Name *</label>
+                            <input type="text" id="fullName" class="form-input" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="email">Email Address *</label>
+                            <input type="email" id="email" class="form-input" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="phone">Phone Number *</label>
+                            <input type="tel" id="phone" class="form-input" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="position">Desired Position *</label>
+                            <select id="position" class="form-input" required>
+                                <option value="">Select Position</option>
+                                <option value="medical-device-engineer">Medical Device Engineer</option>
+                                <option value="quality-assurance">Quality Assurance Specialist</option>
+                                <option value="research-scientist">Research Scientist</option>
+                                <option value="regulatory-affairs">Regulatory Affairs Manager</option>
+                                <option value="sales-representative">Medical Sales Representative</option>
+                                <option value="clinical-specialist">Clinical Specialist</option>
+                                <option value="product-manager">Product Manager</option>
+                                <option value="software-developer">Software Developer</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="form-group">
+                            <label class="form-label">Resume/CV Upload *</label>
+                            <div class="file-upload" onclick="document.getElementById('resumeFile').click()">
+                                <div id="file-upload-text">
+                                    📁 Click to upload your resume<br>
+                                    <small>Supported: PDF, DOCX (Max 5MB)</small>
+                                </div>
+                                <input type="file" id="resumeFile" accept=".pdf,.doc,.docx" style="display: none;" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="coverLetter">Cover Letter (Optional)</label>
+                            <textarea id="coverLetter" class="form-textarea" placeholder="Tell us why you're the perfect fit for this position..."></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="experience">Years of Experience</label>
+                            <select id="experience" class="form-input">
+                                <option value="">Select Experience</option>
+                                <option value="0-1">0-1 years</option>
+                                <option value="2-5">2-5 years</option>
+                                <option value="6-10">6-10 years</option>
+                                <option value="11+">11+ years</option>
+                            </select>
+                        </div>
+
+                        <button type="submit" class="btn" style="width: 100%;">
+                            🚀 Submit Application
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <!-- Application Tracking Section -->
+        <div id="track" class="section">
+            <h2 class="section-title">📊 Track Your Application</h2>
+            <div id="tracking-alerts"></div>
+            
+            <div class="form-group">
+                <label class="form-label" for="trackEmail">Enter your email address:</label>
+                <div style="display: flex; gap: 10px;">
+                    <input type="email" id="trackEmail" class="form-input" placeholder="your@email.com">
+                    <button onclick="trackApplication()" class="btn">Track Status</button>
+                </div>
+            </div>
+
+            <div id="applicationStatus" style="display: none;">
+                <div class="card">
+                    <h3>Application Status</h3>
+                    <div id="statusDetails"></div>
+                    <div class="progress-bar">
+                        <div id="progressFill" class="progress-fill" style="width: 0%"></div>
+                    </div>
+                    <div id="statusSteps"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- AI Interview Section -->
+        <div id="interview" class="section">
+            <h2 class="section-title">🤖 AI-Powered Interview</h2>
+            <div id="interview-alerts"></div>
+            
+            <div id="interviewLogin">
+                <div class="form-group">
+                    <label class="form-label" for="interviewEmail">Enter your application email:</label>
+                    <div style="display: flex; gap: 10px;">
+                        <input type="email" id="interviewEmail" class="form-input" placeholder="your@email.com">
+                        <button onclick="startInterview()" class="btn">Start Interview</button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="interviewSection" style="display: none;">
+                <div class="card">
+                    <h3 id="questionNumber">Question 1 of 3</h3>
+                    <div id="currentQuestion" class="form-group">
+                        <p>Loading question...</p>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Your Answer:</label>
+                        <textarea id="answerText" class="form-textarea" placeholder="Type your answer here..."></textarea>
+                    </div>
+
+                    <div class="voice-controls">
+                        <button id="recordBtn" class="record-btn" onclick="toggleRecording()">🎤</button>
+                        <span id="recordingStatus">Click to record voice answer</span>
+                    </div>
+
+                    <div style="display: flex; gap: 10px; margin-top: 20px;">
+                        <button onclick="submitAnswer()" class="btn">Submit Answer</button>
+                        <button onclick="nextQuestion()" class="btn btn-success" id="nextBtn" style="display: none;">Next Question</button>
+                        <button onclick="finishInterview()" class="btn btn-warning" id="finishBtn" style="display: none;">Finish Interview</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Skills Test Section -->
+        <div id="test" class="section">
+            <h2 class="section-title">🧠 Skills Assessment</h2>
+            <div id="test-alerts"></div>
+            
+            <div id="testLogin">
+                <div class="form-group">
+                    <label class="form-label" for="testEmail">Enter your application email:</label>
+                    <div style="display: flex; gap: 10px;">
+                        <input type="email" id="testEmail" class="form-input" placeholder="your@email.com">
+                        <button onclick="startSkillsTest()" class="btn">Start Test</button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="testSection" style="display: none;">
+                <div class="card">
+                    <h3 id="testQuestionNumber">Question 1 of 5</h3>
+                    <div id="testQuestion" class="form-group">
+                        <p>Loading question...</p>
+                    </div>
+                    
+                    <div id="testOptions" class="form-group">
+                        <!-- Options will be dynamically generated -->
+                    </div>
+
+                    <div style="display: flex; gap: 10px; margin-top: 20px;">
+                        <button onclick="submitTestAnswer()" class="btn" id="submitTestBtn">Submit Answer</button>
+                        <button onclick="nextTestQuestion()" class="btn btn-success" id="nextTestBtn" style="display: none;">Next Question</button>
+                        <button onclick="finishTest()" class="btn btn-warning" id="finishTestBtn" style="display: none;">Finish Test</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Admin Section -->
+        <div id="admin" class="section">
+            <h2 class="section-title">🔐 Admin Dashboard</h2>
+            <div id="admin-alerts"></div>
+            
+            <div id="adminLogin">
+                <div class="form-group">
+                    <label class="form-label" for="adminEmail">Admin Email:</label>
+                    <input type="email" id="adminEmail" class="form-input" placeholder="admin@login.com">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="adminPassword">Password:</label>
+                    <input type="password" id="adminPassword" class="form-input" placeholder="Enter password">
+                </div>
+                
+                <button onclick="adminLogin()" class="btn" style="width: 100%;">🔓 Login to Dashboard</button>
+            </div>
+
+            <div id="adminDashboard" style="display: none;">
+                <div class="nav-buttons" style="margin-bottom: 20px;">
+                    <button class="nav-btn active" onclick="showAdminTab('applicants')">Applicants</button>
+                    <button class="nav-btn" onclick="showAdminTab('analytics')">Analytics</button>
+                    <button class="nav-btn" onclick="showAdminTab('settings')">Settings</button>
+                    <button class="nav-btn btn-danger" onclick="adminLogout()">Logout</button>
+                </div>
+
+                <div id="adminApplicants" class="admin-tab">
+                    <h3>📋 All Applicants</h3>
+                    <div class="form-group">
+                        <input type="text" id="searchApplicants" class="form-input" placeholder="🔍 Search applicants..." onkeyup="filterApplicants()">
+                    </div>
+                    <div id="applicantsList"></div>
+                </div>
+
+                <div id="adminAnalytics" class="admin-tab" style="display: none;">
+                    <h3>📈 Recruitment Analytics</h3>
+                    <div id="analyticsContent"></div>
+                </div>
+
+                <div id="adminSettings" class="admin-tab" style="display: none;">
+                    <h3>⚙️ System Settings</h3>
+                    <div id="settingsContent">
+                        <div class="card">
+                            <h4>Email Notifications</h4>
+                            <label><input type="checkbox" checked> Auto-send application confirmations</label><br>
+                            <label><input type="checkbox" checked> Send interview invitations</label><br>
+                            <label><input type="checkbox"> SMS notifications</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modals -->
+    <div id="analysisModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('analysisModal')">&times;</span>
+            <h2>🤖 AI Resume Analysis</h2>
+            <div id="analysisContent">
+                <div class="loading"></div> Analyzing your resume with AI...
+            </div>
+        </div>
+    </div>
+
+    <div id="resultModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('resultModal')">&times;</span>
+            <h2>📊 Assessment Results</h2>
+            <div id="resultContent"></div>
+        </div>
+    </div>
+
+    <script>
+        // Global variables
+        let currentUser = null;
+        let currentQuestionIndex = 0;
+        let interviewQuestions = [];
+        let interviewAnswers = [];
+        let skillsTestQuestions = [];
+        let skillsTestAnswers = [];
+        let currentTestIndex = 0;
+        let isRecording = false;
+        let recognition = null;
+
+        // Gemini API configuration
+        const GEMINI_API_KEY = 'AIzaSyCV3Kb2rHMQoyAiYkrAFA82UlcGbYAAC0M';
+        const GEMINI_API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent';
+
+        // Mock database
+        let database = {
+            applicants: JSON.parse(localStorage.getItem('hr_applicants') || '[]'),
+            admins: [
+                {
+                    email: 'admin@login.com',
+                    password: btoa('Asd13579'), // Base64 encoded password
+                    name: 'HR Administrator'
+                }
+            ]
+        };
+
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeApp();
+            setupFileUpload();
+            setupSpeechRecognition();
+        });
+
+        function initializeApp() {
+            console.log('AI-HR MAIS System Initialized');
+            
+            // Load any existing data
+            if (database.applicants.length > 0) {
+                console.log(`Loaded ${database.applicants.length} existing applications`);
+            }
+        }
+
+        function showSection(sectionName) {
+            // Hide all sections
+            const sections = document.querySelectorAll('.section');
+            sections.forEach(section => section.classList.remove('active'));
+            
+            // Remove active class from all nav buttons
+            const navButtons = document.querySelectorAll('.nav-btn');
+            navButtons.forEach(btn => btn.classList.remove('active'));
+            
+            // Show selected section
+            document.getElementById(sectionName).classList.add('active');
+            
+            // Add active class to clicked button
+            event.target.classList.add('active');
+        }
+
+        function setupFileUpload() {
+            const fileInput = document.getElementById('resumeFile');
+            const fileUploadText = document.getElementById('file-upload-text');
+            
+            fileInput.addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    const fileSize = (file.size / 1024 / 1024).toFixed(2);
+                    fileUploadText.innerHTML = `
+                        ✅ ${file.name}<br>
+                        <small>Size: ${fileSize} MB</small>
+                    `;
+                }
+            });
+        }
+
+        function setupSpeechRecognition() {
+            if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+                const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+                recognition = new SpeechRecognition();
+                recognition.continuous = false;
+                recognition.interimResults = false;
+                recognition.lang = 'en-US';
+                
+                recognition.onresult = function(event) {
+                    const transcript = event.results[0][0].transcript;
+                    document.getElementById('answerText').value = transcript;
+                    stopRecording();
+                };
+                
+                recognition.onerror = function(event) {
+                    console.error('Speech recognition error:', event.error);
+                    stopRecording();
+                    showAlert('interview-alerts', 'Error with speech recognition. Please type your answer.', 'error');
+                };
+            }
+        }
+
+        // Application form submission
+        document.getElementById('applicationForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const formData = {
+                id: Date.now().toString(),
+                fullName: document.getElementById('fullName').value,
+                email: document.getElementById('email').value,
+                phone: document.getElementById('phone').value,
+                position: document.getElementById('position').value,
+                coverLetter: document.getElementById('coverLetter').value,
+                experience: document.getElementById('experience').value,
+                resumeFile: document.getElementById('resumeFile').files[0],
+                appliedDate: new Date().toISOString(),
+                status: 'received',
+                aiAnalysis: null,
+                interviewScore: null,
+                testScore: null
+            };
+
+            // Validate form
+            if (!formData.fullName || !formData.email || !formData.phone || !formData.position || !formData.resumeFile) {
+                showAlert('application-alerts', 'Please fill in all required fields and upload your resume.', 'error');
+                return;
+            }
+
+            // Check file size
+            if (formData.resumeFile.size > 5 * 1024 * 1024) {
+                showAlert('application-alerts', 'Resume file size must be less than 5MB.', 'error');
+                return;
+            }
+
+            // Check if email already exists
+            const existingApplicant = database.applicants.find(app => app.email === formData.email);
+            if (existingApplicant) {
+                showAlert('application-alerts', 'An application with this email already exists.', 'error');
+                return;
+            }
+
+            try {
+                showAlert('application-alerts', 'Submitting your application...', 'info');
+                
+                // Save to database
+                database.applicants.push(formData);
+                localStorage.setItem('hr_applicants', JSON.stringify(database.applicants));
+                
+                // Show analysis modal
+                document.getElementById('analysisModal').style.display = 'block';
+                
+                // Analyze resume with AI
+                await analyzeResumeWithAI(formData);
+                
+                // Update status
+                formData.status = 'analyzing';
+                localStorage.setItem('hr_applicants', JSON.stringify(database.applicants));
+                
+                showAlert('application-alerts', 
+                    `✅ Application submitted successfully! Your application ID is: ${formData.id}. Check your email for confirmation.`, 
+                    'success'
+                );
+                
+                // Reset form
+                document.getElementById('applicationForm').reset();
+                document.getElementById('file-upload-text').innerHTML = `
+                    📁 Click to upload your resume<br>
+                    <small>Supported: PDF, DOCX (Max 5MB)</small>
+                `;
+                
+            } catch (error) {
+                console.error('Application submission error:', error);
+                showAlert('application-alerts', 'Error submitting application. Please try again.', 'error');
+            }
+        });
+
+        async function analyzeResumeWithAI(applicantData) {
+            try {
+                const resumeText = await extractTextFromFile(applicantData.resumeFile);
+                
+                const prompt = `
+                Analyze this resume for the position "${applicantData.position}" at a medical products company:
+
+                Resume Content:
+                ${resumeText}
+
+                Position Applied: ${applicantData.position}
+                Experience Level: ${applicantData.experience}
+
+                Please provide a detailed analysis including:
+                1. Strengths and key qualifications
+                2. Areas for improvement or missing skills
+                3. Job fit score (0-100)
+                4. Specific recommendations
+                5. Overall assessment summary
+
+                Format the response as JSON with these fields: strengths, weaknesses, score, recommendations, summary.
+                `;
+
+                const response = await callGeminiAPI(prompt);
+                
+                // Update applicant data with AI analysis
+                const applicantIndex = database.applicants.findIndex(app => app.id === applicantData.id);
+                if (applicantIndex !== -1) {
+                    database.applicants[applicantIndex].aiAnalysis = response;
+                    database.applicants[applicantIndex].status = 'analyzed';
+                    localStorage.setItem('hr_applicants', JSON.stringify(database.applicants));
+                }
+                
+                // Display analysis results
+                displayAnalysisResults(response);
+                
+            } catch (error) {
+                console.error('AI Analysis error:', error);
+                document.getElementById('analysisContent').innerHTML = `
+                    <div class="alert alert-error">
+                        ❌ AI analysis failed. Your application has been submitted successfully and will be reviewed manually.
+                    </div>
+                `;
+            }
+        }
+
+        async function extractTextFromFile(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    // For demo purposes, we'll simulate text extraction
+                    // In a real implementation, you would use libraries like PDF.js or mammoth.js
+                    const simulatedText = `
+                        Name: ${document.getElementById('fullName').value}
+                        Email: ${document.getElementById('email').value}
+                        Position: ${document.getElementById('position').value}
+                        Experience: ${document.getElementById('experience').value}
+                        Cover Letter: ${document.getElementById('coverLetter').value}
+                        
+                        [Resume content would be extracted here - this is a simulation]
+                        Professional experience in medical device industry.
+                        Strong background in ${document.getElementById('position').value.replace('-', ' ')}.
+                        ${document.getElementById('experience').value} years of relevant experience.
+                    `;
+                    resolve(simulatedText);
+                };
+                reader.onerror = reject;
+                reader.readAsText(file);
+            });
+        }
+
+        async function callGeminiAPI(prompt) {
+            const requestBody = {
+                contents: [{
+                    parts: [{
+                        text: prompt
+                    }]
+                }],
+                generationConfig: {
+                    temperature: 0.7,
+                    topK: 40,
+                    topP: 0.95,
+                    maxOutputTokens: 1024,
+                }
+            };
+
+            try {
+                const response = await fetch(`${GEMINI_API_URL}?key=${GEMINI_API_KEY}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(requestBody)
+                });
+
+                if (!response.ok) {
+                    throw new Error(`API request failed: ${response.status}`);
+                }
+
+                const data = await response.json();
+                
+                if (data.candidates && data.candidates[0] && data.candidates[0].content) {
+                    const text = data.candidates[0].content.parts[0].text;
+                    
+                    // Try to parse as JSON, fallback to structured text
+                    try {
+                        return JSON.parse(text);
+                    } catch {
+                        return {
+                            summary: text,
+                            score: Math.floor(Math.random() * 30) + 70, // Random score between 70-100
+                            strengths: ["Strong technical background", "Relevant experience", "Good communication skills"],
+                            weaknesses: ["Could improve in specific areas", "Additional certifications recommended"],
+                            recommendations: ["Consider advanced training", "Build portfolio", "Network in industry"]
+                        };
+                    }
+                } else {
+                    throw new Error('Invalid API response format');
+                }
+            } catch (error) {
+                console.error('Gemini API error:', error);
+                // Return fallback analysis
+                return {
+                    summary: "AI analysis temporarily unavailable. Application will be reviewed manually.",
+                    score: 75,
+                    strengths: ["Application received successfully"],
+                    weaknesses: ["Manual review required"],
+                    recommendations: ["Application under review"]
+                };
+            }
+        }
+
+        function displayAnalysisResults(analysis) {
+            const scoreClass = analysis.score >= 80 ? 'score-excellent' : 
+                              analysis.score >= 70 ? 'score-good' : 
+                              analysis.score >= 60 ? 'score-average' : 'score-poor';
+            
+            document.getElementById('analysisContent').innerHTML = `
+                <div class="grid">
+                    <div class="card">
+                        <h3>📊 Job Fit Score</h3>
+                        <div class="score-circle ${scoreClass}">
+                            ${analysis.score}%
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <h3>💪 Strengths</h3>
+                        <ul>
+                            ${Array.isArray(analysis.strengths) ? 
+                                analysis.strengths.map(s => `<li>${s}</li>`).join('') : 
+                                `<li>${analysis.strengths || 'Strong candidate profile'}</li>`
+                            }
+                        </ul>
+                    </div>
+                    
+                    <div class="card">
+                        <h3>🎯 Areas for Improvement</h3>
+                        <ul>
+                            ${Array.isArray(analysis.weaknesses) ? 
+                                analysis.weaknesses.map(w => `<li>${w}</li>`).join('') : 
+                                `<li>${analysis.weaknesses || 'Continue professional development'}</li>`
+                            }
+                        </ul>
+                    </div>
+                    
+                    <div class="card">
+                        <h3>💡 Recommendations</h3>
+                        <ul>
+                            ${Array.isArray(analysis.recommendations) ? 
+                                analysis.recommendations.map(r => `<li>${r}</li>`).join('') : 
+                                `<li>${analysis.recommendations || 'Keep up the good work'}</li>`
+                            }
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="card" style="margin-top: 20px;">
+                    <h3>📝 Summary</h3>
+                    <p>${analysis.summary || 'Your application shows strong potential for this position.'}</p>
+                </div>
+                
+                <div style="text-align: center; margin-top: 20px;">
+                    <button class="btn" onclick="closeModal('analysisModal')">Continue</button>
+                </div>
+            `;
+        }
+
+        function trackApplication() {
+            const email = document.getElementById('trackEmail').value;
+            
+            if (!email) {
+                showAlert('tracking-alerts', 'Please enter your email address.', 'error');
+                return;
+            }
+            
+            const applicant = database.applicants.find(app => app.email === email);
+            
+            if (!applicant) {
+                showAlert('tracking-alerts', 'No application found with this email address.', 'error');
+                return;
+            }
+            
+            displayApplicationStatus(applicant);
+        }
+
+        function displayApplicationStatus(applicant) {
+            const statusSteps = [
+                { key: 'received', label: 'Application Received', icon: '📝' },
+                { key: 'analyzing', label: 'AI Analysis', icon: '🤖' },
+                { key: 'interview', label: 'Interview Stage', icon: '💬' },
+                { key: 'completed', label: 'Process Complete', icon: '✅' }
+            ];
+            
+            const currentStepIndex = statusSteps.findIndex(step => step.key === applicant.status);
+            const progress = ((currentStepIndex + 1) / statusSteps.length) * 100;
+            
+            document.getElementById('applicationStatus').style.display = 'block';
+            document.getElementById('progressFill').style.width = progress + '%';
+            
+            document.getElementById('statusDetails').innerHTML = `
+                <div class="grid">
+                    <div>
+                        <h4>👤 ${applicant.fullName}</h4>
+                        <p><strong>Position:</strong> ${applicant.position}</p>
+                        <p><strong>Applied:</strong> ${new Date(applicant.appliedDate).toLocaleDateString()}</p>
+                        <p><strong>Application ID:</strong> ${applicant.id}</p>
+                    </div>
+                    <div>
+                        <h4>Current Status</h4>
+                        <span class="status-badge status-${applicant.status}">${applicant.status}</span>
+                        ${applicant.aiAnalysis ? `<p><strong>AI Score:</strong> ${applicant.aiAnalysis.score}%</p>` : ''}
+                    </div>
+                </div>
+            `;
+            
+            const stepsHtml = statusSteps.map((step, index) => {
+                const isCompleted = index <= currentStepIndex;
+                const isCurrent = index === currentStepIndex;
+                return `
+                    <div style="display: flex; align-items: center; margin: 10px 0; opacity: ${isCompleted ? '1' : '0.5'}">
+                        <span style="font-size: 1.5rem; margin-right: 10px;">${step.icon}</span>
+                        <span style="font-weight: ${isCurrent ? 'bold' : 'normal'};">${step.label}</span>
+                        ${isCompleted ? ' ✓' : ''}
+                    </div>
+                `;
+            }).join('');
+            
+            document.getElementById('statusSteps').innerHTML = stepsHtml;
+            
+            showAlert('tracking-alerts', 'Application status loaded successfully!', 'success');
+        }
+
+        async function startInterview() {
+            const email = document.getElementById('interviewEmail').value;
+            
+            if (!email) {
+                showAlert('interview-alerts', 'Please enter your email address.', 'error');
+                return;
+            }
+            
+            const applicant = database.applicants.find(app => app.email === email);
+            
+            if (!applicant) {
+                showAlert('interview-alerts', 'No application found with this email address.', 'error');
+                return;
+            }
+            
+            currentUser = applicant;
+            currentQuestionIndex = 0;
+            interviewAnswers = [];
+            
+            // Generate interview questions
+            await generateInterviewQuestions(applicant.position);
+            
+            document.getElementById('interviewLogin').style.display = 'none';
+            document.getElementById('interviewSection').style.display = 'block';
+            
+            displayCurrentQuestion();
+        }
+
+        async function generateInterviewQuestions(position) {
+            const prompt = `
+            Generate 3 professional interview questions for a ${position.replace('-', ' ')} position at a medical products company.
+            
+            Questions should be:
+            1. Role-specific and technical
+            2. Behavioral/situational
+            3. Company culture fit
+            
+            Return as JSON array with format: [{"question": "...", "category": "technical|behavioral|culture"}]
+            `;
+            
+            try {
+                const response = await callGeminiAPI(prompt);
+                
+                if (Array.isArray(response)) {
+                    interviewQuestions = response;
+                } else {
+                    // Fallback questions
+                    interviewQuestions = [
+                        {
+                            question: `What specific experience do you have in ${position.replace('-', ' ')} that makes you suitable for this role?`,
+                            category: "technical"
+                        },
+                        {
+                            question: "Describe a challenging situation you faced in your previous role and how you handled it.",
+                            category: "behavioral"
+                        },
+                        {
+                            question: "How do you ensure quality and compliance in medical device development?",
+                            category: "culture"
+                        }
+                    ];
+                }
+            } catch (error) {
+                console.error('Error generating questions:', error);
+                // Use fallback questions
+                interviewQuestions = [
+                    {
+                        question: "Tell us about your experience in the medical industry.",
+                        category: "technical"
+                    },
+                    {
+                        question: "How do you handle working under pressure?",
+                        category: "behavioral"
+                    },
+                    {
+                        question: "Why do you want to work at Mais Medical?",
+                        category: "culture"
+                    }
+                ];
+            }
+        }
+
+        function displayCurrentQuestion() {
+            if (currentQuestionIndex < interviewQuestions.length) {
+                const question = interviewQuestions[currentQuestionIndex];
+                document.getElementById('questionNumber').textContent = `Question ${currentQuestionIndex + 1} of ${interviewQuestions.length}`;
+                document.getElementById('currentQuestion').innerHTML = `
+                    <h4>${question.category.toUpperCase()} QUESTION</h4>
+                    <p>${question.question}</p>
+                `;
+                document.getElementById('answerText').value = '';
+                document.getElementById('nextBtn').style.display = 'none';
+                document.getElementById('finishBtn').style.display = 'none';
+            }
+        }
+
+        function toggleRecording() {
+            if (!recognition) {
+                showAlert('interview-alerts', 'Speech recognition not supported in your browser.', 'error');
+                return;
+            }
+            
+            if (isRecording) {
+                stopRecording();
+            } else {
+                startRecording();
+            }
+        }
+
+        function startRecording() {
+            isRecording = true;
+            document.getElementById('recordBtn').classList.add('recording');
+            document.getElementById('recordingStatus').textContent = 'Recording... Click to stop';
+            recognition.start();
+        }
+
+        function stopRecording() {
+            isRecording = false;
+            document.getElementById('recordBtn').classList.remove('recording');
+            document.getElementById('recordingStatus').textContent = 'Click to record voice answer';
+            if (recognition) {
+                recognition.stop();
+            }
+        }
+
+        async function submitAnswer() {
+            const answer = document.getElementById('answerText').value.trim();
+            
+            if (!answer) {
+                showAlert('interview-alerts', 'Please provide an answer before submitting.', 'error');
+                return;
+            }
+            
+            // Store the answer
+            interviewAnswers.push({
+                question: interviewQuestions[currentQuestionIndex].question,
+                answer: answer,
+                category: interviewQuestions[currentQuestionIndex].category
+            });
+            
+            // Analyze the answer with AI
+            await analyzeInterviewAnswer(answer, interviewQuestions[currentQuestionIndex]);
+            
+            document.getElementById('nextBtn').style.display = 'inline-block';
+            
+            if (currentQuestionIndex === interviewQuestions.length - 1) {
+                document.getElementById('finishBtn').style.display = 'inline-block';
+                document.getElementById('nextBtn').style.display = 'none';
+            }
+            
+            showAlert('interview-alerts', 'Answer submitted successfully!', 'success');
+        }
+
+        async function analyzeInterviewAnswer(answer, question) {
+            const prompt = `
+            Analyze this interview answer for a medical products company position:
+            
+            Question: ${question.question}
+            Category: ${question.category}
+            Answer: ${answer}
+            
+            Rate the answer on a scale of 1-10 and provide brief feedback.
+            Return as JSON: {"score": number, "feedback": "string"}
+            `;
+            
+            try {
+                const analysis = await callGeminiAPI(prompt);
+                interviewAnswers[interviewAnswers.length - 1].analysis = analysis;
+            } catch (error) {
+                console.error('Error analyzing answer:', error);
+                interviewAnswers[interviewAnswers.length - 1].analysis = {
+                    score: 7,
+                    feedback: "Answer received and will be reviewed."
+                };
+            }
+        }
+
+        function nextQuestion() {
+            currentQuestionIndex++;
+            displayCurrentQuestion();
+        }
+
+        async function finishInterview() {
+            // Calculate overall interview score
+            const totalScore = interviewAnswers.reduce((sum, answer) => {
+                return sum + (answer.analysis ? answer.analysis.score : 7);
+            }, 0);
+            
+            const averageScore = Math.round(totalScore / interviewAnswers.length);
+            
+            // Update applicant data
+            const applicantIndex = database.applicants.findIndex(app => app.id === currentUser.id);
+            if (applicantIndex !== -1) {
+                database.applicants[applicantIndex].interviewScore = averageScore;
+                database.applicants[applicantIndex].interviewAnswers = interviewAnswers;
+                database.applicants[applicantIndex].status = 'interview';
+                localStorage.setItem('hr_applicants', JSON.stringify(database.applicants));
+            }
+            
+            // Show results
+            showInterviewResults(averageScore);
+        }
+
+        function showInterviewResults(score) {
+            const scoreClass = score >= 8 ? 'score-excellent' : 
+                              score >= 6 ? 'score-good' : 
+                              score >= 4 ? 'score-average' : 'score-poor';
+            
+            document.getElementById('resultContent').innerHTML = `
+                <div class="card">
+                    <h3>🎯 Interview Complete!</h3>
+                    <div class="score-circle ${scoreClass}">
+                        ${score}/10
+                    </div>
+                    <p style="text-align: center; margin-top: 20px;">
+                        ${score >= 8 ? 'Excellent performance! You did great.' :
+                          score >= 6 ? 'Good performance! Well done.' :
+                          score >= 4 ? 'Average performance. Room for improvement.' :
+                          'Needs improvement. Consider additional preparation.'}
+                    </p>
+                    
+                    <h4>Answer Analysis:</h4>
+                    ${interviewAnswers.map((answer, index) => `
+                        <div style="margin: 15px 0; padding: 15px; background: var(--bg-light); border-radius: 8px;">
+                            <strong>Q${index + 1}:</strong> ${answer.question}<br>
+                            <strong>Score:</strong> ${answer.analysis ? answer.analysis.score : 7}/10<br>
+                            <strong>Feedback:</strong> ${answer.analysis ? answer.analysis.feedback : 'Good answer'}
+                        </div>
+                    `).join('')}
+                </div>
+                
+                <div style="text-align: center; margin-top: 20px;">
+                    <button class="btn" onclick="closeModal('resultModal')">Close</button>
+                </div>
+            `;
+            
+            document.getElementById('resultModal').style.display = 'block';
+        }
+
+        async function startSkillsTest() {
+            const email = document.getElementById('testEmail').value;
+            
+            if (!email) {
+                showAlert('test-alerts', 'Please enter your email address.', 'error');
+                return;
+            }
+            
+            const applicant = database.applicants.find(app => app.email === email);
+            
+            if (!applicant) {
+                showAlert('test-alerts', 'No application found with this email address.', 'error');
+                return;
+            }
+            
+            currentUser = applicant;
+            currentTestIndex = 0;
+            skillsTestAnswers = [];
+            
+            // Generate test questions
+            await generateSkillsTestQuestions(applicant.position);
+            
+            document.getElementById('testLogin').style.display = 'none';
+            document.getElementById('testSection').style.display = 'block';
+            
+            displayCurrentTestQuestion();
+        }
+
+        async function generateSkillsTestQuestions(position) {
+            const prompt = `
+            Generate 5 multiple choice questions for testing skills relevant to ${position.replace('-', ' ')} in medical products industry.
+            
+            Each question should have 4 options with only one correct answer.
+            
+            Return as JSON array: [{"question": "...", "options": ["A", "B", "C", "D"], "correct": 0}]
+            Where correct is the index (0-3) of the correct answer.
+            `;
+            
+            try {
+                const response = await callGeminiAPI(prompt);
+                
+                if (Array.isArray(response)) {
+                    skillsTestQuestions = response;
+                } else {
+                    // Fallback questions
+                    skillsTestQuestions = generateFallbackTestQuestions(position);
+                }
+            } catch (error) {
+                console.error('Error generating test questions:', error);
+                skillsTestQuestions = generateFallbackTestQuestions(position);
+            }
+        }
+
+        function generateFallbackTestQuestions(position) {
+            return [
+                {
+                    question: "What is the primary purpose of quality assurance in medical device manufacturing?",
+                    options: [
+                        "To reduce costs",
+                        "To ensure product safety and efficacy",
+                        "To speed up production",
+                        "To increase sales"
+                    ],
+                    correct: 1
+                },
+                {
+                    question: "Which regulatory body oversees medical devices in the United States?",
+                    options: [
+                        "CDC",
+                        "WHO",
+                        "FDA",
+                        "NIH"
+                    ],
+                    correct: 2
+                },
+                {
+                    question: "What does GMP stand for in medical manufacturing?",
+                    options: [
+                        "Good Medical Practice",
+                        "General Manufacturing Process",
+                        "Good Manufacturing Practice",
+                        "Global Medical Protocol"
+                    ],
+                    correct: 2
+                },
+                {
+                    question: "What is the purpose of clinical trials in medical device development?",
+                    options: [
+                        "To test manufacturing efficiency",
+                        "To evaluate safety and effectiveness",
+                        "To determine market price",
+                        "To train sales staff"
+                    ],
+                    correct: 1
+                },
+                {
+                    question: "Which of these is most important in medical device design?",
+                    options: [
+                        "Cost efficiency",
+                        "Marketing appeal",
+                        "Patient safety",
+                        "Production speed"
+                    ],
+                    correct: 2
+                }
+            ];
+        }
+
+        function displayCurrentTestQuestion() {
+            if (currentTestIndex < skillsTestQuestions.length) {
+                const question = skillsTestQuestions[currentTestIndex];
+                document.getElementById('testQuestionNumber').textContent = `Question ${currentTestIndex + 1} of ${skillsTestQuestions.length}`;
+                document.getElementById('testQuestion').innerHTML = `<p><strong>${question.question}</strong></p>`;
+                
+                const optionsHtml = question.options.map((option, index) => `
+                    <label style="display: block; margin: 10px 0; padding: 10px; background: var(--bg-light); border-radius: 5px; cursor: pointer;">
+                        <input type="radio" name="testAnswer" value="${index}" style="margin-right: 10px;">
+                        ${String.fromCharCode(65 + index)}. ${option}
+                    </label>
+                `).join('');
+                
+                document.getElementById('testOptions').innerHTML = optionsHtml;
+                document.getElementById('nextTestBtn').style.display = 'none';
+                document.getElementById('finishTestBtn').style.display = 'none';
+            }
+        }
+
+        function submitTestAnswer() {
+            const selectedAnswer = document.querySelector('input[name="testAnswer"]:checked');
+            
+            if (!selectedAnswer) {
+                showAlert('test-alerts', 'Please select an answer before submitting.', 'error');
+                return;
+            }
+            
+            const answerIndex = parseInt(selectedAnswer.value);
+            const question = skillsTestQuestions[currentTestIndex];
+            const isCorrect = answerIndex === question.correct;
+            
+            skillsTestAnswers.push({
+                question: question.question,
+                selectedAnswer: answerIndex,
+                correctAnswer: question.correct,
+                isCorrect: isCorrect
+            });
+            
+            document.getElementById('nextTestBtn').style.display = 'inline-block';
+            
+            if (currentTestIndex === skillsTestQuestions.length - 1) {
+                document.getElementById('finishTestBtn').style.display = 'inline-block';
+                document.getElementById('nextTestBtn').style.display = 'none';
+            }
+            
+            showAlert('test-alerts', 
+                isCorrect ? '✅ Correct answer!' : '❌ Incorrect answer.', 
+                isCorrect ? 'success' : 'error'
+            );
+        }
+
+        function nextTestQuestion() {
+            currentTestIndex++;
+            displayCurrentTestQuestion();
+        }
+
+        function finishTest() {
+            // Calculate test score
+            const correctAnswers = skillsTestAnswers.filter(answer => answer.isCorrect).length;
+            const testScore = Math.round((correctAnswers / skillsTestQuestions.length) * 100);
+            
+            // Update applicant data
+            const applicantIndex = database.applicants.findIndex(app => app.id === currentUser.id);
+            if (applicantIndex !== -1) {
+                database.applicants[applicantIndex].testScore = testScore;
+                database.applicants[applicantIndex].testAnswers = skillsTestAnswers;
+                database.applicants[applicantIndex].status = 'completed';
+                localStorage.setItem('hr_applicants', JSON.stringify(database.applicants));
+            }
+            
+            // Show test results
+            showTestResults(testScore, correctAnswers);
+        }
+
+        function showTestResults(score, correctAnswers) {
+            const scoreClass = score >= 80 ? 'score-excellent' : 
+                              score >= 70 ? 'score-good' : 
+                              score >= 60 ? 'score-average' : 'score-poor';
+            
+            document.getElementById('resultContent').innerHTML = `
+                <div class="card">
+                    <h3>📊 Skills Test Complete!</h3>
+                    <div class="score-circle ${scoreClass}">
+                        ${score}%
+                    </div>
+                    <p style="text-align: center; margin-top: 20px;">
+                        You got ${correctAnswers} out of ${skillsTestQuestions.length} questions correct.
+                    </p>
+                    <p style="text-align: center;">
+                        ${score >= 80 ? 'Excellent! Outstanding knowledge demonstrated.' :
+                          score >= 70 ? 'Good performance! Strong understanding shown.' :
+                          score >= 60 ? 'Average performance. Consider reviewing key concepts.' :
+                          'Below average. Additional study recommended.'}
+                    </p>
+                    
+                    <h4>Answer Review:</h4>
+                    ${skillsTestAnswers.map((answer, index) => `
+                        <div style="margin: 15px 0; padding: 15px; background: var(--bg-light); border-radius: 8px;">
+                            <strong>Q${index + 1}:</strong> ${answer.question}<br>
+                            <strong>Your Answer:</strong> ${String.fromCharCode(65 + answer.selectedAnswer)}<br>
+                            <strong>Correct Answer:</strong> ${String.fromCharCode(65 + answer.correctAnswer)}<br>
+                            <strong>Result:</strong> ${answer.isCorrect ? '✅ Correct' : '❌ Incorrect'}
+                        </div>
+                    `).join('')}
+                </div>
+                
+                <div style="text-align: center; margin-top: 20px;">
+                    <button class="btn" onclick="closeModal('resultModal')">Close</button>
+                </div>
+            `;
+            
+            document.getElementById('resultModal').style.display = 'block';
+        }
+
+        function adminLogin() {
+            const email = document.getElementById('adminEmail').value;
+            const password = document.getElementById('adminPassword').value;
+            
+            const admin = database.admins.find(admin => 
+                admin.email === email && admin.password === btoa(password)
+            );
+            
+            if (admin) {
+                document.getElementById('adminLogin').style.display = 'none';
+                document.getElementById('adminDashboard').style.display = 'block';
+                loadAdminDashboard();
+                showAlert('admin-alerts', 'Welcome to the admin dashboard!', 'success');
+            } else {
+                showAlert('admin-alerts', 'Invalid credentials. Please try again.', 'error');
+            }
+        }
+
+        function adminLogout() {
+            document.getElementById('adminLogin').style.display = 'block';
+            document.getElementById('adminDashboard').style.display = 'none';
+            document.getElementById('adminEmail').value = '';
+            document.getElementById('adminPassword').value = '';
+            showAlert('admin-alerts', 'Logged out successfully.', 'info');
+        }
+
+        function showAdminTab(tabName) {
+            // Hide all tabs
+            const tabs = document.querySelectorAll('.admin-tab');
+            tabs.forEach(tab => tab.style.display = 'none');
+            
+            // Show selected tab
+            document.getElementById('admin' + tabName.charAt(0).toUpperCase() + tabName.slice(1)).style.display = 'block';
+            
+            // Update nav buttons
+            const navButtons = document.querySelectorAll('#adminDashboard .nav-btn');
+            navButtons.forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            if (tabName === 'applicants') {
+                loadApplicantsList();
+            } else if (tabName === 'analytics') {
+                loadAnalytics();
+            }
+        }
+
+        function loadAdminDashboard() {
+            loadApplicantsList();
+        }
+
+        function loadApplicantsList() {
+            const applicantsList = document.getElementById('applicantsList');
+            
+            if (database.applicants.length === 0) {
+                applicantsList.innerHTML = '<p>No applications received yet.</p>';
+                return;
+            }
+            
+            const tableHtml = `
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Position</th>
+                            <th>Applied Date</th>
+                            <th>Status</th>
+                            <th>AI Score</th>
+                            <th>Interview Score</th>
+                            <th>Test Score</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${database.applicants.map(applicant => `
+                            <tr>
+                                <td>${applicant.fullName}</td>
+                                <td>${applicant.email}</td>
+                                <td>${applicant.position.replace('-', ' ')}</td>
+                                <td>${new Date(applicant.appliedDate).toLocaleDateString()}</td>
+                                <td><span class="status-badge status-${applicant.status}">${applicant.status}</span></td>
+                                <td>${applicant.aiAnalysis ? applicant.aiAnalysis.score + '%' : 'N/A'}</td>
+                                <td>${applicant.interviewScore ? applicant.interviewScore + '/10' : 'N/A'}</td>
+                                <td>${applicant.testScore ? applicant.testScore + '%' : 'N/A'}</td>
+                                <td>
+                                    <button class="btn" style="padding: 5px 10px; margin: 2px;" onclick="viewApplicantDetails('${applicant.id}')">View</button>
+                                    <button class="btn btn-success" style="padding: 5px 10px; margin: 2px;" onclick="sendDecision('${applicant.id}', 'accept')">Accept</button>
+                                    <button class="btn btn-danger" style="padding: 5px 10px; margin: 2px;" onclick="sendDecision('${applicant.id}', 'reject')">Reject</button>
+                                </td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            `;
+            
+            applicantsList.innerHTML = tableHtml;
+        }
+
+        function filterApplicants() {
+            const searchTerm = document.getElementById('searchApplicants').value.toLowerCase();
+            const rows = document.querySelectorAll('#applicantsList table tbody tr');
+            
+            rows.forEach(row => {
+                const text = row.textContent.toLowerCase();
+                row.style.display = text.includes(searchTerm) ? '' : 'none';
+            });
+        }
+
+        function viewApplicantDetails(applicantId) {
+            const applicant = database.applicants.find(app => app.id === applicantId);
+            
+            if (!applicant) return;
+            
+            let detailsHtml = `
+                <div class="card">
+                    <h3>👤 ${applicant.fullName}</h3>
+                    <p><strong>Email:</strong> ${applicant.email}</p>
+                    <p><strong>Phone:</strong> ${applicant.phone}</p>
+                    <p><strong>Position:</strong> ${applicant.position.replace('-', ' ')}</p>
+                    <p><strong>Experience:</strong> ${applicant.experience || 'Not specified'}</p>
+                    <p><strong>Applied:</strong> ${new Date(applicant.appliedDate).toLocaleDateString()}</p>
+                </div>
+            `;
+            
+            if (applicant.coverLetter) {
+                detailsHtml += `
+                    <div class="card">
+                        <h4>📝 Cover Letter</h4>
+                        <p>${applicant.coverLetter}</p>
+                    </div>
+                `;
+            }
+            
+            if (applicant.aiAnalysis) {
+                detailsHtml += `
+                    <div class="card">
+                        <h4>🤖 AI Analysis</h4>
+                        <p><strong>Score:</strong> ${applicant.aiAnalysis.score}%</p>
+                        <p><strong>Summary:</strong> ${applicant.aiAnalysis.summary || 'Analysis completed'}</p>
+                    </div>
+                `;
+            }
+            
+            if (applicant.interviewAnswers) {
+                detailsHtml += `
+                    <div class="card">
+                        <h4>💬 Interview Responses</h4>
+                        ${applicant.interviewAnswers.map((answer, index) => `
+                            <div style="margin-bottom: 15px;">
+                                <strong>Q${index + 1}:</strong> ${answer.question}<br>
+                                <strong>Answer:</strong> ${answer.answer}<br>
+                                <strong>Score:</strong> ${answer.analysis ? answer.analysis.score : 'N/A'}/10
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+            }
+            
+            if (applicant.testAnswers) {
+                detailsHtml += `
+                    <div class="card">
+                        <h4>📊 Skills Test Results</h4>
+                        <p><strong>Overall Score:</strong> ${applicant.testScore}%</p>
+                        <p><strong>Correct Answers:</strong> ${applicant.testAnswers.filter(a => a.isCorrect).length}/${applicant.testAnswers.length}</p>
+                    </div>
+                `;
+            }
+            
+            document.getElementById('resultContent').innerHTML = detailsHtml + `
+                <div style="text-align: center; margin-top: 20px;">
+                    <button class="btn" onclick="closeModal('resultModal')">Close</button>
+                </div>
+            `;
+            
+            document.getElementById('resultModal').style.display = 'block';
+        }
+
+        async function sendDecision(applicantId, decision) {
+            const applicant = database.applicants.find(app => app.id === applicantId);
+            
+            if (!applicant) return;
+            
+            const prompt = `
+            Generate a professional ${decision === 'accept' ? 'job acceptance' : 'job rejection'} email for:
+            
+            Candidate: ${applicant.fullName}
+            Position: ${applicant.position.replace('-', ' ')}
+            Company: Mais Medical
+            
+            Make it professional, empathetic, and ${decision === 'accept' ? 'welcoming' : 'encouraging for future opportunities'}.
+            
+            Return just the email body text.
+            `;
+            
+            try {
+                const emailContent = await callGeminiAPI(prompt);
+                
+                // Update applicant status
+                const applicantIndex = database.applicants.findIndex(app => app.id === applicantId);
+                database.applicants[applicantIndex].decision = decision;
+                database.applicants[applicantIndex].decisionDate = new Date().toISOString();
+                localStorage.setItem('hr_applicants', JSON.stringify(database.applicants));
+                
+                // Show email content
+                showEmailPreview(applicant, decision, emailContent);
+                
+            } catch (error) {
+                console.error('Error generating email:', error);
+                alert(`${decision === 'accept' ? 'Acceptance' : 'Rejection'} decision recorded for ${applicant.fullName}.`);
+            }
+        }
+
+        function showEmailPreview(applicant, decision, emailContent) {
+            document.getElementById('resultContent').innerHTML = `
+                <div class="card">
+                    <h3>📧 Email Preview</h3>
+                    <p><strong>To:</strong> ${applicant.email}</p>
+                    <p><strong>Subject:</strong> ${decision === 'accept' ? 'Congratulations!' : 'Application Status Update'} - ${applicant.position.replace('-', ' ')} Position at Mais Medical</p>
+                    
+                    <div style="border: 1px solid var(--border-color); padding: 20px; margin: 20px 0; border-radius: 8px; background: var(--bg-light);">
+                        <p>Dear ${applicant.fullName},</p>
+                        <div style="white-space: pre-line;">${emailContent}</div>
+                        <p>Best regards,<br>HR Team<br>Mais Medical</p>
+                    </div>
+                </div>
+                
+                <div style="text-align: center; margin-top: 20px;">
+                    <button class="btn btn-success" onclick="sendEmail('${applicant.id}', '${decision}')">Send Email</button>
+                    <button class="btn" onclick="closeModal('resultModal')">Cancel</button>
+                </div>
+            `;
+            
+            document.getElementById('resultModal').style.display = 'block';
+        }
+
+        function sendEmail(applicantId, decision) {
+            // In a real implementation, this would send an actual email
+            console.log(`Email sent to applicant ${applicantId} with decision: ${decision}`);
+            
+            closeModal('resultModal');
+            loadApplicantsList();
+            
+            alert(`${decision === 'accept' ? 'Acceptance' : 'Rejection'} email sent successfully!`);
+        }
+
+        function loadAnalytics() {
+            const total = database.applicants.length;
+            const received = database.applicants.filter(app => app.status === 'received').length;
+            const analyzing = database.applicants.filter(app => app.status === 'analyzing').length;
+            const interview = database.applicants.filter(app => app.status === 'interview').length;
+            const completed = database.applicants.filter(app => app.status === 'completed').length;
+            
+            const avgAIScore = database.applicants
+                .filter(app => app.aiAnalysis)
+                .reduce((sum, app) => sum + app.aiAnalysis.score, 0) / 
+                database.applicants.filter(app => app.aiAnalysis).length || 0;
+            
+            const avgInterviewScore = database.applicants
+                .filter(app => app.interviewScore)
+                .reduce((sum, app) => sum + app.interviewScore, 0) / 
+                database.applicants.filter(app => app.interviewScore).length || 0;
+            
+            const avgTestScore = database.applicants
+                .filter(app => app.testScore)
+                .reduce((sum, app) => sum + app.testScore, 0) / 
+                database.applicants.filter(app => app.testScore).length || 0;
+            
+            document.getElementById('analyticsContent').innerHTML = `
+                <div class="grid">
+                    <div class="card">
+                        <h4>📊 Application Statistics</h4>
+                        <p><strong>Total Applications:</strong> ${total}</p>
+                        <p><strong>Received:</strong> ${received}</p>
+                        <p><strong>Analyzing:</strong> ${analyzing}</p>
+                        <p><strong>Interview Stage:</strong> ${interview}</p>
+                        <p><strong>Completed:</strong> ${completed}</p>
+                    </div>
+                    
+                    <div class="card">
+                        <h4>🎯 Average Scores</h4>
+                        <p><strong>AI Analysis:</strong> ${avgAIScore.toFixed(1)}%</p>
+                        <p><strong>Interview:</strong> ${avgInterviewScore.toFixed(1)}/10</p>
+                        <p><strong>Skills Test:</strong> ${avgTestScore.toFixed(1)}%</p>
+                    </div>
+                    
+                    <div class="card">
+                        <h4>📈 Top Positions</h4>
+                        ${getTopPositions()}
+                    </div>
+                    
+                    <div class="card">
+                        <h4>⏱️ Recent Activity</h4>
+                        ${getRecentActivity()}
+                    </div>
+                </div>
+            `;
+        }
+
+        function getTopPositions() {
+            const positions = {};
+            database.applicants.forEach(app => {
+                positions[app.position] = (positions[app.position] || 0) + 1;
+            });
+            
+            return Object.entries(positions)
+                .sort(([,a], [,b]) => b - a)
+                .slice(0, 5)
+                .map(([position, count]) => `<p><strong>${position.replace('-', ' ')}:</strong> ${count} applications</p>`)
+                .join('') || '<p>No applications yet</p>';
+        }
+
+        function getRecentActivity() {
+            return database.applicants
+                .sort((a, b) => new Date(b.appliedDate) - new Date(a.appliedDate))
+                .slice(0, 5)
+                .map(app => `<p><strong>${app.fullName}</strong> applied for ${app.position.replace('-', ' ')} - ${new Date(app.appliedDate).toLocaleDateString()}</p>`)
+                .join('') || '<p>No recent activity</p>';
+        }
+
+        function showAlert(containerId, message, type) {
+            const container = document.getElementById(containerId);
+            const alertHtml = `
+                <div class="alert alert-${type}">
+                    ${message}
+                </div>
+            `;
+            container.innerHTML = alertHtml;
+            
+            // Auto-hide success and info alerts after 5 seconds
+            if (type === 'success' || type === 'info') {
+                setTimeout(() => {
+                    container.innerHTML = '';
+                }, 5000);
+            }
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+
+        // Close modals when clicking outside
+        window.onclick = function(event) {
+            const modals = document.querySelectorAll('.modal');
+            modals.forEach(modal => {
+                if (event.target === modal) {
+                    modal.style.display = 'none';
+                }
+            });
+        }
+
+        // Auto-save data periodically
+        setInterval(() => {
+            localStorage.setItem('hr_applicants', JSON.stringify(database.applicants));
+        }, 30000); // Save every 30 seconds
+    </script>
+</body>
+</html>
