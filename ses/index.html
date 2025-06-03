@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MAISCO Internal System</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="light-theme">
+    <!-- Login Modal -->
+    <div class="modal fade" id="loginModal" tabindex="-1" data-bs-backdrop="static">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" data-en="Login to MAISCO System" data-ar="تسجيل الدخول إلى نظام مايسكو">Login to MAISCO System</h5>
+                </div>
+                <div class="modal-body">
+                    <form id="loginForm">
+                        <div class="mb-3">
+                            <label for="username" class="form-label" data-en="Username" data-ar="اسم المستخدم">Username</label>
+                            <input type="text" class="form-control" id="username" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="password" class="form-label" data-en="Password" data-ar="كلمة المرور">Password</label>
+                            <input type="password" class="form-control" id="password" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="role" class="form-label" data-en="Role" data-ar="الدور">Role</label>
+                            <select class="form-select" id="role" required>
+                                <option value="" data-en="Select Role" data-ar="اختر الدور">Select Role</option>
+                                <option value="employee" data-en="Employee" data-ar="موظف">Employee</option>
+                                <option value="admin" data-en="Admin" data-ar="مدير">Admin</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100" data-en="Login" data-ar="دخول">Login</button>
+                    </form>
+                    <div class="mt-3 text-muted small">
+                        <p data-en="Demo credentials:" data-ar="بيانات تجريبية:">Demo credentials:</p>
+                        <p data-en="Employee: user/pass" data-ar="موظف: user/pass">Employee: user/pass</p>
+                        <p data-en="Admin: admin/admin" data-ar="مدير: admin/admin">Admin: admin/admin</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#" onclick="showPage('dashboard')">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' fill='%23ffffff'/%3E%3Ctext x='20' y='25' text-anchor='middle' fill='%23007bff' font-family='Arial' font-size='14' font-weight='bold'%3EM%3C/text%3E%3C/svg%3E" alt="MAISCO" width="30" height="30">
+                MAISCO
+            </a>
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" onclick="showPage('dashboard')" data-en="Dashboard" data-ar="لوحة التحكم">Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" onclick="showPage('data-entry')" data-en="Data Entry" data-ar="إدخال البيانات">Data Entry</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" onclick="showPage('leaderboard')" data-en="Leaderboard" data-ar="لوحة المتصدرين">Leaderboard</a>
+                    </li>
+                    <li class="nav-item admin-only" style="display: none;">
+                        <a class="nav-link" href="#" onclick="showPage('admin-dashboard')" data-en="Admin Dashboard" data-ar="لوحة الإدارة">Admin Dashboard</a>
+                    </li>
+                    <li class="nav-item admin-only" style="display: none;">
+                        <a class="nav-link" href="#" onclick="showPage('ai-analytics')" data-en="AI Analytics" data-ar="تحليلات الذكاء الاصطناعي">AI Analytics</a>
+                    </li>
+                </ul>
+                
+                <div class="d-flex align-items-center gap-3">
+                    <!-- Branch Selector -->
+                    <select class="form-select form-select-sm" id="branchSelector" style="width: auto;">
+                        <option value="all" data-en="All Branches" data-ar="جميع الفروع">All Branches</option>
+                        <option value="riyadh" data-en="Riyadh" data-ar="الرياض">Riyadh</option>
+                        <option value="jeddah" data-en="Jeddah" data-ar="جدة">Jeddah</option>
+                        <option value="dammam" data-en="Dammam" data-ar="الدمام">Dammam</option>
+                    </select>
+                    
+                    <!-- Language Toggle -->
+                    <button class="btn btn-outline-light btn-sm" onclick="toggleLanguage()">
+                        <i class="fas fa-language"></i> <span id="langToggle">عربي</span>
+                    </button>
+                    
+                    <!-- Dark Mode Toggle -->
+                    <button class="btn btn-outline-light btn-sm" onclick="toggleTheme()">
+                        <i id="themeIcon" class="fas fa-moon"></i>
+                    </button>
+                    
+                    <!-- User Info -->
+                    <div class="dropdown">
+                        <button class="btn btn-outline-light btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                            <i class="fas fa-user"></i> <span id="currentUser">User</span>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#" onclick="logout()" data-en="Logout" data-ar="تسجيل الخروج">Logout</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content Container -->
+    <div class="container-fluid">
+        <!-- Dashboard Page -->
+        <div id="dashboard-page" class="page-content" style="display: none;">
+            <div class="row">
+                <div class="col-12">
+                    <h2 class="mb-4" data-en="Welcome to MAISCO Internal System" data-ar="مرحباً بك في النظام الداخلي لمايسكو">Welcome to MAISCO Internal System</h2>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="card text-center">
+                                <div class="card-body">
+                                    <i class="fas fa-chart-line fa-3x text-primary mb-3"></i>
+                                    <h5 data-en="Total Sales" data-ar="إجمالي المبيعات">Total Sales</h5>
+                                    <h3 id="totalSales">0</h3>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card text-center">
+                                <div class="card-body">
+                                    <i class="fas fa-users fa-3x text-success mb-3"></i>
+                                    <h5 data-en="Active Employees" data-ar="الموظفون النشطون">Active Employees</h5>
+                                    <h3 id="activeEmployees">0</h3>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card text-center">
+                                <div class="card-body">
+                                    <i class="fas fa-box fa-3x text-warning mb-3"></i>
+                                    <h5 data-en="Products Shipped" data-ar="المنتجات المشحونة">Products Shipped</h5>
+                                    <h3 id="productsShipped">0</h3>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card text-center">
+                                <div class="card-body">
+                                    <i class="fas fa-building fa-3x text-info mb-3"></i>
+                                    <h5 data-en="Active Branches" data-ar="الفروع النشطة">Active Branches</h5>
+                                    <h3>3</h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Data Entry Page -->
+        <div id="data-entry-page" class="page-content" style="display: none;">
+            <div class="row">
+                <div class="col-lg-8 mx-auto">
+                    <div class="card">
+                        <div class="card-header">
+                            <h4 data-en="Product Data Entry" data-ar="إدخال بيانات المنتج">Product Data Entry</h4>
+                        </div>
+                        <div class="card-body">
+                            <form id="dataEntryForm">
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label" data-en="Product Category" data-ar="فئة المنتج">Product Category</label>
+                                        <select class="form-select" id="productCategory" required onchange="loadProducts()">
+                                            <option value="" data-en="Select Category" data-ar="اختر الفئة">Select Category</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label" data-en="Product" data-ar="المنتج">Product</label>
+                                        <select class="form-select" id="productName" required>
+                                            <option value="" data-en="Select Product" data-ar="اختر المنتج">Select Product</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label" data-en="Quantity" data-ar="الكمية">Quantity</label>
+                                        <input type="number" class="form-control" id="quantity" required min="1">
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label" data-en="Branch" data-ar="الفرع">Branch</label>
+                                        <select class="form-select" id="entryBranch" required>
+                                            <option value="riyadh" data-en="Riyadh" data-ar="الرياض">Riyadh</option>
+                                            <option value="jeddah" data-en="Jeddah" data-ar="جدة">Jeddah</option>
+                                            <option value="dammam" data-en="Dammam" data-ar="الدمام">Dammam</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label" data-en="Client Name" data-ar="اسم العميل">Client Name</label>
+                                        <input type="text" class="form-control" id="clientName" required>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label" data-en="Sale Price (Optional)" data-ar="سعر البيع (اختياري)">Sale Price (Optional)</label>
+                                        <input type="number" class="form-control" id="salePrice" step="0.01" min="0">
+                                    </div>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label class="form-label" data-en="Employees Involved" data-ar="الموظفون المشاركون">Employees Involved</label>
+                                    <div id="employeeTags" class="employee-tags mb-2"></div>
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" id="employeeInput" placeholder="Enter employee name...">
+                                        <button type="button" class="btn btn-outline-secondary" onclick="addEmployee()">
+                                            <i class="fas fa-plus"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label class="form-label" data-en="Upload Files (Optional)" data-ar="رفع الملفات (اختياري)">Upload Files (Optional)</label>
+                                    <input type="file" class="form-control" id="fileUpload" multiple accept=".pdf,.jpg,.jpeg,.png">
+                                    <div class="form-text" data-en="You can upload invoices (PDF) or product photos (JPG, PNG)" data-ar="يمكنك رفع الفواتير (PDF) أو صور المنتجات (JPG, PNG)">You can upload invoices (PDF) or product photos (JPG, PNG)</div>
+                                </div>
+                                
+                                <div class="d-grid">
+                                    <button type="submit" class="btn btn-primary" data-en="Submit Entry" data-ar="إرسال البيانات">Submit Entry</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Leaderboard Page -->
+        <div id="leaderboard-page" class="page-content" style="display: none;">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h4 data-en="Employee Leaderboard" data-ar="لوحة المتصدرين">Employee Leaderboard</h4>
+                            <div class="d-flex gap-2">
+                                <button class="btn btn-outline-primary btn-sm" onclick="refreshLeaderboard()">
+                                    <i class="fas fa-sync-alt"></i> <span data-en="Refresh" data-ar="تحديث">Refresh</span>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th data-en="Rank" data-ar="الترتيب">Rank</th>
+                                            <th data-en="Employee Name" data-ar="اسم الموظف">Employee Name</th>
+                                            <th data-en="Total Quantity" data-ar="إجمالي الكمية">Total Quantity</th>
+                                            <th data-en="Branch" data-ar="الفرع">Branch</th>
+                                            <th data-en="Last Activity" data-ar="آخر نشاط">Last Activity</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="leaderboardTable">
+                                        <!-- Dynamic content -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Admin Dashboard Page -->
+        <div id="admin-dashboard-page" class="page-content admin-only" style="display: none;">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h4 data-en="Admin Dashboard - Sales Records" data-ar="لوحة الإدارة - سجلات المبيعات">Admin Dashboard - Sales Records</h4>
+                            <div class="d-flex gap-2">
+                                <button class="btn btn-success btn-sm" onclick="exportToExcel()">
+                                    <i class="fas fa-file-excel"></i> <span data-en="Export Excel" data-ar="تصدير إكسل">Export Excel</span>
+                                </button>
+                                <button class="btn btn-danger btn-sm" onclick="exportToPDF()">
+                                    <i class="fas fa-file-pdf"></i> <span data-en="Export PDF" data-ar="تصدير PDF">Export PDF</span>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <!-- Filters -->
+                            <div class="row mb-3">
+                                <div class="col-md-3">
+                                    <input type="date" class="form-control" id="startDate" placeholder="Start Date">
+                                </div>
+                                <div class="col-md-3">
+                                    <input type="date" class="form-control" id="endDate" placeholder="End Date">
+                                </div>
+                                <div class="col-md-3">
+                                    <input type="text" class="form-control" id="searchFilter" placeholder="Search...">
+                                </div>
+                                <div class="col-md-3">
+                                    <button class="btn btn-primary" onclick="applyFilters()">
+                                        <i class="fas fa-filter"></i> <span data-en="Apply Filters" data-ar="تطبيق المرشحات">Apply Filters</span>
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <div class="table-responsive">
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th data-en="Date/Time" data-ar="التاريخ/الوقت">Date/Time</th>
+                                            <th data-en="Product" data-ar="المنتج">Product</th>
+                                            <th data-en="Quantity" data-ar="الكمية">Quantity</th>
+                                            <th data-en="Client" data-ar="العميل">Client</th>
+                                            <th data-en="Sale Price" data-ar="سعر البيع">Sale Price</th>
+                                            <th data-en="Employees" data-ar="الموظفون">Employees</th>
+                                            <th data-en="Branch" data-ar="الفرع">Branch</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="adminTable">
+                                        <!-- Dynamic content -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Charts Section -->
+            <div class="row mt-4">
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 data-en="Top Selling Products" data-ar="المنتجات الأكثر مبيعاً">Top Selling Products</h5>
+                        </div>
+                        <div class="card-body">
+                            <canvas id="productsChart" height="200"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 data-en="Monthly Revenue Trend" data-ar="اتجاه الإيرادات الشهرية">Monthly Revenue Trend</h5>
+                        </div>
+                        <div class="card-body">
+                            <canvas id="revenueChart" height="200"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- AI Analytics Page -->
+        <div id="ai-analytics-page" class="page-content admin-only" style="display: none;">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h4 data-en="AI Analytics Dashboard" data-ar="لوحة تحليلات الذكاء الاصطناعي">AI Analytics Dashboard</h4>
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" id="liveAI" checked>
+                                <label class="form-check-label" for="liveAI" data-en="Live AI Analysis" data-ar="تحليل مباشر بالذكاء الاصطناعي">Live AI Analysis</label>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <!-- AI Analytics Tabs -->
+                            <ul class="nav nav-tabs" id="aiTabs" role="tablist">
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link active" id="customer-tab" data-bs-toggle="tab" data-bs-target="#customer-analysis" role="tab" data-en="Customer Behavior" data-ar="سلوك العملاء">Customer Behavior</button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link" id="forecast-tab" data-bs-toggle="tab" data-bs-target="#sales-forecast" role="tab" data-en="Sales Forecasting" data-ar="توقعات المبيعات">Sales Forecasting</button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link" id="performance-tab" data-bs-toggle="tab" data-bs-target="#employee-performance" role="tab" data-en="Employee Performance" data-ar="أداء الموظفين">Employee Performance</button>
+                                </li>
+                            </ul>
+                            
+                            <div class="tab-content mt-3" id="aiTabContent">
+                                <!-- Customer Behavior Analysis -->
+                                <div class="tab-pane fade show active" id="customer-analysis" role="tabpanel">
+                                    <div class="row">
+                                        <div class="col-md-8">
+                                            <div class="card">
+                                                <div class="card-header">
+                                                    <h6 data-en="Customer Segmentation Analysis" data-ar="تحليل تقسيم العملاء">Customer Segmentation Analysis</h6>
+                                                </div>
+                                                <div class="card-body">
+                                                    <canvas id="customerSegmentChart" height="150"></canvas>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="card">
+                                                <div class="card-header">
+                                                    <h6 data-en="AI Insights" data-ar="رؤى الذكاء الاصطناعي">AI Insights</h6>
+                                                </div>
+                                                <div class="card-body">
+                                                    <div id="customerInsights">
+                                                        <div class="alert alert-info">
+                                                            <strong data-en="Key Finding:" data-ar="النتيجة الرئيسية:">Key Finding:</strong>
+                                                            <p data-en="High-value customers prefer I.V. Therapy products by 34%" data-ar="العملاء ذوو القيمة العالية يفضلون منتجات العلاج الوريدي بنسبة 34%">High-value customers prefer I.V. Therapy products by 34%</p>
+                                                        </div>
+                                                        <div class="alert alert-warning">
+                                                            <strong data-en="Recommendation:" data-ar="التوصية:">Recommendation:</strong>
+                                                            <p data-en="Focus marketing on Neonatal products in Jeddah branch" data-ar="ركز التسويق على منتجات حديثي الولادة في فرع جدة">Focus marketing on Neonatal products in Jeddah branch</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Sales Forecasting -->
+                                <div class="tab-pane fade" id="sales-forecast" role="tabpanel">
+                                    <div class="row">
+                                        <div class="col-md-8">
+                                            <div class="card">
+                                                <div class="card-header">
+                                                    <h6 data-en="Sales Forecast - Next 6 Months" data-ar="توقعات المبيعات - الأشهر الستة القادمة">Sales Forecast - Next 6 Months</h6>
+                                                </div>
+                                                <div class="card-body">
+                                                    <canvas id="salesForecastChart" height="150"></canvas>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="card">
+                                                <div class="card-header">
+                                                    <h6 data-en="Forecast Metrics" data-ar="مقاييس التوقعات">Forecast Metrics</h6>
+                                                </div>
+                                                <div class="card-body">
+                                                    <div class="metric-item">
+                                                        <span data-en="Expected Growth:" data-ar="النمو المتوقع:">Expected Growth:</span>
+                                                        <strong class="text-success">+15.7%</strong>
+                                                    </div>
+                                                    <div class="metric-item">
+                                                        <span data-en="Confidence Level:" data-ar="مستوى الثقة:">Confidence Level:</span>
+                                                        <strong class="text-info">87%</strong>
+                                                    </div>
+                                                    <div class="metric-item">
+                                                        <span data-en="Peak Month:" data-ar="الشهر الذروة:">Peak Month:</span>
+                                                        <strong class="text-warning">August</strong>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Employee Performance -->
+                                <div class="tab-pane fade" id="employee-performance" role="tabpanel">
+                                    <div class="row">
+                                        <div class="col-md-8">
+                                            <div class="card">
+                                                <div class="card-header">
+                                                    <h6 data-en="Employee Performance Analysis" data-ar="تحليل أداء الموظفين">Employee Performance Analysis</h6>
+                                                </div>
+                                                <div class="card-body">
+                                                    <canvas id="employeePerformanceChart" height="150"></canvas>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="card">
+                                                <div class="card-header">
+                                                    <h6 data-en="Performance Insights" data-ar="رؤى الأداء">Performance Insights</h6>
+                                                </div>
+                                                <div class="card-body">
+                                                    <div class="alert alert-success">
+                                                        <strong data-en="Top Performer:" data-ar="أفضل أداء:">Top Performer:</strong>
+                                                        <p>Ahmed Al-Mahmoud (Riyadh)</p>
+                                                    </div>
+                                                    <div class="alert alert-info">
+                                                        <strong data-en="Improvement Needed:" data-ar="يحتاج تحسين:">Improvement Needed:</strong>
+                                                        <p data-en="Evening shift productivity" data-ar="إنتاجية الوردية المسائية">Evening shift productivity</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div class="toast-container position-fixed bottom-0 end-0 p-3">
+        <div id="successToast" class="toast" role="alert">
+            <div class="toast-header">
+                <i class="fas fa-check-circle text-success me-2"></i>
+                <strong class="me-auto" data-en="Success" data-ar="نجح">Success</strong>
+                <button type="button" class="btn-close" data-bs-dismiss="toast"></button>
+            </div>
+            <div class="toast-body" id="toastMessage">
+                <!-- Dynamic message -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
